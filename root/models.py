@@ -105,10 +105,6 @@ class Theme(models.Model):
         max_length=7, blank=True, verbose_name=_("Text color")
     )
 
-    font_family = models.CharField(
-        max_length=100, blank=True, verbose_name=_("Font family")
-    )
-
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated at"))
 
