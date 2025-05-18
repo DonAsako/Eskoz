@@ -48,6 +48,7 @@ class Article(models.Model):
         Category,
         on_delete=models.SET_NULL,
         null=True,
+        blank=True,
         related_name="category",
         verbose_name=_("Category"),
     )
