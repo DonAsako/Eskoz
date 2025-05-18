@@ -14,6 +14,9 @@ class SiteSettings(models.Model):
     )
     contact_email = models.EmailField(blank=True, verbose_name=_("Contact mail"))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated at"))
+    under_maintenance = models.BooleanField(
+        default=False, verbose_name=_("Under maintenance")
+    )
 
     def __str__(self):
         return gettext("Site settings")
