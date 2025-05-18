@@ -2,7 +2,11 @@ import markdown
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from .forms import ArticleAdminForm
-from .models import Article, Tag
+from .models import Article, Tag, Category
+
+
+class CategoryAdmin(admin.ModelAdmin):
+    search_fields = ["title"]
 
 
 class TagAdmin(admin.ModelAdmin):
@@ -14,11 +18,11 @@ class ArticleAdmin(admin.ModelAdmin):
         reading_time = obj.get_reading_time()
         return f"{reading_time} {_("min")}"
 
-    autocomplete_fields = ["tags"]
+    autocomplete_fields = ["tags", "category"]
     fieldsets = [
         (
             "General",
-            {"fields": ["title", "content", "picture", "tags", "author"]},
+            {"fields": [("title", "picture"), "content", ("tags", "category"), "author"]},
         ),
         ("Visiblity", {"fields": [("visibility", "password")]}),
         ("Metadata", {"fields": ["published_on"]}),
@@ -38,4 +42,5 @@ class ArticleAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Article, ArticleAdmin)
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(Tag, TagAdmin)

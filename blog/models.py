@@ -18,6 +18,17 @@ class Tag(models.Model):
         verbose_name_plural = _("Tags")
 
 
+class Category(models.Model):
+    title = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = _("Category")
+        verbose_name_plural = _("Categories")
+
+
 class Article(models.Model):
     VISIBILITY_CHOICES = [
         ("public", _("Public")),
@@ -32,6 +43,13 @@ class Article(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("Author"))
     tags = models.ManyToManyField(
         Tag, related_name="articles", blank=True, verbose_name=_("Tags")
+    )
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="category",
+        verbose_name=_("Category"),
     )
     published_on = models.DateTimeField(
         null=True, blank=True, verbose_name=_("Published on")
