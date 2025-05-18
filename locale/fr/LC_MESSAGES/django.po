@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-18 01:49+0200\n"
+"POT-Creation-Date: 2025-05-19 00:13+0200\n"
 "PO-Revision-Date: 2025-05-18 12:00+0000\n"
 "Last-Translator: Your Name <you@example.com>\n"
 "Language-Team: French\n"
@@ -11,248 +11,260 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: eskoz/settings.py:121
-msgid "English"
-msgstr ""
-
-#: eskoz/settings.py:122
-msgid "French"
-msgstr ""
-
-#: eskoz/settings.py:123
-msgid "Italian"
-msgstr ""
-
-#: blog/admin.py:23
+#: blog/admin.py:19
 msgid "min"
 msgstr "min"
 
-#: blog/admin.py:56
+#: blog/admin.py:35
 msgid "Reading time"
 msgstr "Temps de lecture"
 
-#: blog/models.py:16
+#: blog/models.py:17
 msgid "Tag"
 msgstr "Étiquette"
 
-#: blog/models.py:17 blog/models.py:32
+#: blog/models.py:18 blog/models.py:45
 msgid "Tags"
 msgstr "Étiquettes"
 
-#: blog/models.py:22
+#: blog/models.py:28 blog/models.py:53
+msgid "Category"
+msgstr "Catégorie"
+
+#: blog/models.py:29
+msgid "Categories"
+msgstr "Catégories"
+
+#: blog/models.py:34
 msgid "Public"
 msgstr "Public"
 
-#: blog/models.py:23
+#: blog/models.py:35
 msgid "Unlisted"
 msgstr "Non listé"
 
-#: blog/models.py:24
+#: blog/models.py:36
 msgid "Protected"
 msgstr "Protégé"
 
-#: blog/models.py:25
+#: blog/models.py:37
 msgid "Private"
 msgstr "Privé"
 
-#: blog/models.py:28 root/models.py:136
+#: blog/models.py:40 root/models.py:166
 msgid "Title"
 msgstr "Titre"
 
-#: blog/models.py:29
+#: blog/models.py:41
 msgid "Slug"
 msgstr "Slug"
 
-#: blog/models.py:30 root/models.py:111
+#: blog/models.py:42 root/models.py:139
 msgid "Content"
 msgstr "Contenu"
 
-#: blog/models.py:31
+#: blog/models.py:43
 msgid "Author"
 msgstr "Auteur"
 
-#: blog/models.py:33
+#: blog/models.py:56
 msgid "Published on"
 msgstr "Publié le"
 
-#: blog/models.py:34
+#: blog/models.py:58
 msgid "Edited on"
 msgstr "Modifié le"
 
-#: blog/models.py:35
+#: blog/models.py:60
 msgid "Picture"
 msgstr "Image"
 
-#: blog/models.py:40
+#: blog/models.py:66
 msgid "Visibility"
 msgstr "Visibilité"
 
-#: blog/models.py:42
+#: blog/models.py:69
 msgid "Password"
 msgstr "Mot de passe"
 
-#: blog/models.py:72
+#: blog/models.py:100
 msgid "Article"
 msgstr "Article"
 
-#: blog/models.py:73
+#: blog/models.py:101 blog/templates/blog/articles_list.html:3
 msgid "Articles"
 msgstr "Articles"
+
+#: eskoz/settings.py:122
+msgid "English"
+msgstr "Anglais"
+
+#: eskoz/settings.py:123
+msgid "French"
+msgstr "Français"
+
+#: eskoz/settings.py:124
+msgid "Italian"
+msgstr "Italien"
 
 #: root/models.py:8
 msgid "Site name"
 msgstr "Nom du site"
 
-#: root/models.py:9
+#: root/models.py:10
 msgid "Logo"
 msgstr "Logo"
 
-#: root/models.py:10
+#: root/models.py:13
 msgid "Favicon"
 msgstr "Favicon"
 
-#: root/models.py:11
+#: root/models.py:15
 msgid "Contact mail"
 msgstr "Email de contact"
 
-#: root/models.py:12 root/models.py:80 root/models.py:112
+#: root/models.py:16 root/models.py:111 root/models.py:140
 msgid "Updated at"
 msgstr "Mis à jour le"
 
-#: root/models.py:15 root/models.py:18
+#: root/models.py:17
+msgid "Under maintenance"
+msgstr "En maintenance"
+
+#: root/models.py:20 root/models.py:23
 msgid "Site settings"
 msgstr "Paramètres du site"
 
-#: root/models.py:23
+#: root/models.py:31
 #, fuzzy
 #| msgid "Site settings"
 msgid "SEO settings"
 msgstr "Paramètres du site"
 
-#: root/models.py:26
+#: root/models.py:35
 msgid "Meta author"
 msgstr "Auteur méta"
 
-#: root/models.py:27
+#: root/models.py:38
 msgid "Meta description"
 msgstr "Description méta"
 
-#: root/models.py:28
+#: root/models.py:41
 msgid "Meta keywords"
 msgstr "Mots-clés méta"
 
-#: root/models.py:30
+#: root/models.py:45
 msgid "Google analytics id"
 msgstr "ID Google Analytics"
 
-#: root/models.py:31
+#: root/models.py:48
 msgid "Google tag manager id"
 msgstr "ID Google Tag Manager"
 
-#: root/models.py:32
+#: root/models.py:51
 msgid "Google site verification"
 msgstr "Vérification du site Google"
 
-#: root/models.py:35
+#: root/models.py:56
 msgid "Open Graph title"
 msgstr "Titre Open Graph"
 
-#: root/models.py:36
+#: root/models.py:59
 msgid "Open Graph description"
 msgstr "Description Open Graph"
 
-#: root/models.py:37
+#: root/models.py:62
 msgid "Open Graph image"
 msgstr "Image Open Graph"
 
-#: root/models.py:43
+#: root/models.py:69
 msgid "Summary"
 msgstr "Résumé"
 
-#: root/models.py:44
+#: root/models.py:70
 msgid "Summary Large Image"
 msgstr "Résumé avec grande image"
 
-#: root/models.py:48
+#: root/models.py:74
 msgid "Twitter card type"
 msgstr "Type de carte Twitter"
 
-#: root/models.py:50
+#: root/models.py:77
 msgid "Twitter title"
 msgstr "Titre Twitter"
 
-#: root/models.py:51
+#: root/models.py:80
 msgid "Twitter description"
 msgstr "Description Twitter"
 
-#: root/models.py:52
+#: root/models.py:83
 msgid "Twitter image"
 msgstr "Image Twitter"
 
-#: root/models.py:60
+#: root/models.py:91
 msgid "Name"
 msgstr "Nom"
 
-#: root/models.py:63
+#: root/models.py:94
 msgid "Primary color"
 msgstr "Couleur principale"
 
-#: root/models.py:66
+#: root/models.py:97
 msgid "Secondary color"
 msgstr "Couleur secondaire"
 
-#: root/models.py:69
+#: root/models.py:100
 msgid "Background color"
 msgstr "Couleur de fond"
 
-#: root/models.py:72
+#: root/models.py:103
 msgid "Text color"
 msgstr "Couleur du texte"
 
-#: root/models.py:76
+#: root/models.py:107
 msgid "Font family"
 msgstr "Police de caractères"
 
-#: root/models.py:79
+#: root/models.py:110
 msgid "Created at"
 msgstr "Créé le"
 
-#: root/models.py:82
+#: root/models.py:113
 msgid "Is active"
 msgstr "Est actif"
 
-#: root/models.py:92
+#: root/models.py:123
 msgid "Theme"
 msgstr "Thème"
 
-#: root/models.py:93
+#: root/models.py:124
 msgid "Themes"
 msgstr "Thèmes"
 
-#: root/models.py:109
+#: root/models.py:138
 msgid "Filename"
 msgstr "Nom de fichier"
 
-#: root/models.py:121
+#: root/models.py:149
 msgid "WellKnown File"
 msgstr "Fichier WellKnown"
 
-#: root/models.py:122
+#: root/models.py:150
 msgid "WellKnown Files"
 msgstr "Fichiers WellKnown"
 
-#: root/models.py:127
+#: root/models.py:156
 msgid "Avatar"
 msgstr "Avatar"
 
-#: root/models.py:128
+#: root/models.py:158
 msgid "Biography"
 msgstr "Biographie"
 
-#: root/models.py:137
+#: root/models.py:167
 msgid "URL"
 msgstr "URL"
 
-#: root/models.py:138
+#: root/models.py:169
 msgid "Icon"
 msgstr "Icône"
