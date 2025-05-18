@@ -9,6 +9,7 @@ class ContentEditorWidget(Widget):
     class Media:
         css = {
             "all": (
+                "css/content_editor_widget.css",
                 "https://uicdn.toast.com/editor/latest/toastui-editor.min.css",
                 "https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css",
                 "https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight.min.css",

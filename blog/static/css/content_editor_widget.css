@@ -1,0 +1,5 @@
+.toastui-editor-contents h1, .toastui-editor-contents h2, .toastui-editor-contents h3, .toastui-editor-contents h4, .toastui-editor-contents h5{
+    padding: 0;
+    margin: 0;
+    background-color: transparent !important;
+}
