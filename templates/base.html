@@ -41,6 +41,10 @@
     {% block head %}{% endblock %}
 </head>
 <body>
+    {% if site_settings.under_maintenance %}
+        {% trans 'Under maintenance' %}
+    {% else %}
     {% block content %}{% endblock %}
+    {% endif %}
 </body>
 </html>

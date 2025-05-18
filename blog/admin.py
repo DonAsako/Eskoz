@@ -22,7 +22,14 @@ class ArticleAdmin(admin.ModelAdmin):
     fieldsets = [
         (
             "General",
-            {"fields": [("title", "picture"), "content", ("tags", "category"), "author"]},
+            {
+                "fields": [
+                    ("title", "picture"),
+                    "content",
+                    ("tags", "category"),
+                    "author",
+                ]
+            },
         ),
         ("Visiblity", {"fields": [("visibility", "password")]}),
         ("Metadata", {"fields": ["published_on"]}),
