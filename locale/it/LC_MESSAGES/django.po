@@ -1,0 +1,265 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-05-18 01:49+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: eskoz/settings.py:121
+msgid "English"
+msgstr ""
+
+#: eskoz/settings.py:122
+msgid "French"
+msgstr ""
+
+#: eskoz/settings.py:123
+msgid "Italian"
+msgstr ""
+
+#: blog/admin.py:23
+msgid "min"
+msgstr "min"
+
+#: blog/admin.py:56
+msgid "Reading time"
+msgstr "Tempo di lettura"
+
+#: blog/models.py:16
+msgid "Tag"
+msgstr "Etichetta"
+
+#: blog/models.py:17 blog/models.py:32
+msgid "Tags"
+msgstr "Etichette"
+
+#: blog/models.py:22
+msgid "Public"
+msgstr "Pubblico"
+
+#: blog/models.py:23
+msgid "Unlisted"
+msgstr "Non in elenco"
+
+#: blog/models.py:24
+msgid "Protected"
+msgstr "Protetto"
+
+#: blog/models.py:25
+msgid "Private"
+msgstr "Privato"
+
+#: blog/models.py:28 root/models.py:136
+msgid "Title"
+msgstr "Titolo"
+
+#: blog/models.py:29
+msgid "Slug"
+msgstr "Slug"
+
+#: blog/models.py:30 root/models.py:111
+msgid "Content"
+msgstr "Contenuto"
+
+#: blog/models.py:31
+msgid "Author"
+msgstr "Autore"
+
+#: blog/models.py:33
+msgid "Published on"
+msgstr "Pubblicato il"
+
+#: blog/models.py:34
+msgid "Edited on"
+msgstr "Modificato il"
+
+#: blog/models.py:35
+msgid "Picture"
+msgstr "Immagine"
+
+#: blog/models.py:40
+msgid "Visibility"
+msgstr "Visibilità"
+
+#: blog/models.py:42
+msgid "Password"
+msgstr "Password"
+
+#: blog/models.py:72
+msgid "Article"
+msgstr "Articolo"
+
+#: blog/models.py:73
+msgid "Articles"
+msgstr "Articoli"
+
+#: root/models.py:8
+msgid "Site name"
+msgstr "Nome del sito"
+
+#: root/models.py:9
+msgid "Logo"
+msgstr "Logo"
+
+#: root/models.py:10
+msgid "Favicon"
+msgstr "Favicon"
+
+#: root/models.py:11
+msgid "Contact mail"
+msgstr "Email di contatto"
+
+#: root/models.py:12 root/models.py:80 root/models.py:112
+msgid "Updated at"
+msgstr "Aggiornato il"
+
+#: root/models.py:15 root/models.py:18
+msgid "Site settings"
+msgstr "Impostazioni del sito"
+
+#: root/models.py:23
+#, fuzzy
+#| msgid "Site settings"
+msgid "SEO settings"
+msgstr "Impostazioni del sito"
+
+#: root/models.py:26
+msgid "Meta author"
+msgstr "Autore meta"
+
+#: root/models.py:27
+msgid "Meta description"
+msgstr "Descrizione meta"
+
+#: root/models.py:28
+msgid "Meta keywords"
+msgstr "Parole chiave meta"
+
+#: root/models.py:30
+msgid "Google analytics id"
+msgstr "ID di Google Analytics"
+
+#: root/models.py:31
+msgid "Google tag manager id"
+msgstr "ID di Google Tag Manager"
+
+#: root/models.py:32
+msgid "Google site verification"
+msgstr "Verifica sito Google"
+
+#: root/models.py:35
+msgid "Open Graph title"
+msgstr "Titolo Open Graph"
+
+#: root/models.py:36
+msgid "Open Graph description"
+msgstr "Descrizione Open Graph"
+
+#: root/models.py:37
+msgid "Open Graph image"
+msgstr "Immagine Open Graph"
+
+#: root/models.py:43
+msgid "Summary"
+msgstr "Sommario"
+
+#: root/models.py:44
+msgid "Summary Large Image"
+msgstr "Immagine grande sommario"
+
+#: root/models.py:48
+msgid "Twitter card type"
+msgstr "Tipo di card Twitter"
+
+#: root/models.py:50
+msgid "Twitter title"
+msgstr "Titolo Twitter"
+
+#: root/models.py:51
+msgid "Twitter description"
+msgstr "Descrizione Twitter"
+
+#: root/models.py:52
+msgid "Twitter image"
+msgstr "Immagine Twitter"
+
+#: root/models.py:60
+msgid "Name"
+msgstr "Nome"
+
+#: root/models.py:63
+msgid "Primary color"
+msgstr "Colore primario"
+
+#: root/models.py:66
+msgid "Secondary color"
+msgstr "Colore secondario"
+
+#: root/models.py:69
+msgid "Background color"
+msgstr "Colore di sfondo"
+
+#: root/models.py:72
+msgid "Text color"
+msgstr "Colore del testo"
+
+#: root/models.py:76
+msgid "Font family"
+msgstr "Famiglia di caratteri"
+
+#: root/models.py:79
+msgid "Created at"
+msgstr "Creato il"
+
+#: root/models.py:82
+msgid "Is active"
+msgstr "È attivo"
+
+#: root/models.py:92
+msgid "Theme"
+msgstr "Tema"
+
+#: root/models.py:93
+msgid "Themes"
+msgstr "Temi"
+
+#: root/models.py:109
+msgid "Filename"
+msgstr "Nome del file"
+
+#: root/models.py:121
+msgid "WellKnown File"
+msgstr "File WellKnown"
+
+#: root/models.py:122
+msgid "WellKnown Files"
+msgstr "File WellKnown"
+
+#: root/models.py:127
+msgid "Avatar"
+msgstr "Avatar"
+
+#: root/models.py:128
+msgid "Biography"
+msgstr "Biografia"
+
+#: root/models.py:137
+msgid "URL"
+msgstr "URL"
+
+#: root/models.py:138
+msgid "Icon"
+msgstr "Icona"

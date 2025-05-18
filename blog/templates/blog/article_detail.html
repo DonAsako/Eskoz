@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block head %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/pygments.css' %}">
+{% endblock %}
+{% block title %} - {{ article.title }}{% endblock %}
+{% block SEO %}
+    <meta property="og:type" content="article" />
+    <meta property="article:published_time" content="{{ article.published_on.isoformat }}" />
+    <meta property="article:modified_time" content="{{ article.edited_on.isoformat }}" />
+    {% for tag in article.tags.all %}<meta property="article:tag" content="{{ tag.title }}" />{% endfor %}
+{% endblock %}
+{% block content %}
+    {{ article.content_as_html|safe }}
+{% endblock %}
