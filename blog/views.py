@@ -8,5 +8,5 @@ def article_detail(request, slug):
 
 
 def articles_list(request):
-    articles = Article.objects.all()
+    articles = Article.objects.filter(visibility="public")
     return render(request, "blog/articles_list.html", {"articles": articles})
