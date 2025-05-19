@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _, gettext
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 
 
@@ -65,7 +66,20 @@ class Page(models.Model):
         if not self.site_settings:
             self.site_settings = SiteSettings.objects.first()
 
+        self.full_clean()
+
         super().save(*args, **kwargs)
+
+    def clean(self):
+        if self.visibility == "referenced":
+            pages = Page.objects.filter(visibility="referenced")
+            if self.pk:
+                pages = pages.exclude(pk=self.pk)
+
+            if pages.count() >= 3:
+                raise ValidationError(
+                    {"visibility": _("You can only have up to 3 pages marked as 'referenced'.")}
+                )
 
     def __str__(self):
         return self.title
