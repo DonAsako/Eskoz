@@ -4,7 +4,7 @@ from .models import WellKnownFile, Page
 
 
 def index(request):
-    page = Page.objects.filter(visibility='index').first()
+    page = Page.objects.filter(visibility="index").first()
     if page:
         return render(request, "root/page.html", {"page": page})
     else:
