@@ -34,7 +34,7 @@ main {
 }
 .maintenance-wapper svg {
     fill: var(--text-color);
-    width: 50px;
+    width: 5em;
     margin: 1em;
     color: var(--text-color);
 }
