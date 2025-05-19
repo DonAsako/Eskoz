@@ -29,13 +29,14 @@
     {% if site_settings.seo_settings.twitter_image %}<meta name="twitter:image" content="{{ site_settings.seo_settings.twitter_image.url }}">{% endif %}
     <meta name="twitter:description" content="{{ site_settings.seo_settings.twitter_description }}">
     <title>{{site_settings.site_name}}{% block title %}{% endblock%}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <style>
         :root {
-            --primary-color: {{theme.primary_color}};
-            --secondary-color: {{theme.secondary_color}};
-            --background-color: {{theme.background_color}};
-            --text-color: {{theme.text_color}};
-            --font-familly: {{theme.font_family}};
+            {% if theme.primary_color %}--primary-color: {{theme.primary_color}};{% endif %}
+            {% if theme.secondary_color %}--secondary-color: {{theme.secondary_color}};{% endif %}
+            {% if theme.background_color %}--background-color: {{theme.background_color}};{% endif %}
+            {% if theme.text_color %}--text-color: {{theme.text_color}};{% endif %}
         }
     </style>
     {% block head %}{% endblock %}
@@ -44,7 +45,31 @@
     {% if site_settings.under_maintenance %}
         {% trans 'Under maintenance' %}
     {% else %}
-    {% block content %}{% endblock %}
+        <header>
+            <nav class="navbar">
+                <div class="navbar-logo">
+                {% if site_settings.logo %}
+                    <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}'s logo">
+                {% else %}
+                    <h1>{{ site_settings.site_name }}</h1>
+                {% endif %}
+                </div>
+                <ul class="navbar-items">
+                    <li class="navbar-item">
+                        <a href="" class="navbar-item--link">{% trans 'WhoAmI' %}</a>
+                    </li>
+                    <li class="navbar-item">
+                        <a href="" class="navbar-item--link">{% trans 'Articles' %}</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+        <footer>
+            <p class="footer-credits">Powered with ❤️ by <a href="https://github.com/DonAsako/eskoz">Eskoz</a></p>
+        </footer>
     {% endif %}
 </body>
 </html>
