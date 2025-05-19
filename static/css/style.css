@@ -67,6 +67,12 @@ main {
     padding: 1em;
     margin: auto;
 }
+.page_wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 1em;
+    width: 100%;
+}
 footer {
     display: flex;
     justify-content: center;
