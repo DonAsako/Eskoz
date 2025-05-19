@@ -66,13 +66,15 @@
                     </li>
                 {% endfor %}
                     <li class="navbar-item">
-                        <a href="" class="navbar-item--link">{% trans 'Articles' %}</a>
+                        <a href="{% url 'blog:articles_list' %}" class="navbar-item--link">{% trans 'Articles' %}</a>
                     </li>
                 </ul>
             </nav>
         </header>
         <main>
-            {% block content %}{% endblock %}
+            <div class="page_wrapper">
+                {% block content %}{% endblock %}
+            </div>
         </main>
         <footer>
             <p class="footer-credits">{{ site_settings.footer_credits | safe}}</p>
