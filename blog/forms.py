@@ -7,4 +7,4 @@ class ArticleAdminForm(ModelForm):
     class Meta:
         model = Article
         fields = "__all__"
-        widgets = {"content": ContentEditorWidget}
+        widgets = {"content": ContentEditorWidget, "description": Textarea}

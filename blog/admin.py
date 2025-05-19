@@ -24,7 +24,7 @@ class ArticleAdmin(admin.ModelAdmin):
             "General",
             {
                 "fields": [
-                    ("title", "picture"),
+                    ("title", "description", "picture"),
                     "content",
                     ("tags", "category"),
                     "author",
