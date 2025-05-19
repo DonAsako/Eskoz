@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 def create_site_settings(sender, **kwargs):
     try:
         if not SiteSettings.objects.exists():
-            SiteSettings.objects.create(site_name="Mon Site")
+            SiteSettings.objects.create(site_name="Eskoz")
     except (OperationalError, ProgrammingError):
         pass
 
