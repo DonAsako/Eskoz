@@ -70,15 +70,6 @@ class Article(models.Model):
     )
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            base_slug = slugify(self.title)
-            slug = base_slug
-            n = 1
-            while Article.objects.filter(slug=slug).exists():
-                slug = f"{base_slug}-{n}"
-                n += 1
-            self.slug = slug
-
         # Defined published_on on the first save.
         if not self.published_on:
             self.published_on = timezone.now()

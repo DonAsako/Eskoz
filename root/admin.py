@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
 from .models import (
     SiteSettings,
     WellKnownFile,
@@ -8,6 +9,7 @@ from .models import (
     UserLink,
     Theme,
     SeoSettings,
+    Page,
 )
 
 
@@ -15,14 +17,14 @@ class WellKnownFileInline(admin.TabularInline):
     model = WellKnownFile
     can_delete = True
     extra = 0
-    verbose_name = "Well-Known file"
+    verbose_name = _("Well-Known file")
 
 
 class ThemeInline(admin.StackedInline):
     model = Theme
     can_delete = True
     extra = 0
-    verbose_name = "Theme"
+    verbose_name = _("Theme")
 
 
 class SeoSettingsInline(admin.StackedInline):
@@ -67,18 +69,25 @@ class SiteSettingsAdmin(admin.ModelAdmin):
         return False
 
 
+class PageAdmin(admin.ModelAdmin):
+    model = Page
+    verbose_name = _("Page")
+    exclude = ["site_settings"]
+    prepopulated_fields = {"slug": ("title",)}
+
+
 class UserProfileInline(admin.TabularInline):
     model = UserProfile
     can_delete = False
-    verbose_name = "Profil"
+    verbose_name = _("Profil")
 
 
 class UserLinkInline(admin.TabularInline):
     model = UserLink
     extra = 1
     can_delete = True
-    verbose_name = "Lien externe"
-    verbose_name_plural = "Mes liens personnalisés"
+    verbose_name = _("External link")
+    verbose_name_plural = _("External links")
 
 
 class UserAdmin(BaseUserAdmin):
@@ -88,3 +97,4 @@ class UserAdmin(BaseUserAdmin):
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(SiteSettings, SiteSettingsAdmin)
+admin.site.register(Page, PageAdmin)

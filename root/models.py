@@ -25,6 +25,40 @@ class SiteSettings(models.Model):
         verbose_name = verbose_name_plural = _("Site settings")
 
 
+class Page(models.Model):
+    VISIBILITY_CHOICES = [
+        ("public", _("Public")),
+        ("private", _("Private")),
+        ("referenced", _("Referenced")),
+    ]
+    site_settings = models.ForeignKey(
+        SiteSettings, on_delete=models.CASCADE, related_name="page", null=True
+    )
+    title = models.CharField(max_length=150, verbose_name=_("Title"))
+    content = models.TextField(verbose_name=_("Content"))
+    visibility = models.CharField(
+        max_length=10,
+        choices=VISIBILITY_CHOICES,
+        default="public",
+        verbose_name=_("Visibility"),
+    )
+
+    slug = models.SlugField(unique=True, blank=True, verbose_name=_("Slug"))
+
+    def save(self, *args, **kwargs):
+        if not self.site_settings:
+            self.site_settings = SiteSettings.objects.first()
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = _("Page")
+        verbose_name_plural = _("Pages")
+
+
 class SeoSettings(models.Model):
     site_settings = models.OneToOneField(
         SiteSettings,
