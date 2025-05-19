@@ -18,6 +18,8 @@ class SiteSettings(models.Model):
         max_length=250,
         verbose_name=_("Footer credits"),
         default='Powered with ❤️ by <a href="https://github.com/DonAsako/eskoz">Eskoz</a>',
+        null=True,
+        blank=True
     )
     under_maintenance = models.BooleanField(
         default=False, verbose_name=_("Under maintenance")
@@ -28,6 +30,12 @@ class SiteSettings(models.Model):
 
     def get_page_referenced(self):
         return self.page.filter(visibility="referenced")
+
+    def save(self, *args, **kwargs):
+        if not self.footer_credits:
+            self.footer_credits = 'Powered with ❤️ by <a href="https://github.com/DonAsako/eskoz">Eskoz</a>'
+
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = verbose_name_plural = _("Site settings")
