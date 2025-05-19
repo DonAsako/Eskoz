@@ -20,7 +20,7 @@ class SiteSettings(models.Model):
         verbose_name=_("Footer credits"),
         default='Powered with ❤️ by <a href="https://github.com/DonAsako/eskoz">Eskoz</a>',
         null=True,
-        blank=True
+        blank=True,
     )
     under_maintenance = models.BooleanField(
         default=False, verbose_name=_("Under maintenance")
@@ -76,9 +76,13 @@ class Page(models.Model):
             if self.pk:
                 pages = pages.exclude(pk=self.pk)
 
-            if pages.count() >= 3:
+            if pages.count() >= 4:
                 raise ValidationError(
-                    {"visibility": _("You can only have up to 3 pages marked as 'referenced'.")}
+                    {
+                        "visibility": _(
+                            "You can only have up to 3 pages marked as 'referenced'."
+                        )
+                    }
                 )
 
     def __str__(self):
