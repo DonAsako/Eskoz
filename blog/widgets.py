@@ -20,5 +20,6 @@ class ContentEditorWidget(Widget):
             "https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js",
             "https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight-all.min.js",
             "https://cdn.jsdelivr.net/npm/latex.js/dist/latex.js",
+            "script/latex_plugin.js",
             "script/content_editor_widget.js",
         )
