@@ -43,7 +43,7 @@ class Page(models.Model):
         verbose_name=_("Visibility"),
     )
 
-    slug = models.SlugField(unique=True, blank=True, verbose_name=_("Slug"))
+    slug = models.SlugField(unique=True, blank=False, verbose_name=_("Slug"))
 
     def save(self, *args, **kwargs):
         if not self.site_settings:

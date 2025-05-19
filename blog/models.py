@@ -38,7 +38,7 @@ class Article(models.Model):
     ]
 
     title = models.CharField(max_length=255, verbose_name=_("Title"))
-    slug = models.SlugField(unique=True, blank=True, verbose_name=_("Slug"))
+    slug = models.SlugField(unique=True, blank=False, verbose_name=_("Slug"))
     content = models.TextField(verbose_name=_("Content"))
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("Author"))
     tags = models.ManyToManyField(
