@@ -57,7 +57,7 @@
                 </div>
                 </a>
                 <ul class="navbar-items">
-                {% for page in site_settings.page.all %}
+                {% for page in site_settings.get_page_referenced %}
                     <li class="navbar-item">
                         <a href="{% url 'root:page_detail' page.slug %}" class="navbar-item--link">{{ page.title }}</a>
                     </li>

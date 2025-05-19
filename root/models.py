@@ -21,6 +21,9 @@ class SiteSettings(models.Model):
     def __str__(self):
         return gettext("Site settings")
 
+    def get_page_referenced(self):
+        return self.page.filter(visibility="referenced")
+
     class Meta:
         verbose_name = verbose_name_plural = _("Site settings")
 
