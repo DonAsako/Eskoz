@@ -9,12 +9,12 @@ def index(request):
 
 def page_detail(request, slug):
     page = get_object_or_404(Page, slug=slug)
-    if page.visibility == 'private':
+    if page.visibility == "private":
         if request.user.is_authenticated:
             return render(request, "root/page.html", {"page": page})
         else:
             raise Http404
-            print('ok')
+            print("ok")
     else:
         return render(request, "root/page.html", {"page": page})
 

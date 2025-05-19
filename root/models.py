@@ -14,6 +14,11 @@ class SiteSettings(models.Model):
     )
     contact_email = models.EmailField(blank=True, verbose_name=_("Contact mail"))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated at"))
+    footer_credits = models.CharField(
+        max_length=250,
+        verbose_name=_("Footer credits"),
+        default='Powered with ❤️ by <a href="https://github.com/DonAsako/eskoz">Eskoz</a>',
+    )
     under_maintenance = models.BooleanField(
         default=False, verbose_name=_("Under maintenance")
     )
