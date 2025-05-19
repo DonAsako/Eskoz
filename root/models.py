@@ -47,6 +47,7 @@ class Page(models.Model):
         ("public", _("Public")),
         ("private", _("Private")),
         ("referenced", _("Referenced")),
+        ("index", _("Index")),
     ]
     site_settings = models.ForeignKey(
         SiteSettings, on_delete=models.CASCADE, related_name="page", null=True
@@ -81,6 +82,19 @@ class Page(models.Model):
                     {
                         "visibility": _(
                             "You can only have up to 3 pages marked as 'referenced'."
+                        )
+                    }
+                )
+        if self.visibility == "index":
+            pages = Page.objects.filter(visibility="index")
+            if self.pk:
+                pages = pages.exclude(pk=self.pk)
+
+            if pages.count() >= 4:
+                raise ValidationError(
+                    {
+                        "visibility": _(
+                            "You can only have up to 1 page marked as 'index'."
                         )
                     }
                 )
