@@ -76,11 +76,6 @@ class Article(models.Model):
 
         super().save(*args, **kwargs)
 
-    def content_as_html(self):
-        # Comvert markdown into html
-        html = markdown.markdown(self.content, extensions=["extra"])
-        return mark_safe(html)
-
     def get_reading_time(self):
         return len(self.content.split(" ")) // 200
 

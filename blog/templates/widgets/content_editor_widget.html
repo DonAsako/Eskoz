@@ -1,2 +1,2 @@
 <div id="editor-content"></div>
-<textarea name="content" id="textarea-content" hidden>{{ widget.value }}</textarea>
+<textarea name="content" id="textarea-content" hidden>{{ widget.value | default_if_none:'' }}</textarea>

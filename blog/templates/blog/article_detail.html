@@ -11,5 +11,4 @@
     {% for tag in article.tags.all %}<meta property="article:tag" content="{{ tag.title }}" />{% endfor %}
 {% endblock %}
 {% block content %}
-    {{ article.content_as_html|safe }}
 {% endblock %}
