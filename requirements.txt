@@ -1,5 +1,9 @@
 asgiref==3.8.1
 Django==5.2.1
+gunicorn==23.0.0
 Markdown==3.8
+packaging==25.0
 pillow==11.2.1
+psycopg==3.2.9
+python-dotenv==1.1.0
 sqlparse==0.5.3
