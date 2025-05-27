@@ -7,7 +7,7 @@
 }
 :root {
     --primary-color: #f1f1f1;
-    --secondary-color: red;
+    --secondary-color: #f1f1f1;
     --background-color: #fefefe;
     --text-color: #3e3e3e;
 }
@@ -89,7 +89,7 @@ main {
 }
 .article_card:hover{
     transform: translateX(-8px) translateY(-8px);
-    box-shadow: 0 0 0 2px var(--secondary-color), 8px 8px 0 0 var(--secondary-color);
+    box-shadow: 0 0 0 2px var(--primary-color), 8px 8px 0 0 var(--primary-color);
 }
 .article_card--title {
     font-size: 1.2em;
@@ -113,7 +113,7 @@ main {
 .article_card--tag {
     padding: .5em;
     font-size: .8em;
-    background-color: var(--secondary-color);
+    background-color: var(--primary-color);
     border-radius: 5px;
     padding: 4px 8px;
     white-space: nowrap;
