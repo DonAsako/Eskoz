@@ -80,5 +80,30 @@
             <p class="footer-credits">{{ site_settings.footer_credits | safe}}</p>
         </footer>
     {% endif %}
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.body.classList.add('fade-in');
+
+  document.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', e => {
+      const url = link.getAttribute('href');
+
+      // Ignore si c'est un lien externe ou ancre
+      if (!url || url.startsWith('http') || url.startsWith('#') || url.startsWith('mailto:')) {
+        return;
+      }
+
+      e.preventDefault();
+      document.body.classList.remove('fade-in');
+      document.body.classList.add('fade-out');
+
+      setTimeout(() => {
+        window.location.href = url;
+      }, 500); // durée de l'animation fadeOut
+    });
+  });
+});
+</script>
+
 </body>
 </html>

@@ -2,6 +2,9 @@
 {% block head %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/pygments.css' %}">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css/github-markdown.min.css" />
 {% endblock %}
 {% block title %} - {{ article.title }}{% endblock %}
 {% block SEO %}
@@ -11,4 +14,10 @@
     {% for tag in article.tags.all %}<meta property="article:tag" content="{{ tag.title }}" />{% endfor %}
 {% endblock %}
 {% block content %}
+    <h1 class="article--title">{{ article.title }}</h1>
+    <div class="article--content markdown-body">
+        {{ article.get_content_as_html }}
+    </div>
+    <script>hljs.highlightAll();</script>
+
 {% endblock %}

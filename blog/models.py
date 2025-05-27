@@ -82,6 +82,12 @@ class Article(models.Model):
     def get_reading_time(self):
         return len(self.content.split(" ")) // 200
 
+    def get_content_as_html(self):
+        html = markdown.markdown(
+            self.content, extensions=["extra", "codehilite", "fenced_code"]
+        )
+        return mark_safe(html)
+
     def __str__(self):
         return self.title
 

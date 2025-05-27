@@ -42,7 +42,7 @@ class ArticleAdmin(admin.ModelAdmin):
     reading_time.short_description = _("Reading time")
 
     class Media:
-        js = ("script/article_edit.js", )
+        js = ("script/article_edit.js",)
         css = {
             "all": ("css/article_edit.css",),
         }
