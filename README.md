@@ -34,6 +34,15 @@ To create the first Django superuser, run :
 docker compose exec web python manage.py createsuperuser
 ```
 
+## To-do 
+### Logs
+- Add Django logging configuration
+- Set up log rotation (e.g. RotatingFileHandler)
+- Mount Docker volume for log files
+- Define log levels (INFO, WARNING, ERROR, etc.)
+- Redirect container logs to files
+- Add .env variable for log level
+
 ## Key Features
 - Ready-to-use multilingual blog
 - Easy deployment with Docker
