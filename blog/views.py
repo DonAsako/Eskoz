@@ -4,6 +4,18 @@ from .models import Article
 
 def article_detail(request, slug):
     article = get_object_or_404(Article, slug=slug)
+    if article.visibility == "private":
+        if not request.user.is_authenticated:
+            raise Http404
+
+    elif article.visibility == "protected":
+        if (
+            request.method == "POST"
+            and request.POST.get("password") == article.password
+        ):
+            return render(request, "blog/article_detail.html", {"article": article})
+        return render(request, "blog/article_password.html")
+
     return render(request, "blog/article_detail.html", {"article": article})
 
 
