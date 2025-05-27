@@ -18,7 +18,7 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Load .env
-load_dotenv('.env')
+load_dotenv(".env")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -27,7 +27,7 @@ load_dotenv('.env')
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG") == '1'
+DEBUG = os.getenv("DEBUG") == "1"
 
 ALLOWED_HOSTS = ALLOWED_HOSTS = os.getenv(
     "DJANGO_ALLOWED_HOSTS", "127.0.0.1 localhost"
@@ -93,7 +93,7 @@ DATABASES = {
         "PORT": os.environ.get("DB_PORT", "5432"),
     }
 }
-if os.getenv("DEBUG") == '1':
+if os.getenv("DEBUG") == "1":
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",

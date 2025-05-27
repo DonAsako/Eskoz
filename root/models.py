@@ -186,7 +186,9 @@ class Theme(models.Model):
     text_color = models.CharField(
         max_length=7, blank=True, verbose_name=_("Text color")
     )
-    show_transition = models.BooleanField(default=False, verbose_name=_("Show transition between page"))
+    show_transition = models.BooleanField(
+        default=False, verbose_name=_("Show transition between page")
+    )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated at"))
 
