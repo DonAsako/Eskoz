@@ -25,6 +25,9 @@ class SiteSettings(models.Model):
     under_maintenance = models.BooleanField(
         default=False, verbose_name=_("Under maintenance")
     )
+    show_transition = models.BooleanField(
+        default=False, verbose_name=_("Show transition between page")
+    )
 
     def __str__(self):
         return gettext("Site settings")
@@ -189,9 +192,6 @@ class Theme(models.Model):
     )
     text_color = models.CharField(
         max_length=7, blank=True, verbose_name=_("Text color")
-    )
-    show_transition = models.BooleanField(
-        default=False, verbose_name=_("Show transition between page")
     )
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
