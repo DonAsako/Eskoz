@@ -32,7 +32,7 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <style>
-        :root {
+        [data-theme="light"] {
             {% if light_theme.primary_color %}--primary-color: {{light_theme.primary_color}};{% endif %}
             {% if light_theme.secondary_color %}--secondary-color: {{light_theme.secondary_color}};{% endif %}
             {% if light_theme.background_color %}--background-color: {{light_theme.background_color}};{% endif %}
