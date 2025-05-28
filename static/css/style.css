@@ -7,9 +7,15 @@
 }
 :root {
     --primary-color: #f1f1f1;
-    --secondary-color: #f1f1f1;
+    --secondary-color: #f5f5f5;
     --background-color: #fefefe;
     --text-color: #3e3e3e;
+}
+[data-theme="dark"] {
+    --primary-color:   #2b2b2b;
+    --secondary-color: #3a3a3a;
+    --background-color:#1e1e1e;
+    --text-color:      #f1f1f1;
 }
 body {
     background-color: var(--background-color);
@@ -131,7 +137,12 @@ footer {
     font-size: 14px;
     background-color: var(--primary-color);
     color: var(--text-color);
+    align-items: center;
     text-align: center;
+
+}
+.footer-credits {
+    flex: 1;
 }
 .footer-credits a {
     text-decoration: none;
@@ -150,7 +161,7 @@ footer {
     background-color: var(--background-color) !important;
 }
 .codehilite {
-    background-color: var(--secondary-color) !important;
+    background-color: #f1f1f1 !important;
 }
 
 .article--form-password {
@@ -195,6 +206,20 @@ footer {
 .fade-in {
   animation: fadeIn 0.1s ease forwards;
 }
+
+.toggle_theme-button {
+    position: absolute;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    text-align: center;
+    border: none;
+    background-color: var(--secondary-color);
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+    font-size: 1em;
+    border-radius: 50%;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }

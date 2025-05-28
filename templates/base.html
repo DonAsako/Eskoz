@@ -33,11 +33,18 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <style>
         :root {
-            {% if theme.primary_color %}--primary-color: {{theme.primary_color}};{% endif %}
-            {% if theme.secondary_color %}--secondary-color: {{theme.secondary_color}};{% endif %}
-            {% if theme.background_color %}--background-color: {{theme.background_color}};{% endif %}
-            {% if theme.text_color %}--text-color: {{theme.text_color}};{% endif %}
+            {% if light_theme.primary_color %}--primary-color: {{light_theme.primary_color}};{% endif %}
+            {% if light_theme.secondary_color %}--secondary-color: {{light_theme.secondary_color}};{% endif %}
+            {% if light_theme.background_color %}--background-color: {{light_theme.background_color}};{% endif %}
+            {% if light_theme.text_color %}--text-color: {{light_theme.text_color}};{% endif %}
         }
+        [data-theme="dark"] {
+            {% if dark_theme.primary_color %}--primary-color: {{dark_theme.primary_color}};{% endif %}
+            {% if dark_theme.secondary_color %}--secondary-color: {{dark_theme.secondary_color}};{% endif %}
+            {% if dark_theme.background_color %}--background-color: {{dark_theme.background_color}};{% endif %}
+            {% if dark_theme.text_color %}--text-color: {{dark_theme.text_color}};{% endif %}
+        }
+
     </style>
     {% block head %}{% endblock %}
 </head>
@@ -77,8 +84,12 @@
             </div>
         </main>
         <footer>
-            <p class="footer-credits">{{ site_settings.footer_credits | safe}}</p>
+            <p class="footer-credits">
+                {{ site_settings.footer_credits | safe}}
+            </p>
+            <button class="toggle_theme-button" onclick="toggleTheme()"><span id="themeIcon">🌙</span> </button>
         </footer>
+
     {% endif %}
     {% if theme.show_transition %}
     <script>
@@ -101,6 +112,24 @@
     });
     </script>
     {% endif %}
+    <script>
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute("data-theme");
+            const newTheme = currentTheme === "dark" ? "light" : "dark";
+            document.documentElement.setAttribute("data-theme", newTheme);
+            localStorage.setItem("theme", newTheme);
+            updateThemeIcon(newTheme);
+        }
+        function updateThemeIcon(theme) {
+            const icon = document.getElementById("themeIcon");
+            icon.textContent = theme === "dark" ? "🌙" : "☀️";
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedTheme = localStorage.getItem("theme") || "light";
+            document.documentElement.setAttribute("data-theme", savedTheme);
+            updateThemeIcon(savedTheme);
+        });
+    </script>
 
 </body>
 </html>

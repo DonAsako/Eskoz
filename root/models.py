@@ -172,6 +172,10 @@ class SeoSettings(models.Model):
 
 
 class Theme(models.Model):
+    THEME_CHOICES = [
+        ("light", _("Light")),
+        ("dark", _("Dark")),
+    ]
     name = models.CharField(max_length=100, unique=True, verbose_name=_("Name"))
 
     primary_color = models.CharField(
@@ -189,10 +193,12 @@ class Theme(models.Model):
     show_transition = models.BooleanField(
         default=False, verbose_name=_("Show transition between page")
     )
+
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated at"))
 
     is_active = models.BooleanField(default=False, verbose_name=_("Is active"))
+    theme_type = models.CharField(max_length=10, choices=THEME_CHOICES, default="light")
 
     site_settings = models.ForeignKey(
         SiteSettings, on_delete=models.CASCADE, related_name="theme"
@@ -208,12 +214,14 @@ class Theme(models.Model):
     def save(self, *args, **kwargs):
         if self.is_active:
             # Disables all other active themes
-            Theme.objects.filter(~Q(id=self.id), is_active=True).update(is_active=False)
+            Theme.objects.filter(
+                ~Q(id=self.id), theme_type=self.theme_type, is_active=True
+            ).update(is_active=False)
         super().save(*args, **kwargs)
 
     @classmethod
-    def get_active_theme(cls):
-        return cls.objects.filter(is_active=True).first()
+    def get_active_theme(cls, theme_type):
+        return cls.objects.filter(is_active=True, theme_type=theme_type).first()
 
 
 class WellKnownFile(models.Model):

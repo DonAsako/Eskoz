@@ -2,8 +2,9 @@ from .models import Theme, SiteSettings
 
 
 def active_theme(request):
-    theme = Theme.get_active_theme()
-    return {"theme": theme}
+    light_theme = Theme.get_active_theme("light")
+    dark_theme = Theme.get_active_theme("dark")
+    return {"light_theme": light_theme, "dark_theme": dark_theme}
 
 
 def site_settings(request):
