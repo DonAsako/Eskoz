@@ -52,13 +52,17 @@
 {% if site_settings.under_maintenance %}
     {% include "components/maintenance.html" %}
 {% else %}
-    {% include "components/navbar.html" %}
+    <header>
+        {% include "components/navbar.html" %}
+    </header>
     <main>
         <div class="page_wrapper">
             {% block content %}{% endblock %}
         </div>
     </main>
-    {% include "components/footer.html" %}
+    <footer>
+        {% include "components/footer.html" %}
+    </footer>
 {% endif %}
 {% if site_settings.show_transition%}
     <script>
@@ -80,24 +84,7 @@
         });
     });
     </script>
+    <script src="{% static 'js/toggleTheme.js' %}"></script>
 {% endif %}
-    <script>
-        function toggleTheme() {
-            const currentTheme = document.documentElement.getAttribute("data-theme");
-            const newTheme = currentTheme === "dark" ? "light" : "dark";
-            document.documentElement.setAttribute("data-theme", newTheme);
-            localStorage.setItem("theme", newTheme);
-            updateThemeIcon(newTheme);
-        }
-        function updateThemeIcon(theme) {
-            const icon = document.getElementById("themeIcon");
-            icon.textContent = theme === "dark" ? "🌙" : "☀️";
-        }
-        document.addEventListener("DOMContentLoaded", () => {
-            const savedTheme = localStorage.getItem("theme") || "light";
-            document.documentElement.setAttribute("data-theme", savedTheme);
-            updateThemeIcon(savedTheme);
-        });
-    </script>
 </body>
 </html>

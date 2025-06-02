@@ -1,0 +1,48 @@
+:root {
+    --primary-color: var(--header-bg);
+    --secondary-color: var(--secondary);
+    --background-color: var(--body-bg);
+    --text-color: var(--primary-fg);
+}
+[data-theme="dark"] {
+    --primary-color: var(--header-bg);
+    --secondary-color: var(--secondary);
+    --background-color: var(--body-bg);
+    --text-color: var(--primary-fg);
+}
+.navbar h1, .navbar a {
+    padding: 0;
+    margin: 0;
+    font-weight: bold;
+}
+footer {
+    display: none;
+}
+main {
+    display: initial !important;
+}
+#login-form .submit-row input:hover {
+    color: var(--accent)
+}
+.toggle_theme-button {
+    position: relative;
+    right: 0;
+}
+.navbar-item--link:visited, .navbar-item--link:hover, .navbar-item--link {
+    color: var(--text-color) !important;
+}
+.navbar-item--link:hover {
+    border-bottom: 1px solid;
+}
+.logout-form button{
+    background-color: transparent;
+    border: none;
+    color: var(--text-color);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+.logout-form button:hover {
+    color: var(--text-color);
+    border-bottom: 1px solid;
+}

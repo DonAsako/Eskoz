@@ -1,0 +1,22 @@
+{% load i18n %}
+<nav class="navbar">
+    <div class="navbar-logo">
+        <a class="navbar-logo--link" href="{% url 'admin:index' %}">
+            <h1>{% translate 'Administration Panel' %}</h1>
+        </a>
+    </div>
+    <ul class="navbar-items">
+        {% if has_permission %}
+        <li class="navbar-item">
+            <a href="{% url 'admin:auth_user_change' user.pk %}" class="navbar-item--link" style="text-transform: capitalize;">{{user.username}}</a>
+        </li>
+        <form class="logout-form" method="post" action="{% url 'admin:logout' %}">
+            {% csrf_token %}
+            <button type="submit">{% translate 'Log out' %}</button>
+        </form>
+        {% endif %}
+        <li class="navbar-item">
+            {% include 'components/toggle_theme.html' %}
+        </li>
+    </ul>
+</nav>

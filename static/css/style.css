@@ -66,12 +66,15 @@ main {
     display: flex;
     align-items: center;
     list-style: none;
+    margin: 0;
 }
 .navbar-item {
     padding: 0 1em;
+    list-style: none;
 }
-.navbar-item--link {
+.navbar-item--link{
     font-weight: bold;
+    color: var(--text-color);
     text-decoration: none;
 }
 .page_wrapper {
