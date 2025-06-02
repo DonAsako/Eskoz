@@ -56,27 +56,7 @@
     </div>
     {% else %}
         <header>
-            <nav class="navbar">
-                <div class="navbar-logo">
-                <a class="navbar-logo--link" href="{% url 'root:index' %}">
-                {% if site_settings.logo %}
-                    <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}'s logo">
-                {% else %}
-                    <h1>{{ site_settings.site_name }}</h1>
-                {% endif %}
-                </div>
-                </a>
-                <ul class="navbar-items">
-                {% for page in site_settings.get_page_referenced %}
-                    <li class="navbar-item">
-                        <a href="{% url 'root:page_detail' page.slug %}" class="navbar-item--link">{{ page.title }}</a>
-                    </li>
-                {% endfor %}
-                    <li class="navbar-item">
-                        <a href="{% url 'blog:articles_list' %}" class="navbar-item--link">{% trans 'Articles' %}</a>
-                    </li>
-                </ul>
-            </nav>
+            {% include "components/navbar.html" %}
         </header>
         <main>
             <div class="page_wrapper">
@@ -84,10 +64,7 @@
             </div>
         </main>
         <footer>
-            <p class="footer-credits">
-                {{ site_settings.footer_credits | safe}}
-            </p>
-            <button class="toggle_theme-button" onclick="toggleTheme()"><span id="themeIcon">🌙</span> </button>
+            {% include "components/footer.html" %}
         </footer>
 
     {% endif %}
