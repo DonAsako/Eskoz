@@ -10,6 +10,9 @@
         <li class="navbar-item">
             <a href="{% url 'admin:auth_user_change' user.pk %}" class="navbar-item--link" style="text-transform: capitalize;">{{user.username}}</a>
         </li>
+        <li class="navbar-item">
+            <a href="{% url 'root:index' %}" class="navbar-item--link" style="text-transform: capitalize;">{% translate 'View site' %}</a>
+        </li>
         <form class="logout-form" method="post" action="{% url 'admin:logout' %}">
             {% csrf_token %}
             <button type="submit">{% translate 'Log out' %}</button>
