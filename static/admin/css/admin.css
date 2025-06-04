@@ -4,35 +4,55 @@
     --background-color: var(--body-bg);
     --text-color: var(--primary-fg);
 }
-[data-theme="dark"] {
-    --primary-color: var(--header-bg);
-    --secondary-color: var(--secondary);
-    --background-color: var(--body-bg);
-    --text-color: var(--primary-fg);
-}
-.navbar h1, .navbar a {
+.navbar-logo--link h1, .navbar-item--link {
     padding: 0;
     margin: 0;
     font-weight: bold;
+    color: var(--text-color);
 }
-footer {
-    display: none;
+.navbar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    padding: 1em;
+    background-color: var(--primary-color);
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+}
+.navbar-logo--link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+.navbar-items {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+.navbar-item {
+    padding: 0 1em;
+    list-style: none;
+}
+.navbar-item--link,
+.navbar-item--link:visited,
+.navbar-item--link:hover,
+.navbar-item--link:focus,
+.navbar-logo--link:focus {
+    color: var(--text-color) !important;
+    text-decoration: none;
+}
+.navbar-item--link:hover {
+    border-bottom: 1px solid;
 }
 main {
     display: initial !important;
 }
 #login-form .submit-row input:hover {
-    color: var(--accent)
+    color: var(--accent);
 }
-.toggle_theme-button {
-    position: relative;
-    right: 0;
-}
-.navbar-item--link:visited, .navbar-item--link:hover, .navbar-item--link {
-    color: var(--text-color) !important;
-}
-.navbar-item--link:hover {
-    border-bottom: 1px solid;
+#login-form .submit-row input {
+    width: 100%;
+    padding: 12px;
 }
 .logout-form button{
     background-color: transparent;
@@ -45,4 +65,16 @@ main {
 .logout-form button:hover {
     color: var(--text-color);
     border-bottom: 1px solid;
+}
+.toggle_theme-button {
+    position: relative;
+    right: 0;
+    width: 45px;
+    height: 45px;
+    text-align: center;
+    border: none;
+    background-color: var(--secondary-color);
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+    font-size: 1em;
+    border-radius: 50%;
 }

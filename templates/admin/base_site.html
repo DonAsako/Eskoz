@@ -4,7 +4,6 @@
 {% block title %}{{ site_settings.site_name }} - Eskoz{% endblock %}
 
 {% block extrastyle %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"> 
     <link rel="stylesheet" type="text/css" href="{% static 'admin/css/admin.css' %}">
 {% endblock %}
 {% block extrahead %}
@@ -17,7 +16,6 @@
     {% include 'admin/components/navbar.html' %}
 {% endblock %}
 
-{% block footer %}{% include 'components/footer.html' %}{% endblock %}
 
 {% block extrabody %}
     <script src="{% static 'js/toggleTheme.js' %}"></script>
