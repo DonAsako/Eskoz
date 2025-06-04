@@ -1,5 +1,5 @@
-import markdown
 from django.contrib import admin
+from django.urls import path
 from django.utils.translation import gettext_lazy as _
 from .forms import ArticleAdminForm
 from .models import Article, Tag, Category
@@ -43,9 +43,6 @@ class ArticleAdmin(admin.ModelAdmin):
 
     class Media:
         js = ("script/article_edit.js",)
-        css = {
-            "all": ("css/article_edit.css",),
-        }
 
 
 admin.site.register(Article, ArticleAdmin)

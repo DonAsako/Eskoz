@@ -11,6 +11,7 @@ from .models import (
     SeoSettings,
     Page,
 )
+from .forms import PageAdminForm
 
 
 class WellKnownFileInline(admin.TabularInline):
@@ -73,6 +74,7 @@ class PageAdmin(admin.ModelAdmin):
     model = Page
     verbose_name = _("Page")
     exclude = ["site_settings"]
+    form = PageAdminForm
     prepopulated_fields = {"slug": ("title",)}
 
 

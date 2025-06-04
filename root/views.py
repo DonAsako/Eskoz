@@ -1,5 +1,9 @@
+import markdown
 from django.shortcuts import render, get_object_or_404, HttpResponse
+from django.contrib.auth.decorators import login_required
 from django.http import Http404
+from django.http import HttpResponse, JsonResponse
+from django.utils.safestring import mark_safe
 from .models import WellKnownFile, Page
 
 
@@ -9,6 +13,17 @@ def index(request):
         return render(request, "root/page.html", {"page": page})
     else:
         return render(request, "root/index.html")
+
+
+@login_required
+def content_preview(request):
+    if request.method == "POST":
+        content = request.POST.get("content", "")
+        html = markdown.markdown(
+            content, extensions=["extra", "codehilite", "fenced_code"]
+        )
+        return JsonResponse({"html": mark_safe(html)})
+    return HttpResponse(request, status="401")
 
 
 def page_detail(request, slug):
