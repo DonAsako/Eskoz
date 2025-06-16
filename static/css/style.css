@@ -184,15 +184,14 @@ main {
 }
 
 /* Maintenance */
-.maintenance-wapper {
-  width: 100vw;
+.message-wapper {
   height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
-.maintenance-wapper svg {
+.message-wapper svg {
   fill: var(--text-color);
   width: 5em;
   margin: 1em;

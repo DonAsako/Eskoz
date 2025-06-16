@@ -4,24 +4,7 @@
     <meta property="og:type" content="website" />
 {% endblock %}
 {% block content %}
-<style>
-    .message {
-        position: absolute; 
-        margin: auto; 
-        top: 50%; 
-        bottom: 50%;
-        text-align: center;
-        line-height: 1.5;
-    }
-    .message a {
-        text-decoration: none;
-        border-bottom: 1px solid;
-    }
-    .message a:hover {
-        border-bottom: 1px solid transparent;
-    }
-</style>
-<div class="message">
+<div class="message-wapper">
     <h2>{% trans 'You can configure this page from your administration panel.' %}</h2>
     <p>
         {% url 'admin:login' as admin_url %}

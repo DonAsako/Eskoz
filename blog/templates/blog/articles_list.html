@@ -7,7 +7,7 @@
 {% block content %}
     <div class="articles_list">
         {% if not articles %}
-            <h2 class="information_message">{% trans 'There is no article at the moment.' %}</h2>
+            <h2 class="message-wapper">{% trans 'There is no article at the moment.' %}</h2>
         {% else %}
         {% for article in articles %}
             <a class="article_card" href="{% url 'blog:article_detail' article.slug %}">
