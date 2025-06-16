@@ -44,6 +44,8 @@ docker compose exec web python manage.py createsuperuser
 - [ ] Add .env variable for log level
 ### Admin
 - [x] Add a color palette to choose a color in the theme section.
+### Translate
+- [ ] Make translation
 
 ## Key Features
 - Ready-to-use multilingual blog
