@@ -156,3 +156,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+ADMIN_URL = os.getenv("ADMIN_URL") or "admin"

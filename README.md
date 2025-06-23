@@ -22,7 +22,23 @@ cp .env.example .env
 ```
 
 ### 3. Edit the .env file to configure your environment variables.
+The .env file stores your environment-specific settings. Here's what each variable does:
+```yaml
+# --- Django Settings ---
+DEBUG=0                         # Enable (1) or disable (0) Django debug mode
+DJANGO_SECRET_KEY=              # Secret key for Django security
+DJANGO_ALLOWED_HOSTS=           # Space-separated list of allowed hostnames
+ADMIN_URL=                      # Custom URL path for the Django admin (e.g., "admin")
 
+# --- PostgreSQL Settings ---
+POSTGRES_DB=                    # Name of the PostgreSQL database
+POSTGRES_USER=                  # PostgreSQL username
+POSTGRES_PASSWORD=              # PostgreSQL password
+
+# --- NGINX / Domain Configuration ---
+DOMAIN=                         # Your domain name (e.g., example.com)
+EMAIL=                          # Email address used for SSL certificate
+```
 ### 4. Build and start the Docker containers in detached mode:
 ```sh
 docker compose up --build -d
@@ -46,6 +62,10 @@ docker compose exec web python manage.py createsuperuser
 - [x] Add a color palette to choose a color in the theme section.
 ### Translate
 - [ ] Make translation
+### Style
+- [ ] Make the layout responsive
+- [ ] Improve article detail view
+- [ ] Add article parameters to the article list page
 
 ## Key Features
 - Ready-to-use multilingual blog
