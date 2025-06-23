@@ -177,7 +177,11 @@ main {
 }
 .article--content {
   padding: 45px;
+  width: 100%;
   background-color: var(--background-color) !important;
+}
+.article--content * {
+  max-width: 100%;
 }
 .codehilite {
   background-color: #f1f1f1 !important;
