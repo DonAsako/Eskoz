@@ -33,9 +33,11 @@ ALLOWED_HOSTS = ALLOWED_HOSTS = os.getenv(
     "DJANGO_ALLOWED_HOSTS", "127.0.0.1 localhost"
 ).split(" ")
 
+CSRF_TRUSTED_ORIGINS = ["https://" + domain for domain in ALLOWED_HOSTS]
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 # Application definition
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
