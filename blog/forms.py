@@ -1,10 +1,10 @@
 from django.forms import ModelForm
-from .models import Article
+from .models import ArticleTranslation
 from root.widgets import ContentEditorWidget
 
 
-class ArticleAdminForm(ModelForm):
+class ArticleTranslationAdminForm(ModelForm):
     class Meta:
-        model = Article
+        model = ArticleTranslation
         fields = "__all__"
         widgets = {"content": ContentEditorWidget}

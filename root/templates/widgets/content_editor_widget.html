@@ -1,4 +1,4 @@
 <div class="editor-content">
-    <textarea class="editor-content--editor" name="content" id="textarea-content">{{ widget.value | default_if_none:'' }}</textarea>
-    <iframe class="editor-content--viewer"></iframe>
+    <textarea class="editor-content--editor" name="{{widget.name}}" id="{{widget.name}}">{{ widget.value | default_if_none:'' }}</textarea>
+    <iframe class="editor-content--viewer" id="render-{{widget.name}}"></iframe>
 </div>

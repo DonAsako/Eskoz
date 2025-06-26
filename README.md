@@ -66,6 +66,13 @@ docker compose exec web python manage.py createsuperuser
 - [ ] Make the layout responsive
 - [ ] Improve article detail view
 - [ ] Add article parameters to the article list page
+### Deploy
+- [ ] Add automatic script to load SSL/Certificates and easy deploy..
+### Features 
+- [ ] New Theme Manager
+    - [ ] Options to load Theme
+    - [ ] Theme structure
+
 
 ## Key Features
 - Ready-to-use multilingual blog

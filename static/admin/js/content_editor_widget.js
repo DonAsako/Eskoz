@@ -3,7 +3,7 @@ function getCookie(name) {
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
-async function sendContentToPreview(content) {
+async function sendContentToPreview(content, id) {
     const response = await fetch("/content_preview/", {
         method: "POST",
         headers: {
@@ -15,7 +15,7 @@ async function sendContentToPreview(content) {
 
     if (response.ok) {
         const data = await response.json();
-        iframe = document.querySelector(".editor-content--viewer");
+        const iframe = document.getElementById(`render-${id}`);
         const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
         const html = `
             <!DOCTYPE html>
@@ -46,11 +46,42 @@ async function sendContentToPreview(content) {
         console.error("Error :", response.status);
     }
 }
+function debounce(fn, delay = 250) {
+    let timer = null;
+    return function (...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn.apply(this, args), delay);
+    };
+}
+
+function initTextareas(textareas) {
+    textareas.forEach((textarea) => {
+        if (textarea.dataset.listenerAttached || textarea.id.includes('__prefix__')) return;
+
+        textarea.dataset.listenerAttached = "true";
+        const id = textarea.id;
+        
+        sendContentToPreview(textarea.value, id);
+
+        const smoothUpdate = debounce((value) => {
+            sendContentToPreview(value, id);
+        }, 250);
+
+        textarea.addEventListener("input", (e) => {
+            smoothUpdate(e.target.value);
+        });
+    });
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
-    const textarea = document.querySelector(".editor-content--editor");
-    sendContentToPreview(textarea.value);
-    textarea.addEventListener("input", (e) => {
-        console.log(e.target.value)
-        sendContentToPreview(e.target.value);
-    })
+    const textareas = document.querySelectorAll(".editor-content--editor");
+    initTextareas(textareas);
+});
+
+document.addEventListener("formset:added", (e) => {
+    const newForm = e.target;
+
+    const newTextareas = newForm.querySelectorAll(".editor-content--editor");
+    initTextareas(newTextareas);
 });

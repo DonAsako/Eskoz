@@ -36,13 +36,8 @@ class Article(models.Model):
         ("protected", _("Protected")),
         ("private", _("Private")),
     ]
-
     title = models.CharField(max_length=255, verbose_name=_("Title"))
-    description = models.TextField(
-        max_length=512, verbose_name=_("Description"), blank=True, null=True
-    )
     slug = models.SlugField(unique=True, blank=False, verbose_name=_("Slug"))
-    content = models.TextField(verbose_name=_("Content"))
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("Author"))
     tags = models.ManyToManyField(
         Tag, related_name="articles", blank=True, verbose_name=_("Tags")
@@ -79,8 +74,8 @@ class Article(models.Model):
 
         super().save(*args, **kwargs)
 
-    def get_reading_time(self):
-        return len(self.content.split(" ")) // 200
+    def get_translation(self, language_code):
+        return self.translations.filter(language=language_code).first()
 
     def get_content_as_html(self):
         html = markdown.markdown(
@@ -89,8 +84,39 @@ class Article(models.Model):
         return mark_safe(html)
 
     def __str__(self):
-        return self.title
+        return self.slug
 
     class Meta:
         verbose_name = _("Article")
         verbose_name_plural = _("Articles")
+
+
+class ArticleTranslation(models.Model):
+    LANGUAGE_CHOICES = [
+        ("fr", "French"),
+        ("en", "English"),
+        ("it", "Italian"),
+    ]
+    article = models.ForeignKey(
+        Article,
+        related_name="translations",
+        on_delete=models.CASCADE,
+        verbose_name=_("Article"),
+    )
+    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    title = models.CharField(max_length=255, verbose_name=_("Title"))
+    description = models.TextField(
+        max_length=512, blank=True, null=True, verbose_name=_("Description")
+    )
+    content = models.TextField(verbose_name=_("Content"))
+
+    class Meta:
+        unique_together = ("article", "language")
+        verbose_name = _("Article Translation")
+        verbose_name_plural = _("Article Translations")
+
+    def get_reading_time(self):
+        return len(self.content.split(" ")) // 200
+
+    def __str__(self):
+        return f"{self.article.slug} ({self.language})"
