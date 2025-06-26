@@ -6,17 +6,17 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css/github-markdown.min.css" />
 {% endblock %}
-{% block title %} - {{ article.title }}{% endblock %}
+{% block title %} - {{ article.get_translation.title }}{% endblock %}
 {% block SEO %}
     <meta property="og:type" content="article" />
     <meta property="article:published_time" content="{{ article.published_on.isoformat }}" />
     <meta property="article:modified_time" content="{{ article.edited_on.isoformat }}" />
     {% for tag in article.tags.all %}<meta property="article:tag" content="{{ tag.title }}" />{% endfor %}
-{% endblock %}
+{% endblock %}cd
 {% block content %}
-    <h1 class="article--title">{{ article.title }}</h1>
+    <h1 class="article--title">{{ article.get_translation.title }}</h1>
     <div class="article--content markdown-body">
-        {{ article.get_content_as_html }}
+        {{ article.get_translation.get_content_as_html }}
     </div>
     <script>hljs.highlightAll();</script>
 

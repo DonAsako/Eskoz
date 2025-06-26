@@ -12,9 +12,9 @@
         {% for article in articles %}
             <a class="article_card" href="{% url 'blog:article_detail' article.slug %}">
           
-                <p class="article_card--title">{{ article.title }}</p>
+                <p class="article_card--title">{{ article.get_translation.title }}</p>
                 <p class="article_card--date">{{ article.published_on }}</p>
-                <p class="article_card--description">{{ article.description|default_if_none:'' }}</p>
+                <p class="article_card--description">{{ article.get_translation.description|default_if_none:'' }}</p>
                 <div class="article_card--tags">
                     {% for tag in article.tags.all %}
                         <p class="article_card--tag">{{ tag.title }}</p>

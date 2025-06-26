@@ -3,7 +3,8 @@ from django.db import models
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.contrib.auth.models import User
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import get_language, gettext_lazy as _
+from django.conf import settings
 import markdown
 
 
@@ -74,14 +75,15 @@ class Article(models.Model):
 
         super().save(*args, **kwargs)
 
-    def get_translation(self, language_code):
-        return self.translations.filter(language=language_code).first()
-
-    def get_content_as_html(self):
-        html = markdown.markdown(
-            self.content, extensions=["extra", "codehilite", "fenced_code"]
-        )
-        return mark_safe(html)
+    def get_translation(self, language=None):
+        lang = language or get_language()
+        translation = self.translations.filter(language=lang).first()
+        if not translation:
+            translation = (
+                self.translations.filter(language="en").first()
+                or self.translations.filter().first()
+            )
+        return translation
 
     def __str__(self):
         return self.slug
@@ -92,11 +94,7 @@ class Article(models.Model):
 
 
 class ArticleTranslation(models.Model):
-    LANGUAGE_CHOICES = [
-        ("fr", "French"),
-        ("en", "English"),
-        ("it", "Italian"),
-    ]
+    LANGUAGE_CHOICES = settings.LANGUAGES
     article = models.ForeignKey(
         Article,
         related_name="translations",
@@ -117,6 +115,12 @@ class ArticleTranslation(models.Model):
 
     def get_reading_time(self):
         return len(self.content.split(" ")) // 200
+
+    def get_content_as_html(self):
+        html = markdown.markdown(
+            self.content, extensions=["extra", "codehilite", "fenced_code"]
+        )
+        return mark_safe(html)
 
     def __str__(self):
         return f"{self.article.slug} ({self.language})"
