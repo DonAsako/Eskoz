@@ -181,6 +181,7 @@ main {
   padding-left: .5em;
   align-self: flex-start;
   font-size: 0.9rem;
+  max-width: 250px;
 }
 .article--toc a {
   text-decoration: none;
