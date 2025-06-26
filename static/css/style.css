@@ -251,7 +251,7 @@ main {
 
 /* Maintenance */
 .message-wapper {
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -261,6 +261,9 @@ main {
   fill: var(--text-color);
   width: 5em;
   margin: 1em;
+}
+.message-wapper h2 {
+  text-align: center;
 }
 
 /* Footer */
