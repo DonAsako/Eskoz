@@ -118,7 +118,7 @@ class ArticleTranslation(models.Model):
 
     def get_content_as_html(self):
         html = markdown.markdown(
-            self.content, extensions=["extra", "codehilite", "fenced_code"]
+            self.content, extensions=["extra", "codehilite", "fenced_code", "toc"]
         )
         return mark_safe(html)
 

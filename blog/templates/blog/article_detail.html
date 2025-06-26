@@ -14,10 +14,79 @@
     {% for tag in article.tags.all %}<meta property="article:tag" content="{{ tag.title }}" />{% endfor %}
 {% endblock %}cd
 {% block content %}
-    <h1 class="article--title">{{ article.get_translation.title }}</h1>
+<div class="article--container">
     <div class="article--content markdown-body">
         {{ article.get_translation.get_content_as_html }}
     </div>
-    <script>hljs.highlightAll();</script>
+    <aside class="article--toc" id="toc"></aside>
+</div>
+<script>hljs.highlightAll();</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const content = document.querySelector(".article--content");
+    const toc = document.getElementById("toc");
+
+    if (!content || !toc) return;
+
+    const headers = content.querySelectorAll("h1, h2, h3, h4");
+    if (!headers.length) return;
+
+    const ul = document.createElement("ul");
+
+    headers.forEach(header => {
+        const id = header.id;
+        if (!id) return;
+
+        const anchor = document.createElement("a");
+        anchor.href = `#${id}`;
+        anchor.className = "article--anchor-link";
+
+        while (header.firstChild) {
+            anchor.appendChild(header.firstChild);
+        }
+        
+        header.appendChild(anchor);
+        if (!header.id) {
+            header.id = header.textContent.trim().toLowerCase().replace(/\s+/g, '-');
+        }
+
+        const li = document.createElement("li");
+        li.style.marginLeft = `${(parseInt(header.tagName[1]) - 1) * 0.5}em`;
+
+        const a = document.createElement("a");
+        a.href = `#${header.id}`;
+        a.textContent = header.textContent;
+        
+        li.appendChild(a);
+        ul.appendChild(li);
+    });
+
+    toc.appendChild(ul);
+    const tocLinks = toc.querySelectorAll("a");
+
+    function onScroll() {
+        let current = null;
+        headers.forEach(header => {
+            const rect = header.getBoundingClientRect();
+            if (rect.top <= 100) {
+                current = header.id;
+            }
+        });
+
+        tocLinks.forEach(link => {
+            if (link.getAttribute('href') === `#${current}`) {
+                link.classList.add("active");
+            } else {
+                link.classList.remove("active");
+            }
+        });
+    }
+
+    document.addEventListener('scroll', onScroll);
+
+    onScroll();
+});
+</script>
 
 {% endblock %}
