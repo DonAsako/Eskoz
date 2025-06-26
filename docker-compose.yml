@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:15
+    image: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
@@ -22,7 +22,7 @@ services:
     restart: unless-stopped
 
   nginx:
-    image: nginx:alpine
+    image: nginx
     volumes:
       - static_volume:/app/staticfiles
       - media_volume:/app/media
