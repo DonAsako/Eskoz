@@ -44,7 +44,7 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2em;
+  padding: 2em 3em;
   width: 100%;
 }
 
@@ -175,7 +175,6 @@ main {
 .article--toc {
   position: sticky;
   top: 1em;
-  width: 250px;
   max-height: 100vh;
   overflow-y: auto;
   border-left: 3px solid var(--primary-color);
@@ -215,12 +214,12 @@ main {
 .article--container {
   display: flex;
   width: 100%;
-  padding: 0 1em;
   align-items: flex-start;
   gap: 2rem;
 }
 .article--wrapper {
   flex: 1;
+  width: 0;
 }
 .article--picture-wrapper {
   flex: 1;
@@ -320,5 +319,8 @@ footer {
 @media (max-width: 768px) {
   .article--toc {
     display: none;
+  }
+  .page_wrapper {
+    padding: 1em;
   }
 }
