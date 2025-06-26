@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Error 403 - Forbidden (CSRF)" %}
+{% endblock %}
+
+{% block SEO %}
+    <meta property="og:type" content="website" />
+    <meta name="robots" content="noindex" />
+{% endblock %}
+
+{% block content %}
+<div class="message-wrapper error-403">
+    <h2>{% trans "ERROR 403 - Forbidden" %}</h2>
+    <p>{% trans "CSRF verification failed. You do not have permission to access this page." %}</p>
+    <p>{% trans "Please refresh the page and try again. Make sure cookies are enabled in your browser." %}</p>
+</div>
+{% endblock %}
