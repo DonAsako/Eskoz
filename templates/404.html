@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block SEO %}
+    <meta property="og:type" content="website" />
+    <meta name="robots" content="noindex" />
+{% endblock %}
+
+{% block title %}
+    {% trans "Error 404 - Page not found" %}
+{% endblock %}
+
+{% block content %}
+<div class="message-wrapper error-404">
+    <h2>{% trans 'ERROR 404 - Page not found' %}</h2>
+    <p>{% trans "Please check the URL or return to the" %} 
+       <a href="/">{% trans "homepage" %}</a>.</p>
+</div>
+{% endblock %}
+

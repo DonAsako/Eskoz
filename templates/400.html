@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Error 400 - Bad Request" %}
+{% endblock %}
+
+{% block SEO %}
+    <meta property="og:type" content="website" />
+    <meta name="robots" content="noindex" />
+{% endblock %}
+
+{% block content %}
+<div class="message-wrapper error-400">
+    <h2>{% trans "ERROR 400 - Bad Request" %}</h2>
+    <p>{% trans "The request could not be understood by the server." %}</p>
+</div>
+{% endblock %}
