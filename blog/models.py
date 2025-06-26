@@ -86,7 +86,7 @@ class Article(models.Model):
         return translation
 
     def __str__(self):
-        return self.slug
+        return self.title
 
     class Meta:
         verbose_name = _("Article")
