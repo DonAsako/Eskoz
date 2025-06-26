@@ -18,7 +18,7 @@ def backup(self, request, queryset):
             for translation in article.translations.all():
                 lang = translation.language
                 title = translation.title or f"article-{article.pk}"
-                filename = f"{slugify(title)}-{lang}.md"
+                filename = f"{slugify(title)}/{lang}.md"
 
                 content = f"# {translation.title}\n\n"
                 if translation.description:
