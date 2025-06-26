@@ -12,11 +12,13 @@ async function sendContentToPreview(content, id) {
         },
         body: new URLSearchParams({ content })
     });
-
+    const currentTheme = document.documentElement.getAttribute("data-theme");
+    console.log(currentTheme);
     if (response.ok) {
         const data = await response.json();
         const iframe = document.getElementById(`render-${id}`);
         const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
         const html = `
             <!DOCTYPE html>
             <html>
@@ -31,7 +33,6 @@ async function sendContentToPreview(content, id) {
                         }
                     </style>
                     <link rel="stylesheet" href="/static/css/style.css">
-                    
                 </head>
                 <body class="markdown-body">
                     ${data.html}
@@ -40,6 +41,7 @@ async function sendContentToPreview(content, id) {
             </html>`;
         iframeDoc.open();
         iframeDoc.write(html);
+        iframeDoc.documentElement.setAttribute("data-theme", currentTheme);
         iframeDoc.close();
         
     } else {

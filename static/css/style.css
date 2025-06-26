@@ -299,3 +299,9 @@ footer {
   from { opacity: 1; }
   to   { opacity: 0; }
 }
+
+@media (max-width: 768px) {
+  .article--toc {
+    display: none;
+  }
+}
