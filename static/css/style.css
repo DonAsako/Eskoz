@@ -187,7 +187,6 @@ main {
   text-decoration: none;
   font-weight: bold;
   position: sticky;
-
 }
 .article--toc a.active {
   text-decoration: underline;
@@ -220,9 +219,27 @@ main {
   align-items: flex-start;
   gap: 2rem;
 }
+.article--wrapper {
+  flex: 1;
+}
+.article--picture-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+.article--picture-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  padding-bottom: 1em;
+}
 .article--content {
   flex: 1;
-  min-width: 0;
   background-color: var(--background-color) !important;
 }
 .article--content * {

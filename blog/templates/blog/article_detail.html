@@ -15,8 +15,11 @@
 {% endblock %}cd
 {% block content %}
 <div class="article--container">
-    <div class="article--content markdown-body">
-        {{ article.get_translation.get_content_as_html }}
+    <div class="article--wrapper">
+        {% if article.picture %} <div class="article--picture-wrapper"><img src="{{ article.picture.url }}"></div> {% endif %}
+        <div class="article--content markdown-body">
+            {{ article.get_translation.get_content_as_html }}
+        </div>
     </div>
     <aside class="article--toc" id="toc"></aside>
 </div>
