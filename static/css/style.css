@@ -250,19 +250,19 @@ main {
 }
 
 /* Maintenance */
-.message-wapper {
+.message-wrapper {
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
-.message-wapper svg {
+.message-wrapper svg {
   fill: var(--text-color);
   width: 5em;
   margin: 1em;
 }
-.message-wapper h2 {
+.message-wrapper h2 {
   text-align: center;
 }
 
