@@ -31,21 +31,6 @@
     <title>{{site_settings.site_name}}{% block title %}{% endblock%}</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <style>
-        [data-theme="light"] {
-            {% if light_theme.primary_color %}--primary-color: {{light_theme.primary_color}};{% endif %}
-            {% if light_theme.secondary_color %}--secondary-color: {{light_theme.secondary_color}};{% endif %}
-            {% if light_theme.background_color %}--background-color: {{light_theme.background_color}};{% endif %}
-            {% if light_theme.text_color %}--text-color: {{light_theme.text_color}};{% endif %}
-        }
-        [data-theme="dark"] {
-            {% if dark_theme.primary_color %}--primary-color: {{dark_theme.primary_color}};{% endif %}
-            {% if dark_theme.secondary_color %}--secondary-color: {{dark_theme.secondary_color}};{% endif %}
-            {% if dark_theme.background_color %}--background-color: {{dark_theme.background_color}};{% endif %}
-            {% if dark_theme.text_color %}--text-color: {{dark_theme.text_color}};{% endif %}
-        }
-
-    </style>
     {% block head %}{% endblock %}
 </head>
 <body>

@@ -175,17 +175,12 @@ class SeoSettings(models.Model):
 
 
 class Theme(models.Model):
-    THEME_CHOICES = [
-        ("light", _("Light")),
-        ("dark", _("Dark")),
-    ]
     name = models.CharField(max_length=100, unique=True, verbose_name=_("Name"))
     slug = models.SlugField(unique=True)
     path = models.CharField(max_length=255)
     preview_image = models.ImageField(
         upload_to="theme_previews/", null=True, blank=True
     )
-    theme_type = models.CharField(max_length=10, choices=THEME_CHOICES, default="light")
     is_active = models.BooleanField(default=False, verbose_name=_("Is active"))
 
     site_settings = models.ForeignKey(
@@ -204,14 +199,12 @@ class Theme(models.Model):
     def save(self, *args, **kwargs):
         if self.is_active:
             # Disables all other active themes
-            Theme.objects.filter(
-                ~Q(id=self.id), theme_type=self.theme_type, is_active=True
-            ).update(is_active=False)
+            Theme.objects.filter(~Q(id=self.id), is_active=True).update(is_active=False)
         super().save(*args, **kwargs)
 
     @classmethod
-    def get_active_theme(cls, theme_type):
-        return cls.objects.filter(is_active=True, theme_type=theme_type).first()
+    def get_active_theme(cls):
+        return cls.objects.filter(is_active=True).first()
 
     class Meta:
         verbose_name = _("Theme")

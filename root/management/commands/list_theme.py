@@ -16,18 +16,10 @@ class Command(BaseCommand):
             required=False,
             default=None,
         )
-        parser.add_argument(
-            "--type",
-            type=str,
-            help="Filter themes by type: 'light' or 'dark'",
-            required=False,
-            default=None,
-        )
 
     def handle(self, *args, **options):
         themes = Theme.objects.all()
         active = options.get("active")
-        theme_type = options.get("type")
 
         if active:
             active_val = active.lower()
@@ -38,21 +30,12 @@ class Command(BaseCommand):
             else:
                 raise CommandError("Invalid value for --active. Use 'true' or 'false'.")
 
-        if theme_type:
-            theme_type_val = theme_type.lower()
-            if theme_type_val == "light":
-                themes = themes.filter(theme_type="light")
-            elif theme_type_val == "dark":
-                themes = themes.filter(theme_type="dark")
-            else:
-                raise CommandError("Invalid value for --type. Use 'light' or 'dark'.")
-
         self.stdout.write(
-            f"{'Name'.ljust(20)}{'Type'.ljust(10)}{'Path'.ljust(25)}{'Active'}"
+            f"{'Name'.ljust(20)}{'Slug'.ljust(10)}{'Path'.ljust(25)}{'Active'}"
         )
         for theme in themes:
             self.stdout.write(
-                f"{theme.name.ljust(20)}{theme.theme_type.ljust(10)}{theme.path.ljust(25)}{theme.is_active}"
+                f"{theme.name.ljust(20)}{theme.slug.ljust(10)}{theme.path.ljust(25)}{theme.is_active}"
             )
 
         self.stdout.write(
