@@ -180,25 +180,13 @@ class Theme(models.Model):
         ("dark", _("Dark")),
     ]
     name = models.CharField(max_length=100, unique=True, verbose_name=_("Name"))
-
-    primary_color = models.CharField(
-        max_length=7, blank=True, verbose_name=_("Primary color")
+    slug = models.SlugField(unique=True)
+    path = models.CharField(max_length=255)
+    preview_image = models.ImageField(
+        upload_to="theme_previews/", null=True, blank=True
     )
-    secondary_color = models.CharField(
-        max_length=7, blank=True, verbose_name=_("Secondary color")
-    )
-    background_color = models.CharField(
-        max_length=7, blank=True, verbose_name=_("Background color")
-    )
-    text_color = models.CharField(
-        max_length=7, blank=True, verbose_name=_("Text color")
-    )
-
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
-    updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated at"))
-
-    is_active = models.BooleanField(default=False, verbose_name=_("Is active"))
     theme_type = models.CharField(max_length=10, choices=THEME_CHOICES, default="light")
+    is_active = models.BooleanField(default=False, verbose_name=_("Is active"))
 
     site_settings = models.ForeignKey(
         SiteSettings, on_delete=models.CASCADE, related_name="theme"
@@ -207,9 +195,11 @@ class Theme(models.Model):
     def __str__(self):
         return self.name
 
-    class Meta:
-        verbose_name = _("Theme")
-        verbose_name_plural = _("Themes")
+    def get_static_prefix(self):
+        return f"themes/{self.slug}/static"
+
+    def get_template_dir(self):
+        return os.path.join(settings.BASE_DIR, "themes", self.slug, "templates")
 
     def save(self, *args, **kwargs):
         if self.is_active:
@@ -222,6 +212,10 @@ class Theme(models.Model):
     @classmethod
     def get_active_theme(cls, theme_type):
         return cls.objects.filter(is_active=True, theme_type=theme_type).first()
+
+    class Meta:
+        verbose_name = _("Theme")
+        verbose_name_plural = _("Themes")
 
 
 class WellKnownFile(models.Model):

@@ -11,7 +11,7 @@ from .models import (
     SeoSettings,
     Page,
 )
-from .forms import PageAdminForm, ThemeAdminForm
+from .forms import PageAdminForm
 
 
 class WellKnownFileInline(admin.TabularInline):
@@ -24,8 +24,8 @@ class WellKnownFileInline(admin.TabularInline):
 class ThemeInline(admin.StackedInline):
     model = Theme
     can_delete = True
+    readonly_fields = ["slug", "path", "preview_image"]
     extra = 0
-    form = ThemeAdminForm
     verbose_name = _("Theme")
 
 
