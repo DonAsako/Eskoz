@@ -55,9 +55,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const li = document.createElement("li");
-        li.style.marginLeft = `${(parseInt(header.tagName[1]) - 1) * 0.5}em`;
 
         const a = document.createElement("a");
+        a.style.marginLeft = `${(parseInt(header.tagName[1]) - 1) * 1}em`;
+
         a.href = `#${header.id}`;
         a.textContent = header.textContent;
         
@@ -79,9 +80,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         tocLinks.forEach(link => {
             if (link.getAttribute('href') === `#${current}`) {
-                link.classList.add("active");
+                link.parentElement.classList.add("active");
             } else {
-                link.classList.remove("active");
+                link.parentElement.classList.remove("active");
             }
         });
     }

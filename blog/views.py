@@ -14,14 +14,18 @@ def article_detail(request, slug):
             request.method == "POST"
             and request.POST.get("password") == article.password
         ):
-            return render(request, "blog/article_detail.html", {"article": article})
-        return render(request, "blog/article_password.html")
+            return render(
+                request,
+                f"blog/article_detail.html",
+                {"article": article},
+            )
+        return render(request, f"blog/article_password.html")
 
-    return render(request, "blog/article_detail.html", {"article": article})
+    return render(request, f"blog/article_detail.html", {"article": article})
 
 
 def articles_list(request):
     articles = Article.objects.filter(visibility="public").prefetch_related(
         "translations", "tags"
     )
-    return render(request, "blog/articles_list.html", {"articles": articles})
+    return render(request, f"blog/articles_list.html", {"articles": articles})

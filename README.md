@@ -29,6 +29,7 @@ DEBUG=0                         # Enable (1) or disable (0) Django debug mode
 DJANGO_SECRET_KEY=              # Secret key for Django security
 DJANGO_ALLOWED_HOSTS=           # Space-separated list of allowed hostnames
 ADMIN_URL=                      # Custom URL path for the Django admin (e.g., "admin")
+THEME=                          # Active Theme in themes directory (default: Eskoz)
 
 # --- PostgreSQL Settings ---
 POSTGRES_DB=                    # Name of the PostgreSQL database
@@ -58,8 +59,6 @@ docker compose exec web python manage.py createsuperuser
 - [ ] Define log levels (INFO, WARNING, ERROR, etc.)
 - [ ] Redirect container logs to files
 - [ ] Add .env variable for log level
-### Admin
-- [x] Add a color palette to choose a color in the theme section.
 ### Translate
 - [ ] Make translation
 ### Style
@@ -71,8 +70,8 @@ docker compose exec web python manage.py createsuperuser
 ### Features 
 - [ ] New Theme Manager
     - [ ] Options to load Theme
-    - [ ] Theme structure
-
+    - [x] Theme structure
+    - [ ] Fix deploy theme
 
 ## Key Features
 - Ready-to-use multilingual blog

@@ -58,26 +58,36 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "root.middleware.ActiveThemeMiddleware",
 ]
 
 ROOT_URLCONF = "eskoz.urls"
 
+ACTIVE_THEME = os.getenv("THEME", "Eskoz")
+
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": ["templates"],
+        "DIRS": ["templates", "themes"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "root.context_processors.active_theme",
                 "root.context_processors.site_settings",
+                "root.context_processors.active_theme",
             ],
         },
     },
 ]
+
+TEMPLATES[0]["DIRS"] = [
+    os.path.join(BASE_DIR, "themes", ACTIVE_THEME, "templates"),
+    os.path.join(BASE_DIR, "templates"),
+]
+
 
 WSGI_APPLICATION = "eskoz.wsgi.application"
 
@@ -147,9 +157,9 @@ LOCALE_PATHS = [
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATICFILES_DIRS = [BASE_DIR / "static", BASE_DIR / "themes" / ACTIVE_THEME / "static"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

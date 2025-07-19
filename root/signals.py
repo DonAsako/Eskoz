@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save, post_migrate
 from django.dispatch import receiver
 from django.db.utils import OperationalError, ProgrammingError
-from .models import SeoSettings, SiteSettings, UserProfile, Theme
+from .models import SeoSettings, SiteSettings, UserProfile
 from django.contrib.auth.models import User
 
 
@@ -20,7 +20,6 @@ def create_site_settings(sender, **kwargs):
 def create_seo_settings(sender, instance, created, **kwargs):
     if created:
         SeoSettings.objects.create(site_settings=instance)
-        theme = Theme.objects.create(site_settings=instance, name="default")
 
 
 # Create UserProfile on creation of User

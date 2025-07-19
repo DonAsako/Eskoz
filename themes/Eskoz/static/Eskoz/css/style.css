@@ -180,7 +180,7 @@ main {
   border-left: 3px solid var(--primary-color);
   padding-left: .5em;
   align-self: flex-start;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   max-width: 250px;
 }
 .article--toc a {
@@ -188,11 +188,17 @@ main {
   font-weight: bold;
   position: sticky;
 }
-.article--toc a.active {
-  text-decoration: underline;
+.article--toc li.active a {
+  color: var(--primary-color);
+}
+.article--toc li.active {
+  background-color: var(--text-color);
 }
 .article--toc ul {
   list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
 }
 .article--anchor-link {
   color: var(--text-color) !important;

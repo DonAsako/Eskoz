@@ -174,54 +174,30 @@ class SeoSettings(models.Model):
         return ""
 
 
-class Theme(models.Model):
-    THEME_CHOICES = [
-        ("light", _("Light")),
-        ("dark", _("Dark")),
-    ]
-    name = models.CharField(max_length=100, unique=True, verbose_name=_("Name"))
+# class Theme(models.Model):
+#     name = models.CharField(max_length=100, unique=True, verbose_name=_("Name"))
+#     is_active = models.BooleanField(default=False, verbose_name=_("Is active"))
 
-    primary_color = models.CharField(
-        max_length=7, blank=True, verbose_name=_("Primary color")
-    )
-    secondary_color = models.CharField(
-        max_length=7, blank=True, verbose_name=_("Secondary color")
-    )
-    background_color = models.CharField(
-        max_length=7, blank=True, verbose_name=_("Background color")
-    )
-    text_color = models.CharField(
-        max_length=7, blank=True, verbose_name=_("Text color")
-    )
+#     site_settings = models.ForeignKey(
+#         SiteSettings, on_delete=models.CASCADE, related_name="theme"
+#     )
 
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
-    updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated at"))
+#     def __str__(self):
+#         return self.name
 
-    is_active = models.BooleanField(default=False, verbose_name=_("Is active"))
-    theme_type = models.CharField(max_length=10, choices=THEME_CHOICES, default="light")
+#     def save(self, *args, **kwargs):
+#         if self.is_active:
+#             # Disables all other active themes
+#             Theme.objects.filter(~Q(id=self.id), is_active=True).update(is_active=False)
+#         super().save(*args, **kwargs)
 
-    site_settings = models.ForeignKey(
-        SiteSettings, on_delete=models.CASCADE, related_name="theme"
-    )
+#     @classmethod
+#     def get_active_theme(cls):
+#         return cls.objects.filter(is_active=True).first()
 
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = _("Theme")
-        verbose_name_plural = _("Themes")
-
-    def save(self, *args, **kwargs):
-        if self.is_active:
-            # Disables all other active themes
-            Theme.objects.filter(
-                ~Q(id=self.id), theme_type=self.theme_type, is_active=True
-            ).update(is_active=False)
-        super().save(*args, **kwargs)
-
-    @classmethod
-    def get_active_theme(cls, theme_type):
-        return cls.objects.filter(is_active=True, theme_type=theme_type).first()
+#     class Meta:
+#         verbose_name = _("Theme")
+#         verbose_name_plural = _("Themes")
 
 
 class WellKnownFile(models.Model):
