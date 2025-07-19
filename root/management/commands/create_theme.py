@@ -1,4 +1,5 @@
 import os
+import shutil
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 
@@ -12,9 +13,17 @@ class Command(BaseCommand):
             type=str,
             help="Name of the new theme",
         )
+        parser.add_argument(
+            "base_theme",
+            type=str,
+            nargs="?",
+            default=None,
+            help="Copy from an existing theme",
+        )
 
     def handle(self, *args, **options):
         theme_name = options["name"]
+        base_theme_name = options["base_theme"]
         themes_dir = settings.BASE_DIR / "themes"
         if not os.path.isdir(themes_dir):
             raise CommandError(f"There is no themes directory in {themes_dir}.")
@@ -29,30 +38,51 @@ class Command(BaseCommand):
             )
 
         new_theme_path = themes_dir / theme_name
+        if base_theme_name:
+            base_theme_path = themes_dir / base_theme_name
+            if not base_theme_path.exists() or not base_theme_path.is_dir():
+                raise CommandError(f"Base theme '{base_theme_name}' does not exist.")
 
-        # List of files to create
-        paths = [
-            new_theme_path / "templates" / theme_name / "root" / "index.html",
-            new_theme_path / "templates" / theme_name / "root" / "page.html",
-            new_theme_path / "templates" / theme_name / "blog" / "article_detail.html",
-            new_theme_path
-            / "templates"
-            / theme_name
-            / "blog"
-            / "article_password.html",
-            new_theme_path / "templates" / theme_name / "blog" / "article_list.html",
-            new_theme_path / "templates" / theme_name / "400.html",
-            new_theme_path / "templates" / theme_name / "403.html",
-            new_theme_path / "templates" / theme_name / "404.html",
-            new_theme_path / "templates" / theme_name / "500.html",
-            new_theme_path / "static" / theme_name / "css" / "style.css",
-            new_theme_path / "static" / theme_name / "js",
-        ]
-        for path in paths:
-            if path.suffix:
-                path.parent.mkdir(parents=True, exist_ok=True)
-                path.touch(exist_ok=True)
-            else:
-                path.mkdir(parents=True, exist_ok=True)
+            shutil.copytree(base_theme_path, new_theme_path)
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f"Theme '{theme_name}' created by copying '{base_theme_name}'!"
+                )
+            )
+        else:
+            # List of files to create
+            paths = [
+                new_theme_path / "templates" / theme_name / "root" / "index.html",
+                new_theme_path / "templates" / theme_name / "root" / "page.html",
+                new_theme_path
+                / "templates"
+                / theme_name
+                / "blog"
+                / "article_detail.html",
+                new_theme_path
+                / "templates"
+                / theme_name
+                / "blog"
+                / "article_password.html",
+                new_theme_path
+                / "templates"
+                / theme_name
+                / "blog"
+                / "article_list.html",
+                new_theme_path / "templates" / theme_name / "400.html",
+                new_theme_path / "templates" / theme_name / "403.html",
+                new_theme_path / "templates" / theme_name / "404.html",
+                new_theme_path / "templates" / theme_name / "500.html",
+                new_theme_path / "static" / theme_name / "css" / "style.css",
+                new_theme_path / "static" / theme_name / "js",
+            ]
+            for path in paths:
+                if path.suffix:
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    path.touch(exist_ok=True)
+                else:
+                    path.mkdir(parents=True, exist_ok=True)
 
-        self.stdout.write(self.style.SUCCESS(f"'{theme_name}' created with success !"))
+            self.stdout.write(
+                self.style.SUCCESS(f"Theme '{theme_name}' created with success !")
+            )
