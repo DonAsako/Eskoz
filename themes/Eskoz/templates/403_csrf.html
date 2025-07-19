@@ -1,8 +1,8 @@
-{% extends 'Eskoz/base.html' %}
+{% extends 'base.html' %}
 {% load i18n %}
 
 {% block title %}
-    {% trans " - Forbidden" %}
+    {% trans " - Forbidden (CSRF)" %}
 {% endblock %}
 
 {% block SEO %}
@@ -13,6 +13,7 @@
 {% block content %}
 <div class="message-wrapper error-403">
     <h2>{% trans "ERROR 403 - Forbidden" %}</h2>
-    <p>{% trans "You do not have permission to access this page." %}</p>
+    <p>{% trans "CSRF verification failed. You do not have permission to access this page." %}</p>
+    <p>{% trans "Please refresh the page and try again. Make sure cookies are enabled in your browser." %}</p>
 </div>
 {% endblock %}

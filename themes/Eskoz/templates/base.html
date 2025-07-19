@@ -37,10 +37,10 @@
 </head>
 <body>
 {% if site_settings.under_maintenance %}
-    {% include "Eskoz/components/maintenance.html" %}
+    {% include "components/maintenance.html" %}
 {% else %}
     <header>
-        {% include "Eskoz/components/navbar.html" %}
+        {% include "components/navbar.html" %}
     </header>
     <main>
         <div class="page_wrapper">
@@ -48,7 +48,7 @@
         </div>
     </main>
     <footer>
-        {% include "Eskoz/components/footer.html" %}
+        {% include "components/footer.html" %}
     </footer>
 {% endif %}
 {% if site_settings.show_transition%}

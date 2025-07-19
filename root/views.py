@@ -11,21 +11,21 @@ def index(request):
     page = Page.objects.filter(visibility="index").first()
 
     if page:
-        return render(request, f"{request.theme}/root/page.html", {"page": page})
+        return render(request, f"root/page.html", {"page": page})
     else:
-        return render(request, f"{request.theme}/root/index.html")
+        return render(request, f"root/index.html")
 
 
 def page_detail(request, slug):
     page = get_object_or_404(Page, slug=slug)
     if page.visibility == "private":
         if request.user.is_authenticated:
-            return render(request, f"{request.theme}root/page.html", {"page": page})
+            return render(request, f"root/page.html", {"page": page})
         else:
             raise Http404
             print("ok")
     else:
-        return render(request, f"{request.theme}/root/page.html", {"page": page})
+        return render(request, f"root/page.html", {"page": page})
 
 
 def well_known(request, filename):
