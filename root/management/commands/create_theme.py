@@ -29,6 +29,8 @@ class Command(BaseCommand):
             )
 
         new_theme_path = themes_dir / theme_name
+
+        # List of files to create
         paths = [
             new_theme_path / "templates" / theme_name / "root" / "index.html",
             new_theme_path / "templates" / theme_name / "root" / "page.html",
@@ -47,10 +49,10 @@ class Command(BaseCommand):
             new_theme_path / "static" / theme_name / "js",
         ]
         for path in paths:
-            if path.suffix:  # C'est un fichier (ex: .html, .css)
+            if path.suffix:
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.touch(exist_ok=True)
-            else:  # C'est un dossier
+            else:
                 path.mkdir(parents=True, exist_ok=True)
 
         self.stdout.write(self.style.SUCCESS(f"'{theme_name}' created with success !"))
