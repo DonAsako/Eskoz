@@ -63,7 +63,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "eskoz.urls"
 
-ACTIVE_THEME = os.getenv("theme", "Eskoz")
+ACTIVE_THEME = os.getenv("THEME", "Eskoz")
 
 
 TEMPLATES = [
