@@ -14,6 +14,8 @@ async function sendContentToPreview(content, id) {
     });
     const currentTheme = document.documentElement.getAttribute("data-theme");
     console.log(currentTheme);
+    const Theme = document.querySelector('meta[name="theme-name"]').getAttribute("content");
+
     if (response.ok) {
         const data = await response.json();
         const iframe = document.getElementById(`render-${id}`);
@@ -32,7 +34,7 @@ async function sendContentToPreview(content, id) {
                             padding: 1em;
                         }
                     </style>
-                    <link rel="stylesheet" href="/static/css/style.css">
+                    <link rel="stylesheet" href="${Theme}/static/css/style.css">
                 </head>
                 <body class="markdown-body">
                     ${data.html}

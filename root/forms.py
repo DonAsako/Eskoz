@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Page, Theme
+from .models import Page
 from root.widgets import ContentEditorWidget
 
 

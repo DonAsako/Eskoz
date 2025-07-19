@@ -7,7 +7,6 @@ from .models import (
     WellKnownFile,
     UserProfile,
     UserLink,
-    Theme,
     SeoSettings,
     Page,
 )
@@ -19,14 +18,6 @@ class WellKnownFileInline(admin.TabularInline):
     can_delete = True
     extra = 0
     verbose_name = _("Well-Known file")
-
-
-class ThemeInline(admin.StackedInline):
-    model = Theme
-    can_delete = True
-    readonly_fields = ["slug", "path", "preview_image"]
-    extra = 0
-    verbose_name = _("Theme")
 
 
 class SeoSettingsInline(admin.StackedInline):
@@ -62,7 +53,7 @@ class SeoSettingsInline(admin.StackedInline):
 
 
 class SiteSettingsAdmin(admin.ModelAdmin):
-    inlines = [WellKnownFileInline, ThemeInline, SeoSettingsInline]
+    inlines = [WellKnownFileInline, SeoSettingsInline]
 
     def has_add_permission(self, request):
         return not SiteSettings.objects.exists()

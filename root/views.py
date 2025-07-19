@@ -9,10 +9,28 @@ from .models import WellKnownFile, Page
 
 def index(request):
     page = Page.objects.filter(visibility="index").first()
+
     if page:
-        return render(request, "root/page.html", {"page": page})
+        return render(request, f"{request.theme}/root/page.html", {"page": page})
     else:
-        return render(request, "root/index.html")
+        return render(request, f"{request.theme}/root/index.html")
+
+
+def page_detail(request, slug):
+    page = get_object_or_404(Page, slug=slug)
+    if page.visibility == "private":
+        if request.user.is_authenticated:
+            return render(request, f"{request.theme}root/page.html", {"page": page})
+        else:
+            raise Http404
+            print("ok")
+    else:
+        return render(request, f"{request.theme}/root/page.html", {"page": page})
+
+
+def well_known(request, filename):
+    WellKnown_file = get_object_or_404(WellKnownFile, filename=filename)
+    return HttpResponse(WellKnown_file.content, content_type="text/plain")
 
 
 @login_required
@@ -24,20 +42,3 @@ def content_preview(request):
         )
         return JsonResponse({"html": mark_safe(html)})
     return HttpResponse(request, status="401")
-
-
-def page_detail(request, slug):
-    page = get_object_or_404(Page, slug=slug)
-    if page.visibility == "private":
-        if request.user.is_authenticated:
-            return render(request, "root/page.html", {"page": page})
-        else:
-            raise Http404
-            print("ok")
-    else:
-        return render(request, "root/page.html", {"page": page})
-
-
-def well_known(request, filename):
-    WellKnown_file = get_object_or_404(WellKnownFile, filename=filename)
-    return HttpResponse(WellKnown_file.content, content_type="text/plain")

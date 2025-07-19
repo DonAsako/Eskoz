@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'admin/css/admin.css' %}">
 {% endblock %}
 {% block extrahead %}
+    <meta name="theme-name" content="{{ request.name }}">
 {% if site_settings.favicon %}
     <link rel="shortcut icon" href="{{ site_settings.favicon.url }}" type="image/x-icon">
 {% endif %}
