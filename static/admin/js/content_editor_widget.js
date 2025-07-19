@@ -34,7 +34,7 @@ async function sendContentToPreview(content, id) {
                             padding: 1em;
                         }
                     </style>
-                    <link rel="stylesheet" href="${Theme}/static/css/style.css">
+                    <link rel="stylesheet" href="/static/${Theme}/css/style.css">
                 </head>
                 <body class="markdown-body">
                     ${data.html}
