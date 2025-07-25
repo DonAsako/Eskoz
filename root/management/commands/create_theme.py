@@ -50,6 +50,13 @@ class Command(BaseCommand):
                 raise CommandError(f"Base theme '{base_theme_name}' does not exist.")
 
             shutil.copytree(base_theme_path, new_theme_path)
+
+            # Rename themes/THEME/static/THEME
+            old_static_path = new_theme_path / "static" / base_theme_name
+            new_static_path = new_theme_path / "static" / theme_name
+            if old_static_path.exists():
+                old_static_path.rename(new_static_path)
+
             self.stdout.write(
                 self.style.SUCCESS(
                     f"Theme '{theme_name}' created by copying '{base_theme_name}'!"
