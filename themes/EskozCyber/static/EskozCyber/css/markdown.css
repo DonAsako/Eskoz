@@ -1,0 +1,57 @@
+.markdown-body {
+    word-wrap: break-word;
+}
+.markdown-body h1, .markdown-body h2, .markdown-body h3{
+    margin: .5em 0;
+    border-bottom: 1px solid var(--foreground-color);
+}
+p {
+    margin: .25em 0;
+}
+.markdown-body ol,
+.markdown-body ul {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 2em;
+}
+.markdown-body > :first-child {
+  margin-top: 0 !important;
+}
+.markdown-body ol ol,
+.markdown-body ul ol {
+  list-style-type: lower-roman;
+}
+.markdown-body ol ol ol,
+.markdown-body ol ul ol,
+.markdown-body ul ol ol,
+.markdown-body ul ul ol {
+  list-style-type: lower-alpha;
+}
+.markdown-body pre, .markdown-body code {
+    border-radius: 5px;
+    margin: 1em 0;
+}
+
+.markdown-body h1 code, .markdown-body h2 code, .markdown-body h3 code, .markdown-body h4 code, .markdown-body h5 code, .markdown-body h6 code, .markdown-body a code, .markdown-body p code{
+    background-color: var(--foreground-color);
+    padding: 2px;
+}
+.markdown-body h1 a,
+.markdown-body h2 a,
+.markdown-body h3 a, 
+.markdown-body h4 a, 
+.markdown-body h5 a, 
+.markdown-body h6 a{
+    text-decoration: none;
+}
+.markdown-body blockquote {
+  margin: 0;
+  padding: 0 1em;
+  color: var(--fgColor-muted);
+  border-left: 0.25em solid var(--foreground-color);
+}
+.markdown-body hr {
+    overflow: hidden;
+    color: var(--font-color);
+    margin: .25em 0;
+}

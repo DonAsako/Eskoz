@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block head %}
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+{% load static %}
+<link rel="stylesheet" href="{% static 'EskozCyber/css/markdown.css' %}">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pygments-css@1.0.0/friendly.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+{% endblock %}
+{% block title %} - {{ article.get_translation.title }}{% endblock %}
+{% block SEO %}
+    <meta property="og:type" content="article" />
+    <meta property="article:published_time" content="{{ article.published_on.isoformat }}" />
+    <meta property="article:modified_time" content="{{ article.edited_on.isoformat }}" />
+    {% for tag in article.tags.all %}<meta property="article:tag" content="{{ tag.title }}" />{% endfor %}
+{% endblock %}cd
+{% block content %}
+<div class="article--container">
+    <div class="article--wrapper">
+        {% if article.picture %} <div class="article--picture-wrapper"><img src="{{ article.picture.url }}"></div> {% endif %}
+        <div class="article--content markdown-body">
+            {{ article.get_translation.get_content_as_html }}
+        </div>
+    </div>
+    <aside class="article--toc" id="toc"></aside>
+</div>
+<script>hljs.highlightAll();</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const content = document.querySelector(".article--content");
+    const toc = document.getElementById("toc");
+
+    if (!content || !toc) return;
+
+    const headers = content.querySelectorAll("h1, h2, h3, h4");
+    if (!headers.length) return;
+
+    const ul = document.createElement("ul");
+
+    headers.forEach(header => {
+        const id = header.id;
+        if (!id) return;
+
+        const anchor = document.createElement("a");
+        anchor.href = `#${id}`;
+        anchor.className = "article--anchor-link";
+
+        while (header.firstChild) {
+            anchor.appendChild(header.firstChild);
+        }
+        
+        header.appendChild(anchor);
+        if (!header.id) {
+            header.id = header.textContent.trim().toLowerCase().replace(/\s+/g, '-');
+        }
+
+        const li = document.createElement("li");
+
+        const a = document.createElement("a");
+        a.style.marginLeft = `${(parseInt(header.tagName[1]) - 1) * 1}em`;
+
+        a.href = `#${header.id}`;
+        a.textContent = header.textContent;
+        
+        li.appendChild(a);
+        ul.appendChild(li);
+    });
+
+    toc.appendChild(ul);
+    const tocLinks = toc.querySelectorAll("a");
+
+    function onScroll() {
+        let current = null;
+        headers.forEach(header => {
+            const rect = header.getBoundingClientRect();
+            if (rect.top <= 100) {
+                current = header.id;
+            }
+        });
+
+        tocLinks.forEach(link => {
+            if (link.getAttribute('href') === `#${current}`) {
+                link.parentElement.classList.add("active");
+            } else {
+                link.parentElement.classList.remove("active");
+            }
+        });
+    }
+
+    document.addEventListener('scroll', onScroll);
+
+    onScroll();
+});
+</script>
+
+{% endblock %}
