@@ -29,17 +29,14 @@
                     <p class="article_card--description">“{{ article.get_translation.description|default_if_none:'' }}”</p>
 
                 {% endif %}
-                <div class="article_card--tags">
-                    {% for tag in article.tags.all %}
-                        <p class="article_card--tag">{{ tag.title }}</p>
-                    {% endfor %}
-                    {% for tag in article.tags.all %}
-                        <p class="article_card--tag">{{ tag.title }}</p>
-                    {% endfor %}
-                    {% for tag in article.tags.all %}
-                        <p class="article_card--tag">{{ tag.title }}</p>
-                    {% endfor %}
+                <div class="article_card--bottom">
+                    <div class="article_card--tags">
+                        {% for tag in article.tags.all %}
+                            <p class="article_card--tag">{{ tag.title }}</p>
+                        {% endfor %}
+                    </div>
                 </div>
+
             </a>
         {% endfor %}
     </div>

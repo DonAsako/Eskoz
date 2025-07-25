@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}
+    {% trans " - Forbidden" %}
+{% endblock %}
+
+{% block SEO %}
+    <meta property="og:type" content="website" />
+    <meta name="robots" content="noindex" />
+{% endblock %}
+
+{% block content %}
+<div class="message-wrapper">
+    <h2>{% trans "ERROR 403 - Forbidden" %}</h2>
+    <p>{% trans "You do not have permission to access this page." %}</p>
+</div>
+{% endblock %}
