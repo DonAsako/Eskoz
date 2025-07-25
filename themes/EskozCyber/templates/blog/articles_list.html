@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %} - {% translate "Articles" %}{% endblock %}
+    {% block SEO %}
+    <meta property="og:type" content="website" />
+    {% endblock %}
+{% block content %}
+    {% if not articles %}
+        <h2 class="message-wrapper">{% trans 'There is no article at the moment.' %}</h2>
+    {% else %}
+    <div class="articles_list">
+    <div class="articles_list--top">
+        <h2 class="articles_list--title">Articles</h2>
+        
+    </div>
+    
+        {% for article in articles %}
+            <a class="article_card" href="{% url 'blog:article_detail' article.slug %}">
+                <div class="article_card--top">
+                    <div class="article_card--top-left">
+                        <p class="article_card--date">{{ article.published_on|date:"j F Y" }}</p>
+                        <p class="article_card--title">{{ article.get_translation.title }}</p>
+                    </div>
+                    {% if article.category %}
+                        <p class="article_card--category">{{ article.category }}</p>
+                    {% endif %}
+                </div>
+                {% if article.get_translation.description %}
+                    <p class="article_card--description">“{{ article.get_translation.description|default_if_none:'' }}”</p>
+
+                {% endif %}
+                <div class="article_card--tags">
+                    {% for tag in article.tags.all %}
+                        <p class="article_card--tag">{{ tag.title }}</p>
+                    {% endfor %}
+                    {% for tag in article.tags.all %}
+                        <p class="article_card--tag">{{ tag.title }}</p>
+                    {% endfor %}
+                    {% for tag in article.tags.all %}
+                        <p class="article_card--tag">{{ tag.title }}</p>
+                    {% endfor %}
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+
+
+{% endblock %}
