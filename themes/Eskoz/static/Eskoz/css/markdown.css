@@ -3,7 +3,7 @@
 }
 .markdown-body h1, .markdown-body h2, .markdown-body h3{
     margin: .5em 0;
-    border-bottom: 1px solid var(--foreground-color);
+    border-bottom: 1px solid var(--secondary-color);
 }
 p {
     margin: .25em 0;
@@ -33,7 +33,7 @@ p {
 }
 
 .markdown-body h1 code, .markdown-body h2 code, .markdown-body h3 code, .markdown-body h4 code, .markdown-body h5 code, .markdown-body h6 code, .markdown-body a code, .markdown-body p code{
-    background-color: var(--foreground-color);
+    background-color: var(--secondary-color);
     padding: 2px;
 }
 .markdown-body h1 a,
@@ -47,7 +47,7 @@ p {
 .markdown-body blockquote {
   margin: 0;
   padding: 0 1em;
-  border-left: 0.25em solid var(--foreground-color);
+  border-left: 0.25em solid var(--secondary-color);
 }
 .markdown-body hr {
     overflow: hidden;
