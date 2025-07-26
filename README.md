@@ -3,13 +3,11 @@
 **Eskoz** is a Django-based project designed to help you quickly and easily create a multilingual blog, with a straightforward deployment process.
 
 ## Requirements
-
 Make sure you have the following installed on your system:
 - Docker
 - Docker Compose
 
 ## Installation
-
 ### 1. Clone the repository:
 ```sh
 git clone git@github.com:DonAsako/eskoz.git
@@ -52,7 +50,6 @@ docker compose exec web python manage.py createsuperuser
 ```
 
 ## Customization 
-
 ### Themes
 #### List available themes
 **To list all available themes with the following command:**
@@ -65,10 +62,14 @@ python3 manage.py list_themes
 Name                      Path                                                         Active
 ---------------------------------------------------------------------------------------------
 Eskoz                     /Eskoz/themes/Eskoz                                          Yes   
+EskozCyber                /Eskoz/themes/EskozCyber                                     No   
 
-Successfully listed 1 theme(s).
+Successfully listed 2 theme(s).
 ```
-
+- **Eskoz (Default)**
+![Eskoz's Preview](pictures/Eskoz.png)
+- **EskozCyber**
+![EskozCyber's Preview](pictures/EskozCyber.png)
 #### Create a new theme
 **To create a brand new theme with default structure:**
 ```sh
