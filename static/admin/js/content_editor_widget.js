@@ -25,20 +25,27 @@ async function sendContentToPreview(content, id) {
             <!DOCTYPE html>
             <html>
                 <head>
-                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css/github-markdown.min.css">
                     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
                     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-                    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
                     <style>
                         body{
                             padding: 1em;
                         }
                     </style>
                     <link rel="stylesheet" href="/static/${Theme}/css/style.css">
+                    <link rel="stylesheet" href="/static/${Theme}/css/markdown.css">
                 </head>
-                <body class="markdown-body">
-                    ${data.html}
+                
+                <body>
+                    <div class="article--container">
+                        <div class="article--wrapper">
+                            <div class="article--content markdown-body">
+                                ${data.html}
+                            </div>
+                        </div>
+                    </div>
                     <script>hljs.highlightAll();</script>
+                    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
                 </body>
             </html>`;
         iframeDoc.open();
