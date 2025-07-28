@@ -24,9 +24,9 @@
         {% else %}    
             {% for article in articles.all|dictsortreversed:"published_on" %}      
                 <a class="article_card" href="{% url 'blog:article_detail' article.slug %}">
+
                     <div class="article_card--top">
                         <div class="article_card--top-left">
-                            <p class="article_card--date">{{ article.published_on|date:"j F Y" }}</p>
                             <p class="article_card--title">{{ article.get_translation.title }}</p>
                         </div>
                         {% if article.category %}
@@ -35,16 +35,16 @@
                     </div>
                     {% if article.get_translation.description %}
                         <p class="article_card--description">“{{ article.get_translation.description|default_if_none:'' }}”</p>
-
                     {% endif %}
                     <div class="article_card--bottom">
+                        <p class="article_card--date">{{ article.published_on|date:"j F Y" }}</p>
+
                         <div class="article_card--tags">
                             {% for tag in article.tags.all %}
                                 <p class="article_card--tag">{{ tag.title }}</p>
                             {% endfor %}
                         </div>
                     </div>
-
                 </a>
             {% endfor %}
         {% endif %}
