@@ -13,7 +13,7 @@ p {
   text-wrap: wrap;
 }
 .markdown-body li mjx-container {
-  text-align: left;
+  text-align: left !important;
 }
 .markdown-body pre code.hljs{
   text-wrap: nowrap;
