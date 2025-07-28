@@ -8,6 +8,13 @@
 p {
     margin: .25em 0;
 }
+.markdown-body mjx-container, .markdown-body pre code {
+  overflow-x: auto;
+  text-wrap: wrap;
+}
+.markdown-body pre code.hljs{
+  text-wrap: nowrap;
+}
 .markdown-body ol,
 .markdown-body ul {
   margin-top: 0;
