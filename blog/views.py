@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.utils.translation import get_language
-from .models import Article
+from .models import Article, Category
 
 
 def article_detail(request, slug):
@@ -24,8 +24,18 @@ def article_detail(request, slug):
     return render(request, f"blog/article_detail.html", {"article": article})
 
 
-def articles_list(request):
+def articles_list(request, slug=None):
     articles = Article.objects.filter(visibility="public").prefetch_related(
         "translations", "tags"
     )
-    return render(request, f"blog/articles_list.html", {"articles": articles})
+    category = None
+    if slug:
+        category = get_object_or_404(Category, slug=slug)
+
+        articles = articles.filter(category=category)
+
+    return render(
+        request,
+        f"blog/articles_list.html",
+        {"articles": articles, "category": category},
+    )

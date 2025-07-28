@@ -20,7 +20,23 @@ class Tag(models.Model):
 
 
 class Category(models.Model):
-    title = models.CharField(max_length=255, unique=True)
+    title = models.CharField(max_length=255, unique=True, verbose_name=_("Title"))
+    slug = models.SlugField(unique=True, blank=False, null=True, verbose_name=_("Slug"))
+
+    def get_translation(self, language=None):
+        lang = language or get_language()
+        translation = self.translations.filter(language=lang).first()
+        if not translation:
+            translation = (
+                self.translations.filter(language="en").first()
+                or self.translations.filter().first()
+            )
+        return translation
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
@@ -28,6 +44,19 @@ class Category(models.Model):
     class Meta:
         verbose_name = _("Category")
         verbose_name_plural = _("Categories")
+
+
+class CategoryTranslation(models.Model):
+    category = models.ForeignKey(
+        Category,
+        related_name="translations",
+        on_delete=models.CASCADE,
+        verbose_name=_("Category"),
+    )
+    language = models.CharField(max_length=10, choices=settings.LANGUAGES)
+
+    def __str__(self):
+        return f"{self.category.slug} ({self.language})"
 
 
 class Article(models.Model):
@@ -94,14 +123,13 @@ class Article(models.Model):
 
 
 class ArticleTranslation(models.Model):
-    LANGUAGE_CHOICES = settings.LANGUAGES
     article = models.ForeignKey(
         Article,
         related_name="translations",
         on_delete=models.CASCADE,
         verbose_name=_("Article"),
     )
-    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    language = models.CharField(max_length=10, choices=settings.LANGUAGES)
     title = models.CharField(max_length=255, verbose_name=_("Title"))
     description = models.TextField(
         max_length=512, blank=True, null=True, verbose_name=_("Description")
