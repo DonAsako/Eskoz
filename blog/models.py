@@ -54,6 +54,7 @@ class CategoryTranslation(models.Model):
         verbose_name=_("Category"),
     )
     language = models.CharField(max_length=10, choices=settings.LANGUAGES)
+    title = models.CharField(max_length=255, verbose_name=_("Title"))
 
     def __str__(self):
         return f"{self.category.slug} ({self.language})"

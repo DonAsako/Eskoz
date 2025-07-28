@@ -6,7 +6,7 @@ from django.urls import path
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 from .forms import ArticleTranslationAdminForm
-from .models import Article, Tag, Category, ArticleTranslation
+from .models import Article, Tag, Category, ArticleTranslation, CategoryTranslation
 
 
 @admin.action(description=_("Backup selected articles"))
@@ -33,8 +33,20 @@ def backup(self, request, queryset):
     return response
 
 
+class CategoryTranslationAdmin(admin.StackedInline):
+    model = CategoryTranslation
+    extra = 1
+    can_delete = True
+
+    def get_extra(self, request, obj=None, **kwargs):
+        if obj is None:
+            return 1
+        return 1 if not CategoryTranslation.objects.filter(category=obj).exists() else 0
+
+
 class CategoryAdmin(admin.ModelAdmin):
     search_fields = ["title"]
+    inlines = [CategoryTranslationAdmin]
 
 
 class TagAdmin(admin.ModelAdmin):

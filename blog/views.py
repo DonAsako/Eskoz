@@ -28,14 +28,18 @@ def articles_list(request, slug=None):
     articles = Article.objects.filter(visibility="public").prefetch_related(
         "translations", "tags"
     )
-    category = None
+    selected_category = None
     if slug:
-        category = get_object_or_404(Category, slug=slug)
+        selected_category = get_object_or_404(Category, slug=slug)
 
-        articles = articles.filter(category=category)
-
+        articles = articles.filter(category=selected_category)
+    categories = Category.objects.all()
     return render(
         request,
         f"blog/articles_list.html",
-        {"articles": articles, "category": category},
+        {
+            "articles": articles,
+            "categories": categories,
+            "selected_category": selected_category,
+        },
     )

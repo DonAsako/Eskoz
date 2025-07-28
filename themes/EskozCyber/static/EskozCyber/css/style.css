@@ -94,6 +94,7 @@ main {
 }
 .message-wrapper {
   height: 100%;
+  padding: 1em;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -115,7 +116,18 @@ main {
   gap: 15px;
   width: 80%;
 }
-
+.articles_list--top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.articles_list--select {
+  background-color: var(--foreground-color);
+  border: none;
+  border-radius: 5px;
+  color: var(--font-color);
+  padding: .5em;
+}
 .article_card {
   display: flex;
   flex-direction: column;
