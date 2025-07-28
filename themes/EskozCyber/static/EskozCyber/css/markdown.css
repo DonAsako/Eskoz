@@ -12,6 +12,9 @@ p {
   overflow-x: auto;
   text-wrap: wrap;
 }
+.markdown-body li mjx-container {
+  text-align: left;
+}
 .markdown-body pre code.hljs{
   text-wrap: nowrap;
 }
@@ -38,7 +41,6 @@ p {
     border-radius: 5px;
     margin: 1em 0;
 }
-
 .markdown-body h1 code, .markdown-body h2 code, .markdown-body h3 code, .markdown-body h4 code, .markdown-body h5 code, .markdown-body h6 code, .markdown-body a code, .markdown-body p code{
     background-color: var(--foreground-color);
     padding: 2px;

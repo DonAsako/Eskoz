@@ -14,7 +14,7 @@
         
     </div>
     
-        {% for article in articles %}
+        {% for article in articles.all|dictsortreversed:"published_on" %}
             <a class="article_card" href="{% url 'blog:article_detail' article.slug %}">
                 <div class="article_card--top">
                     <div class="article_card--top-left">
