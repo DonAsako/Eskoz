@@ -1,9 +1,9 @@
-asgiref==3.8.1
-Django==5.2.1
+asgiref==3.9.1
+Django==5.2.4
 gunicorn==23.0.0
-Markdown==3.8
+Markdown==3.8.2
 packaging==25.0
-pillow==11.2.1
+pillow==11.3.0
 psycopg==3.2.9
-python-dotenv==1.1.0
+python-dotenv==1.1.1
 sqlparse==0.5.3
