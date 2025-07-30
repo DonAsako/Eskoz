@@ -49,6 +49,12 @@ To create the first Django superuser, run:
 docker compose exec web python manage.py createsuperuser
 ```
 
+### 6. Update your config
+To update your config, run :
+```sh
+docker compose exec web python manage.py config
+```
+
 ## Customization 
 ### Themes
 #### List available themes
