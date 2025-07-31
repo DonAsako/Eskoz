@@ -1,3 +1,4 @@
+# Redirect any HTTP traffic by IP to correct domain
 server {
     listen 80 default_server;
     server_name _;
@@ -5,7 +6,7 @@ server {
     return 301 https://${DOMAIN}$request_uri;
 }
 
-# Redirect any HTTPS traffic by IP or bad domain to correct domain
+# Redirect any HTTPS traffic by IP to correct domain
 server {
     listen 443 ssl default_server;
     server_name _;
@@ -15,7 +16,6 @@ server {
 
     return 301 https://${DOMAIN}$request_uri;
 }
-
 
 server {
     listen 80;
@@ -35,6 +35,7 @@ server {
         root /var/www/certbot;
     }
 
+    # Redirect any HTTP traffic to HTTPS  
     location / {
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
