@@ -10,7 +10,7 @@ from .models import (
     SeoSettings,
     Page,
 )
-from .forms import PageAdminForm
+from .forms import PageAdminForm, UserAdminForm
 
 
 class WellKnownFileInline(admin.TabularInline):
@@ -70,10 +70,15 @@ class PageAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
 
 
-class UserProfileInline(admin.TabularInline):
+class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
     verbose_name = _("Profil")
+    form = UserAdminForm
+    fieldsets = [
+        (_("Description"), {"fields": ["avatar", "bio"]}),
+        (_("Security"), {"fields": ["secret_key"]}),
+    ]
 
 
 class UserLinkInline(admin.TabularInline):

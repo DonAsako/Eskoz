@@ -172,6 +172,7 @@ class SeoSettings(models.Model):
     def __str__(self):
         return ""
 
+
 class WellKnownFile(models.Model):
     filename = models.CharField(max_length=255, verbose_name=_("Filename"))
     content = models.TextField(verbose_name=_("Content"))
