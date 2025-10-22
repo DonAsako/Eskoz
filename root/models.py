@@ -201,7 +201,7 @@ class UserProfile(models.Model):
         upload_to="avatars/", blank=True, null=True, verbose_name=_("Avatar")
     )
     bio = models.TextField(blank=True, verbose_name=_("Biography"))
-    otp_is_active = models.BooleanField(verbose_name=_("Is OTP active"), default=False)
+    otp_is_active = models.BooleanField(verbose_name=_("Is 2FA active"), default=False)
     otp_secret_key = models.CharField(
         default=pyotp.random_base32, max_length=64, verbose_name=_("OTP secret key")
     )

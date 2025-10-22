@@ -11,7 +11,7 @@ from .models import (
     SeoSettings,
     Page,
 )
-from .forms import PageAdminForm
+from .forms import PageAdminForm, UserProfileAdminForm
 
 
 class WellKnownFileInline(admin.TabularInline):
@@ -74,19 +74,22 @@ class PageAdmin(admin.ModelAdmin):
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
+    form = UserProfileAdminForm
+
     verbose_name = _("Profil")
     fieldsets = [
         (_("Description"), {"fields": ["avatar", "bio"]}),
-        (_("Security"), {"fields": ["otp_is_active", "qr_code"]}),
+        (_("Security"), {"fields": ["otp_is_active", "otp_code", "qr_code"]}),
     ]
     readonly_fields = ("qr_code",)
 
     def qr_code(self, obj):
-        if obj.otp_is_active:
-            return format_html('<img src="{}" />', obj.get_otp_qr_code())
-        return "OTP non activé"
+        return format_html('<img src="{}" />', obj.get_otp_qr_code())
 
-    qr_code.short_description = "QR Code OTP"
+    qr_code.short_description = "Authentication QR Code"
+
+    class Media:
+        js = ("admin/js/user_profil_edit.js",)
 
 
 class UserLinkInline(admin.TabularInline):
