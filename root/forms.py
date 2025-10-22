@@ -9,10 +9,3 @@ class PageAdminForm(ModelForm):
         model = Page
         fields = "__all__"
         widgets = {"content": ContentEditorWidget}
-
-
-class UserAdminForm(ModelForm):
-    class Meta:
-        model = UserProfile
-        fields = "__all__"
-        widgets = {"otp_secret_key": OTPWidget}

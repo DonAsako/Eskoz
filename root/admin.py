@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
+from django.utils.html import format_html
 from .models import (
     SiteSettings,
     WellKnownFile,
@@ -10,7 +11,7 @@ from .models import (
     SeoSettings,
     Page,
 )
-from .forms import PageAdminForm, UserAdminForm
+from .forms import PageAdminForm
 
 
 class WellKnownFileInline(admin.TabularInline):
@@ -74,11 +75,18 @@ class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
     verbose_name = _("Profil")
-    form = UserAdminForm
     fieldsets = [
         (_("Description"), {"fields": ["avatar", "bio"]}),
-        (_("Security"), {"fields": ["otp_secret_key"]}),
+        (_("Security"), {"fields": ["otp_is_active", "qr_code"]}),
     ]
+    readonly_fields = ("qr_code",)
+
+    def qr_code(self, obj):
+        if obj.otp_is_active:
+            return format_html('<img src="{}" />', obj.get_otp_qr_code())
+        return "OTP non activé"
+
+    qr_code.short_description = "QR Code OTP"
 
 
 class UserLinkInline(admin.TabularInline):
