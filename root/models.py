@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _, gettext
 from django.core.exceptions import ValidationError
-from django.db.models import Q
 
 
 class SiteSettings(models.Model):
@@ -173,33 +172,6 @@ class SeoSettings(models.Model):
     def __str__(self):
         return ""
 
-
-# class Theme(models.Model):
-#     name = models.CharField(max_length=100, unique=True, verbose_name=_("Name"))
-#     is_active = models.BooleanField(default=False, verbose_name=_("Is active"))
-
-#     site_settings = models.ForeignKey(
-#         SiteSettings, on_delete=models.CASCADE, related_name="theme"
-#     )
-
-#     def __str__(self):
-#         return self.name
-
-#     def save(self, *args, **kwargs):
-#         if self.is_active:
-#             # Disables all other active themes
-#             Theme.objects.filter(~Q(id=self.id), is_active=True).update(is_active=False)
-#         super().save(*args, **kwargs)
-
-#     @classmethod
-#     def get_active_theme(cls):
-#         return cls.objects.filter(is_active=True).first()
-
-#     class Meta:
-#         verbose_name = _("Theme")
-#         verbose_name_plural = _("Themes")
-
-
 class WellKnownFile(models.Model):
     filename = models.CharField(max_length=255, verbose_name=_("Filename"))
     content = models.TextField(verbose_name=_("Content"))
@@ -222,6 +194,7 @@ class UserProfile(models.Model):
         upload_to="avatars/", blank=True, null=True, verbose_name=_("Avatar")
     )
     bio = models.TextField(blank=True, verbose_name=_("Biography"))
+    secret_key = models.CharField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.user.get_username()}"
