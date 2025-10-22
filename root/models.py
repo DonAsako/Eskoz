@@ -1,3 +1,4 @@
+import pyotp
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _, gettext
@@ -195,7 +196,15 @@ class UserProfile(models.Model):
         upload_to="avatars/", blank=True, null=True, verbose_name=_("Avatar")
     )
     bio = models.TextField(blank=True, verbose_name=_("Biography"))
-    secret_key = models.CharField(blank=True, null=True)
+    otp_is_active = models.BooleanField(verbose_name=_("Is OTP active"), default=False)
+    otp_secret_key = models.CharField(
+        default=pyotp.random_base32, max_length=64, verbose_name=_("OTP secret key")
+    )
+
+    def get_otpauth(self):
+        return pyotp.totp.TOTP(self.otp_secret_key).provisioning_uri(
+            name=self.user.get_username(), issuer_name="Eskoz"
+        )
 
     def __str__(self):
         return f"{self.user.get_username()}"

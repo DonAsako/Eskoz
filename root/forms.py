@@ -15,4 +15,4 @@ class UserAdminForm(ModelForm):
     class Meta:
         model = UserProfile
         fields = "__all__"
-        widgets = {"secret_key": OTPWidget}
+        widgets = {"otp_secret_key": OTPWidget}

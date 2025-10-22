@@ -77,7 +77,7 @@ class UserProfileInline(admin.StackedInline):
     form = UserAdminForm
     fieldsets = [
         (_("Description"), {"fields": ["avatar", "bio"]}),
-        (_("Security"), {"fields": ["secret_key"]}),
+        (_("Security"), {"fields": ["otp_secret_key"]}),
     ]
 
 
