@@ -1,7 +1,4 @@
-import uuid
 from django.forms import Widget
-from django.utils.safestring import mark_safe
-from django.templatetags.static import static
 
 
 class ContentEditorWidget(Widget):
