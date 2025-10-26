@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("blog", "0018_auto_20251026_2048"),
+        ("blog", "0017_ctf_post_project_remove_article_author_and_more"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 

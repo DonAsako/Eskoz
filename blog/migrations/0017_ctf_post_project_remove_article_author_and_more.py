@@ -4,6 +4,30 @@ import django.db.models.deletion
 from django.conf import settings
 from django.db import migrations, models
 
+def link_articles_to_posts(apps, schema_editor):
+    Article = apps.get_model("blog", "Article")
+    Post = apps.get_model("blog", "Post")
+
+    db_alias = schema_editor.connection.alias
+
+    for article in Article.objects.using(db_alias).all():
+        post = Post.objects.using(db_alias).create(
+            title=article.title,
+            slug=article.slug,
+            author=article.author,
+            category=article.category,
+            published_on=article.published_on,
+            edited_on=article.edited_on,
+            picture=article.picture,
+            visibility=article.visibility,
+            password=article.password,
+        )
+
+        post.tags.set(article.tags.all())
+
+        article.post_ptr = post
+        article.save()
+
 
 class Migration(migrations.Migration):
 
@@ -260,10 +284,9 @@ class Migration(migrations.Migration):
             name="post_ptr",
             field=models.OneToOneField(
                 auto_created=True,
-                default="",
                 on_delete=django.db.models.deletion.CASCADE,
+                null=True,
                 parent_link=True,
-                primary_key=True,
                 serialize=False,
                 to="blog.post",
             ),
@@ -318,6 +341,9 @@ class Migration(migrations.Migration):
                 "verbose_name_plural": "Post Translations",
                 "unique_together": {("post", "language")},
             },
+        ),
+        migrations.RunPython(
+            link_articles_to_posts, reverse_code=migrations.RunPython.noop
         ),
         migrations.DeleteModel(
             name="ArticleTranslation",
