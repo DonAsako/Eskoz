@@ -221,6 +221,7 @@ class UserProfile(models.Model):
         img.save(buffer, format="PNG")
         img_str = base64.b64encode(buffer.getvalue()).decode()
         return f"data:image/png;base64,{img_str}"
+
     def __str__(self):
         return f"{self.user.get_username()}"
 
