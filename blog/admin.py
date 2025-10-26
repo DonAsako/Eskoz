@@ -16,6 +16,7 @@ from .models import (
     Project,
     Tag,
     Writeup,
+    CTF
 )
 
 
@@ -126,7 +127,6 @@ class WritupApdmin(PostAdmin):
     ]
     list_display = ("ctf", "difficulty", "points")
 
-
 class ProjectAdmin(admin.ModelAdmin):
     list_display = (
         "name",
@@ -155,3 +155,4 @@ admin.site.register(Writeup, WritupApdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Tag, TagAdmin)
+admin.site.register(CTF, admin.ModelAdmin)
