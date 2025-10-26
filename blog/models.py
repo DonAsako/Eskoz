@@ -279,3 +279,53 @@ class Certification(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class CVE(models.Model):
+    cve_id = models.CharField(
+        max_length=20,
+        unique=True,
+        verbose_name=_("cve_id"),
+        help_text=_("the unique identifier for the CVE (e.g., CVE-2025-12345)"),
+    )
+    description = models.TextField(
+        verbose_name=_("description"),
+        help_text=_("a detailed description of the vulnerability"),
+    )
+    published_date = models.DateField(
+        blank=True,
+        null=True,
+        verbose_name=_("published_date"),
+        help_text=_("date when the CVE was published"),
+    )
+    last_modified_date = models.DateField(
+        blank=True,
+        null=True,
+        verbose_name=_("last_modified_date"),
+        help_text=_("date when the CVE was last updated"),
+    )
+    cvss_score = models.DecimalField(
+        max_digits=3,
+        decimal_places=1,
+        blank=True,
+        null=True,
+        verbose_name=_("cvss_score"),
+        help_text=_("the severity score of the vulnerability"),
+    )
+    vulnerable_product = models.CharField(
+        max_length=200,
+        blank=True,
+        null=True,
+        verbose_name=_("vulnerable_product"),
+        help_text=_("the affected product(s)"),
+    )
+    references_url = models.URLField(
+        max_length=300,
+        blank=True,
+        null=True,
+        verbose_name=_("references_url"),
+        help_text=_("link to official references or advisories"),
+    )
+
+    def __str__(self):
+        return self.cve_id
