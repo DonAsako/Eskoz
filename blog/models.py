@@ -245,3 +245,37 @@ class Project(models.Model):
     class Meta:
         verbose_name = _("Project")
         verbose_name_plural = _("Projects")
+
+
+class Certification(models.Model):
+    name = models.CharField(
+        max_length=100, blank=False, null=False, verbose_name=_("Name")
+    )
+    description = models.TextField()
+    certification_detail_url = models.URLField(
+        max_length=200,
+        blank=True,
+        null=True,
+        verbose_name=_("Certification URL"),
+        help_text=_("Link to the official page of the certification"),
+    )
+    obtained_date = models.DateField(
+        blank=True,
+        null=True,
+        verbose_name=_("Obtained Date"),
+        help_text=_("Date when the certification was obtained"),
+    )
+    picture = models.ImageField(
+        upload_to="pictures/", blank=True, null=True, verbose_name=_("Picture")
+    )
+    article = models.ForeignKey(
+        Article,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="certifications",
+        verbose_name=_("Related Article"),
+    )
+
+    def __str__(self):
+        return self.name
