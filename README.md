@@ -124,11 +124,6 @@ Your new theme should now be applied and visible on the site.
 - [ ] Add article parameters to the article list page
 ### Deployment
 - [ ] Add an automatic script to load SSL certificates and simplify deployment
-### Features 
-- [ ] New Theme Manager
-    - [ ] Options to load theme
-    - [x] Theme structure
-    - [ ] Fix deploy theme
 
 ## Key Features
 - Ready-to-use multilingual blog
