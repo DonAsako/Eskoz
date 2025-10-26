@@ -71,7 +71,7 @@ class Post(models.Model):
     slug = models.SlugField(unique=True, blank=False, verbose_name=_("Slug"))
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("Author"))
     tags = models.ManyToManyField(
-        Tag, related_name="articles", blank=True, verbose_name=_("Tags")
+        Tag, related_name="posts", blank=True, verbose_name=_("Tags")
     )
     category = models.ForeignKey(
         Category,
@@ -170,9 +170,10 @@ class CTF(models.Model):
     class Meta:
         verbose_name = _("CTF")
         verbose_name_plural = _("CTFs")
+        ordering = ["-date_beginning"]
 
 
-class Writeup(Article):
+class Writeup(Post):
     DIFFICULTY_CHOICES = [
         ("easy", _("Easy")),
         ("medium", _("Medium")),

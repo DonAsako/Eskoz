@@ -79,7 +79,7 @@ class PostTranslationAdmin(admin.StackedInline):
     def get_extra(self, request, obj=None, **kwargs):
         if obj is None:
             return 1
-        return 1 if not PostTranslation.objects.filter(article=obj).exists() else 0
+        return 1 if not PostTranslation.objects.filter(post=obj).exists() else 0
 
 
 class PostAdmin(admin.ModelAdmin):
