@@ -84,6 +84,10 @@ class PostAdmin(admin.ModelAdmin):
     inlines = [PostTranslationAdmin]
     list_display = ("title", "published_on", "visibility")
     autocomplete_fields = ["tags", "category"]
+    readonly_fields = ["edited_on"]
+    prepopulated_fields = {"slug": ("title",)}
+    actions = [backup]
+
     fieldsets = [
         (
             "General",
@@ -99,9 +103,7 @@ class PostAdmin(admin.ModelAdmin):
         ("Metadata", {"fields": ["published_on"]}),
         ("Information", {"fields": ["edited_on", "slug"]}),
     ]
-    readonly_fields = ["edited_on"]
-    prepopulated_fields = {"slug": ("title",)}
-    actions = [backup]
+
 
     class Media:
         js = ("script/article_edit.js",)
@@ -109,12 +111,23 @@ class PostAdmin(admin.ModelAdmin):
 class ArticleAdmin(PostAdmin):
     ...
 
-class Writeupdmin(PostAdmin):
-    ...
+class WritupApdmin(PostAdmin):
+    fieldsets = PostAdmin.fieldsets + [
+        (
+            "CTF Information",
+            {
+                "fields": [
+                    ("ctf", "difficulty", "points", "category", "solver_count"),
+                ]
+            },
+        ),
+    ]
+    list_display = ("title", "ctf", "difficulty", "points", "visibility")
+
 
 
 admin.site.register(Article, ArticleAdmin)
-admin.site.register(Writeup, WriteupAdmin)
+admin.site.register(Writeup, WritupApdmin)
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Tag, TagAdmin)
