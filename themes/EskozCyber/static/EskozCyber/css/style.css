@@ -1,14 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 :root {
-    --background-color: #222831;
-    --foreground-color: #31363F;
-    --accent-color: #76ABAE;
-    --font-color: #EEEEEE;
+  --background-color: #222831;
+  --foreground-color: #31363F;
+  --accent-color: #76ABAE;
+  --font-color: #EEEEEE;
 }
 
 html {
@@ -16,13 +17,13 @@ html {
 }
 
 body {
-    background-color: var(--background-color);
-    color: var(--font-color);
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    align-items: center;
-    font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;
+  background-color: var(--background-color);
+  color: var(--font-color);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  align-items: center;
+  font-family: "Roboto", sans-serif;
 }
 a {
   color: var(--accent-color);
@@ -55,24 +56,23 @@ header{
   list-style: none;
 }
 .navbar-item {
-  padding: 0 1em;
+  margin-left: 1em;
   list-style: none;
 }
 .navbar-item--link {
   font-weight: bold;
   display: flex;
-  gap: 2px;
   color: var(--accent-color);
   text-decoration: none;
   transition: color .2s ease-in-out;
 }
-.navbar-item--link::before {
-  content: '/';
+.navbar-item--separator {
   color: var(--accent-color);
   display: block;
   font-weight: bolder;
   transition: color .2s ease-in-out;
 }
+
 .navbar-item--link:hover::before{
   color:var(--font-color);
 }
@@ -133,7 +133,6 @@ main {
   flex-direction: column;
   text-decoration: none;
   gap: 5px;
-  border-bottom: 1px solid var(--font-color);
   padding-bottom: 1.5em;
 }
 .article_card--title {
@@ -259,7 +258,7 @@ main {
 .article--content * {
   max-width: 100%;
   line-height: 1.5em;
-    text-align: justify;
+  text-align: justify;
 }
 .article--form-password-wrapper {
   display: flex;

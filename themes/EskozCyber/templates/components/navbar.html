@@ -14,9 +14,15 @@
         <li class="navbar-item">
             <a href="{% url 'root:page_detail' page.slug %}" class="navbar-item--link">{{ page.title }}</a>
         </li>
+        <li class="navbar-item navbar-item--separator">
+            /
+        </li>
         {% endfor %}
         <li class="navbar-item">
             <a href="{% url 'blog:writeups_list' %}" class="navbar-item--link">{% trans 'Writeups' %}</a>
+        </li>
+        <li class="navbar-item navbar-item--separator">
+            /
         </li>
         <li class="navbar-item">
             <a href="{% url 'blog:articles_list' %}" class="navbar-item--link">{% trans 'Articles' %}</a>
