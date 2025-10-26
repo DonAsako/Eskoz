@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render, Http404
 from django.utils.translation import gettext_lazy as _
-
+from django.db.models import Count, Q
 from .models import Article, Category, Writeup
 
 
@@ -49,8 +49,12 @@ def posts_list(
     if slug:
         selected_category = get_object_or_404(Category, slug=slug)
         posts = posts.filter(category=selected_category)
-    categories = Category.objects.all()
+    model_name = model_class.__name__.lower()
+    category_filter_field = f"category__{model_name}__visibility"
 
+    categories = Category.objects.annotate(
+        num_posts=Count("category__id", filter=Q(**{category_filter_field: "public"}))
+    ).filter(num_posts__gt=0)
     return render(
         request,
         "blog/posts_lists.html",
