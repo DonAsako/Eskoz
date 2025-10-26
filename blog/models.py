@@ -60,7 +60,7 @@ class CategoryTranslation(models.Model):
         return f"{self.category.slug} ({self.language})"
 
 
-class Article(models.Model):
+class Post(models.Model):
     VISIBILITY_CHOICES = [
         ("public", _("Public")),
         ("unlisted", _("Unlisted")),
@@ -98,13 +98,6 @@ class Article(models.Model):
         max_length=50, null=True, blank=True, verbose_name=_("Password")
     )
 
-    def save(self, *args, **kwargs):
-        # Defined published_on on the first save.
-        if not self.published_on:
-            self.published_on = timezone.now()
-
-        super().save(*args, **kwargs)
-
     def get_translation(self, language=None):
         lang = language or get_language()
         translation = self.translations.filter(language=lang).first()
@@ -115,20 +108,23 @@ class Article(models.Model):
             )
         return translation
 
+    def save(self, *args, **kwargs):
+        # Defined published_on on the first save.
+        if not self.published_on:
+            self.published_on = timezone.now()
+
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.title
 
-    class Meta:
-        verbose_name = _("Article")
-        verbose_name_plural = _("Articles")
 
-
-class ArticleTranslation(models.Model):
-    article = models.ForeignKey(
-        Article,
+class PostTranslation(models.Model):
+    post = models.ForeignKey(
+        Post,
         related_name="translations",
         on_delete=models.CASCADE,
-        verbose_name=_("Article"),
+        verbose_name=_("Post"),
     )
     language = models.CharField(max_length=10, choices=settings.LANGUAGES)
     title = models.CharField(max_length=255, verbose_name=_("Title"))
@@ -138,9 +134,9 @@ class ArticleTranslation(models.Model):
     content = models.TextField(verbose_name=_("Content"))
 
     class Meta:
-        unique_together = ("article", "language")
-        verbose_name = _("Article Translation")
-        verbose_name_plural = _("Article Translations")
+        unique_together = ("post", "language")
+        verbose_name = _("Post Translation")
+        verbose_name_plural = _("Post Translations")
 
     def get_reading_time(self):
         return len(self.content.split(" ")) // 200
@@ -152,4 +148,68 @@ class ArticleTranslation(models.Model):
         return mark_safe(html)
 
     def __str__(self):
-        return f"{self.article.slug} ({self.language})"
+        return f"{self.post.slug} ({self.language})"
+
+
+class Article(Post):
+    class Meta:
+        verbose_name = _("Article")
+        verbose_name_plural = _("Articles")
+
+
+class CTF(models.Model):
+    name = models.CharField(
+        max_length=100, blank=False, null=False, verbose_name=_("Name")
+    )
+    date_beginning = models.DateTimeField()
+    date_end = models.DateTimeField()
+
+    def __str__(self):
+        return self.name
+
+
+class Writeup(Article):
+    DIFFICULTY_CHOICES = [
+        ("easy", _("Easy")),
+        ("medium", _("Medium")),
+        ("hard", _("Hard")),
+        ("insane", _("Insane")),
+    ]
+    ctf = models.ForeignKey(
+        CTF,
+        related_name="ctf",
+        on_delete=models.SET_NULL,
+        verbose_name=_("CTF"),
+        null=True,
+        blank=True,
+    )
+    difficulty = models.CharField(
+        max_length=10,
+        choices=DIFFICULTY_CHOICES,
+        default="medium",
+        verbose_name=_("Difficulty"),
+    )
+    points = models.PositiveIntegerField(
+        default=0,
+        verbose_name=_("Points"),
+        help_text=_("Score or point value for this challenge."),
+    )
+    category = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        verbose_name=_("Challenge category"),
+        help_text=_("e.g. pwn, web, crypto, forensics..."),
+    )
+    solver_count = models.PositiveIntegerField(
+        default=0,
+        verbose_name=_("Number of solvers"),
+        help_text=_("Optional: number of people who solved it."),
+    )
+
+    def __str__(self):
+        return f"{self.title} ({self.ctf.name if self.ctf else 'No CTF'})"
+
+    class Meta:
+        verbose_name = _("Writeup")
+        verbose_name_plural = _("Writeups")
