@@ -16,6 +16,9 @@
         </li>
         {% endfor %}
         <li class="navbar-item">
+            <a href="{% url 'blog:writeups_list' %}" class="navbar-item--link">{% trans 'Writeups' %}</a>
+        </li>
+        <li class="navbar-item">
             <a href="{% url 'blog:articles_list' %}" class="navbar-item--link">{% trans 'Articles' %}</a>
         </li>
     </ul>

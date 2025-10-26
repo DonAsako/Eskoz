@@ -27,7 +27,7 @@
         </h2>
         {% else %}    
             {% for post in posts.all|dictsortreversed:"published_on" %}      
-                <a class="article_card" href="{% url 'blog:writeup_detail' post.slug %}">
+                <a class="article_card" href="{% url detail_url_name post.slug %}">
 
                     <div class="article_card--top">
                         <div class="article_card--top-left">
