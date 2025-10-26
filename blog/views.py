@@ -1,45 +1,71 @@
-from django.shortcuts import render, get_object_or_404
-from django.utils.translation import get_language
-from .models import Article, Category
+from django.shortcuts import get_object_or_404, render, Http404
+from django.utils.translation import gettext_lazy as _
+
+from .models import Article, Category, Writeup
+
+
+def post_detail(
+    request,
+    model_class,
+    slug,
+    template_detail,
+    template_password="blog/post_password.html",
+):
+    post = get_object_or_404(model_class, slug=slug)
+
+    if post.visibility == "private" and not request.user.is_authenticated:
+        raise Http404
+
+    if post.visibility == "protected":
+        if request.method == "POST" and request.POST.get("password") == getattr(
+            post, "password", ""
+        ):
+            return render(request, template_detail, {"post": post})
+        return render(request, template_password)
+
+    return render(request, template_detail, {"post": post})
 
 
 def article_detail(request, slug):
-    article = get_object_or_404(Article, slug=slug)
-    if article.visibility == "private":
-        if not request.user.is_authenticated:
-            raise Http404
-
-    elif article.visibility == "protected":
-        if (
-            request.method == "POST"
-            and request.POST.get("password") == article.password
-        ):
-            return render(
-                request,
-                f"blog/article_detail.html",
-                {"article": article},
-            )
-        return render(request, f"blog/article_password.html")
-
-    return render(request, f"blog/article_detail.html", {"article": article})
+    return post_detail(request, Article, slug, "blog/post_detail.html")
 
 
-def articles_list(request, slug=None):
-    articles = Article.objects.filter(visibility="public").prefetch_related(
+def writeup_detail(request, slug):
+    return post_detail(request, Writeup, slug, "blog/post_detail.html")
+
+
+def posts_list(
+    request, model_class, slug=None, post_type="posts", post_type_trans="Posts"
+):
+    posts = model_class.objects.filter(visibility="public").prefetch_related(
         "translations", "tags"
     )
     selected_category = None
     if slug:
         selected_category = get_object_or_404(Category, slug=slug)
-
-        articles = articles.filter(category=selected_category)
+        posts = posts.filter(category=selected_category)
     categories = Category.objects.all()
+
     return render(
         request,
-        f"blog/articles_list.html",
+        "blog/posts_lists.html",
         {
-            "articles": articles,
+            "posts": posts,
             "categories": categories,
             "selected_category": selected_category,
+            "post_type_trans": post_type_trans,
+            "post_type": post_type,
         },
+    )
+
+
+def articles_list(request, slug=None):
+    return posts_list(
+        request, Article, slug, post_type="articles", post_type_trans=_("Articles")
+    )
+
+
+def writeups_list(request, slug=None):
+    return posts_list(
+        request, Writeup, slug, post_type="writeups", post_type_trans=_("Writeups")
     )
