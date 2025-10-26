@@ -194,13 +194,6 @@ class Writeup(Article):
         verbose_name=_("Points"),
         help_text=_("Score or point value for this challenge."),
     )
-    category = models.CharField(
-        max_length=100,
-        blank=True,
-        null=True,
-        verbose_name=_("Challenge category"),
-        help_text=_("e.g. pwn, web, crypto, forensics..."),
-    )
     solver_count = models.PositiveIntegerField(
         default=0,
         verbose_name=_("Number of solvers"),

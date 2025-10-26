@@ -104,12 +104,12 @@ class PostAdmin(admin.ModelAdmin):
         ("Information", {"fields": ["edited_on", "slug"]}),
     ]
 
-
     class Media:
         js = ("script/article_edit.js",)
 
-class ArticleAdmin(PostAdmin):
-    ...
+
+class ArticleAdmin(PostAdmin): ...
+
 
 class WritupApdmin(PostAdmin):
     fieldsets = PostAdmin.fieldsets + [
@@ -117,13 +117,12 @@ class WritupApdmin(PostAdmin):
             "CTF Information",
             {
                 "fields": [
-                    ("ctf", "difficulty", "points", "category", "solver_count"),
+                    ("ctf", "difficulty", "points", "solver_count"),
                 ]
             },
         ),
     ]
-    list_display = ("title", "ctf", "difficulty", "points", "visibility")
-
+    list_display = ("ctf", "difficulty", "points")
 
 
 admin.site.register(Article, ArticleAdmin)
