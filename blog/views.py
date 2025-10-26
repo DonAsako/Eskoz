@@ -35,7 +35,12 @@ def writeup_detail(request, slug):
 
 
 def posts_list(
-    request, model_class, slug=None, post_type="posts", post_type_trans="Posts"
+    request,
+    model_class,
+    slug=None,
+    post_type="posts",
+    post_type_trans="Posts",
+    detail_url_name="blog:post_detail",
 ):
     posts = model_class.objects.filter(visibility="public").prefetch_related(
         "translations", "tags"
@@ -55,17 +60,28 @@ def posts_list(
             "selected_category": selected_category,
             "post_type_trans": post_type_trans,
             "post_type": post_type,
+            "detail_url_name": detail_url_name,
         },
     )
 
 
 def articles_list(request, slug=None):
     return posts_list(
-        request, Article, slug, post_type="articles", post_type_trans=_("Articles")
+        request,
+        Article,
+        slug,
+        post_type="articles",
+        post_type_trans=_("Articles"),
+        detail_url_name="blog:article_detail",
     )
 
 
 def writeups_list(request, slug=None):
     return posts_list(
-        request, Writeup, slug, post_type="writeups", post_type_trans=_("Writeups")
+        request,
+        Writeup,
+        slug,
+        post_type="writeups",
+        post_type_trans=_("Writeups"),
+        detail_url_name="blog:writeup_detail",
     )
