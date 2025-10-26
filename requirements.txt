@@ -8,3 +8,4 @@ psycopg==3.2.9
 python-dotenv==1.1.1
 sqlparse==0.5.3
 pyotp==2.9.0
+qrcode==8.2
