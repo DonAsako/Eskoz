@@ -6,19 +6,19 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
 {% endblock %}
-{% block title %} - {{ article.get_translation.title }}{% endblock %}
+{% block title %} - {{ post.get_translation.title }}{% endblock %}
 {% block SEO %}
     <meta property="og:type" content="article" />
-    <meta property="article:published_time" content="{{ article.published_on.isoformat }}" />
-    <meta property="article:modified_time" content="{{ article.edited_on.isoformat }}" />
-    {% for tag in article.tags.all %}<meta property="article:tag" content="{{ tag.title }}" />{% endfor %}
+    <meta property="article:published_time" content="{{ post.published_on.isoformat }}" />
+    <meta property="article:modified_time" content="{{ post.edited_on.isoformat }}" />
+    {% for tag in post.tags.all %}<meta property="article:tag" content="{{ tag.title }}" />{% endfor %}
 {% endblock %}cd
 {% block content %}
 <div class="article--container">
     <div class="article--wrapper">
-        {% if article.picture %} <div class="article--picture-wrapper"><img src="{{ article.picture.url }}"></div> {% endif %}
+        {% if post.picture %} <div class="article--picture-wrapper"><img src="{{ post.picture.url }}"></div> {% endif %}
         <div class="article--content markdown-body">
-            {{ article.get_translation.get_content_as_html }}
+            {{ post.get_translation.get_content_as_html }}
         </div>
     </div>
     <aside class="article--toc" id="toc"></aside>

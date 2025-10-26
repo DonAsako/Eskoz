@@ -19,10 +19,10 @@
             {% endfor %}
         </select>
     </div>
-        {% if not articles %}
+        {% if not posts %}
             <h2 class="message-wrapper">{% trans 'There is no article at the moment.' %}</h2>
         {% else %}    
-            {% for article in articles.all|dictsortreversed:"published_on" %}      
+            {% for article in posts.all|dictsortreversed:"published_on" %}      
                 <a class="article_card" href="{% url 'blog:article_detail' article.slug %}">
 
                     <div class="article_card--top">
