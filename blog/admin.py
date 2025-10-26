@@ -16,7 +16,9 @@ from .models import (
     Project,
     Tag,
     Writeup,
-    CTF
+    CTF,
+    CVE,
+    Certification
 )
 
 
@@ -156,3 +158,6 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(CTF, admin.ModelAdmin)
+admin.site.register(Certification, admin.ModelAdmin)
+admin.site.register(CVE, admin.ModelAdmin)
+

@@ -276,6 +276,14 @@ class Certification(models.Model):
         related_name="certifications",
         verbose_name=_("Related Article"),
     )
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="certifications",
+        verbose_name=_("Owner")
+    )
 
     def __str__(self):
         return self.name
@@ -326,6 +334,13 @@ class CVE(models.Model):
         verbose_name=_("references_url"),
         help_text=_("link to official references or advisories"),
     )
-
+    author = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="cve",
+        verbose_name=_("Author")
+    )
     def __str__(self):
         return self.cve_id
