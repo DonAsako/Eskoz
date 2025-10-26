@@ -223,6 +223,14 @@ class Project(models.Model):
     picture = models.ImageField(
         upload_to="pictures/", blank=True, null=True, verbose_name=_("Picture")
     )
+    maintenair = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="projects",
+        verbose_name=_("Maintainer"),
+    )
 
     def short_description(self):
         return (
