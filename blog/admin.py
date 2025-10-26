@@ -18,7 +18,7 @@ from .models import (
     Writeup,
     CTF,
     CVE,
-    Certification
+    Certification,
 )
 
 
@@ -129,6 +129,7 @@ class WritupApdmin(PostAdmin):
     ]
     list_display = ("ctf", "difficulty", "points")
 
+
 class ProjectAdmin(admin.ModelAdmin):
     list_display = (
         "name",
@@ -160,4 +161,3 @@ admin.site.register(Tag, TagAdmin)
 admin.site.register(CTF, admin.ModelAdmin)
 admin.site.register(Certification, admin.ModelAdmin)
 admin.site.register(CVE, admin.ModelAdmin)
-
