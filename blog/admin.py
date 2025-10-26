@@ -3,6 +3,7 @@ import zipfile
 
 from django.contrib import admin
 from django.http import HttpResponse
+from django.utils.html import format_html
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
@@ -12,6 +13,7 @@ from .models import (
     Category,
     CategoryTranslation,
     PostTranslation,
+    Project,
     Tag,
     Writeup,
 )
@@ -125,8 +127,31 @@ class WritupApdmin(PostAdmin):
     list_display = ("ctf", "difficulty", "points")
 
 
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "short_description",
+        "source_link",
+        "website",
+        "picture_thumbnail",
+    )
+    search_fields = ("name", "description")
+    list_filter = ()
+    ordering = ("name",)
+
+    def picture_thumbnail(self, obj):
+        if obj.picture:
+            return format_html(
+                '<img src="{}" width="75" height="75" style="object-fit:cover; border-radius:5px;" />',
+                obj.picture.url,
+            )
+        return "-"
+
+    picture_thumbnail.short_description = _("Thumbnail")
+
+
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Writeup, WritupApdmin)
-
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(Project, ProjectAdmin)
 admin.site.register(Tag, TagAdmin)
