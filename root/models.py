@@ -211,6 +211,9 @@ class UserProfile(models.Model):
             name=self.user.get_username(), issuer_name="Eskoz"
         )
 
+    def verify_otp(self, token):
+        return pyotp.TOTP(self.otp_secret_key).verify(token)
+
     def get_otp_qr_code(self):
         uri = self.get_otpauth()
         img = qrcode.make(uri)
@@ -218,7 +221,6 @@ class UserProfile(models.Model):
         img.save(buffer, format="PNG")
         img_str = base64.b64encode(buffer.getvalue()).decode()
         return f"data:image/png;base64,{img_str}"
-
     def __str__(self):
         return f"{self.user.get_username()}"
 
