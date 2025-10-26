@@ -12,9 +12,9 @@
             <option value="">{% trans 'All' %}</option>
             {% for category in categories %}
                 {% if selected_category == category%}
-                    <option value="{{category.slug}}" selected>{{category.get_translation.title}}</option>
+                    <option value="{{category.slug}}" selected>{{category.get_translation.title|default:category.title}}</option>
                 {% else %}
-                    <option value="{{category.slug}}">{{category.get_translation.title}}</option>
+                    <option value="{{category.slug}}">{{category.get_translation.title|default:category.title}}</option>
                 {% endif %}
             {% endfor %}
         </select>
