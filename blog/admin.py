@@ -1,12 +1,20 @@
 import io
 import zipfile
-from django.utils.text import slugify
+
 from django.contrib import admin
-from django.urls import path
 from django.http import HttpResponse
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
-from .forms import ArticleTranslationAdminForm
-from .models import Article, Tag, Category, ArticleTranslation, CategoryTranslation
+
+from .forms import PostTranslationAdminForm
+from .models import (
+    Article,
+    Category,
+    CategoryTranslation,
+    PostTranslation,
+    Tag,
+    Writeup,
+)
 
 
 @admin.action(description=_("Backup selected articles"))
@@ -53,8 +61,8 @@ class TagAdmin(admin.ModelAdmin):
     search_fields = ["title"]
 
 
-class ArticleTranslationAdmin(admin.StackedInline):
-    model = ArticleTranslation
+class PostTranslationAdmin(admin.StackedInline):
+    model = PostTranslation
 
     def reading_time(self, obj):
         reading_time = obj.get_reading_time()
@@ -62,18 +70,18 @@ class ArticleTranslationAdmin(admin.StackedInline):
 
     reading_time.short_description = _("Reading time")
     readonly_fields = ["reading_time"]
-    form = ArticleTranslationAdminForm
+    form = PostTranslationAdminForm
     extra = 1
     can_delete = True
 
     def get_extra(self, request, obj=None, **kwargs):
         if obj is None:
             return 1
-        return 1 if not ArticleTranslation.objects.filter(article=obj).exists() else 0
+        return 1 if not PostTranslation.objects.filter(article=obj).exists() else 0
 
 
-class ArticleAdmin(admin.ModelAdmin):
-    inlines = [ArticleTranslationAdmin]
+class PostAdmin(admin.ModelAdmin):
+    inlines = [PostTranslationAdmin]
     list_display = ("title", "published_on", "visibility")
     autocomplete_fields = ["tags", "category"]
     fieldsets = [
@@ -98,7 +106,15 @@ class ArticleAdmin(admin.ModelAdmin):
     class Media:
         js = ("script/article_edit.js",)
 
+class ArticleAdmin(PostAdmin):
+    ...
+
+class Writeupdmin(PostAdmin):
+    ...
+
 
 admin.site.register(Article, ArticleAdmin)
+admin.site.register(Writeup, WriteupAdmin)
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Tag, TagAdmin)
