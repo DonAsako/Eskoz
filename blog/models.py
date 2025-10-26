@@ -167,6 +167,10 @@ class CTF(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = _("CTF")
+        verbose_name_plural = _("CTFs")
+
 
 class Writeup(Article):
     DIFFICULTY_CHOICES = [
@@ -206,3 +210,29 @@ class Writeup(Article):
     class Meta:
         verbose_name = _("Writeup")
         verbose_name_plural = _("Writeups")
+
+
+class Project(models.Model):
+    name = models.CharField(
+        max_length=100, blank=False, null=False, verbose_name=_("Name")
+    )
+    description = models.TextField()
+    source_link = models.URLField(max_length=200, blank=True, null=True)
+    website = models.URLField(max_length=200, blank=True, null=True)
+    picture = models.ImageField(
+        upload_to="pictures/", blank=True, null=True, verbose_name=_("Picture")
+    )
+
+    def short_description(self):
+        return (
+            (self.description[:75] + "...")
+            if len(self.description) > 75
+            else self.description
+        )
+
+    def __str__(self):
+        return f"{self.name}"
+
+    class Meta:
+        verbose_name = _("Project")
+        verbose_name_plural = _("Projects")
