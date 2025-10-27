@@ -305,6 +305,30 @@ main {
 .article--form-password button:hover{
   background-color: var(--accent-color);
 }
+
+/* CERTIFICATIONS */
+.article_card-split {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  height: auto;
+}
+.article_card_left {
+  flex: 0.05;
+}
+.article_card--image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+
+}
+.article_card_right {
+  display: flex;
+  flex: 1;;
+  flex-direction: column;
+}
+
 /* FOOTER */
 footer {
   display: flex;

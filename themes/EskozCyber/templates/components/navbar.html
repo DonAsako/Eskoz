@@ -19,6 +19,12 @@
         </li>
         {% endfor %}
         <li class="navbar-item">
+            <a href="{% url 'blog:certifications_lists' %}" class="navbar-item--link">Certifications</a>
+        </li>
+        <li class="navbar-item navbar-item--separator">
+            /
+        </li>
+        <li class="navbar-item">
             <a href="{% url 'blog:writeups_list' %}" class="navbar-item--link">{% trans 'Writeups' %}</a>
         </li>
         <li class="navbar-item navbar-item--separator">
