@@ -247,6 +247,22 @@ class Project(models.Model):
         verbose_name_plural = _("Projects")
 
 
+class Issuer(models.Model):
+    name = models.CharField(max_length=150, unique=True, verbose_name=_("Name"))
+    website = models.URLField(
+        max_length=255, blank=True, null=True, verbose_name=_("Website")
+    )
+    description = models.TextField(blank=True, verbose_name=_("Description"))
+
+    class Meta:
+        verbose_name = _("Issuer")
+        verbose_name_plural = _("Issuers")
+        ordering = ("name",)
+
+    def __str__(self):
+        return self.name
+
+
 class Certification(models.Model):
     name = models.CharField(
         max_length=100, blank=False, null=False, verbose_name=_("Name")
@@ -273,7 +289,7 @@ class Certification(models.Model):
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
-        related_name="certifications",
+        related_name="certification",
         verbose_name=_("Related Article"),
     )
     owner = models.ForeignKey(
@@ -282,7 +298,16 @@ class Certification(models.Model):
         blank=True,
         null=True,
         related_name="certifications",
-        verbose_name=_("Owner")
+        verbose_name=_("Owner"),
+    )
+    issuer = models.ForeignKey(
+        Issuer,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="certifications",
+        verbose_name=_("Issuer"),
+        help_text=_("Organization or platform that issued the certification"),
     )
 
     def __str__(self):
@@ -340,7 +365,8 @@ class CVE(models.Model):
         blank=True,
         null=True,
         related_name="cve",
-        verbose_name=_("Author")
+        verbose_name=_("Author"),
     )
+
     def __str__(self):
         return self.cve_id
