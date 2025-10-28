@@ -6,9 +6,10 @@
     {% endblock %}
 {% block content %}
     <div class="articles_list">
-    <div class="articles_list--top">
-        <h2 class="articles_list--title">{{ post_type_trans }}</h2>
-    </div>
+        <div class="articles_list--top">
+            <h2 class="articles_list--title">{% trans 'Certifications' %}</h2>
+        </div>
+            
         {% if not certifications %}
         <h2 class="message-wrapper"></h2>
             {% trans 'There is no certifications at the moment.' %}
