@@ -231,6 +231,14 @@ class Project(models.Model):
         related_name="projects",
         verbose_name=_("Maintainer"),
     )
+    article = models.ForeignKey(
+        Article,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="project",
+        verbose_name=_("Related Article"),
+    )
 
     def short_description(self):
         return (
