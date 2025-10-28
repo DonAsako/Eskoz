@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render, Http404
 from django.utils.translation import gettext_lazy as _
 from django.db.models import Count, Q
-from .models import Article, Category, Writeup, Certification
+from .models import Article, Category, Writeup, Certification, Project
 
 
 def post_detail(
@@ -91,8 +91,14 @@ def writeups_list(request, slug=None):
     )
 
 
-def certifications_lists(request, slug=None):
+def certifications_lists(request):
     certifications = Certification.objects.all()
     return render(
         request, "blog/certifications_lists.html", {"certifications": certifications}
+    )
+
+def projects_lists(request):
+    projects = Project.objects.all()
+    return render(
+        request, "blog/projects_lists.html", {"projects": projects}
     )
