@@ -55,16 +55,4 @@
             {% endfor %}
         {% endif %}
     </div>
-
-<script>
-    const categorySelector = document.getElementById('category-selector');
-    categorySelector.addEventListener('change', function () {
-        const selectedCategory = this.value;
-        if (selectedCategory) {
-            window.location.href = `/{{ post_type }}/${selectedCategory}`;
-        } else {
-            window.location.href = `/{{ post_type }}/`;
-        }
-    });
-</script>
 {% endblock %}
