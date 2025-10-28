@@ -27,17 +27,20 @@
                 </div>
 
                     <div class="article_card_right">
-                        <div class="article_card--top">
-                            <div class="article_card--top-left">
-                                <p class="article_card--title">{{ certification.name }}</p>
+                        <div class="article_card-split--top">
+                            <div class="article_card--top">
+                                <div class="article_card--top-left">
+                                    <p class="article_card--title">{{ certification.name }}</p>
+                                </div>
+                                {% if certification.issuer %}
+                                    <p class="article_card--category">{{ certification.issuer.name }}</p>
+                                {% endif %}
                             </div>
-                            {% if certification.issuer %}
-                                <p class="article_card--category">{{ certification.issuer.name }}</p>
+                            {% if certification.description %}
+                                <p class="article_card--description">“{{ certification.description|default_if_none:'' }}”</p>
                             {% endif %}
                         </div>
-                        {% if certification.description %}
-                            <p class="article_card--description">“{{ certification.description|default_if_none:'' }}”</p>
-                        {% endif %}
+
                         <div class="article_card--bottom">
                             <p class="article_card--date">{% trans 'Obtained on' %} {{ certification.obtained_date|date }}</p>
                         </div>
