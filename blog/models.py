@@ -223,7 +223,7 @@ class Project(models.Model):
     picture = models.ImageField(
         upload_to="pictures/", blank=True, null=True, verbose_name=_("Picture")
     )
-    maintenair = models.ForeignKey(
+    maintainer = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
         null=True,
