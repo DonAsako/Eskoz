@@ -239,6 +239,8 @@ class Project(models.Model):
         related_name="project",
         verbose_name=_("Related Article"),
     )
+    date_beginning = models.DateField(null=True, blank=True)
+    date_end = models.DateField(null=True, blank=True)
 
     def short_description(self):
         return (
