@@ -63,3 +63,6 @@ p {
     color: var(--font-color);
     margin: .25em 0;
 }
+.mjx-container *, mjx-mrow *{
+  line-height: 0 !important;
+}
