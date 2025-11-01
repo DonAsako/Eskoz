@@ -42,6 +42,14 @@ async function sendContentToPreview(content, id) {
                         </div>
                     </div>
                     <script>hljs.highlightAll();</script>
+                    <script>
+                        // MathJax
+                        window.MathJax = {
+                            tex: {
+                                inlineMath: [['$', '$']]
+                            }
+                        }
+                    </script>
                 </body>
             </html>`;
             iframeDoc.open();

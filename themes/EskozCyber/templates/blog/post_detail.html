@@ -90,7 +90,13 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener('scroll', onScroll);
 
     onScroll();
+
+    // MathJax
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$']]
+        }
+    };
 });
 </script>
-
 {% endblock %}
