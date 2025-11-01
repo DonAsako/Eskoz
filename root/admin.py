@@ -10,6 +10,7 @@ from .models import (
     UserLink,
     SeoSettings,
     Page,
+    ViewPageSettings,
 )
 from .forms import PageAdminForm, UserProfileAdminForm
 
@@ -25,7 +26,7 @@ class SeoSettingsInline(admin.StackedInline):
     model = SeoSettings
     can_delete = False
     extra = 0
-    verbose_name = "SEO Settings"
+    verbose_name = _("SEO Settings")
     fieldsets = [
         ("Meta", {"fields": ["meta_author", "meta_description", "meta_keywords"]}),
         (
@@ -53,8 +54,15 @@ class SeoSettingsInline(admin.StackedInline):
     ]
 
 
+class ViewPageSettingsInline(admin.StackedInline):
+    model = ViewPageSettings
+    can_delete = False
+    extra = 0
+    verbose_name = _("View Page Settings")
+
+
 class SiteSettingsAdmin(admin.ModelAdmin):
-    inlines = [WellKnownFileInline, SeoSettingsInline]
+    inlines = [WellKnownFileInline, SeoSettingsInline, ViewPageSettingsInline]
 
     def has_add_permission(self, request):
         return not SiteSettings.objects.exists()
