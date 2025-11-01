@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save, post_migrate
 from django.dispatch import receiver
 from django.db.utils import OperationalError, ProgrammingError
-from .models import SeoSettings, SiteSettings, UserProfile
+from .models import SeoSettings, SiteSettings, UserProfile, ViewPageSettings
 from django.contrib.auth.models import User
 
 
@@ -15,11 +15,10 @@ def create_site_settings(sender, **kwargs):
         pass
 
 
-# Create Seosettings on creation of SiteSettings
 @receiver(post_save, sender=SiteSettings)
-def create_seo_settings(sender, instance, created, **kwargs):
-    if created:
-        SeoSettings.objects.create(site_settings=instance)
+def create_related_settings(sender, instance, **kwargs):
+    SeoSettings.objects.get_or_create(site_settings=instance)
+    ViewPageSettings.objects.get_or_create(site_settings=instance)
 
 
 # Create UserProfile on creation of User
