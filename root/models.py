@@ -195,6 +195,36 @@ class WellKnownFile(models.Model):
         verbose_name_plural = _("WellKnown Files")
 
 
+class ViewPageSettings(models.Model):
+    site_settings = models.OneToOneField(
+        SiteSettings,
+        on_delete=models.CASCADE,
+        related_name="view_page_settings",
+        verbose_name=_("View page settings"),
+    )
+    activate_certifications_page = models.BooleanField(
+        default=True, verbose_name=_("Show certification page")
+    )
+    activate_projects_page = models.BooleanField(
+        default=True, verbose_name=_("Show project page")
+    )
+    activate_articles_page = models.BooleanField(
+        default=True, verbose_name=_("Show article page")
+    )
+    activate_cves_page = models.BooleanField(
+        default=True, verbose_name=_("Show cve page")
+    )
+    activate_writeups_page = models.BooleanField(
+        default=True, verbose_name=_("Show writeup page")
+    )
+    activate_members_page = models.BooleanField(
+        default=True, verbose_name=_("Show member page")
+    )
+
+    def __str__(self):
+        return ""
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     avatar = models.ImageField(
