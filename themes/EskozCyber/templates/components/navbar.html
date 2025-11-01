@@ -11,33 +11,57 @@
     </div>
     <ul class="navbar-items">
         {% for page in site_settings.get_page_referenced %}
-        <li class="navbar-item">
-            <a href="{% url 'root:page_detail' page.slug %}" class="navbar-item--link">{{ page.title }}</a>
-        </li>
-        <li class="navbar-item navbar-item--separator">
-            /
-        </li>
+            <li class="navbar-item">
+                <a href="{% url 'root:page_detail' page.slug %}" class="navbar-item--link">{{ page.title }}</a>
+            </li>
+            <li class="navbar-item navbar-item--separator">
+                /
+            </li>
         {% endfor %}
-        <li class="navbar-item">
-            <a href="{% url 'blog:projects_lists' %}" class="navbar-item--link">{% trans 'Projects' %}</a>
-        </li>
-        <li class="navbar-item navbar-item--separator">
-            /
-        </li>
-        <li class="navbar-item">
-            <a href="{% url 'blog:certifications_lists' %}" class="navbar-item--link">{% trans 'Certifications' %}</a>
-        </li>
-        <li class="navbar-item navbar-item--separator">
-            /
-        </li>
-        <li class="navbar-item">
-            <a href="{% url 'blog:writeups_list' %}" class="navbar-item--link">{% trans 'Writeups' %}</a>
-        </li>
-        <li class="navbar-item navbar-item--separator">
-            /
-        </li>
-        <li class="navbar-item">
-            <a href="{% url 'blog:articles_list' %}" class="navbar-item--link">{% trans 'Articles' %}</a>
-        </li>
+        {% if site_settings.view_page_settings.activate_projects_page %}
+            <li class="navbar-item">
+                <a href="{% url 'blog:projects_lists' %}" class="navbar-item--link">{% trans 'Projects' %}</a>
+            </li>
+            <li class="navbar-item navbar-item--separator">
+                /
+            </li>
+        {% endif %}
+        {% if site_settings.view_page_settings.activate_certifications_page %}
+            <li class="navbar-item">
+                <a href="{% url 'blog:certifications_lists' %}" class="navbar-item--link">{% trans 'Certifications' %}</a>
+            </li>
+            <li class="navbar-item navbar-item--separator">
+                /
+            </li>
+        {% endif %}
+        {% if site_settings.view_page_settings.activate_writeups_page %}
+            <li class="navbar-item">
+                <a href="{% url 'blog:writeups_list' %}" class="navbar-item--link">{% trans 'Writeups' %}</a>
+            </li>
+            <li class="navbar-item navbar-item--separator">
+                /
+            </li>
+        {% endif %}
+        {% if site_settings.view_page_settings.activate_articles_page %}
+            <li class="navbar-item">
+                <a href="{% url 'blog:articles_list' %}" class="navbar-item--link">{% trans 'Articles' %}</a>
+            </li>
+            <li class="navbar-item navbar-item--separator">
+                /
+            </li>
+        {% endif %}
+        {% if site_settings.view_page_settings.activate_members_page %}
+            <li class="navbar-item">
+                <a href="#members" class="navbar-item--link">{% trans 'Members' %}</a>
+            </li>
+            <li class="navbar-item navbar-item--separator">
+                    /
+            </li>
+        {% endif %}
+        {% if site_settings.view_page_settings.activate_cves_page %}
+            <li class="navbar-item">
+                <a href="#CVEs" class="navbar-item--link">{% trans 'CVEs' %}</a>
+            </li>
+        {% endif %}
     </ul>
 </nav>
