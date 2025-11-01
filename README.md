@@ -124,6 +124,7 @@ Your new theme should now be applied and visible on the site.
 - [ ] Make the layout responsive
 - [ ] Improve article detail view
 - [ ] Add article parameters to the article list page
+- [ ] Update Eskoz Theme
 
 ### Deployment
 - [ ] Add an automatic script to load SSL certificates and simplify deployment
