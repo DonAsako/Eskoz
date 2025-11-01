@@ -116,19 +116,33 @@ Your new theme should now be applied and visible on the site.
 - [ ] Define log levels (INFO, WARNING, ERROR, etc.)
 - [ ] Redirect container logs to files
 - [ ] Add .env variable for log level
+
 ### Translate
 - [ ] Make translation
+
 ### Styling
 - [ ] Make the layout responsive
 - [ ] Improve article detail view
 - [ ] Add article parameters to the article list page
+
 ### Deployment
 - [ ] Add an automatic script to load SSL certificates and simplify deployment
+
+### Authentication / Users
+- [ ] Finish connection with 2FA OTP
+
+### Views / Pages
+- [ ] View Page Settings (block view if false)
+- [ ] Add members page
+
+### New Apps
+- [ ] Create Course app
 
 ## Key Features
 - Ready-to-use multilingual blog
 - Easy deployment with Docker
 - Built-in Django admin interface
+
 
 ## License
 This project is licensed under the GNU General Public License v3.0.
