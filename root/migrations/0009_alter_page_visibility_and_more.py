@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("root", "0008_sitesettings_footer_credits_alter_page_slug"),
     ]

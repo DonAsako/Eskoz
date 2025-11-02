@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("root", "0017_remove_userprofile_secret_key_and_more"),
     ]

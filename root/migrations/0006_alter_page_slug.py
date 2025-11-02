@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("root", "0005_page_slug_alter_page_site_settings"),
     ]

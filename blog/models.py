@@ -1,17 +1,26 @@
-from django.utils.text import slugify
+import markdown
+from django.conf import settings
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 from django.utils.safestring import mark_safe
-from django.contrib.auth.models import User
-from django.utils.translation import get_language, gettext_lazy as _
-from django.conf import settings
-import markdown
+from django.utils.text import slugify
+from django.utils.translation import get_language
+from django.utils.translation import gettext_lazy as _
 
 
 class Tag(models.Model):
+    """
+    Represents a tag that can be associated with posts.
+
+    Attributes:
+        title (CharField): The unique name of the tag.
+    """
+
     title = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
+        """Return the title of the tag as its string representation."""
         return self.title
 
     class Meta:
@@ -20,10 +29,30 @@ class Tag(models.Model):
 
 
 class Category(models.Model):
+    """
+    Represents a category for posts, which can have translations.
+
+    Attributes:
+        title (CharField): The title of the category.
+        slug (SlugField): URL-friendly identifier for the category.
+    """
+
     title = models.CharField(max_length=255, unique=True, verbose_name=_("Title"))
     slug = models.SlugField(unique=True, blank=False, null=True, verbose_name=_("Slug"))
 
     def get_translation(self, language=None):
+        """
+        Get the translation of the category for the specified language.
+
+        If no translation exists for the given language, fallback to English
+        or any available translation.
+
+        Args:
+            language (str, optional): Language code to get the translation. Defaults to None (current language).
+
+        Returns:
+            CategoryTranslation: The corresponding translation instance.
+        """
         lang = language or get_language()
         translation = self.translations.filter(language=lang).first()
         if not translation:
@@ -34,11 +63,16 @@ class Category(models.Model):
         return translation
 
     def save(self, *args, **kwargs):
+        """
+        Automatically generate a slug from the title if not provided,
+        then save the category instance.
+        """
         if not self.slug:
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
     def __str__(self):
+        """Return the title of the category as its string representation."""
         return self.title
 
     class Meta:
@@ -47,6 +81,15 @@ class Category(models.Model):
 
 
 class CategoryTranslation(models.Model):
+    """
+    Represents a translated version of a Category.
+
+    Attributes:
+        category (ForeignKey): The category being translated.
+        language (CharField): Language code of the translation.
+        title (CharField): Translated title.
+    """
+
     category = models.ForeignKey(
         Category,
         related_name="translations",
@@ -57,10 +100,27 @@ class CategoryTranslation(models.Model):
     title = models.CharField(max_length=255, verbose_name=_("Title"))
 
     def __str__(self):
+        """Return the category slug and language code as the string representation."""
         return f"{self.category.slug} ({self.language})"
 
 
 class Post(models.Model):
+    """
+    Base model representing a blog post or article.
+
+    Attributes:
+        title (CharField): The title of the post.
+        slug (SlugField): URL-friendly identifier.
+        author (ForeignKey): User who created the post.
+        tags (ManyToManyField): Tags associated with the post.
+        category (ForeignKey): Category of the post.
+        published_on (DateTimeField): Date when the post was first published.
+        edited_on (DateTimeField): Date when the post was last edited.
+        picture (ImageField): Optional image for the post.
+        visibility (CharField): Visibility of the post (public, unlisted, protected, private).
+        password (CharField): Optional password for protected posts.
+    """
+
     VISIBILITY_CHOICES = [
         ("public", _("Public")),
         ("unlisted", _("Unlisted")),
@@ -99,6 +159,18 @@ class Post(models.Model):
     )
 
     def get_translation(self, language=None):
+        """
+        Get the translation of the post for the specified language.
+
+        If no translation exists for the given language, fallback to English
+        or any available translation.
+
+        Args:
+            language (str, optional): Language code to get the translation. Defaults to None (current language).
+
+        Returns:
+            PostTranslation: The corresponding translation instance.
+        """
         lang = language or get_language()
         translation = self.translations.filter(language=lang).first()
         if not translation:
@@ -109,17 +181,34 @@ class Post(models.Model):
         return translation
 
     def save(self, *args, **kwargs):
-        # Defined published_on on the first save.
+        """
+        Save the post instance.
+
+        If this is the first save and published_on is not set, automatically
+        set published_on to the current time.
+        """
         if not self.published_on:
             self.published_on = timezone.now()
 
         super().save(*args, **kwargs)
 
     def __str__(self):
+        """Return the title of the post as its string representation."""
         return self.title
 
 
 class PostTranslation(models.Model):
+    """
+    Represents a translation of a Post into a specific language.
+
+    Attributes:
+        post (ForeignKey): The post being translated.
+        language (CharField): Language code of the translation.
+        title (CharField): Translated title.
+        description (TextField): Short description of the post content.
+        content (TextField): Full post content in the specified language.
+    """
+
     post = models.ForeignKey(
         Post,
         related_name="translations",
@@ -139,81 +228,57 @@ class PostTranslation(models.Model):
         verbose_name_plural = _("Post Translations")
 
     def get_reading_time(self):
+        """
+        Estimate the reading time of the post content in minutes.
+
+        Returns:
+            int: Approximate reading time based on 200 words per minute.
+        """
         return len(self.content.split(" ")) // 200
 
     def get_content_as_html(self):
+        """
+        Convert the Markdown content of the post to safe HTML.
+
+        Returns:
+            str: HTML representation of the post content.
+        """
         html = markdown.markdown(
             self.content, extensions=["extra", "codehilite", "fenced_code", "toc"]
         )
         return mark_safe(html)
 
     def __str__(self):
+        """Return the post slug and language code as the string representation."""
         return f"{self.post.slug} ({self.language})"
 
 
 class Article(Post):
+    """
+    Represents an article, which is a specialized type of Post.
+    """
+
     class Meta:
         verbose_name = _("Article")
         verbose_name_plural = _("Articles")
 
 
-class CTF(models.Model):
-    name = models.CharField(
-        max_length=100, blank=False, null=False, verbose_name=_("Name")
-    )
-    date_beginning = models.DateTimeField()
-    date_end = models.DateTimeField()
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = _("CTF")
-        verbose_name_plural = _("CTFs")
-        ordering = ["-date_beginning"]
-
-
-class Writeup(Post):
-    DIFFICULTY_CHOICES = [
-        ("easy", _("Easy")),
-        ("medium", _("Medium")),
-        ("hard", _("Hard")),
-        ("insane", _("Insane")),
-    ]
-    ctf = models.ForeignKey(
-        CTF,
-        related_name="ctf",
-        on_delete=models.SET_NULL,
-        verbose_name=_("CTF"),
-        null=True,
-        blank=True,
-    )
-    difficulty = models.CharField(
-        max_length=10,
-        choices=DIFFICULTY_CHOICES,
-        default="medium",
-        verbose_name=_("Difficulty"),
-    )
-    points = models.PositiveIntegerField(
-        default=0,
-        verbose_name=_("Points"),
-        help_text=_("Score or point value for this challenge."),
-    )
-    solver_count = models.PositiveIntegerField(
-        default=0,
-        verbose_name=_("Number of solvers"),
-        help_text=_("Optional: number of people who solved it."),
-    )
-
-    def __str__(self):
-        return f"{self.title} ({self.ctf.name if self.ctf else 'No CTF'})"
-
-    class Meta:
-        verbose_name = _("Writeup")
-        verbose_name_plural = _("Writeups")
-
-
 class Project(models.Model):
+    """
+    Represents a project associated with articles.
+
+    Attributes:
+        name (CharField): Name of the project.
+        description (TextField): Description of the project.
+        source_link (URLField): URL to the project's source code repository.
+        website (URLField): URL to the project website.
+        picture (ImageField): Optional image representing the project.
+        maintainer (ForeignKey): User responsible for maintaining the project.
+        article (ForeignKey): Related article describing the project.
+        date_beginning (DateField): Project start date.
+        date_end (DateField): Project end date.
+    """
+
     name = models.CharField(
         max_length=100, blank=False, null=False, verbose_name=_("Name")
     )
@@ -243,6 +308,12 @@ class Project(models.Model):
     date_end = models.DateField(null=True, blank=True)
 
     def short_description(self):
+        """
+        Return a shortened version of the project description.
+
+        Returns:
+            str: First 75 characters of the description followed by "..." if truncated.
+        """
         return (
             (self.description[:75] + "...")
             if len(self.description) > 75
@@ -250,133 +321,9 @@ class Project(models.Model):
         )
 
     def __str__(self):
+        """Return the name of the project as its string representation."""
         return f"{self.name}"
 
     class Meta:
         verbose_name = _("Project")
         verbose_name_plural = _("Projects")
-
-
-class Issuer(models.Model):
-    name = models.CharField(max_length=150, unique=True, verbose_name=_("Name"))
-    website = models.URLField(
-        max_length=255, blank=True, null=True, verbose_name=_("Website")
-    )
-    description = models.TextField(blank=True, verbose_name=_("Description"))
-
-    class Meta:
-        verbose_name = _("Issuer")
-        verbose_name_plural = _("Issuers")
-        ordering = ("name",)
-
-    def __str__(self):
-        return self.name
-
-
-class Certification(models.Model):
-    name = models.CharField(
-        max_length=100, blank=False, null=False, verbose_name=_("Name")
-    )
-    description = models.TextField()
-    certification_detail_url = models.URLField(
-        max_length=200,
-        blank=True,
-        null=True,
-        verbose_name=_("Certification URL"),
-        help_text=_("Link to the official page of the certification"),
-    )
-    obtained_date = models.DateField(
-        blank=True,
-        null=True,
-        verbose_name=_("Obtained Date"),
-        help_text=_("Date when the certification was obtained"),
-    )
-    picture = models.ImageField(
-        upload_to="pictures/", blank=True, null=True, verbose_name=_("Picture")
-    )
-    article = models.ForeignKey(
-        Article,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        related_name="certification",
-        verbose_name=_("Related Article"),
-    )
-    owner = models.ForeignKey(
-        User,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        related_name="certifications",
-        verbose_name=_("Owner"),
-    )
-    issuer = models.ForeignKey(
-        Issuer,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        related_name="certifications",
-        verbose_name=_("Issuer"),
-        help_text=_("Organization or platform that issued the certification"),
-    )
-
-    def __str__(self):
-        return self.name
-
-
-class CVE(models.Model):
-    cve_id = models.CharField(
-        max_length=20,
-        unique=True,
-        verbose_name=_("cve_id"),
-        help_text=_("the unique identifier for the CVE (e.g., CVE-2025-12345)"),
-    )
-    description = models.TextField(
-        verbose_name=_("description"),
-        help_text=_("a detailed description of the vulnerability"),
-    )
-    published_date = models.DateField(
-        blank=True,
-        null=True,
-        verbose_name=_("published_date"),
-        help_text=_("date when the CVE was published"),
-    )
-    last_modified_date = models.DateField(
-        blank=True,
-        null=True,
-        verbose_name=_("last_modified_date"),
-        help_text=_("date when the CVE was last updated"),
-    )
-    cvss_score = models.DecimalField(
-        max_digits=3,
-        decimal_places=1,
-        blank=True,
-        null=True,
-        verbose_name=_("cvss_score"),
-        help_text=_("the severity score of the vulnerability"),
-    )
-    vulnerable_product = models.CharField(
-        max_length=200,
-        blank=True,
-        null=True,
-        verbose_name=_("vulnerable_product"),
-        help_text=_("the affected product(s)"),
-    )
-    references_url = models.URLField(
-        max_length=300,
-        blank=True,
-        null=True,
-        verbose_name=_("references_url"),
-        help_text=_("link to official references or advisories"),
-    )
-    author = models.ForeignKey(
-        User,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        related_name="cve",
-        verbose_name=_("Author"),
-    )
-
-    def __str__(self):
-        return self.cve_id

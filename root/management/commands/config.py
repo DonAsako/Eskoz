@@ -1,5 +1,6 @@
 import os
 import sys
+
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from dotenv import dotenv_values
@@ -83,7 +84,7 @@ class Command(BaseCommand):
                 env_value = ""
                 while env_value == "":
                     env_value = input(
-                        f"Enter a new value for '{key}' {f"(default : '{value}')" if value else ""}: "
+                        f"Enter a new value for '{key}' {f"(default : '{value}')" if value else ''}: "
                     )
                     if env_value or value:
                         env_dict[key] = env_value or value

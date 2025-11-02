@@ -15,11 +15,6 @@ from .models import (
     PostTranslation,
     Project,
     Tag,
-    Writeup,
-    CTF,
-    CVE,
-    Certification,
-    Issuer,
 )
 
 
@@ -72,7 +67,7 @@ class PostTranslationAdmin(admin.StackedInline):
 
     def reading_time(self, obj):
         reading_time = obj.get_reading_time()
-        return f"{reading_time} {_("min")}"
+        return f"{reading_time} {_('min')}"
 
     reading_time.short_description = _("Reading time")
     readonly_fields = ["reading_time"]
@@ -117,20 +112,6 @@ class PostAdmin(admin.ModelAdmin):
 class ArticleAdmin(PostAdmin): ...
 
 
-class WritupApdmin(PostAdmin):
-    fieldsets = PostAdmin.fieldsets + [
-        (
-            "CTF Information",
-            {
-                "fields": [
-                    ("ctf", "difficulty", "points", "solver_count"),
-                ]
-            },
-        ),
-    ]
-    list_display = ("ctf", "difficulty", "points")
-
-
 class ProjectAdmin(admin.ModelAdmin):
     list_display = (
         "name",
@@ -155,11 +136,6 @@ class ProjectAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Article, ArticleAdmin)
-admin.site.register(Writeup, WritupApdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Tag, TagAdmin)
-admin.site.register(CTF, admin.ModelAdmin)
-admin.site.register(Certification, admin.ModelAdmin)
-admin.site.register(Issuer, admin.ModelAdmin)
-admin.site.register(CVE, admin.ModelAdmin)

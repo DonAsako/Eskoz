@@ -28,7 +28,7 @@
         {% endif %}
         {% if site_settings.view_page_settings.activate_certifications_page %}
             <li class="navbar-item">
-                <a href="{% url 'blog:certifications_lists' %}" class="navbar-item--link">{% trans 'Certifications' %}</a>
+                <a href="{% url 'infosec:certifications_lists' %}" class="navbar-item--link">{% trans 'Certifications' %}</a>
             </li>
             <li class="navbar-item navbar-item--separator">
                 /
@@ -36,7 +36,7 @@
         {% endif %}
         {% if site_settings.view_page_settings.activate_writeups_page %}
             <li class="navbar-item">
-                <a href="{% url 'blog:writeups_list' %}" class="navbar-item--link">{% trans 'Writeups' %}</a>
+                <a href="{% url 'infosec:writeups_list' %}" class="navbar-item--link">{% trans 'Writeups' %}</a>
             </li>
             <li class="navbar-item navbar-item--separator">
                 /
