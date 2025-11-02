@@ -102,10 +102,10 @@ class TranslatableCategoryTranslation(models.Model):
 
 class TranslatableMarkdownItem(models.Model):
     """
-    Base model representing a blog post or article.
+    Base model representing a translatable markdown item.
 
     Attributes:
-        title (CharField): The title of the post.
+        title (CharField): The title of the translatable markdown item.
         slug (SlugField): URL-friendly identifier.
     """
 
@@ -123,7 +123,7 @@ class TranslatableMarkdownItem(models.Model):
             language (str, optional): Language code to get the translation. Defaults to None (current language).
 
         Returns:
-            PostTranslation: The corresponding translation instance.
+            TranslatableMarkdownItemTranslation: The corresponding translation instance.
         """
         lang = language or get_language()
         translation = self.translations.filter(language=lang).first()
@@ -135,20 +135,20 @@ class TranslatableMarkdownItem(models.Model):
         return translation
 
     def __str__(self):
-        """Return the title of the post as its string representation."""
+        """Return the title of the translatable markdown item as its string representation."""
         return self.title
 
 
 class TranslatableMarkdownItemTranslation(models.Model):
     """
-    Represents a translation of a Post into a specific language.
+    Represents a translation of a translatable markdown item into a specific language.
 
     Attributes:
         translable_content (ForeignKey): The TranslatableMarkdownItem being translated.
         language (CharField): Language code of the translation.
         title (CharField): Translated title.
-        description (TextField): Short description of the post content.
-        content (TextField): Full post content in the specified language.
+        description (TextField): Short description of the translatable markdown item content.
+        content (TextField): Full translatable markdown item content in the specified language.
     """
 
     translable_content = models.ForeignKey(
@@ -174,6 +174,18 @@ class TranslatableMarkdownItemTranslation(models.Model):
             int: Approximate reading time based on 200 words per minute.
         """
         return len(self.content.split(" ")) // 200
+
+    def get_content_as_html(self):
+        """
+        Convert the Markdown content of the translatable markdown item to safe HTML.
+
+        Returns:
+            str: HTML representation of the post content.
+        """
+        html = markdown.markdown(
+            self.content, extensions=["extra", "codehilite", "fenced_code", "toc"]
+        )
+        return mark_safe(html)
 
     def __str__(self):
         """Return the TranslatableMarkdownItem slug and language code as the string representation."""
