@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from root.models import SiteSettings
 
 
 class Page(models.Model):
@@ -24,10 +25,16 @@ class Page(models.Model):
         default="public",
         verbose_name=_("Visibility"),
     )
+    site_settings = models.ForeignKey(
+        SiteSettings, on_delete=models.CASCADE, related_name="pages", null=True
+    )
 
     slug = models.SlugField(unique=True, blank=False, verbose_name=_("Slug"))
 
     def save(self, *args, **kwargs):
+        if not self.site_settings:
+            self.site_settings = SiteSettings.objects.first()
+
         self.full_clean()
 
         super().save(*args, **kwargs)

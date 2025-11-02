@@ -31,7 +31,7 @@ class SiteSettings(models.Model):
         return gettext("Site settings")
 
     def get_page_referenced(self):
-        return self.page.filter(visibility="referenced")
+        return self.pages.filter(visibility="referenced")
 
     def save(self, *args, **kwargs):
         if not self.footer_credits:

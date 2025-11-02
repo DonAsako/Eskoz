@@ -95,7 +95,7 @@ class TranslatableCategoryTranslation(models.Model):
         return f"{self.category.slug} ({self.language})"
 
     class Meta:
-        unique_together = ("translable_content", "language")
+        unique_together = ("category", "language")
         abstract = True
         verbose_name = _("Translation")
         verbose_name_plural = _("Translations")
@@ -145,14 +145,14 @@ class TranslatableMarkdownItemTranslation(models.Model):
     Represents a translation of a translatable markdown item into a specific language.
 
     Attributes:
-        translable_content (ForeignKey): The TranslatableMarkdownItem being translated.
+        translatable_content (ForeignKey): The TranslatableMarkdownItem being translated.
         language (CharField): Language code of the translation.
         title (CharField): Translated title.
         description (TextField): Short description of the translatable markdown item content.
         content (TextField): Full translatable markdown item content in the specified language.
     """
 
-    translable_content = models.ForeignKey(
+    translatable_content = models.ForeignKey(
         TranslatableMarkdownItem,
         related_name="translations",
         on_delete=models.CASCADE,
@@ -190,10 +190,10 @@ class TranslatableMarkdownItemTranslation(models.Model):
 
     def __str__(self):
         """Return the TranslatableMarkdownItem slug and language code as the string representation."""
-        return f"{self.TranslatableContent.slug} ({self.language})"
+        return f"{self.translatable_content.slug} ({self.language})"
 
     class Meta:
-        unique_together = ("translable_content", "language")
+        unique_together = ("translatable_content", "language")
         abstract = True
         verbose_name = _("Translation")
         verbose_name_plural = _("Translations")
@@ -275,6 +275,28 @@ class Post(TranslatableMarkdownItem):
                 )
             )
         return errors
+
+
+class PostTranslation(TranslatableMarkdownItemTranslation):
+    """
+    Abstract base class for Post translations.
+
+    Subclasses must define a concrete ForeignKey to their Post subclass.
+    """
+
+    class Meta:
+        abstract = True
+        verbose_name = _("Post Translation")
+        verbose_name_plural = _("Post Translations")
+
+    @property
+    def parent(self):
+        """
+        Returns the parent post (must be implemented by subclass if ForeignKey name differs).
+        """
+        raise NotImplementedError(
+            "Each subclass of AbstractPostTranslation must define a ForeignKey to its Post model."
+        )
 
 
 class Tag(models.Model):
