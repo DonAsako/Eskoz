@@ -10,6 +10,7 @@ from root.models.abstracts import (
     TranslatableCategory,
     TranslatableCategoryTranslation,
 )
+from root.utils import upload_to_certifications
 
 
 class Issuer(models.Model):
@@ -71,7 +72,10 @@ class Certification(models.Model):
         help_text=_("Date when the certification was obtained"),
     )
     picture = models.ImageField(
-        upload_to="pictures/", blank=True, null=True, verbose_name=_("Picture")
+        upload_to=upload_to_certifications,
+        blank=True,
+        null=True,
+        verbose_name=_("Picture"),
     )
     article = models.ForeignKey(
         Article,

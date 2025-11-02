@@ -2,15 +2,16 @@ from django.db import models
 from django.utils.translation import gettext
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
+from root.utils import upload_to_settings
 
 
 class SiteSettings(models.Model):
     site_name = models.CharField(max_length=100, verbose_name=_("Site name"))
     logo = models.ImageField(
-        upload_to="logos/", blank=True, null=True, verbose_name=_("Logo")
+        upload_to=upload_to_settings, blank=True, null=True, verbose_name=_("Logo")
     )
     favicon = models.ImageField(
-        upload_to="favicons/", blank=True, null=True, verbose_name=_("Favicon")
+        upload_to=upload_to_settings, blank=True, null=True, verbose_name=_("Favicon")
     )
     contact_email = models.EmailField(blank=True, verbose_name=_("Contact mail"))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated at"))
@@ -80,7 +81,10 @@ class SeoSettings(models.Model):
         max_length=200, blank=True, verbose_name=_("Open Graph description")
     )
     og_image = models.ImageField(
-        upload_to="SEO/", blank=True, null=True, verbose_name=_("Open Graph image")
+        upload_to=upload_to_settings,
+        blank=True,
+        null=True,
+        verbose_name=_("Open Graph image"),
     )
 
     # Twitter
@@ -101,7 +105,10 @@ class SeoSettings(models.Model):
         max_length=200, blank=True, verbose_name=_("Twitter description")
     )
     twitter_image = models.ImageField(
-        upload_to="SEO/", blank=True, null=True, verbose_name=_("Twitter image")
+        upload_to=upload_to_settings,
+        blank=True,
+        null=True,
+        verbose_name=_("Twitter image"),
     )
 
     def __str__(self):

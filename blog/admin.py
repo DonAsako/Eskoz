@@ -16,7 +16,7 @@ class ArticleTranslationAdmin(AbstractPostTranslationAdmin):
 
 
 class ArticleAdmin(AbstractPostAdmin):
-    inlines = [ArticleTranslationAdmin]
+    inlines = AbstractPostAdmin.inlines + [ArticleTranslationAdmin]
 
 
 class CategoryAdmin(admin.ModelAdmin):

@@ -8,6 +8,9 @@ from django.utils.text import slugify
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
+from root.utils import upload_to_settings, upload_to_posts
 
 
 class TranslatableCategory(models.Model):
@@ -230,7 +233,7 @@ class Post(TranslatableMarkdownItem):
     )
     edited_on = models.DateTimeField(auto_now=True, verbose_name=_("Edited on"))
     picture = models.ImageField(
-        upload_to="pictures/", blank=True, null=True, verbose_name=_("Picture")
+        upload_to=upload_to_posts, blank=True, null=True, verbose_name=_("Picture")
     )
     visibility = models.CharField(
         max_length=10,
@@ -319,3 +322,26 @@ class Tag(models.Model):
         verbose_name = _("Tag")
         verbose_name_plural = _("Tags")
         abstract = True
+
+
+class PostImage(models.Model):
+    """
+    Model representing additional images for a post.
+    Each Post can have multiple images.
+    """
+
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey("content_type", "object_id")
+    picture = models.ImageField(upload_to=upload_to_settings, verbose_name=_("Picture"))
+    uploaded_on = models.DateTimeField(auto_now_add=True, verbose_name=_("Uploaded on"))
+
+    class Meta:
+        verbose_name = _("Post Image")
+        verbose_name_plural = _("Post Images")
+        ordering = ["uploaded_on"]
+
+    def __str__(self):
+        title = getattr(self.content_object, 'title', 'Objet')
+        return f"{title} -  {self.uploaded_on}"
+

@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from root.models.abstracts import Post, PostTranslation, Tag, TranslatableCategory
+from root.utils import upload_to_projects
 
 
 class Category(TranslatableCategory): ...
@@ -80,7 +81,7 @@ class Project(models.Model):
     source_link = models.URLField(max_length=200, blank=True, null=True)
     website = models.URLField(max_length=200, blank=True, null=True)
     picture = models.ImageField(
-        upload_to="pictures/", blank=True, null=True, verbose_name=_("Picture")
+        upload_to=upload_to_projects, blank=True, null=True, verbose_name=_("Picture")
     )
     maintainer = models.ForeignKey(
         User,

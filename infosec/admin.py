@@ -31,7 +31,7 @@ class WritupAdmin(AbstractPostAdmin):
         ),
     ]
     list_display = ("ctf", "difficulty", "points")
-    inlines = [WriteupTranslationAdmin]
+    inlines = AbstractPostAdmin.inlines + [WriteupTranslationAdmin]
 
 
 class CategoryTranslationAdmin(admin.StackedInline):
