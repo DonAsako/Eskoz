@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
+from django.utils.safestring import mark_safe
 
 
 class TranslatableCategory(models.Model):

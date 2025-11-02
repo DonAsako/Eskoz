@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
 
 
 class SiteSettings(models.Model):
