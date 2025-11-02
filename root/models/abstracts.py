@@ -238,7 +238,7 @@ class Post(TranslatableMarkdownItem):
     password = models.CharField(
         max_length=50, null=True, blank=True, verbose_name=_("Password")
     )
-
+    
     def save(self, *args, **kwargs):
         """
         Save the post instance.
@@ -260,12 +260,18 @@ class Post(TranslatableMarkdownItem):
         verbose_name = _("Post")
         verbose_name_plural = _("Posts")
 
-    def __init_subclass__(cls, **kwargs):
-        super().__init_subclass__(**kwargs)
-        if not any(f.name == "category" for f in cls._meta.local_fields):
-            raise TypeError(
-                f"{cls.__name__} must define a 'category' ForeignKey field."
+    @classmethod
+    def check(cls, **kwargs):
+        errors = super().check(**kwargs)
+        if not cls._meta.abstract and not any(f.name == "category" for f in cls._meta.local_fields):
+            errors.append(
+                checks.Error(
+                    "'category' field is required.",
+                    obj=cls,
+                    id="post.E001",
+                )
             )
+        return errors
 
 
 class Tag(models.Model):
