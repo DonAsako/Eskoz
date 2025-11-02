@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
+from django.core import checks
 
 
 class TranslatableCategory(models.Model):
@@ -238,7 +239,7 @@ class Post(TranslatableMarkdownItem):
     password = models.CharField(
         max_length=50, null=True, blank=True, verbose_name=_("Password")
     )
-    
+
     def save(self, *args, **kwargs):
         """
         Save the post instance.
@@ -263,7 +264,9 @@ class Post(TranslatableMarkdownItem):
     @classmethod
     def check(cls, **kwargs):
         errors = super().check(**kwargs)
-        if not cls._meta.abstract and not any(f.name == "category" for f in cls._meta.local_fields):
+        if not cls._meta.abstract and not any(
+            f.name == "category" for f in cls._meta.local_fields
+        ):
             errors.append(
                 checks.Error(
                     "'category' field is required.",
