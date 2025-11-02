@@ -260,6 +260,13 @@ class Post(TranslatableMarkdownItem):
         verbose_name = _("Post")
         verbose_name_plural = _("Posts")
 
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        if not any(f.name == "category" for f in cls._meta.local_fields):
+            raise TypeError(
+                f"{cls.__name__} must define a 'category' ForeignKey field."
+            )
+
 
 class Tag(models.Model):
     """
