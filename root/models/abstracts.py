@@ -186,7 +186,6 @@ class TranslatableMarkdownItemTranslation(models.Model):
         verbose_name_plural = _("Translations")
 
 
-
 class Post(TranslatableMarkdownItem):
     """
     Base model representing a post.
@@ -211,9 +210,6 @@ class Post(TranslatableMarkdownItem):
         ("private", _("Private")),
     ]
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("Author"))
-    tags = models.ManyToManyField(
-        Tag, related_name="posts", blank=True, verbose_name=_("Tags")
-    )
     published_on = models.DateTimeField(
         null=True, blank=True, verbose_name=_("Published on")
     )

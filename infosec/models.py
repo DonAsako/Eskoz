@@ -2,7 +2,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from blog.models import Article, Post
+from blog.models import Article
+from root.models.abstracts import Post, TranslatableCategory
 
 
 class Issuer(models.Model):
@@ -196,6 +197,9 @@ class CTF(models.Model):
         ordering = ["-date_beginning"]
 
 
+class Category(TranslatableCategory): ...
+
+
 class Writeup(Post):
     """
     Represents a writeup for a CTF challenge.
@@ -236,6 +240,14 @@ class Writeup(Post):
         default=0,
         verbose_name=_("Number of solvers"),
         help_text=_("Optional: number of people who solved it."),
+    )
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="category",
+        verbose_name=_("Category"),
     )
 
     def __str__(self):
