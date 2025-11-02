@@ -134,18 +134,6 @@ class TranslatableMarkdownItem(models.Model):
             )
         return translation
 
-    def save(self, *args, **kwargs):
-        """
-        Save the post instance.
-
-        If this is the first save and published_on is not set, automatically
-        set published_on to the current time.
-        """
-        if not self.published_on:
-            self.published_on = timezone.now()
-
-        super().save(*args, **kwargs)
-
     def __str__(self):
         """Return the title of the post as its string representation."""
         return self.title
@@ -243,28 +231,6 @@ class Post(TranslatableMarkdownItem):
         max_length=50, null=True, blank=True, verbose_name=_("Password")
     )
 
-    def get_translation(self, language=None):
-        """
-        Get the translation of the post for the specified language.
-
-        If no translation exists for the given language, fallback to English
-        or any available translation.
-
-        Args:
-            language (str, optional): Language code to get the translation. Defaults to None (current language).
-
-        Returns:
-            PostTranslation: The corresponding translation instance.
-        """
-        lang = language or get_language()
-        translation = self.translations.filter(language=lang).first()
-        if not translation:
-            translation = (
-                self.translations.filter(language="en").first()
-                or self.translations.filter().first()
-            )
-        return translation
-
     def save(self, *args, **kwargs):
         """
         Save the post instance.
@@ -280,3 +246,8 @@ class Post(TranslatableMarkdownItem):
     def __str__(self):
         """Return the title of the post as its string representation."""
         return self.title
+
+    class Meta:
+        abstract = True
+        verbose_name = _("Post")
+        verbose_name_plural = _("Posts")
