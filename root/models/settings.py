@@ -151,3 +151,68 @@ class ViewPageSettings(models.Model):
 
     def __str__(self):
         return ""
+
+
+class Page(models.Model):
+    VISIBILITY_CHOICES = [
+        ("public", _("Public")),
+        ("private", _("Private")),
+        ("referenced", _("Referenced")),
+        ("index", _("Index")),
+    ]
+    title = models.CharField(max_length=150, verbose_name=_("Title"))
+    content = models.TextField(verbose_name=_("Content"))
+    visibility = models.CharField(
+        max_length=10,
+        choices=VISIBILITY_CHOICES,
+        default="public",
+        verbose_name=_("Visibility"),
+    )
+    site_settings = models.ForeignKey(
+        SiteSettings, on_delete=models.CASCADE, related_name="pages", null=True
+    )
+
+    slug = models.SlugField(unique=True, blank=False, verbose_name=_("Slug"))
+
+    def save(self, *args, **kwargs):
+        if not self.site_settings:
+            self.site_settings = SiteSettings.objects.first()
+
+        self.full_clean()
+
+        super().save(*args, **kwargs)
+
+    def clean(self):
+        if self.visibility == "referenced":
+            pages = Page.objects.filter(visibility="referenced")
+            if self.pk:
+                pages = pages.exclude(pk=self.pk)
+
+            if pages.count() >= 4:
+                raise ValidationError(
+                    {
+                        "visibility": _(
+                            "You can only have up to 3 pages marked as 'referenced'."
+                        )
+                    }
+                )
+        if self.visibility == "index":
+            pages = Page.objects.filter(visibility="index")
+            if self.pk:
+                pages = pages.exclude(pk=self.pk)
+
+            if pages.count() >= 4:
+                raise ValidationError(
+                    {
+                        "visibility": _(
+                            "You can only have up to 1 page marked as 'index'."
+                        )
+                    }
+                )
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = _("Page")
+        verbose_name_plural = _("Pages")
