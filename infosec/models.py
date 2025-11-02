@@ -111,6 +111,7 @@ class CVE(models.Model):
         references_url (URLField): Link to official references or advisories.
         author (ForeignKey): User who submitted or authored the CVE entry.
     """
+
     cve_id = models.CharField(
         max_length=20,
         unique=True,
