@@ -1,11 +1,5 @@
-import markdown
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
-from django.utils import timezone
-from django.utils.safestring import mark_safe
-from django.utils.text import slugify
-from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 
 from root.models.abstracts import Post, PostTranslation, Tag, TranslatableCategory

@@ -18,6 +18,7 @@ from .models import (
 class WriteupTranslationAdmin(AbstractPostTranslationAdmin):
     model = WriteupTranslation
 
+
 class WritupAdmin(AbstractPostAdmin):
     fieldsets = AbstractPostAdmin.fieldsets + [
         (
