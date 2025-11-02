@@ -4,6 +4,7 @@ import django.db.models.deletion
 from django.conf import settings
 from django.db import migrations, models
 
+
 def copy_writeups(apps, schema_editor):
     OldWriteup = apps.get_model('blog', 'Writeup')
     NewWriteup = apps.get_model('infosec', 'Writeup')

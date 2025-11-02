@@ -1,10 +1,10 @@
 from django.urls import path
-from .views import (
-    writeups_list,
-    writeup_detail,
-    certifications_lists,
-)
 
+from .views import (
+    certifications_lists,
+    writeup_detail,
+    writeups_list,
+)
 
 app_name = "infosec"
 urlpatterns = [

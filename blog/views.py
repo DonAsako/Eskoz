@@ -1,6 +1,7 @@
-from django.shortcuts import get_object_or_404, render, Http404
-from django.utils.translation import gettext_lazy as _
 from django.db.models import Count, Q
+from django.shortcuts import Http404, get_object_or_404, render
+from django.utils.translation import gettext_lazy as _
+
 from .models import Article, Category, Project
 
 
