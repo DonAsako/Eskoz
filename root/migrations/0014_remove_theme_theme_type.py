@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("root", "0013_remove_theme_background_color_and_more"),
     ]

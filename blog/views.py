@@ -97,8 +97,7 @@ def certifications_lists(request):
         request, "blog/certifications_lists.html", {"certifications": certifications}
     )
 
+
 def projects_lists(request):
     projects = Project.objects.all()
-    return render(
-        request, "blog/projects_lists.html", {"projects": projects}
-    )
+    return render(request, "blog/projects_lists.html", {"projects": projects})

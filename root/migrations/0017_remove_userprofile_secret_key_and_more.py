@@ -12,7 +12,6 @@ def generate_otp_keys(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("root", "0016_userprofile_secret_key"),
     ]

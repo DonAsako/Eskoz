@@ -5,7 +5,7 @@ from .views import (
     writeups_list,
     writeup_detail,
     certifications_lists,
-    projects_lists
+    projects_lists,
 )
 
 
@@ -18,5 +18,5 @@ urlpatterns = [
     path("writeups/<slug:slug>/", writeups_list, name="writeup_category_list"),
     path("writeups/", writeups_list, name="writeups_list"),
     path("certifications/", certifications_lists, name="certifications_lists"),
-    path("projects/", projects_lists, name="projects_lists")
+    path("projects/", projects_lists, name="projects_lists"),
 ]

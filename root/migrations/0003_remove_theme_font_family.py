@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("root", "0002_sitesettings_under_maintenance"),
     ]

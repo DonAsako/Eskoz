@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import well_known, index, page_detail, content_preview
+
+from .views import content_preview, index, page_detail, well_known
 
 app_name = "root"
 urlpatterns = [

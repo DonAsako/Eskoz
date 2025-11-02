@@ -72,7 +72,7 @@ class PostTranslationAdmin(admin.StackedInline):
 
     def reading_time(self, obj):
         reading_time = obj.get_reading_time()
-        return f"{reading_time} {_("min")}"
+        return f"{reading_time} {_('min')}"
 
     reading_time.short_description = _("Reading time")
     readonly_fields = ["reading_time"]
