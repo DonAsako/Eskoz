@@ -42,7 +42,7 @@ def writeups_list(request, slug=None):
         slug,
         post_type="writeups",
         post_type_trans=_("Writeups"),
-        detail_url_name="root:writeup_detail",
+        detail_url_name="infosec:writeup_detail",
     )
 
 
@@ -61,5 +61,5 @@ def certifications_lists(request):
     """
     certifications = Certification.objects.all()
     return render(
-        request, "blog/certifications_lists.html", {"certifications": certifications}
+        request, "infosec/certifications_lists.html", {"certifications": certifications}
     )
