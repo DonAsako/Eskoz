@@ -8,7 +8,7 @@ from django.utils.text import slugify
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 
-from root.models.abstracts import Post, TranslatableCategory, Tag
+from root.models.abstracts import Post, PostTranslation, Tag, TranslatableCategory
 
 
 class Category(TranslatableCategory): ...
@@ -27,7 +27,7 @@ class Article(Post):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="category",
+        related_name="articles",
         verbose_name=_("Category"),
     )
     tags = models.ManyToManyField(
@@ -37,6 +37,27 @@ class Article(Post):
     class Meta:
         verbose_name = _("Article")
         verbose_name_plural = _("Articles")
+
+
+class ArticleTranslation(PostTranslation):
+    """
+    Represents a translation for an Article.
+    """
+
+    translatable_content = models.ForeignKey(
+        Article,
+        related_name="translations",
+        on_delete=models.CASCADE,
+        verbose_name=_("Translatable Article"),
+    )
+
+    class Meta(PostTranslation.Meta):
+        verbose_name = _("Article Translation")
+        verbose_name_plural = _("Article Translations")
+
+    @property
+    def parent(self):
+        return self.translatable_content
 
 
 class ProjectTag(Tag): ...

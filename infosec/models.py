@@ -3,7 +3,13 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from blog.models import Article
-from root.models.abstracts import Post, TranslatableCategory, Tag
+from root.models.abstracts import (
+    Post,
+    PostTranslation,
+    Tag,
+    TranslatableCategory,
+    TranslatableCategoryTranslation,
+)
 
 
 class Issuer(models.Model):
@@ -200,6 +206,17 @@ class CTF(models.Model):
 class Category(TranslatableCategory): ...
 
 
+class CategoryTranslation(TranslatableCategoryTranslation):
+    """Concrete category translation."""
+
+    category = models.ForeignKey(
+        Category,
+        related_name="translations",
+        on_delete=models.CASCADE,
+        verbose_name=_("Category"),
+    )
+
+
 class WriteupTag(Tag): ...
 
 
@@ -249,7 +266,7 @@ class Writeup(Post):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="category",
+        related_name="writeup",
         verbose_name=_("Category"),
     )
     tags = models.ManyToManyField(
@@ -263,3 +280,24 @@ class Writeup(Post):
     class Meta:
         verbose_name = _("Writeup")
         verbose_name_plural = _("Writeups")
+
+
+class WriteupTranslation(PostTranslation):
+    """
+    Represents a translation for an Writeup.
+    """
+
+    translatable_content = models.ForeignKey(
+        Writeup,
+        related_name="translations",
+        on_delete=models.CASCADE,
+        verbose_name=_("Translatable Writeup"),
+    )
+
+    class Meta(PostTranslation.Meta):
+        verbose_name = _("Writeup Translation")
+        verbose_name_plural = _("Writeup Translations")
+
+    @property
+    def parent(self):
+        return self.translatable_content
