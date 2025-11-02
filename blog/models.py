@@ -13,6 +13,7 @@ from root.models.abstracts import Post, TranslatableCategory
 
 class Category(TranslatableCategory): ...
 
+
 class Tag(models.Model):
     """
     Represents a tag that can be associated with posts.
@@ -31,10 +32,12 @@ class Tag(models.Model):
         verbose_name = _("Tag")
         verbose_name_plural = _("Tags")
 
+
 class Article(Post):
     """
     Represents an article, which is a specialized type of Post.
     """
+
     tags = models.ManyToManyField(
         Tag, related_name="posts", blank=True, verbose_name=_("Tags")
     )
@@ -46,6 +49,7 @@ class Article(Post):
         related_name="category",
         verbose_name=_("Category"),
     )
+
     class Meta:
         verbose_name = _("Article")
         verbose_name_plural = _("Articles")

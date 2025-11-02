@@ -6,8 +6,8 @@ from django.db import migrations, models
 
 
 def copy_writeups(apps, schema_editor):
-    OldWriteup = apps.get_model('blog', 'Writeup')
-    NewWriteup = apps.get_model('infosec', 'Writeup')
+    OldWriteup = apps.get_model("blog", "Writeup")
+    NewWriteup = apps.get_model("infosec", "Writeup")
     for old in OldWriteup.objects.all():
         NewWriteup.objects.create(
             id=old.id,
