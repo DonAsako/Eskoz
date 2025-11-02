@@ -39,7 +39,7 @@ class Command(BaseCommand):
                 self.stdout.write(
                     self.style.SUCCESS(f"Updated '{env_key}' in .env file.")
                 )
-        except:
+        except Exception as e:
             self.stderr.write(self.style.ERROR(f"Failed to update .env: {e}"))
 
     def handle(self, *args, **options):
@@ -69,12 +69,12 @@ class Command(BaseCommand):
                     try:
                         with open(env_path, "w") as f_env:
                             f_env.write(data)
-                    except:
+                    except Exception as e:
                         self.stderr.write(
                             self.style.ERROR(f"Failed to create .env: {e}")
                         )
 
-            except:
+            except Exception as e:
                 self.stderr.write(self.style.ERROR(f"Failed to open .env.example: {e}"))
             self.stdout.write(self.style.SUCCESS("'.env' file created with success !"))
             env_dict = dotenv_values(dotenv_path=env_path)
