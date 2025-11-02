@@ -30,10 +30,6 @@ def article_detail(request, slug):
     return post_detail(request, Article, slug, "blog/post_detail.html")
 
 
-def writeup_detail(request, slug):
-    return post_detail(request, Writeup, slug, "blog/post_detail.html")
-
-
 def posts_list(
     request,
     model_class,
@@ -77,24 +73,6 @@ def articles_list(request, slug=None):
         post_type="articles",
         post_type_trans=_("Articles"),
         detail_url_name="blog:article_detail",
-    )
-
-
-def writeups_list(request, slug=None):
-    return posts_list(
-        request,
-        Writeup,
-        slug,
-        post_type="writeups",
-        post_type_trans=_("Writeups"),
-        detail_url_name="blog:writeup_detail",
-    )
-
-
-def certifications_lists(request):
-    certifications = Certification.objects.all()
-    return render(
-        request, "blog/certifications_lists.html", {"certifications": certifications}
     )
 
 
