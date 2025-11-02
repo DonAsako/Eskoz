@@ -6,30 +6,34 @@ from root.admin.utils import backup
 from root.forms import PostTranslationAdminForm
 from root.models import PostImage
 
+
 class ImagePostAdmin(GenericTabularInline):
     model = PostImage
     extra = 1
-    fields = ('picture', 'image_display', 'image_url')
-    readonly_fields = ('image_display', 'image_url')
+    fields = ("picture", "image_display", "image_url")
+    readonly_fields = ("image_display", "image_url")
 
     def image_display(self, obj):
         if obj.pk and obj.picture:
             return format_html('<img src="{}" width="75" />', obj.picture.url)
         return _("No image yet")
+
     image_display.short_description = "Image"
 
     def image_url(self, obj):
         if obj.pk and obj.picture:
             return format_html(
                 '<p style="text-decoration:underline;" '
-                'onclick="navigator.clipboard.writeText(\'{url}\')">'
-                '{}'
-                '</p>',
+                "onclick=\"navigator.clipboard.writeText('{url}')\">"
+                "{}"
+                "</p>",
                 obj.picture.url,
-                url=obj.picture.url
+                url=obj.picture.url,
             )
         return ""
+
     image_url.short_description = "URL"
+
 
 class AbstractPostTranslationAdmin(admin.StackedInline):
     abstract = True

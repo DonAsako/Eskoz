@@ -189,7 +189,19 @@ class TranslatableMarkdownItemTranslation(models.Model):
             str: HTML representation of the post content.
         """
         html = markdown.markdown(
-            self.content, extensions=["extra", "codehilite", "fenced_code", "toc"]
+            self.content,
+            extensions=[
+                "extra",
+                "codehilite",
+                "fenced_code",
+                "toc",
+                "pymdownx.arithmatex",
+            ],
+            extension_configs={
+                "pymdownx.arithmatex": {
+                    "generic": True,
+                }
+            },
         )
         return mark_safe(html)
 
@@ -342,6 +354,5 @@ class PostImage(models.Model):
         ordering = ["uploaded_on"]
 
     def __str__(self):
-        title = getattr(self.content_object, 'title', 'Objet')
+        title = getattr(self.content_object, "title", "Objet")
         return f"{title} -  {self.uploaded_on}"
-

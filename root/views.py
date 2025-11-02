@@ -38,7 +38,19 @@ def content_preview(request):
     if request.method == "POST":
         content = request.POST.get("content", "")
         html = markdown.markdown(
-            content, extensions=["extra", "codehilite", "fenced_code"]
+            content,
+            extensions=[
+                "extra",
+                "codehilite",
+                "fenced_code",
+                "toc",
+                "pymdownx.arithmatex",
+            ],
+            extension_configs={
+                "pymdownx.arithmatex": {
+                    "generic": True,
+                }
+            },
         )
         return JsonResponse({"html": mark_safe(html)})
     return HttpResponse(request, status="401")
