@@ -1,18 +1,21 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
-from django.utils.translation import gettext_lazy as _
+from django.shortcuts import redirect
+from django.urls import reverse
 from django.utils.html import format_html
-from .models import (
-    SiteSettings,
-    WellKnownFile,
-    UserProfile,
-    UserLink,
-    SeoSettings,
-    Page,
-    ViewPageSettings,
-)
+from django.utils.translation import gettext_lazy as _
+
 from .forms import PageAdminForm, UserProfileAdminForm
+from .models import (
+    Page,
+    SeoSettings,
+    SiteSettings,
+    UserLink,
+    UserProfile,
+    ViewPageSettings,
+    WellKnownFile,
+)
 
 
 class WellKnownFileInline(admin.TabularInline):
@@ -69,6 +72,13 @@ class SiteSettingsAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         return False
+
+    def changelist_view(self, request, extra_context=None):
+        obj = SiteSettings.objects.first()
+        if obj:
+            url = reverse("admin:root_sitesettings_change", args=[obj.pk])
+            return redirect(url)
+        return super().changelist_view(request, extra_context)
 
 
 class PageAdmin(admin.ModelAdmin):
