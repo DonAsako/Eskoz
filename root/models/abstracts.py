@@ -1,0 +1,282 @@
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.db import models
+from django.utils import timezone
+from django.utils.text import slugify
+from django.utils.translation import get_language
+from django.utils.translation import gettext_lazy as _
+
+
+class TranslatableCategory(models.Model):
+    """
+    Abstract base model for categories that can have translations.
+
+    Attributes:
+        title (CharField): The title of the category.
+        slug (SlugField): URL-friendly identifier for the category. Must be unique per concrete model.
+
+    Methods:
+        get_translation(language=None): Returns the translation for the given language,
+                                       falling back to English or any available translation.
+        save(*args, **kwargs): Automatically generates a slug from the title if not provided.
+    """
+
+    title = models.CharField(max_length=255, unique=True, verbose_name=_("Title"))
+    slug = models.SlugField(unique=True, blank=False, null=True, verbose_name=_("Slug"))
+
+    def get_translation(self, language=None):
+        """
+        Get the translation of the category for the specified language.
+
+        If no translation exists for the given language, fallback to English
+        or any available translation.
+
+        Args:
+            language (str, optional): Language code to get the translation. Defaults to None (current language).
+
+        Returns:
+            CategoryTranslation: The corresponding translation instance.
+        """
+        lang = language or get_language()
+        translation = self.translations.filter(language=lang).first()
+        if not translation:
+            translation = (
+                self.translations.filter(language="en").first()
+                or self.translations.filter().first()
+            )
+        return translation
+
+    def save(self, *args, **kwargs):
+        """
+        Automatically generate a slug from the title if not provided,
+        then save the category instance.
+        """
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        """Return the title of the category as its string representation."""
+        return self.title
+
+    class Meta:
+        abstract = True
+        verbose_name = _("Category")
+        verbose_name_plural = _("Categories")
+
+
+class TranslatableCategoryTranslation(models.Model):
+    """
+    Return the translation of the category for the specified language.
+
+    If no translation exists for the given language, fallback to English
+    or any available translation.
+
+    Args:
+        language (str, optional): Language code to get the translation.
+                                    Defaults to current active language.
+
+    Returns:
+        Model instance: The corresponding translation instance.
+    """
+
+    category = models.ForeignKey(
+        TranslatableCategory,
+        related_name="translations",
+        on_delete=models.CASCADE,
+        verbose_name=_("Category"),
+    )
+    language = models.CharField(max_length=10, choices=settings.LANGUAGES)
+    title = models.CharField(max_length=255, verbose_name=_("Title"))
+
+    def __str__(self):
+        """Return the category slug and language code as the string representation."""
+        return f"{self.category.slug} ({self.language})"
+
+    class Meta:
+        unique_together = ("translable_content", "language")
+        abstract = True
+        verbose_name = _("Translation")
+        verbose_name_plural = _("Translations")
+
+
+class TranslatableMarkdownItem(models.Model):
+    """
+    Base model representing a blog post or article.
+
+    Attributes:
+        title (CharField): The title of the post.
+        slug (SlugField): URL-friendly identifier.
+    """
+
+    title = models.CharField(max_length=255, verbose_name=_("Title"))
+    slug = models.SlugField(unique=True, blank=False, verbose_name=_("Slug"))
+
+    def get_translation(self, language=None):
+        """
+        Get the translation of the Item for the specified language.
+
+        If no translation exists for the given language, fallback to English
+        or any available translation.
+
+        Args:
+            language (str, optional): Language code to get the translation. Defaults to None (current language).
+
+        Returns:
+            PostTranslation: The corresponding translation instance.
+        """
+        lang = language or get_language()
+        translation = self.translations.filter(language=lang).first()
+        if not translation:
+            translation = (
+                self.translations.filter(language="en").first()
+                or self.translations.filter().first()
+            )
+        return translation
+
+    def save(self, *args, **kwargs):
+        """
+        Save the post instance.
+
+        If this is the first save and published_on is not set, automatically
+        set published_on to the current time.
+        """
+        if not self.published_on:
+            self.published_on = timezone.now()
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        """Return the title of the post as its string representation."""
+        return self.title
+
+
+class TranslatableMarkdownItemTranslation(models.Model):
+    """
+    Represents a translation of a Post into a specific language.
+
+    Attributes:
+        translable_content (ForeignKey): The TranslatableMarkdownItem being translated.
+        language (CharField): Language code of the translation.
+        title (CharField): Translated title.
+        description (TextField): Short description of the post content.
+        content (TextField): Full post content in the specified language.
+    """
+
+    translable_content = models.ForeignKey(
+        TranslatableMarkdownItem,
+        related_name="translations",
+        on_delete=models.CASCADE,
+        verbose_name=_("Translatable Content"),
+    )
+    language = models.CharField(
+        max_length=10, choices=settings.LANGUAGES, verbose_name=_("Language")
+    )
+    title = models.CharField(max_length=255, verbose_name=_("Title"))
+    description = models.TextField(
+        max_length=512, blank=True, null=True, verbose_name=_("Description")
+    )
+    content = models.TextField(verbose_name=_("Content"))
+
+    def get_reading_time(self):
+        """
+        Estimate the reading time of the TranslatableMarkdownItem content in minutes.
+
+        Returns:
+            int: Approximate reading time based on 200 words per minute.
+        """
+        return len(self.content.split(" ")) // 200
+
+    def __str__(self):
+        """Return the TranslatableMarkdownItem slug and language code as the string representation."""
+        return f"{self.TranslatableContent.slug} ({self.language})"
+
+    class Meta:
+        unique_together = ("translable_content", "language")
+        abstract = True
+        verbose_name = _("Translation")
+        verbose_name_plural = _("Translations")
+
+
+
+class Post(TranslatableMarkdownItem):
+    """
+    Base model representing a post.
+
+    Attributes:
+        title (CharField): The title of the post.
+        slug (SlugField): URL-friendly identifier.
+        author (ForeignKey): User who created the post.
+        tags (ManyToManyField): Tags associated with the post.
+        category (ForeignKey): Category of the post.
+        published_on (DateTimeField): Date when the post was first published.
+        edited_on (DateTimeField): Date when the post was last edited.
+        picture (ImageField): Optional image for the post.
+        visibility (CharField): Visibility of the post (public, unlisted, protected, private).
+        password (CharField): Optional password for protected posts.
+    """
+
+    VISIBILITY_CHOICES = [
+        ("public", _("Public")),
+        ("unlisted", _("Unlisted")),
+        ("protected", _("Protected")),
+        ("private", _("Private")),
+    ]
+    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("Author"))
+    tags = models.ManyToManyField(
+        Tag, related_name="posts", blank=True, verbose_name=_("Tags")
+    )
+    published_on = models.DateTimeField(
+        null=True, blank=True, verbose_name=_("Published on")
+    )
+    edited_on = models.DateTimeField(auto_now=True, verbose_name=_("Edited on"))
+    picture = models.ImageField(
+        upload_to="pictures/", blank=True, null=True, verbose_name=_("Picture")
+    )
+    visibility = models.CharField(
+        max_length=10,
+        choices=VISIBILITY_CHOICES,
+        default="public",
+        verbose_name=_("Visibility"),
+    )
+    password = models.CharField(
+        max_length=50, null=True, blank=True, verbose_name=_("Password")
+    )
+
+    def get_translation(self, language=None):
+        """
+        Get the translation of the post for the specified language.
+
+        If no translation exists for the given language, fallback to English
+        or any available translation.
+
+        Args:
+            language (str, optional): Language code to get the translation. Defaults to None (current language).
+
+        Returns:
+            PostTranslation: The corresponding translation instance.
+        """
+        lang = language or get_language()
+        translation = self.translations.filter(language=lang).first()
+        if not translation:
+            translation = (
+                self.translations.filter(language="en").first()
+                or self.translations.filter().first()
+            )
+        return translation
+
+    def save(self, *args, **kwargs):
+        """
+        Save the post instance.
+
+        If this is the first save and published_on is not set, automatically
+        set published_on to the current time.
+        """
+        if not self.published_on:
+            self.published_on = timezone.now()
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        """Return the title of the post as its string representation."""
+        return self.title
