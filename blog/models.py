@@ -8,29 +8,13 @@ from django.utils.text import slugify
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 
-from root.models.abstracts import Post, TranslatableCategory
+from root.models.abstracts import Post, TranslatableCategory, Tag
 
 
 class Category(TranslatableCategory): ...
 
 
-class Tag(models.Model):
-    """
-    Represents a tag that can be associated with posts.
-
-    Attributes:
-        title (CharField): The unique name of the tag.
-    """
-
-    title = models.CharField(max_length=255, unique=True)
-
-    def __str__(self):
-        """Return the title of the tag as its string representation."""
-        return self.title
-
-    class Meta:
-        verbose_name = _("Tag")
-        verbose_name_plural = _("Tags")
+class ArticleTag(Tag): ...
 
 
 class Article(Post):
@@ -38,9 +22,6 @@ class Article(Post):
     Represents an article, which is a specialized type of Post.
     """
 
-    tags = models.ManyToManyField(
-        Tag, related_name="posts", blank=True, verbose_name=_("Tags")
-    )
     category = models.ForeignKey(
         Category,
         on_delete=models.SET_NULL,
@@ -49,10 +30,16 @@ class Article(Post):
         related_name="category",
         verbose_name=_("Category"),
     )
+    tags = models.ManyToManyField(
+        ArticleTag, related_name="posts", blank=True, verbose_name=_("Tags")
+    )
 
     class Meta:
         verbose_name = _("Article")
         verbose_name_plural = _("Articles")
+
+
+class ProjectTag(Tag): ...
 
 
 class Project(models.Model):
@@ -98,6 +85,9 @@ class Project(models.Model):
     )
     date_beginning = models.DateField(null=True, blank=True)
     date_end = models.DateField(null=True, blank=True)
+    tags = models.ManyToManyField(
+        ProjectTag, related_name="posts", blank=True, verbose_name=_("Tags")
+    )
 
     def short_description(self):
         """

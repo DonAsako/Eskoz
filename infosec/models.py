@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from blog.models import Article
-from root.models.abstracts import Post, TranslatableCategory
+from root.models.abstracts import Post, TranslatableCategory, Tag
 
 
 class Issuer(models.Model):
@@ -200,6 +200,9 @@ class CTF(models.Model):
 class Category(TranslatableCategory): ...
 
 
+class WriteupTag(Tag): ...
+
+
 class Writeup(Post):
     """
     Represents a writeup for a CTF challenge.
@@ -248,6 +251,9 @@ class Writeup(Post):
         blank=True,
         related_name="category",
         verbose_name=_("Category"),
+    )
+    tags = models.ManyToManyField(
+        WriteupTag, related_name="posts", blank=True, verbose_name=_("Tags")
     )
 
     def __str__(self):

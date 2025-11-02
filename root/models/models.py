@@ -109,22 +109,3 @@ class UserLink(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.user.username}"
-
-
-class Tag(models.Model):
-    """
-    Represents a tag that can be associated with posts.
-
-    Attributes:
-        title (CharField): The unique name of the tag.
-    """
-
-    title = models.CharField(max_length=255, unique=True)
-
-    def __str__(self):
-        """Return the title of the tag as its string representation."""
-        return self.title
-
-    class Meta:
-        verbose_name = _("Tag")
-        verbose_name_plural = _("Tags")
