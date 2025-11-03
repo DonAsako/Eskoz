@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %} - {% trans 'Projects' %}{% endblock %}
+    {% block SEO %}
+    <meta property="og:type" content="website" />
+    {% endblock %}
+{% block content %}
+    <div class="article_list">
+    <div class="article_list--top">
+        <h2 class="article_list--title">{% trans 'Projects' %}</h2>
+    </div>
+        {% if not projects %}
+        <h2 class="message-wrapper"></h2>
+            {% trans 'There is no projects at the moment.' %}
+        </h2>
+        {% else %}    
+            {% for project in projects %}      
+                <a class="article_card" 
+                {% if certification.article %}    
+                href="{% url 'blog:article_detail' certification.article.slug %}"
+                {% endif %}
+                >
+                    <div class="article_card--top">
+                        <div class="article_card--top-left">
+                            <p class="article_card--title">{{ project.name }}</p>
+                        </div>
+                        {% if project.maintainer %}
+                            <p class="article_card--category">{{ project.maintainer.username }}</p>
+                        {% endif %}
+                    </div>
+                    {% if project.description %}
+                        <p class="article_card--description">“{{ project.description|default_if_none:'' }}”</p>
+                    {% endif %}
+                    <div class="article_card--bottom">
+                        {% if project.date_beginning %}
+                            <p class="article_card--date">
+                            {{ project.date_beginning|date:"F Y" }} -
+                            {% if project.date_end %}
+                                {{ project.date_end|date:"F Y" }}
+                            {% else %}
+                                {% trans "Now" %}
+                            {% endif %}
+                            </p>
+                        {% endif %}
+                        <div class="article_card--tags">
+                            {% if project.website %}
+                                <a class="article_card--tag" href="{{ project.website }}">{% trans 'Website' %}</a>
+                            {% endif %}
+                            {% if project.source_link %}
+                                <a class="article_card--tag" href="{{ project.source_link }}">{% trans 'Source' %}</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}
