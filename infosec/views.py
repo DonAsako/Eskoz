@@ -23,7 +23,7 @@ def writeup_detail(request, slug):
     return post_detail(request, Writeup, slug, "blog/post_detail.html")
 
 
-def writeups_list(request, slug=None):
+def writeup_list(request, slug=None):
     """
     Render a list of writeups.
 
@@ -48,12 +48,12 @@ def writeups_list(request, slug=None):
     )
 
 
-def certifications_lists(request):
+def certification_list(request):
     """
     Render a list of all certifications.
 
     Fetches all Certification instances and passes them to the
-    'infosec/certifications_lists.html' template.
+    'infosec/certification_list.html' template.
 
     Args:
         request (HttpRequest): The HTTP request object.
@@ -63,5 +63,5 @@ def certifications_lists(request):
     """
     certifications = Certification.objects.all()
     return render(
-        request, "infosec/certifications_lists.html", {"certifications": certifications}
+        request, "infosec/certification_list.html", {"certifications": certifications}
     )

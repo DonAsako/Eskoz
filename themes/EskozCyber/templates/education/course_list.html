@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% block title %} - {{ post_type_trans }}{% endblock %}
+{% block title %} - {% trans 'course' %}{% endblock %}
     {% block SEO %}
     <meta property="og:type" content="website" />
     {% endblock %}
 {% block content %}
-    <div class="articles_list">
-    <div class="articles_list--top">
-        <h2 class="articles_list--title">{{ post_type_trans }}</h2>
-        <select class="articles_list--select" id='category-selector'>
+    <div class="article_list">
+    <div class="article_list--top">
+        <h2 class="article_list--title">{% trans 'Course' %}</h2>
+        <select class="article_list--select" id='category-selector'>
             <option value="">{% trans 'All' %}</option>
             {% for category in categories %}
                 {% if selected_category == category%}
@@ -19,32 +19,30 @@
             {% endfor %}
         </select>
     </div>
-        {% if not posts %}
+        {% if not courses %}
         <h2 class="message-wrapper"></h2>
-            {% blocktrans with post_type=post_type %}
-                There is no {{ post_type }} at the moment.
-            {% endblocktrans %}
+            {% trans 'There is no course at the moment.' %}
         </h2>
         {% else %}    
-            {% for post in posts.all|dictsortreversed:"published_on" %}      
-                <a class="article_card" href="{% url detail_url_name post.slug %}">
+            {% for course in courses.all %}      
+                <a class="article_card" href="{% url 'education:module_list' course.slug %}">
 
                     <div class="article_card--top">
                         <div class="article_card--top-left">
-                            <p class="article_card--title">{{ post.get_translation.title }}</p>
+                            <p class="article_card--title">{{ course.get_translation.title }}</p>
                         </div>
-                        {% if post.category %}
-                            <p class="article_card--category">{{ post.category }}</p>
+                        {% if course.category %}
+                            <p class="article_card--category">{{ course.category }}</p>
                         {% endif %}
                     </div>
-                    {% if post.get_translation.description %}
-                        <p class="article_card--description">“{{ post.get_translation.description|default_if_none:'' }}”</p>
+                    {% if course.get_translation.description %}
+                        <p class="article_card--description">“{{ course.get_translation.description|default_if_none:'' }}”</p>
                     {% endif %}
                     <div class="article_card--bottom">
-                        <p class="article_card--date">{{ post.published_on|date:"j F Y" }}</p>
+                        <p class="article_card--date">{{ course.published_on|date:"j F Y" }}</p>
 
                         <div class="article_card--tags">
-                            {% for tag in post.tags.all %}
+                            {% for tag in course.tags.all %}
                                 <p class="article_card--tag">{{ tag.title }}</p>
                             {% endfor %}
                         </div>
@@ -59,9 +57,9 @@
     categorySelector.addEventListener('change', function () {
         const selectedCategory = this.value;
         if (selectedCategory) {
-            window.location.href = `/{{ post_type }}/${selectedCategory}`;
+            window.location.href = `/{{ course_type }}/${selectedCategory}`;
         } else {
-            window.location.href = `/{{ post_type }}/`;
+            window.location.href = `/{{ course_type }}/`;
         }
     });
 </script>

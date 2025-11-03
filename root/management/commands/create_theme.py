@@ -70,7 +70,7 @@ class Command(BaseCommand):
                 new_theme_path / "templates" / "root" / "page.html",
                 new_theme_path / "templates" / "blog" / "article_detail.html",
                 new_theme_path / "templates" / "blog" / "article_password.html",
-                new_theme_path / "templates" / "blog" / "articles_list.html",
+                new_theme_path / "templates" / "blog" / "article_list.html",
                 new_theme_path / "templates" / "400.html",
                 new_theme_path / "templates" / "403.html",
                 new_theme_path / "templates" / "403_csrf.html",

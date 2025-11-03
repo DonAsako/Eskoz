@@ -100,7 +100,7 @@ class AbstractPostAdmin(AbstractTranslatableMarkdownItemAdmin):
 
 class AbstractCategoryAdmin(admin.ModelAdmin):
     abstract = True
-
+    prepopulated_fields = {"slug": ("title",)}
     list_display = ("title", "slug")
     search_fields = ["title"]
 
@@ -113,10 +113,6 @@ class AbstractCategoryTranslationAdmin(admin.StackedInline):
     parent_field_name = "category"
 
     def get_extra(self, request, obj=None, **kwargs):
-        """
-        Ajoute dynamiquement un formulaire vide uniquement si
-        aucune traduction n’existe encore pour l’objet parent.
-        """
         if obj is None:
             return 1
 

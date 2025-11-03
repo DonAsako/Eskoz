@@ -1,15 +1,15 @@
 from django.urls import path
 
 from .views import (
-    certifications_lists,
+    certification_list,
     writeup_detail,
-    writeups_list,
+    writeup_list,
 )
 
 app_name = "infosec"
 urlpatterns = [
     path("writeup/<slug:slug>/", writeup_detail, name="writeup_detail"),
-    path("writeups/<slug:slug>/", writeups_list, name="writeup_category_list"),
-    path("writeups/", writeups_list, name="writeups_list"),
-    path("certifications/", certifications_lists, name="certifications_lists"),
+    path("writeups/<slug:slug>/", writeup_list, name="writeup_category_list"),
+    path("writeups/", writeup_list, name="writeup_list"),
+    path("certifications/", certification_list, name="certification_list"),
 ]
