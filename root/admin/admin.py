@@ -102,7 +102,11 @@ class UserProfileInline(admin.StackedInline):
     readonly_fields = ("qr_code",)
 
     def qr_code(self, obj):
-        return format_html('<img src="{}" />', obj.get_otp_qr_code())
+        return format_html(
+            f"""
+        <div style="border-radius:5px; background: white; display: flex; align-itens:center; justify-content:center;">{obj.get_otp_qr_code()}</div>
+        """
+        )
 
     qr_code.short_description = "Authentication QR Code"
 

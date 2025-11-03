@@ -3,6 +3,7 @@ from io import BytesIO
 
 import pyotp
 import qrcode
+import qrcode.image.svg
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -29,12 +30,10 @@ class UserProfile(models.Model):
         return pyotp.TOTP(self.otp_secret_key).verify(token)
 
     def get_otp_qr_code(self):
-        uri = self.get_otpauth()
-        img = qrcode.make(uri)
-        buffer = BytesIO()
-        img.save(buffer, format="PNG")
-        img_str = base64.b64encode(buffer.getvalue()).decode()
-        return f"data:image/png;base64,{img_str}"
+        qrcode_uri = self.get_otpauth()
+        qr_code_image_factory = qrcode.image.svg.SvgPathImage
+        qr_code_image = qrcode.make(qrcode_uri, image_factory=qr_code_image_factory)
+        return qr_code_image.to_string().decode("utf_8")
 
     def __str__(self):
         return f"{self.user.get_username()}"
