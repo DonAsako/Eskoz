@@ -4,12 +4,12 @@ from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 from root.admin.utils import backup
-from root.forms import PostTranslationAdminForm
-from root.models import PostImage
+from root.forms import AbstractTranslatableMarkdownItemAdminForm
+from root.models import TranslatableMarkdownItemImage
 
 
 class ImagePostAdmin(GenericTabularInline):
-    model = PostImage
+    model = TranslatableMarkdownItemImage
     extra = 1
     fields = ("picture", "image_display", "image_url")
     readonly_fields = ("image_display", "image_url")
@@ -38,7 +38,7 @@ class ImagePostAdmin(GenericTabularInline):
 
 class AbstractPostTranslationAdmin(admin.StackedInline):
     abstract = True
-    form = PostTranslationAdminForm
+    form = AbstractTranslatableMarkdownItemAdminForm
     readonly_fields = ["reading_time"]
     extra = 1
     can_delete = True

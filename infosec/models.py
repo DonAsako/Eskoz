@@ -4,11 +4,11 @@ from django.utils.translation import gettext_lazy as _
 
 from blog.models import Article
 from root.models.abstracts import (
-    Post,
-    PostTranslation,
-    Tag,
-    TranslatableCategory,
-    TranslatableCategoryTranslation,
+    AbstractPost,
+    AbstractPostTranslation,
+    AbstractTag,
+    AbstractTranslatableCategory,
+    AbstractTranslatableCategoryTranslation,
 )
 from root.utils import upload_to_certifications
 
@@ -207,10 +207,10 @@ class CTF(models.Model):
         ordering = ["-date_beginning"]
 
 
-class Category(TranslatableCategory): ...
+class Category(AbstractTranslatableCategory): ...
 
 
-class CategoryTranslation(TranslatableCategoryTranslation):
+class CategoryTranslation(AbstractTranslatableCategoryTranslation):
     """Concrete category translation."""
 
     category = models.ForeignKey(
@@ -221,10 +221,10 @@ class CategoryTranslation(TranslatableCategoryTranslation):
     )
 
 
-class WriteupTag(Tag): ...
+class WriteupTag(AbstractTag): ...
 
 
-class Writeup(Post):
+class Writeup(AbstractPost):
     """
     Represents a writeup for a CTF challenge.
 
@@ -281,12 +281,12 @@ class Writeup(Post):
         """Return the title of the writeup and its associated CTF name."""
         return f"{self.title} ({self.ctf.name if self.ctf else 'No CTF'})"
 
-    class Meta:
+    class Meta(AbstractPostTranslation.Meta):
         verbose_name = _("Writeup")
         verbose_name_plural = _("Writeups")
 
 
-class WriteupTranslation(PostTranslation):
+class WriteupTranslation(AbstractPostTranslation):
     """
     Represents a translation for an Writeup.
     """
@@ -298,7 +298,7 @@ class WriteupTranslation(PostTranslation):
         verbose_name=_("Translatable Writeup"),
     )
 
-    class Meta(PostTranslation.Meta):
+    class Meta(AbstractPostTranslation.Meta):
         verbose_name = _("Writeup Translation")
         verbose_name_plural = _("Writeup Translations")
 
