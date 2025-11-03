@@ -2,9 +2,21 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
-from root.admin import AbstractPostAdmin, AbstractPostTranslationAdmin
+from root.admin import (
+    AbstractPostAdmin,
+    AbstractPostTranslationAdmin,
+    AbstractCategoryAdmin,
+    AbstractCategoryTranslationAdmin,
+)
 
-from .models import Article, ArticleTag, ArticleTranslation, Category, Project
+from .models import (
+    Article,
+    ArticleTag,
+    ArticleTranslation,
+    Category,
+    CategoryTranslation,
+    Project,
+)
 
 
 class TagAdmin(admin.ModelAdmin):
@@ -19,9 +31,12 @@ class ArticleAdmin(AbstractPostAdmin):
     inlines = AbstractPostAdmin.inlines + [ArticleTranslationAdmin]
 
 
-class CategoryAdmin(admin.ModelAdmin):
-    search_fields = ["title"]
-    # inlines = [ArticleTranslationAdmin]
+class CategoryTranslationAdmin(AbstractCategoryTranslationAdmin):
+    model = CategoryTranslation
+
+
+class CategoryAdmin(AbstractCategoryAdmin):
+    inlines = [CategoryTranslationAdmin]
 
 
 class ProjectAdmin(admin.ModelAdmin):

@@ -83,3 +83,29 @@ class AbstractPostAdmin(admin.ModelAdmin):
 
     class Media:
         js = ("script/article_edit.js",)
+
+
+class AbstractCategoryAdmin(admin.ModelAdmin):
+    list_display = ("title", "slug")
+    search_fields = ["title"]
+
+
+class AbstractCategoryTranslationAdmin(admin.StackedInline):
+    abstract = True
+    extra = 1
+    can_delete = True
+
+    # Nom du champ pointant vers le parent (à redéfinir dans les sous-classes)
+    parent_field_name = "category"  # valeur par défaut
+
+    def get_extra(self, request, obj=None, **kwargs):
+        """
+        Ajoute dynamiquement un formulaire vide uniquement si
+        aucune traduction n’existe encore pour l’objet parent.
+        """
+        if obj is None:
+            return 1
+
+        parent_field = {self.parent_field_name: obj}
+        has_existing = self.model.objects.filter(**parent_field).exists()
+        return 1 if not has_existing else 0
