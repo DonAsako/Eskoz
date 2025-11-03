@@ -2,7 +2,7 @@ import pyotp
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from root.models import Page, UserProfile
+from root.models import Page, PostTranslation, UserProfile
 from root.widgets import ContentEditorWidget
 
 
@@ -54,3 +54,10 @@ class UserProfileAdminForm(forms.ModelForm):
         if commit:
             profile.save()
         return profile
+
+
+class PostTranslationAdminForm(forms.ModelForm):
+    class Meta:
+        model = PostTranslation
+        fields = "__all__"
+        widgets = {"content": ContentEditorWidget}

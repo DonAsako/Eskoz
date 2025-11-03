@@ -2,7 +2,15 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from blog.models import Article, Post
+from blog.models import Article
+from root.models.abstracts import (
+    Post,
+    PostTranslation,
+    Tag,
+    TranslatableCategory,
+    TranslatableCategoryTranslation,
+)
+from root.utils import upload_to_certifications
 
 
 class Issuer(models.Model):
@@ -64,7 +72,10 @@ class Certification(models.Model):
         help_text=_("Date when the certification was obtained"),
     )
     picture = models.ImageField(
-        upload_to="pictures/", blank=True, null=True, verbose_name=_("Picture")
+        upload_to=upload_to_certifications,
+        blank=True,
+        null=True,
+        verbose_name=_("Picture"),
     )
     article = models.ForeignKey(
         Article,
@@ -196,6 +207,23 @@ class CTF(models.Model):
         ordering = ["-date_beginning"]
 
 
+class Category(TranslatableCategory): ...
+
+
+class CategoryTranslation(TranslatableCategoryTranslation):
+    """Concrete category translation."""
+
+    category = models.ForeignKey(
+        Category,
+        related_name="translations",
+        on_delete=models.CASCADE,
+        verbose_name=_("Category"),
+    )
+
+
+class WriteupTag(Tag): ...
+
+
 class Writeup(Post):
     """
     Represents a writeup for a CTF challenge.
@@ -237,6 +265,17 @@ class Writeup(Post):
         verbose_name=_("Number of solvers"),
         help_text=_("Optional: number of people who solved it."),
     )
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="writeup",
+        verbose_name=_("Category"),
+    )
+    tags = models.ManyToManyField(
+        WriteupTag, related_name="posts", blank=True, verbose_name=_("Tags")
+    )
 
     def __str__(self):
         """Return the title of the writeup and its associated CTF name."""
@@ -245,3 +284,24 @@ class Writeup(Post):
     class Meta:
         verbose_name = _("Writeup")
         verbose_name_plural = _("Writeups")
+
+
+class WriteupTranslation(PostTranslation):
+    """
+    Represents a translation for an Writeup.
+    """
+
+    translatable_content = models.ForeignKey(
+        Writeup,
+        related_name="translations",
+        on_delete=models.CASCADE,
+        verbose_name=_("Translatable Writeup"),
+    )
+
+    class Meta(PostTranslation.Meta):
+        verbose_name = _("Writeup Translation")
+        verbose_name_plural = _("Writeup Translations")
+
+    @property
+    def parent(self):
+        return self.translatable_content

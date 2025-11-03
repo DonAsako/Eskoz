@@ -6,8 +6,8 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
-from .forms import PageAdminForm, UserProfileAdminForm
-from .models import (
+from root.forms import PageAdminForm, UserProfileAdminForm
+from root.models import (
     Page,
     SeoSettings,
     SiteSettings,
@@ -102,7 +102,11 @@ class UserProfileInline(admin.StackedInline):
     readonly_fields = ("qr_code",)
 
     def qr_code(self, obj):
-        return format_html('<img src="{}" />', obj.get_otp_qr_code())
+        return format_html(
+            f"""
+        <div style="border-radius:5px; background: white; display: flex; align-itens:center; justify-content:center;">{obj.get_otp_qr_code()}</div>
+        """
+        )
 
     qr_code.short_description = "Authentication QR Code"
 

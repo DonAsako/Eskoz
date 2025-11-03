@@ -26,12 +26,16 @@ async function sendContentToPreview(content, id) {
             <!DOCTYPE html>
             <html>
                 <head>
+                
                     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
                     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
                     <style>body{ padding: 1em; }</style>
                     <link rel="stylesheet" href="/static/${Theme}/css/style.css">
                     <link rel="stylesheet" href="/static/${Theme}/css/markdown.css">
-                    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.css" integrity="sha384-WcoG4HRXMzYzfCgiyfrySxx90XSl2rxY5mnVY5TwtWE6KLrArNKn0T/mOgNL0Mmi" crossorigin="anonymous">
+                    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.js" integrity="sha384-J+9dG2KMoiR9hqcFao0IBLwxt6zpcyN68IgwzsCSkbreXUjmNVRhPFTssqdSGjwQ" crossorigin="anonymous"></script>
+                    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"
+                            onload="renderMathInElement(document.body);"></script>
                 </head>
                 <body>
                     <div class="article--container">
@@ -43,12 +47,16 @@ async function sendContentToPreview(content, id) {
                     </div>
                     <script>hljs.highlightAll();</script>
                     <script>
-                        // MathJax
-                        window.MathJax = {
-                            tex: {
-                                inlineMath: [['$', '$']]
-                            }
-                        }
+                        document.addEventListener("DOMContentLoaded", function() {
+                            renderMathInElement(document.body, {
+                            delimiters: [
+                                {left: "\\[", right: "\\]", display: true},
+                                {left: "$$", right: "$$", display: true},
+                                {left: "$", right: "$", display: false},
+                                {left: "\\(", right: "\\)", display: false}
+                            ]
+                            });
+                        });
                     </script>
                 </body>
             </html>`;

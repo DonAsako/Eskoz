@@ -256,7 +256,6 @@ main {
   padding-bottom: 1em;
 }
 .article--content * {
-  max-width: 100%;
   line-height: 1.5em;
   text-align: justify;
 }
