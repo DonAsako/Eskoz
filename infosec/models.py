@@ -270,7 +270,7 @@ class Writeup(AbstractPost):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="writeup",
+        related_name="writeups",
         verbose_name=_("Category"),
     )
     tags = models.ManyToManyField(
