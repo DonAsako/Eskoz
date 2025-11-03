@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block SEO %}
+    <meta property="og:type" content="website" />
+{% endblock %}
+{% block content %}
+<div class="message-wrapper">
+    <h2>{% trans 'You can configure this page from your administration panel.' %}</h2>
+    <p>
+        {% url 'admin:login' as admin_url %}
+        {% blocktrans %}
+            You can access it from <a href="{{ admin_url }}">here</a>.
+        {% endblocktrans %}
+    </p>
+
+</div>
+{% endblock %}
