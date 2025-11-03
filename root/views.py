@@ -143,7 +143,7 @@ def posts_list(
 
     return render(
         request,
-        "blog/posts_lists.html",
+        "blog/post_list.html",
         {
             "posts": posts,
             "categories": categories,

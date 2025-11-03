@@ -110,18 +110,18 @@ main {
 }
 
 /* ARTICLE LISTS */
-.articles_list {
+.article_list {
   display: flex;
   flex-direction: column;
   gap: 1.5em;
   width: 80%;
 }
-.articles_list--top {
+.article_list--top {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.articles_list--select {
+.article_list--select {
   background-color: var(--foreground-color);
   border: none;
   border-radius: 5px;

@@ -5,10 +5,10 @@
     <meta property="og:type" content="website" />
     {% endblock %}
 {% block content %}
-    <div class="articles_list">
-    <div class="articles_list--top">
-        <h2 class="articles_list--title">{{ post_type_trans }}</h2>
-        <select class="articles_list--select" id='category-selector'>
+    <div class="article_list">
+    <div class="article_list--top">
+        <h2 class="article_list--title">{{ post_type_trans }}</h2>
+        <select class="article_list--select" id='category-selector'>
             <option value="">{% trans 'All' %}</option>
             {% for category in categories %}
                 {% if selected_category == category%}

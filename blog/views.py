@@ -20,7 +20,7 @@ def article_detail(request, slug):
     return post_detail(request, Article, slug, "blog/post_detail.html")
 
 
-def articles_list(request, slug=None):
+def article_list(request, slug=None):
     """
     Render a list of articles, optionally filtered by category slug.
 
@@ -44,11 +44,11 @@ def articles_list(request, slug=None):
     )
 
 
-def projects_lists(request):
+def project_list(request):
     """
     Render a list of all projects.
 
-    Fetches all Project instances and passes them to the 'blog/projects_lists.html' template.
+    Fetches all Project instances and passes them to the 'blog/project_list.html' template.
 
     Args:
         request (HttpRequest): The HTTP request object.
@@ -57,4 +57,4 @@ def projects_lists(request):
         HttpResponse: Rendered projects list page.
     """
     projects = Project.objects.all()
-    return render(request, "blog/projects_lists.html", {"projects": projects})
+    return render(request, "blog/project_list.html", {"projects": projects})

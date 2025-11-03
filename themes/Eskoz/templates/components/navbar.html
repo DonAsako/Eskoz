@@ -17,22 +17,22 @@
         {% endfor %}
         {% if site_settings.view_page_settings.activate_projects_page %}
             <li class="navbar-item">
-                <a href="{% url 'blog:projects_lists' %}" class="navbar-item--link">{% trans 'Projects' %}</a>
+                <a href="{% url 'blog:project_list' %}" class="navbar-item--link">{% trans 'Projects' %}</a>
             </li>
         {% endif %}
         {% if site_settings.view_page_settings.activate_certifications_page %}
             <li class="navbar-item">
-                <a href="{% url 'infosec:certifications_lists' %}" class="navbar-item--link">{% trans 'Certifications' %}</a>
+                <a href="{% url 'infosec:certification_list' %}" class="navbar-item--link">{% trans 'Certifications' %}</a>
             </li>
         {% endif %}
         {% if site_settings.view_page_settings.activate_writeups_page %}
             <li class="navbar-item">
-                <a href="{% url 'infosec:writeups_list' %}" class="navbar-item--link">{% trans 'Writeups' %}</a>
+                <a href="{% url 'infosec:writeup_list' %}" class="navbar-item--link">{% trans 'Writeups' %}</a>
             </li>
         {% endif %}
         {% if site_settings.view_page_settings.activate_articles_page %}
             <li class="navbar-item">
-                <a href="{% url 'blog:articles_list' %}" class="navbar-item--link">{% trans 'Articles' %}</a>
+                <a href="{% url 'blog:article_list' %}" class="navbar-item--link">{% trans 'Articles' %}</a>
             </li>
         {% endif %}
         {% if site_settings.view_page_settings.activate_members_page %}
