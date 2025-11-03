@@ -64,20 +64,31 @@ class Command(BaseCommand):
                 )
             )
         else:
+            path_template = new_theme_path / "templates"
+            path_static = new_theme_path / "static" / theme_name
             # List of files to create
             paths = [
-                new_theme_path / "templates" / "root" / "index.html",
-                new_theme_path / "templates" / "root" / "page.html",
-                new_theme_path / "templates" / "blog" / "article_detail.html",
-                new_theme_path / "templates" / "blog" / "article_password.html",
-                new_theme_path / "templates" / "blog" / "article_list.html",
-                new_theme_path / "templates" / "400.html",
-                new_theme_path / "templates" / "403.html",
-                new_theme_path / "templates" / "403_csrf.html",
-                new_theme_path / "templates" / "404.html",
-                new_theme_path / "templates" / "500.html",
-                new_theme_path / "static" / theme_name / "css" / "style.css",
-                new_theme_path / "static" / theme_name / "js",
+                path_template / "root" / "index.html",
+                path_template / "root" / "page.html",
+                path_template / "blog" / "article_detail.html",
+                path_template / "blog" / "article_list.html",
+                path_template / "blog" / "members.html",
+                path_template / "blog" / "project_list.html",
+                path_template / "education" / "course_list.html",
+                path_template / "education" / "lesson_detail.html",
+                path_template / "education" / "lesson_list.html",
+                path_template / "education" / "module_list.html",
+                path_template / "infosec" / "certification_list.html",
+                path_template / "infosec" / "cve_list.html",
+                path_template / "infosec" / "writeup_detail.html",
+                path_template / "infosec" / "writeup_list.html",
+                path_template / "400.html",
+                path_template / "403.html",
+                path_template / "403_csrf.html",
+                path_template / "404.html",
+                path_template / "500.html",
+                path_static / "css" / "style.css",
+                path_static / "js" / "script.js",
             ]
             for path in paths:
                 if path.suffix:
