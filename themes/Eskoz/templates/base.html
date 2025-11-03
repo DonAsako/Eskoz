@@ -9,8 +9,8 @@
     <meta name="keywords" content="{{ site_settings.seo_settings.meta_keywords }}">
     <meta name="description" content="{{ site_settings.seo_settings.meta_description }}">
     <meta name="author" content="{{ site_settings.seo_settings.meta_author }}">
-
     {% if site_settings.favicon %}<link rel="shortcut icon" href="{{ site_settings.favicon.url }}" type="image/x-icon">{% endif %}
+
     <!-- OG -->
     {% block SEO %}{% endblock%}
     <meta property="og:title" content="{{ site_settings.seo_settings.og_title }}">
@@ -21,6 +21,7 @@
     <meta property="og:image:width" content="{{ site_settings.seo_settings.og_image.width }}"/>
     <meta property="og:image:height" content="{{ site_settings.seo_settings.og_image.height }}"/>
     {% endif %}
+
     <!-- Twitter -->
     <meta name="twitter:card" content="{{ site_settings.seo_settings.twitter_card_type }}">
     <meta name="twitter:site" content="{{ request.get_host }}">
@@ -37,7 +38,11 @@
 </head>
 <body>
 {% if site_settings.under_maintenance %}
-    {% include "components/maintenance.html" %}
+    <main>
+        <div class="page_wrapper">
+            {% include "components/maintenance.html" %}
+        </div>
+    </main>
 {% else %}
     <header>
         {% include "components/navbar.html" %}
@@ -51,28 +56,5 @@
         {% include "components/footer.html" %}
     </footer>
 {% endif %}
-{% if site_settings.show_transition%}
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        document.body.classList.add('fade-in');
-        document.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', e => {
-                const url = link.getAttribute('href');
-                if (!url || url.startsWith('http') || url.startsWith('#') || url.startsWith('mailto:')) {
-                    return;
-                }
-                e.preventDefault();
-                document.body.classList.remove('fade-in');
-                document.body.classList.add('fade-out');
-                setTimeout(() => {
-                    window.location.href = url;
-                }, 100);
-            });
-        });
-    });
-    </script>
-{% endif %}
-<script src="{% static 'admin/js/toggleTheme.js' %}"></script>
-
 </body>
 </html>

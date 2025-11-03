@@ -5,8 +5,10 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"
         onload="renderMathInElement(document.querySelector('article--content'));"></script>
 {% load static %}
+{% with markdown_css=ACTIVE_THEME|add:"/css/markdown.css" %}
+    <link rel="stylesheet" href="{% static markdown_css %}">
+{% endwith %}
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
-<link rel="stylesheet" href="{% static 'Eskoz/css/markdown.css' %}">
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
 {% endblock %}
 {% block title %} - {{ post.get_translation.title }}{% endblock %}
