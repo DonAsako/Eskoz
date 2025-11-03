@@ -2,17 +2,34 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from root.models.abstracts import Post, PostTranslation, Tag, TranslatableCategory
+from root.models.abstracts import (
+    AbstractPost,
+    AbstractPostTranslation,
+    AbstractTag,
+    AbstractTranslatableCategory,
+    AbstractTranslatableCategoryTranslation,
+)
 from root.utils import upload_to_projects
 
 
-class Category(TranslatableCategory): ...
+class Category(AbstractTranslatableCategory): ...
 
 
-class ArticleTag(Tag): ...
+class CategoryTranslation(AbstractTranslatableCategoryTranslation):
+    """Concrete category translation."""
+
+    category = models.ForeignKey(
+        Category,
+        related_name="translations",
+        on_delete=models.CASCADE,
+        verbose_name=_("Category"),
+    )
 
 
-class Article(Post):
+class ArticleTag(AbstractTag): ...
+
+
+class Article(AbstractPost):
     """
     Represents an article, which is a specialized type of Post.
     """
@@ -29,12 +46,12 @@ class Article(Post):
         ArticleTag, related_name="posts", blank=True, verbose_name=_("Tags")
     )
 
-    class Meta:
+    class Meta(AbstractPost.Meta):
         verbose_name = _("Article")
         verbose_name_plural = _("Articles")
 
 
-class ArticleTranslation(PostTranslation):
+class ArticleTranslation(AbstractPostTranslation):
     """
     Represents a translation for an Article.
     """
@@ -46,7 +63,7 @@ class ArticleTranslation(PostTranslation):
         verbose_name=_("Translatable Article"),
     )
 
-    class Meta(PostTranslation.Meta):
+    class Meta(AbstractPostTranslation.Meta):
         verbose_name = _("Article Translation")
         verbose_name_plural = _("Article Translations")
 
@@ -55,7 +72,7 @@ class ArticleTranslation(PostTranslation):
         return self.translatable_content
 
 
-class ProjectTag(Tag): ...
+class ProjectTag(AbstractTag): ...
 
 
 class Project(models.Model):

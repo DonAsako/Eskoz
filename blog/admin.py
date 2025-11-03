@@ -2,13 +2,22 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
-from root.admin import AbstractPostAdmin, AbstractPostTranslationAdmin
+from root.admin import (
+    AbstractPostAdmin,
+    AbstractPostTranslationAdmin,
+    AbstractCategoryAdmin,
+    AbstractCategoryTranslationAdmin,
+    AbstractTagAdmin,
+)
 
-from .models import Article, ArticleTag, ArticleTranslation, Category, Project
-
-
-class TagAdmin(admin.ModelAdmin):
-    search_fields = ["title"]
+from .models import (
+    Article,
+    ArticleTag,
+    ArticleTranslation,
+    Category,
+    CategoryTranslation,
+    Project,
+)
 
 
 class ArticleTranslationAdmin(AbstractPostTranslationAdmin):
@@ -19,9 +28,12 @@ class ArticleAdmin(AbstractPostAdmin):
     inlines = AbstractPostAdmin.inlines + [ArticleTranslationAdmin]
 
 
-class CategoryAdmin(admin.ModelAdmin):
-    search_fields = ["title"]
-    # inlines = [ArticleTranslationAdmin]
+class CategoryTranslationAdmin(AbstractCategoryTranslationAdmin):
+    model = CategoryTranslation
+
+
+class CategoryAdmin(AbstractCategoryAdmin):
+    inlines = [CategoryTranslationAdmin]
 
 
 class ProjectAdmin(admin.ModelAdmin):
@@ -45,6 +57,9 @@ class ProjectAdmin(admin.ModelAdmin):
         return "-"
 
     picture_thumbnail.short_description = _("Thumbnail")
+
+
+class TagAdmin(AbstractTagAdmin): ...
 
 
 admin.site.register(Article, ArticleAdmin)

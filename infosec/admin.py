@@ -1,6 +1,12 @@
 from django.contrib import admin
 
-from root.admin import AbstractPostAdmin, AbstractPostTranslationAdmin
+from root.admin import (
+    AbstractPostAdmin,
+    AbstractPostTranslationAdmin,
+    AbstractCategoryAdmin,
+    AbstractCategoryTranslationAdmin,
+    AbstractTagAdmin,
+)
 
 from .models import (
     CTF,
@@ -34,24 +40,15 @@ class WritupAdmin(AbstractPostAdmin):
     inlines = AbstractPostAdmin.inlines + [WriteupTranslationAdmin]
 
 
-class CategoryTranslationAdmin(admin.StackedInline):
+class CategoryTranslationAdmin(AbstractCategoryTranslationAdmin):
     model = CategoryTranslation
-    extra = 1
-    can_delete = True
-
-    def get_extra(self, request, obj=None, **kwargs):
-        if obj is None:
-            return 1
-        return 1 if not CategoryTranslation.objects.filter(category=obj).exists() else 0
 
 
-class CategoryAdmin(admin.ModelAdmin):
-    search_fields = ["title"]
+class CategoryAdmin(AbstractCategoryAdmin):
     inlines = [CategoryTranslationAdmin]
 
 
-class TagAdmin(admin.ModelAdmin):
-    search_fields = ["title"]
+class TagAdmin(AbstractTagAdmin): ...
 
 
 admin.site.register(Writeup, WritupAdmin)

@@ -14,7 +14,7 @@ from django.utils.translation import gettext_lazy as _
 from root.utils import upload_to_posts, upload_to_settings
 
 
-class TranslatableCategory(models.Model):
+class AbstractTranslatableCategory(models.Model):
     """
     Abstract base model for categories that can have translations.
 
@@ -72,7 +72,7 @@ class TranslatableCategory(models.Model):
         verbose_name_plural = _("Categories")
 
 
-class TranslatableCategoryTranslation(models.Model):
+class AbstractTranslatableCategoryTranslation(models.Model):
     """
     Return the translation of the category for the specified language.
 
@@ -88,7 +88,7 @@ class TranslatableCategoryTranslation(models.Model):
     """
 
     category = models.ForeignKey(
-        TranslatableCategory,
+        AbstractTranslatableCategory,
         related_name="translations",
         on_delete=models.CASCADE,
         verbose_name=_("Category"),
@@ -107,7 +107,7 @@ class TranslatableCategoryTranslation(models.Model):
         verbose_name_plural = _("Translations")
 
 
-class TranslatableMarkdownItem(models.Model):
+class AbstractTranslatableMarkdownItem(models.Model):
     """
     Base model representing a translatable markdown item.
 
@@ -145,8 +145,13 @@ class TranslatableMarkdownItem(models.Model):
         """Return the title of the translatable markdown item as its string representation."""
         return self.title
 
+    class Meta:
+        abstract = True
+        verbose_name = _("Translatable Markdown Item")
+        verbose_name_plural = _("Translatable Markdown Items")
 
-class TranslatableMarkdownItemTranslation(models.Model):
+
+class AbstractTranslatableMarkdownItemTranslation(models.Model):
     """
     Represents a translation of a translatable markdown item into a specific language.
 
@@ -159,7 +164,7 @@ class TranslatableMarkdownItemTranslation(models.Model):
     """
 
     translatable_content = models.ForeignKey(
-        TranslatableMarkdownItem,
+        AbstractTranslatableMarkdownItem,
         related_name="translations",
         on_delete=models.CASCADE,
         verbose_name=_("Translatable Content"),
@@ -217,7 +222,7 @@ class TranslatableMarkdownItemTranslation(models.Model):
         verbose_name_plural = _("Translations")
 
 
-class Post(TranslatableMarkdownItem):
+class AbstractPost(AbstractTranslatableMarkdownItem):
     """
     Base model representing a post.
 
@@ -295,7 +300,7 @@ class Post(TranslatableMarkdownItem):
         return errors
 
 
-class PostTranslation(TranslatableMarkdownItemTranslation):
+class AbstractPostTranslation(AbstractTranslatableMarkdownItemTranslation):
     """
     Abstract base class for Post translations.
 
@@ -317,7 +322,7 @@ class PostTranslation(TranslatableMarkdownItemTranslation):
         )
 
 
-class Tag(models.Model):
+class AbstractTag(models.Model):
     """
     Base model representing tag that can be associated with an element.
 
@@ -337,7 +342,7 @@ class Tag(models.Model):
         abstract = True
 
 
-class PostImage(models.Model):
+class TranslatableMarkdownItemImage(models.Model):
     """
     Model representing additional images for a post.
     Each Post can have multiple images.
@@ -350,8 +355,8 @@ class PostImage(models.Model):
     uploaded_on = models.DateTimeField(auto_now_add=True, verbose_name=_("Uploaded on"))
 
     class Meta:
-        verbose_name = _("Post Image")
-        verbose_name_plural = _("Post Images")
+        verbose_name = _("Markdown Image")
+        verbose_name_plural = _("Markdown Images")
         ordering = ["uploaded_on"]
 
     def __str__(self):
