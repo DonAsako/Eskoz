@@ -19,7 +19,15 @@ async function sendContentToPreview(content, id) {
         const data = await response.json();
         const iframe = document.getElementById(`render-${id}`);
         const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-
+        const katexRenderOptions = {
+            delimiters: [
+                { left: "\\[", right: "\\]", display: true },
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false }
+            ],
+            throwOnError: false
+        };
         // If iframe is empty (first load), write full HTML
         if (!iframeDoc.body.innerHTML) {
             const html = `
@@ -45,17 +53,10 @@ async function sendContentToPreview(content, id) {
                             </div>
                         </div>
                     </div>
-                    <script>hljs.highlightAll();</script>
                     <script>
                         document.addEventListener("DOMContentLoaded", function() {
-                            renderMathInElement(document.body, {
-                            delimiters: [
-                                {left: "\\[", right: "\\]", display: true},
-                                {left: "$$", right: "$$", display: true},
-                                {left: "$", right: "$", display: false},
-                                {left: "\\(", right: "\\)", display: false}
-                            ]
-                            });
+                            hljs.highlightAll();
+                            renderMathInElement(document.body, ${JSON.stringify(katexRenderOptions)});
                         });
                     </script>
                 </body>
@@ -69,8 +70,11 @@ async function sendContentToPreview(content, id) {
             contentContainer.innerHTML = data.html;
             iframe.contentWindow.hljs.highlightAll();
             
-            if (iframe.contentWindow.MathJax && iframe.contentWindow.MathJax.typeset) {
-                iframe.contentWindow.MathJax.typeset();
+            if (iframe.contentWindow.renderMathInElement) {
+                iframe.contentWindow.renderMathInElement(
+                    iframeDoc.body,
+                    katexRenderOptions
+                );
             }
         }
 
