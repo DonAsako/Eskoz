@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %} - {% trans 'Members' %}{% endblock %}
+    {% block SEO %}
+    <meta property="og:type" content="website" />
+    {% endblock %}
+{% block content %}
+    <div class="article_list">
+    <div class="article_list--top">
+        <h2 class="article_list--title">{% trans 'Members' %}</h2>
+    </div>
+        {% if not members %}
+        <h2 class="message-wrapper"></h2>
+            {% trans 'There is no members at the moment.' %}
+        </h2>
+        {% else %}    
+            {% for member in members %}      
+            WIP
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}
