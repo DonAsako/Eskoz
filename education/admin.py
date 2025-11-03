@@ -1,22 +1,56 @@
 from django.contrib import admin
-from root.admin.abstracts import AbstractPostAdmin, AbstractPostTranslationAdmin
-from .models import Lesson, LessonTranslation
+from root.admin.abstracts import (
+    AbstractTranslatableMarkdownItemAdmin,
+    AbstractTranslatableMarkdownItemTranslationAdmin,
+    AbstractCategoryAdmin,
+    AbstractCategoryTranslationAdmin,
+)
+from .models import (
+    Lesson,
+    LessonTranslation,
+    CategoryTranslation,
+    Category,
+    Course,
+    Module,
+)
 
 
-class WriteupTranslationAdmin(AbstractPostTranslationAdmin):
+class CategoryTranslationAdmin(AbstractCategoryTranslationAdmin):
+    model = CategoryTranslation
+
+
+class CategoryAdmin(AbstractCategoryAdmin):
+    inlines = [CategoryTranslationAdmin]
+
+
+class CourseAdmin(admin.ModelAdmin):
+    list_display = ("category", "title")
+
+    prepopulated_fields = {"slug": ("title",)}
+
+
+class ModuleAdmin(admin.ModelAdmin):
+    list_display = ("course__category", "course", "title", "order")
+    prepopulated_fields = {"slug": ("title",)}
+
+
+class LessonTranslationAdmin(AbstractTranslatableMarkdownItemTranslationAdmin):
     model = LessonTranslation
 
 
-class LessonAdmin(AbstractPostAdmin):
-    fieldsets = AbstractPostAdmin.fieldsets + [
+class LessonAdmin(AbstractTranslatableMarkdownItemAdmin):
+    fieldsets = [
         (
             "Course information",
-            {
-                "fields": [
-                    ("module", "order"),
-                ]
-            },
+            {"fields": [("title", "module", "order"), ("slug")]},
         ),
     ]
-    list_display = ("module", "order")
-    inlines = AbstractPostAdmin.inlines + [WriteupTranslationAdmin]
+    prepopulated_fields = {"slug": ("title",)}
+    list_display = ("module__course", "module", "title", "order")
+    inlines = AbstractTranslatableMarkdownItemAdmin.inlines + [LessonTranslationAdmin]
+
+
+admin.site.register(Course, CourseAdmin)
+admin.site.register(Module, ModuleAdmin)
+admin.site.register(Lesson, LessonAdmin)
+admin.site.register(Category, CategoryAdmin)

@@ -1,18 +1,18 @@
 from django.db import models
 from django.utils.text import slugify
 from root.models.abstracts import (
-    Post,
-    PostTranslation,
-    TranslatableCategory,
-    TranslatableCategoryTranslation,
+    AbstractTranslatableMarkdownItem,
+    AbstractTranslatableMarkdownItemTranslation,
+    AbstractTranslatableCategory,
+    AbstractTranslatableCategoryTranslation,
 )
 from django.utils.translation import gettext_lazy as _
 
 
-class Category(TranslatableCategory): ...
+class Category(AbstractTranslatableCategory): ...
 
 
-class CategoryTranslation(TranslatableCategoryTranslation):
+class CategoryTranslation(AbstractTranslatableCategoryTranslation):
     """Concrete category translation."""
 
     category = models.ForeignKey(
@@ -37,6 +37,10 @@ class Course(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
     version = models.FloatField(default=0.01)
+    slug = models.SlugField()
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, related_name="courses"
+    )
 
     def __str__(self):
         """Return the course title as its string representation"""
@@ -64,6 +68,7 @@ class Module(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
     order = models.PositiveIntegerField(default=0)
+    slug = models.SlugField()
 
     def __str__(self):
         """Return the module title as its string representation"""
@@ -74,7 +79,7 @@ class Module(models.Model):
         verbose_name_plural = _("Modules")
 
 
-class Lesson(Post):
+class Lesson(AbstractTranslatableMarkdownItem):
     """
     Represents an individual lesson within a module.
 
@@ -97,12 +102,17 @@ class Lesson(Post):
         """Return the lesson title as its string representation"""
         return f"{self.title}"
 
-    class Meta(Post.Meta):
+    class Meta(AbstractTranslatableMarkdownItem.Meta):
         verbose_name = _("Lesson")
         verbose_name_plural = _("Lessons")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["module", "slug"], name="unique_slug_per_module"
+            )
+        ]
 
 
-class LessonTranslation(PostTranslation):
+class LessonTranslation(AbstractTranslatableMarkdownItemTranslation):
     """
     Represents a translation for a lesson.
     """
@@ -114,7 +124,7 @@ class LessonTranslation(PostTranslation):
         verbose_name=_("Translatable Lesson"),
     )
 
-    class Meta(PostTranslation.Meta):
+    class Meta(AbstractTranslatableMarkdownItemTranslation.Meta):
         verbose_name = _("Lesson Translation")
         verbose_name_plural = _("Lesson Translations")
 
