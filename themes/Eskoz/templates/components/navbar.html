@@ -52,7 +52,7 @@
         {% endif %}
         {% if site_settings.view_page_settings.activate_members_page %}
             <li class="navbar-item">
-                <a href="#members" class="navbar-item--link">{% trans 'Members' %}</a>
+                <a href="{% url 'blog:member_list' %}" class="navbar-item--link">{% trans 'Members' %}</a>
             </li>
             <li class="navbar-item navbar-item--separator">
                     /
@@ -60,7 +60,7 @@
         {% endif %}
         {% if site_settings.view_page_settings.activate_cves_page %}
             <li class="navbar-item">
-                <a href="#CVEs" class="navbar-item--link">{% trans 'CVEs' %}</a>
+                <a href="{% url 'infosec:cve_list' %}" class="navbar-item--link">{% trans 'CVEs' %}</a>
             </li>
         {% endif %}
     </ul>
