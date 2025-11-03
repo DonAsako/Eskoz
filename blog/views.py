@@ -1,30 +1,41 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, Http404
 from django.utils.translation import gettext_lazy as _
 
-from root.views import post_detail, posts_list
-
+from django.contrib.auth.models import User
 from .models import Article, Category, Project
 
 
-def article_detail(request, slug):
+def article_detail(request, slug_category, slug_article):
     """
     Render the detail page for a specific article.
 
     Args:
         request (HttpRequest): The HTTP request object.
-        slug (str): Slug identifying the article.
+        slug_category (str): Slug identifying the category.
+        slug_article (str): Slug identifying the article.
 
     Returns:
         HttpResponse: Rendered article detail page.
     """
-    return post_detail(request, Article, slug, "blog/post_detail.html")
+    category = get_object_or_404(Category, slug=slug_category)
+    article = get_object_or_404(Article, category=category, slug=slug_article)
+    if article.visibility == "private" and not request.user.is_authenticated:
+        raise Http404
+
+    if article.visibility == "protected":
+        if request.method == "POST" and request.POST.get("password") == getattr(
+            article, "password", ""
+        ):
+            return render(request, "blog/article_detail.html", {"article": article})
+
+        return render(request, "blog/article_password.html")
+
+    return render(request, "blog/article_detail.html", {"article": article})
 
 
 def article_list(request, slug=None):
     """
     Render a list of articles, optionally filtered by category slug.
-
-    Uses the generic posts_list function with the Article model.
 
     Args:
         request (HttpRequest): The HTTP request object.
@@ -33,22 +44,42 @@ def article_list(request, slug=None):
     Returns:
         HttpResponse: Rendered articles list page.
     """
-    return posts_list(
+    articles = Article.objects.all()
+    selected_category = None
+    if slug:
+        selected_category = get_object_or_404(Category, slug=slug)
+        articles = articles.filter(category=selected_category)
+
+    categories = Category.objects.filter(articles__isnull=False).distinct()
+
+    return render(
         request,
-        Article,
-        Category,
-        slug,
-        post_type="articles",
-        post_type_trans=_("Articles"),
-        detail_url_name="blog:article_detail",
+        "blog/article_list.html",
+        {
+            "articles": articles,
+            "categories": categories,
+            "selected_category": selected_category,
+        },
     )
+
+
+def member_list(request):
+    """
+    Render a list of all members.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: Rendered projects list page.
+    """
+    members = User.objects.select_related("profile").all()
+    return render(request, "blog/member_list.html", {"members": members})
 
 
 def project_list(request):
     """
     Render a list of all projects.
-
-    Fetches all Project instances and passes them to the 'blog/project_list.html' template.
 
     Args:
         request (HttpRequest): The HTTP request object.
