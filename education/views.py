@@ -1,3 +1,9 @@
-from django.shortcuts import render
+from django.http import HttpResponse
 
-# Create your views here.
+
+def course_list(request, slug=""):
+    return HttpResponse("Work in progress")
+
+
+def course_detail(request, slug=""):
+    return HttpResponse("Work in progress")

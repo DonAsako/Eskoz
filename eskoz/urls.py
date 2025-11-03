@@ -8,6 +8,7 @@ urlpatterns = [
     path("", include("root.urls")),
     path("", include("blog.urls")),
     path("", include("infosec.urls")),
+    path("education/", include("education.urls")),
 ]
 
 if settings.DEBUG:
