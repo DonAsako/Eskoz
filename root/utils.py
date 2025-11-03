@@ -1,5 +1,5 @@
-import uuid
 import os
+import uuid
 
 
 def upload_to_random_filename(instance, filename, folder):

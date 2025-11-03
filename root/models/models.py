@@ -1,12 +1,10 @@
-import base64
-from io import BytesIO
-
 import pyotp
 import qrcode
 import qrcode.image.svg
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
 from root.utils import upload_to_users
 
 

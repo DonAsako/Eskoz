@@ -1,16 +1,17 @@
 import markdown
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.core import checks
 from django.db import models
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
-from django.utils.safestring import mark_safe
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey
-from root.utils import upload_to_settings, upload_to_posts
+
+from root.utils import upload_to_posts, upload_to_settings
 
 
 class TranslatableCategory(models.Model):

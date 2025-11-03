@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from blog.views import post_detail, posts_list
 
-from .models import Certification, Writeup, Category
+from .models import Category, Certification, Writeup
 
 
 def writeup_detail(request, slug):

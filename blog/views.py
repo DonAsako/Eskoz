@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
-from .models import Article, Project, Category
 from root.views import post_detail, posts_list
+
+from .models import Article, Category, Project
 
 
 def article_detail(request, slug):
