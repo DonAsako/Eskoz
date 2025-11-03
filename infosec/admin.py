@@ -5,6 +5,7 @@ from root.admin import (
     AbstractPostTranslationAdmin,
     AbstractCategoryAdmin,
     AbstractCategoryTranslationAdmin,
+    AbstractTagAdmin,
 )
 
 from .models import (
@@ -47,8 +48,7 @@ class CategoryAdmin(AbstractCategoryAdmin):
     inlines = [CategoryTranslationAdmin]
 
 
-class TagAdmin(admin.ModelAdmin):
-    search_fields = ["title"]
+class TagAdmin(AbstractTagAdmin): ...
 
 
 admin.site.register(Writeup, WritupAdmin)

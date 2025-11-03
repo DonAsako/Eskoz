@@ -8,7 +8,7 @@ from root.forms import AbstractTranslatableMarkdownItemAdminForm
 from root.models import TranslatableMarkdownItemImage
 
 
-class ImagePostAdmin(GenericTabularInline):
+class TranslatableMarkdownImageAdmin(GenericTabularInline):
     model = TranslatableMarkdownItemImage
     extra = 1
     fields = ("picture", "image_display", "image_url")
@@ -36,12 +36,13 @@ class ImagePostAdmin(GenericTabularInline):
     image_url.short_description = "URL"
 
 
-class AbstractPostTranslationAdmin(admin.StackedInline):
+class AbstractTranslatableMarkdownItemTranslationAdmin(admin.StackedInline):
     abstract = True
-    form = AbstractTranslatableMarkdownItemAdminForm
-    readonly_fields = ["reading_time"]
     extra = 1
     can_delete = True
+    form = AbstractTranslatableMarkdownItemAdminForm
+
+    readonly_fields = ["reading_time"]
 
     def reading_time(self, obj):
         return f"{obj.get_reading_time()} {_('min')}"
@@ -56,15 +57,27 @@ class AbstractPostTranslationAdmin(admin.StackedInline):
         )
 
 
-class AbstractPostAdmin(admin.ModelAdmin):
+class AbstractTranslatableMarkdownItemAdmin(admin.ModelAdmin):
+    """Base adnin for all AbstractTranslatableMarkdownItem-like models."""
+
+    abstract = True
+    actions = [backup]
+    inlines = [TranslatableMarkdownImageAdmin]
+
+
+class AbstractPostTranslationAdmin(
+    AbstractTranslatableMarkdownItemTranslationAdmin
+): ...
+
+
+class AbstractPostAdmin(AbstractTranslatableMarkdownItemAdmin):
     """Base admin for all Post-like models."""
 
+    abstract = True
     list_display = ("title", "published_on", "visibility")
     autocomplete_fields = ["tags", "category"]
     readonly_fields = ["edited_on"]
     prepopulated_fields = {"slug": ("title",)}
-    actions = [backup]
-    inlines = [ImagePostAdmin]
     fieldsets = [
         (
             "General",
@@ -82,10 +95,12 @@ class AbstractPostAdmin(admin.ModelAdmin):
     ]
 
     class Media:
-        js = ("script/article_edit.js",)
+        js = ("admin/js/post_visibility_edit.js",)
 
 
 class AbstractCategoryAdmin(admin.ModelAdmin):
+    abstract = True
+
     list_display = ("title", "slug")
     search_fields = ["title"]
 
@@ -95,8 +110,7 @@ class AbstractCategoryTranslationAdmin(admin.StackedInline):
     extra = 1
     can_delete = True
 
-    # Nom du champ pointant vers le parent (à redéfinir dans les sous-classes)
-    parent_field_name = "category"  # valeur par défaut
+    parent_field_name = "category"
 
     def get_extra(self, request, obj=None, **kwargs):
         """
@@ -109,3 +123,9 @@ class AbstractCategoryTranslationAdmin(admin.StackedInline):
         parent_field = {self.parent_field_name: obj}
         has_existing = self.model.objects.filter(**parent_field).exists()
         return 1 if not has_existing else 0
+
+
+class AbstractTagAdmin(admin.ModelAdmin):
+    abstract = True
+
+    search_fields = ["title"]

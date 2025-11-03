@@ -7,6 +7,7 @@ from root.admin import (
     AbstractPostTranslationAdmin,
     AbstractCategoryAdmin,
     AbstractCategoryTranslationAdmin,
+    AbstractTagAdmin,
 )
 
 from .models import (
@@ -17,10 +18,6 @@ from .models import (
     CategoryTranslation,
     Project,
 )
-
-
-class TagAdmin(admin.ModelAdmin):
-    search_fields = ["title"]
 
 
 class ArticleTranslationAdmin(AbstractPostTranslationAdmin):
@@ -60,6 +57,9 @@ class ProjectAdmin(admin.ModelAdmin):
         return "-"
 
     picture_thumbnail.short_description = _("Thumbnail")
+
+
+class TagAdmin(AbstractTagAdmin): ...
 
 
 admin.site.register(Article, ArticleAdmin)
