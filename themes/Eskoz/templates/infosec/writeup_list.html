@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %} -  {% trans 'Writeups' %}}{% endblock %}
+    {% block SEO %}
+    <meta property="og:type" content="website" />
+    {% endblock %}
+{% block content %}
+    <div class="article_list">
+    <div class="article_list--top">
+        <h2 class="article_list--title">{% trans 'Writeups' %}</h2>
+        {% include "components/category_selector.html" with categories=categories base_url="writeups"%}
+        
+    </div>
+        {% if not articles %}
+        <h2 class="message-wrapper"></h2>
+            {% trans 'There is no writeups at the moment.' %}
+        </h2>
+        {% else %}    
+            {% for writeup in writeups.all|dictsortreversed:"published_on" %}
+                <a class="article_card" href="{% url 'infosec:writeup_detail' writeup.ctf.slug writeup.slug %}">
+                    <div class="article_card--top">
+                        <div class="article_card--top-left">
+                            <p class="article_card--title">{{ writeup.get_translation.title }}</p>
+                        </div>
+                        {% if writeup.category %}
+                            <p class="article_card--category">{{ writeup.category }}</p>
+                        {% endif %}
+                    </div>
+                    {% if writeup.get_translation.description %}
+                        <p class="article_card--description">“{{ writeup.get_translation.description|default_if_none:'' }}”</p>
+                    {% endif %}
+                    <div class="article_card--bottom">
+                        <p class="article_card--date">{{ writeup.published_on|date:"j F Y" }}</p>
+
+                        <div class="article_card--tags">
+                            {% for tag in writeup.tags.all %}
+                                <p class="article_card--tag">{{ tag.title }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}

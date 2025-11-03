@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.css" integrity="sha384-WcoG4HRXMzYzfCgiyfrySxx90XSl2rxY5mnVY5TwtWE6KLrArNKn0T/mOgNL0Mmi" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.js" integrity="sha384-J+9dG2KMoiR9hqcFao0IBLwxt6zpcyN68IgwzsCSkbreXUjmNVRhPFTssqdSGjwQ" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"
+        onload="renderMathInElement(document.querySelector('article--content'));"></script>
+{% load static %}
+{% with markdown_css=ACTIVE_THEME|add:"/css/markdown.css" %}
+    <link rel="stylesheet" href="{% static markdown_css %}">
+{% endwith %}
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+{% endblock %}
+{% block title %} - {{ writeup.get_translation.title }}{% endblock %}
+{% block SEO %}
+    <meta property="og:type" content="article" />
+    <meta property="article:published_time" content="{{ writeup.published_on.isoformat }}" />
+    <meta property="article:modified_time" content="{{ writeup.edited_on.isoformat }}" />
+    {% for tag in writeup.tags.all %}<meta property="article:tag" content="{{ tag.title }}" />{% endfor %}
+{% endblock %}cd
+{% block content %}
+<div class="article--container">
+    <div class="article--wrapper">
+        {% if writeup.picture %} <div class="article--picture-wrapper"><img src="{{ writeup.picture.url }}"></div> {% endif %}
+        <div class="article--content markdown-body">
+            {{ writeup.get_translation.get_content_as_html }}
+        </div>
+    </div>
+    {% include 'components/toc.html' %}
+</div>
+<script>
+    hljs.highlightAll();
+    document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "\\[", right: "\\]", display: true},
+        {left: "$$", right: "$$", display: true},
+        {left: "$", right: "$", display: false},
+        {left: "\\(", right: "\\)", display: false}
+      ]
+    });
+});
+</script>
+{% endblock %}
