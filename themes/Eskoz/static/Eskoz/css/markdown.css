@@ -8,12 +8,12 @@
 p {
     margin: .25em 0;
 }
-.markdown-body mjx-container, .markdown-body pre code {
+.markdown-body pre code {
   overflow-x: auto;
   text-wrap: wrap;
 }
-.markdown-body li mjx-container {
-  text-align: left !important;
+.katex-display *{
+  text-align: center !important;
 }
 .markdown-body pre code.hljs{
   text-wrap: nowrap;
@@ -62,7 +62,4 @@ p {
     overflow: hidden;
     color: var(--font-color);
     margin: .25em 0;
-}
-mjx-container *, mjx-mrow *{
-  line-height: 0 !important;
 }
