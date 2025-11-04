@@ -12,7 +12,7 @@ p {
   overflow-x: auto;
   text-wrap: wrap;
 }
-.katex-display *{
+.katex-display .katex-html{
   text-align: center !important;
 }
 .markdown-body pre code.hljs{
