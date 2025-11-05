@@ -6,4 +6,4 @@ class RootConfig(AppConfig):
     name = "root"
 
     def ready(self):
-        pass
+        import root.signals
