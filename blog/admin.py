@@ -47,6 +47,7 @@ class ProjectAdmin(admin.ModelAdmin):
     search_fields = ("name", "description")
     list_filter = ()
     ordering = ("name",)
+    autocomplete_fields = ["tags"]
 
     def picture_thumbnail(self, obj):
         if obj.picture:
