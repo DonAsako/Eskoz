@@ -147,3 +147,9 @@ class AbstractTagAdmin(admin.ModelAdmin):
     abstract = True
 
     search_fields = ["title"]
+
+
+class AbstractSubModuleInline(admin.StackedInline):
+    abstract = True
+    can_delete = False
+    extra = 0

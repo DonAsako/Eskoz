@@ -153,7 +153,7 @@ class BlogSettings(models.Model):
     )
 
     def __str__(self):
-        return ""
+        return gettext("Active") if self.is_active else ""
 
 
 class InfosecSettings(models.Model):
@@ -178,7 +178,7 @@ class InfosecSettings(models.Model):
     )
 
     def __str__(self):
-        return ""
+        return gettext("Active") if self.is_active else ""
 
 
 class EducationSettings(models.Model):
@@ -196,7 +196,7 @@ class EducationSettings(models.Model):
     )
 
     def __str__(self):
-        return ""
+        return gettext("Active") if self.is_active else ""
 
 
 class Page(models.Model):

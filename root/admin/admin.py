@@ -6,16 +6,17 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
+from root.admin.abstracts import AbstractSubModuleInline
 from root.forms import PageAdminForm, UserProfileAdminForm
 from root.models import (
+    BlogSettings,
+    EducationSettings,
+    InfosecSettings,
     Page,
     SeoSettings,
     SiteSettings,
     UserLink,
     UserProfile,
-    InfosecSettings,
-    BlogSettings,
-    EducationSettings,
     WellKnownFile,
 )
 
@@ -59,24 +60,18 @@ class SeoSettingsInline(admin.StackedInline):
     ]
 
 
-class EducationSettingsInline(admin.StackedInline):
+class EducationSettingsInline(AbstractSubModuleInline):
     model = EducationSettings
-    can_delete = False
-    extra = 0
     verbose_name = _("Education Settings")
 
 
-class InfosecSettingsInline(admin.StackedInline):
+class InfosecSettingsInline(AbstractSubModuleInline):
     model = InfosecSettings
-    can_delete = False
-    extra = 0
     verbose_name = _("Infosec Settings")
 
 
-class BlogSettingsInline(admin.StackedInline):
+class BlogSettingsInline(AbstractSubModuleInline):
     model = BlogSettings
-    can_delete = False
-    extra = 0
     verbose_name = _("Blog Settings")
 
 
@@ -101,6 +96,9 @@ class SiteSettingsAdmin(admin.ModelAdmin):
             url = reverse("admin:root_sitesettings_change", args=[obj.pk])
             return redirect(url)
         return super().changelist_view(request, extra_context)
+
+    class Media:
+        js = ("admin/js/settings_admin.js",)
 
 
 class PageAdmin(admin.ModelAdmin):
