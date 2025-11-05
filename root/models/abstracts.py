@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core import checks
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.utils.safestring import mark_safe
@@ -16,7 +17,10 @@ from root.utils import upload_to_posts, upload_to_settings
 
 class AbstractTranslatableCategory(models.Model):
     """
-    Abstract base model for categories that can have translations.
+    Abstract base model for categories that support translations.
+
+    Each concrete category model can have multiple translations linked
+    through a related translation model.
 
     Attributes:
         title (CharField): The title of the category.
@@ -53,6 +57,13 @@ class AbstractTranslatableCategory(models.Model):
             )
         return translation
 
+    def delete(self, *args, **kwargs):
+        if self.slug == "undefined" or self.title.lower() == "undefined":
+            raise ValidationError(
+                _("The default 'Undefined' category cannot be deleted.")
+            )
+        super().delete(*args, **kwargs)
+
     def save(self, *args, **kwargs):
         """
         Automatically generate a slug from the title if not provided,
@@ -74,17 +85,19 @@ class AbstractTranslatableCategory(models.Model):
 
 class AbstractTranslatableCategoryTranslation(models.Model):
     """
-    Return the translation of the category for the specified language.
+    Abstract base model representing a translation for a category.
 
-    If no translation exists for the given language, fallback to English
-    or any available translation.
+    Each instance corresponds to a translated version of a category for a specific language.
+    If no translation exists for a requested language, it may fall back to English or
+    any other available translation.
 
-    Args:
-        language (str, optional): Language code to get the translation.
-                                    Defaults to current active language.
+    Attributes:
+        category (ForeignKey): The category associated with this translation.
+        language (str): The language code of this translation (e.g., 'en', 'fr').
+        title (str): The title of the category in the specified language.
 
-    Returns:
-        Model instance: The corresponding translation instance.
+    Methods:
+        __str__(): Returns a string representation in the format "category_slug (language)".
     """
 
     category = models.ForeignKey(
