@@ -1,3 +1,7 @@
+import markdown
+from django.urls import path
+from django.http import JsonResponse, HttpResponse
+
 from django.contrib.admin import AdminSite
 from django.utils.translation import gettext_lazy as _
 from root.models import SiteSettings
@@ -48,6 +52,38 @@ class EskozAdminSite(AdminSite):
                     request, str(site_settings.pk), extra_context=extra_context
                 )
         return super().index(request, extra_context)
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                "content_preview/",
+                self.admin_view(self.content_preview),
+                name="content_preview",
+            ),
+        ]
+        return custom_urls + urls
+
+    def content_preview(self, request):
+        if request.method == "POST":
+            content = request.POST.get("content", "")
+            html = markdown.markdown(
+                content,
+                extensions=[
+                    "extra",
+                    "codehilite",
+                    "fenced_code",
+                    "toc",
+                    "pymdownx.arithmatex",
+                ],
+                extension_configs={
+                    "pymdownx.arithmatex": {
+                        "generic": True,
+                    }
+                },
+            )
+            return JsonResponse({"html": (html)})
+        return HttpResponse(request, status="401")
 
 
 admin_site = EskozAdminSite(name="admin")

@@ -2,3 +2,7 @@
     <textarea class="editor-content--editor" name="{{widget.name}}" id="{{widget.name}}">{{ widget.value | default_if_none:'' }}</textarea>
     <iframe class="editor-content--viewer" id="render-{{widget.name}}"></iframe>
 </div>
+
+<script>
+    window.CONTENT_PREVIEW_URL = "{{ content_preview_url }}";
+</script>
