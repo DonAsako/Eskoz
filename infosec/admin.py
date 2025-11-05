@@ -1,12 +1,13 @@
 from django.contrib import admin
 
 from root.admin import (
-    AbstractPostAdmin,
-    AbstractPostTranslationAdmin,
     AbstractCategoryAdmin,
     AbstractCategoryTranslationAdmin,
+    AbstractPostAdmin,
+    AbstractPostTranslationAdmin,
     AbstractTagAdmin,
 )
+from root.admin.site import admin_site
 
 from .models import (
     CTF,
@@ -51,10 +52,10 @@ class CategoryAdmin(AbstractCategoryAdmin):
 class TagAdmin(AbstractTagAdmin): ...
 
 
-admin.site.register(Writeup, WritupAdmin)
-admin.site.register(CTF, admin.ModelAdmin)
-admin.site.register(Certification, admin.ModelAdmin)
-admin.site.register(Issuer, admin.ModelAdmin)
-admin.site.register(CVE, admin.ModelAdmin)
-admin.site.register(WriteupTag, TagAdmin)
-admin.site.register(Category, CategoryAdmin)
+admin_site.register(Writeup, WritupAdmin)
+admin_site.register(CTF, admin.ModelAdmin)
+admin_site.register(Certification, admin.ModelAdmin)
+admin_site.register(Issuer, admin.ModelAdmin)
+admin_site.register(CVE, admin.ModelAdmin)
+admin_site.register(WriteupTag, TagAdmin)
+admin_site.register(Category, CategoryAdmin)

@@ -1,4 +1,5 @@
 from django.contrib import admin
+from root.admin.site import admin_site
 from root.admin.abstracts import (
     AbstractTranslatableMarkdownItemAdmin,
     AbstractTranslatableMarkdownItemTranslationAdmin,
@@ -50,7 +51,7 @@ class LessonAdmin(AbstractTranslatableMarkdownItemAdmin):
     inlines = AbstractTranslatableMarkdownItemAdmin.inlines + [LessonTranslationAdmin]
 
 
-admin.site.register(Course, CourseAdmin)
-admin.site.register(Module, ModuleAdmin)
-admin.site.register(Lesson, LessonAdmin)
-admin.site.register(Category, CategoryAdmin)
+admin_site.register(Course, CourseAdmin)
+admin_site.register(Module, ModuleAdmin)
+admin_site.register(Lesson, LessonAdmin)
+admin_site.register(Category, CategoryAdmin)

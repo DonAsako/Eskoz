@@ -7,6 +7,7 @@ from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 from root.admin.abstracts import AbstractSubModuleInline
+from root.admin.site import admin_site
 from root.forms import PageAdminForm, UserProfileAdminForm
 from root.models import (
     BlogSettings,
@@ -146,7 +147,7 @@ class UserAdmin(BaseUserAdmin):
     inlines = [UserProfileInline, UserLinkInline]
 
 
-admin.site.unregister(User)
-admin.site.register(User, UserAdmin)
-admin.site.register(SiteSettings, SiteSettingsAdmin)
-admin.site.register(Page, PageAdmin)
+# admin_site.unregister(User)
+admin_site.register(User, UserAdmin)
+admin_site.register(SiteSettings, SiteSettingsAdmin)
+admin_site.register(Page, PageAdmin)

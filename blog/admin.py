@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
-
+from root.admin.site import admin_site
 from root.admin import (
     AbstractPostAdmin,
     AbstractPostTranslationAdmin,
@@ -62,7 +62,7 @@ class ProjectAdmin(admin.ModelAdmin):
 class TagAdmin(AbstractTagAdmin): ...
 
 
-admin.site.register(Article, ArticleAdmin)
-admin.site.register(Category, CategoryAdmin)
-admin.site.register(Project, ProjectAdmin)
-admin.site.register(ArticleTag, TagAdmin)
+admin_site.register(Article, ArticleAdmin)
+admin_site.register(Category, CategoryAdmin)
+admin_site.register(Project, ProjectAdmin)
+admin_site.register(ArticleTag, TagAdmin)
