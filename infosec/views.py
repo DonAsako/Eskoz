@@ -1,9 +1,12 @@
-from django.shortcuts import render, get_object_or_404, Http404
+from django.shortcuts import Http404, get_object_or_404, render
 from django.utils.translation import gettext_lazy as _
 
-from .models import Category, Certification, Writeup, CVE
+from root.decorators import feature_active_required
+
+from .models import CVE, Category, Certification, Writeup
 
 
+@feature_active_required(module_name="infosec", feature_name="writeups")
 def writeup_detail(request, slug_category, slug_writeup):
     """
     Render the detail page of a specific writeup.
@@ -32,6 +35,7 @@ def writeup_detail(request, slug_category, slug_writeup):
     return render(request, "infosec/writeup_detail.html", {"writeup": writeup})
 
 
+@feature_active_required(module_name="infosec", feature_name="writeups")
 def writeup_list(request, slug=None):
     """
     Render a list of writeups.
@@ -62,6 +66,7 @@ def writeup_list(request, slug=None):
     )
 
 
+@feature_active_required(module_name="infosec", feature_name="certifications")
 def certification_list(request):
     """
     Render a list of all certifications.
@@ -78,6 +83,7 @@ def certification_list(request):
     )
 
 
+@feature_active_required(module_name="infosec", feature_name="cves")
 def cve_list(request):
     """
     Render a list of all CVEs

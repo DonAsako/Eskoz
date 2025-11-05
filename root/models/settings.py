@@ -146,10 +146,10 @@ class BlogSettings(models.Model):
         default=False, verbose_name=_("Show members page")
     )
     activate_projects_page = models.BooleanField(
-        default=True, verbose_name=_("Show project page")
+        default=True, verbose_name=_("Show projects page")
     )
     activate_articles_page = models.BooleanField(
-        default=True, verbose_name=_("Show article page")
+        default=True, verbose_name=_("Show articles page")
     )
 
     def __str__(self):
@@ -167,14 +167,14 @@ class InfosecSettings(models.Model):
         default=False, verbose_name=_("Activate Infosec Module")
     )
     activate_certifications_page = models.BooleanField(
-        default=True, verbose_name=_("Show certification page")
+        default=True, verbose_name=_("Show certifications page")
     )
 
     activate_cves_page = models.BooleanField(
-        default=True, verbose_name=_("Show cve page")
+        default=True, verbose_name=_("Show CVEs page")
     )
     activate_writeups_page = models.BooleanField(
-        default=True, verbose_name=_("Show writeup page")
+        default=True, verbose_name=_("Show writeups page")
     )
 
     def __str__(self):

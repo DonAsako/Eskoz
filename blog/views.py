@@ -1,10 +1,13 @@
-from django.shortcuts import render, get_object_or_404, Http404
+from django.contrib.auth.models import User
+from django.shortcuts import Http404, get_object_or_404, render
 from django.utils.translation import gettext_lazy as _
 
-from django.contrib.auth.models import User
+from root.decorators import feature_active_required
+
 from .models import Article, Category, Project
 
 
+@feature_active_required(module_name="blog", feature_name="articles")
 def article_detail(request, slug_category, slug_article):
     """
     Render the detail page for a specific article.
@@ -33,6 +36,7 @@ def article_detail(request, slug_category, slug_article):
     return render(request, "blog/article_detail.html", {"article": article})
 
 
+@feature_active_required(module_name="blog", feature_name="articles")
 def article_list(request, slug=None):
     """
     Render a list of articles, optionally filtered by category slug.
@@ -63,6 +67,7 @@ def article_list(request, slug=None):
     )
 
 
+@feature_active_required(module_name="blog", feature_name="members")
 def member_list(request):
     """
     Render a list of all members.
@@ -77,6 +82,7 @@ def member_list(request):
     return render(request, "blog/member_list.html", {"members": members})
 
 
+@feature_active_required(module_name="blog", feature_name="projects")
 def project_list(request):
     """
     Render a list of all projects.
