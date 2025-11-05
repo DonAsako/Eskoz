@@ -18,56 +18,64 @@
                 /
             </li>
         {% endfor %}
-        {% if site_settings.view_page_settings.activate_projects_page %}
-            <li class="navbar-item">
-                <a href="{% url 'blog:project_list' %}" class="navbar-item--link">{% trans 'Projects' %}</a>
-            </li>
-            <li class="navbar-item navbar-item--separator">
-                /
-            </li>
+        {% if site_settings.blog.is_active %}
+            {% if site_settings.blog.activate_projects_page %}
+                <li class="navbar-item">
+                    <a href="{% url 'blog:project_list' %}" class="navbar-item--link">{% trans 'Projects' %}</a>
+                </li>
+            {% endif %}
+            {% if site_settings.blog.activate_articles_page %}
+                <li class="navbar-item navbar-item--separator">
+                    /
+                </li>
+                <li class="navbar-item">
+                    <a href="{% url 'blog:article_list' %}" class="navbar-item--link">{% trans 'Articles' %}</a>
+                </li>
+            {% endif %}
+            {% if site_settings.blog.activate_members_page %}
+                <li class="navbar-item navbar-item--separator">
+                    /
+                </li>
+                <li class="navbar-item">
+                    <a href="{% url 'blog:member_list' %}" class="navbar-item--link">{% trans 'Members' %}</a>
+                </li>
+            {% endif %}
         {% endif %}
-        {% if site_settings.view_page_settings.activate_certifications_page %}
-            <li class="navbar-item">
-                <a href="{% url 'infosec:certification_list' %}" class="navbar-item--link">{% trans 'Certifications' %}</a>
-            </li>
-            <li class="navbar-item navbar-item--separator">
-                /
-            </li>
+        {% if site_settings.infosec.is_active %}
+            {% if site_settings.infosec.activate_certifications_page %}
+                <li class="navbar-item navbar-item--separator">
+                    /
+                </li>
+                <li class="navbar-item">
+                    <a href="{% url 'infosec:certification_list' %}" class="navbar-item--link">{% trans 'Certifications' %}</a>
+                </li>
+            {% endif %}
+            {% if site_settings.infosec.activate_writeups_page %}
+                <li class="navbar-item navbar-item--separator">
+                    /
+                </li>
+                <li class="navbar-item">
+                    <a href="{% url 'infosec:writeup_list' %}" class="navbar-item--link">{% trans 'Writeups' %}</a>
+                </li>
+            {% endif %}
+            {% if site_settings.infosec.activate_cves_page %}
+                <li class="navbar-item navbar-item--separator">
+                    /
+                </li>
+                <li class="navbar-item">
+                    <a href="{% url 'infosec:cve_list' %}" class="navbar-item--link">{% trans 'CVEs' %}</a>
+                </li>
+            {% endif %}
         {% endif %}
-        {% if site_settings.view_page_settings.activate_writeups_page %}
-            <li class="navbar-item">
-                <a href="{% url 'infosec:writeup_list' %}" class="navbar-item--link">{% trans 'Writeups' %}</a>
-            </li>
-            <li class="navbar-item navbar-item--separator">
-                /
-            </li>
-        {% endif %}
-        {% if site_settings.view_page_settings.activate_articles_page %}
-            <li class="navbar-item">
-                <a href="{% url 'blog:article_list' %}" class="navbar-item--link">{% trans 'Articles' %}</a>
-            </li>
-            <li class="navbar-item navbar-item--separator">
-                /
-            </li>
-        {% endif %}
-        {% if site_settings.view_page_settings.activate_members_page %}
-            <li class="navbar-item">
-                <a href="{% url 'blog:member_list' %}" class="navbar-item--link">{% trans 'Members' %}</a>
-            </li>
+        {% if site_settings.education.is_active %}
+            {% if site_settings.education.activate_courses_page %}
             <li class="navbar-item navbar-item--separator">
                     /
             </li>
-        {% endif %}
-        {% if site_settings.view_page_settings.activate_cves_page %}
             <li class="navbar-item">
-                <a href="{% url 'infosec:cve_list' %}" class="navbar-item--link">{% trans 'CVEs' %}</a>
+                <a href="{% url 'education:course_list' %}" class="navbar-item--link">{% trans 'Education' %}</a>
             </li>
-            <li class="navbar-item navbar-item--separator">
-                    /
-            </li>
+            {% endif %}
         {% endif %}
-        <li class="navbar-item">
-            <a href="{% url 'education:course_list' %}" class="navbar-item--link">{% trans 'Education' %}</a>
-        </li>
     </ul>
 </nav>

@@ -13,7 +13,9 @@ from root.models import (
     SiteSettings,
     UserLink,
     UserProfile,
-    ViewPageSettings,
+    InfosecSettings,
+    BlogSettings,
+    EducationSettings,
     WellKnownFile,
 )
 
@@ -57,15 +59,35 @@ class SeoSettingsInline(admin.StackedInline):
     ]
 
 
-class ViewPageSettingsInline(admin.StackedInline):
-    model = ViewPageSettings
+class EducationSettingsInline(admin.StackedInline):
+    model = EducationSettings
     can_delete = False
     extra = 0
-    verbose_name = _("View Page Settings")
+    verbose_name = _("Education Settings")
+
+
+class InfosecSettingsInline(admin.StackedInline):
+    model = InfosecSettings
+    can_delete = False
+    extra = 0
+    verbose_name = _("Infosec Settings")
+
+
+class BlogSettingsInline(admin.StackedInline):
+    model = BlogSettings
+    can_delete = False
+    extra = 0
+    verbose_name = _("Blog Settings")
 
 
 class SiteSettingsAdmin(admin.ModelAdmin):
-    inlines = [WellKnownFileInline, SeoSettingsInline, ViewPageSettingsInline]
+    inlines = [
+        WellKnownFileInline,
+        SeoSettingsInline,
+        EducationSettingsInline,
+        InfosecSettingsInline,
+        BlogSettingsInline,
+    ]
 
     def has_add_permission(self, request):
         return not SiteSettings.objects.exists()

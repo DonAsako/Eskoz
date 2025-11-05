@@ -10,7 +10,9 @@ from .models import (
     SeoSettings,
     SiteSettings,
     UserProfile,
-    ViewPageSettings,
+    InfosecSettings,
+    BlogSettings,
+    EducationSettings,
     AbstractTranslatableCategory,
     AbstractTranslatableCategoryTranslation,
 )
@@ -65,7 +67,9 @@ def create_undefined_categories(sender, **kwargs):
 @receiver(post_save, sender=SiteSettings)
 def create_related_settings(sender, instance, **kwargs):
     SeoSettings.objects.get_or_create(site_settings=instance)
-    ViewPageSettings.objects.get_or_create(site_settings=instance)
+    InfosecSettings.objects.get_or_create(site_settings=instance)
+    BlogSettings.objects.get_or_create(site_settings=instance)
+    EducationSettings.objects.get_or_create(site_settings=instance)
 
 
 # Create UserProfile on creation of User

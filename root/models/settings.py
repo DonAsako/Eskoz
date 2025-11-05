@@ -132,15 +132,18 @@ class WellKnownFile(models.Model):
         verbose_name_plural = _("WellKnown Files")
 
 
-class ViewPageSettings(models.Model):
+class BlogSettings(models.Model):
     site_settings = models.OneToOneField(
         SiteSettings,
         on_delete=models.CASCADE,
-        related_name="view_page_settings",
-        verbose_name=_("View page settings"),
+        related_name="blog",
+        verbose_name=_("Blog settings"),
     )
-    activate_certifications_page = models.BooleanField(
-        default=True, verbose_name=_("Show certification page")
+    is_active = models.BooleanField(
+        default=True, verbose_name=_("Activate Blog Module")
+    )
+    activate_members_view = models.BooleanField(
+        default=False, verbose_name=_("Show members page")
     )
     activate_projects_page = models.BooleanField(
         default=True, verbose_name=_("Show project page")
@@ -148,14 +151,48 @@ class ViewPageSettings(models.Model):
     activate_articles_page = models.BooleanField(
         default=True, verbose_name=_("Show article page")
     )
+
+    def __str__(self):
+        return ""
+
+
+class InfosecSettings(models.Model):
+    site_settings = models.OneToOneField(
+        SiteSettings,
+        on_delete=models.CASCADE,
+        related_name="infosec",
+        verbose_name=_("Infosec settings"),
+    )
+    is_active = models.BooleanField(
+        default=False, verbose_name=_("Activate Infosec Module")
+    )
+    activate_certifications_page = models.BooleanField(
+        default=True, verbose_name=_("Show certification page")
+    )
+
     activate_cves_page = models.BooleanField(
         default=True, verbose_name=_("Show cve page")
     )
     activate_writeups_page = models.BooleanField(
         default=True, verbose_name=_("Show writeup page")
     )
-    activate_members_page = models.BooleanField(
-        default=True, verbose_name=_("Show member page")
+
+    def __str__(self):
+        return ""
+
+
+class EducationSettings(models.Model):
+    site_settings = models.OneToOneField(
+        SiteSettings,
+        on_delete=models.CASCADE,
+        related_name="education",
+        verbose_name=_("Education settings"),
+    )
+    is_active = models.BooleanField(
+        default=False, verbose_name=_("Activate Education Module")
+    )
+    activate_courses_page = models.BooleanField(
+        default=False, verbose_name=_("Show courses page")
     )
 
     def __str__(self):
