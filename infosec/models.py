@@ -277,6 +277,11 @@ class Writeup(AbstractPost):
         WriteupTag, related_name="posts", blank=True, verbose_name=_("Tags")
     )
 
+    def save(self, *args, **kwargs):
+        if not self.category_id:
+            self.category = Category.objects.get(slug="undefined")
+        super().save(*args, **kwargs)
+
     def __str__(self):
         """Return the title of the writeup and its associated CTF name."""
         return f"{self.title} ({self.ctf.name if self.ctf else 'No CTF'})"

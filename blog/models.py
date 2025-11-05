@@ -46,6 +46,11 @@ class Article(AbstractPost):
         ArticleTag, related_name="posts", blank=True, verbose_name=_("Tags")
     )
 
+    def save(self, *args, **kwargs):
+        if not self.category_id:
+            self.category = Category.objects.get(slug="undefined")
+        super().save(*args, **kwargs)
+
     class Meta(AbstractPost.Meta):
         verbose_name = _("Article")
         verbose_name_plural = _("Articles")

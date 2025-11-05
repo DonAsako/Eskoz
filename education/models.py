@@ -39,8 +39,13 @@ class Course(models.Model):
     version = models.FloatField(default=0.01)
     slug = models.SlugField()
     category = models.ForeignKey(
-        Category, on_delete=models.CASCADE, related_name="courses"
+        Category, on_delete=models.CASCADE, related_name="courses", blank=True
     )
+
+    def save(self, *args, **kwargs):
+        if not self.category_id:
+            self.category = Category.objects.get(slug="undefined")
+        super().save(*args, **kwargs)
 
     def __str__(self):
         """Return the course title as its string representation"""
