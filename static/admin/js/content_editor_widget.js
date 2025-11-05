@@ -4,7 +4,7 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 async function sendContentToPreview(content, id) {
-    const response = await fetch("/content_preview/", {
+    const response = await fetch(window.CONTENT_PREVIEW_URL, {
         method: "POST",
         headers: {
             "X-CSRFToken": getCookie("csrftoken"),
