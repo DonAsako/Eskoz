@@ -1,5 +1,6 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.contenttypes.admin import GenericTabularInline
+from django.core.exceptions import ValidationError
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
@@ -103,6 +104,27 @@ class AbstractCategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
     list_display = ("title", "slug")
     search_fields = ["title"]
+
+    def delete_model(self, request, obj):
+        try:
+            super().delete_model(request, obj)
+        except ValidationError as e:
+            self.message_user(
+                request,
+                f"Cannot delete category '{obj}': {e.messages[0]}",
+                level=messages.ERROR,
+            )
+
+    def delete_queryset(self, request, queryset):
+        for obj in queryset:
+            try:
+                obj.delete()
+            except ValidationError as e:
+                self.message_user(
+                    request,
+                    f"Cannot delete category '{obj}': {e.messages[0]}",
+                    level=messages.ERROR,
+                )
 
 
 class AbstractCategoryTranslationAdmin(admin.StackedInline):
