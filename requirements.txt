@@ -9,3 +9,4 @@ pyotp==2.9.0
 python-dotenv==1.2.1
 qrcode==8.2
 sqlparse==0.5.3
+pymdown-extensions==10.16.1
