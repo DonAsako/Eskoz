@@ -12,12 +12,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/base16/dracula.min.css" integrity="sha512-zKpFlhUX8c+WC6H/XTJavnEpWFt2zH9BU9vu0Hry5Y+SEgG21pRMFcecS7DgDXIegXBQ3uK9puwWPP3h6WSR9g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js" integrity="sha512-EBLzUL8XLl+va/zAsmXwS7Z2B1F9HUHkZwyS/VKwh3S7T/U0nF4BaU29EP/ZSf6zgiIxYAnKLu6bJ8dqpmX5uw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {% endblock %}
-{% block title %} - {{ writeup.get_translation.title }}{% endblock %}
+{% block title %} - {{ lesson.title }}{% endblock %}
 {% block SEO %}
     <meta property="og:type" content="article" />
-    <!-- <meta property="article:published_time" content="{{ writeup.published_on.isoformat }}" /> -->
-    <!-- <meta property="article:modified_time" content="{{ writeup.edited_on.isoformat }}" /> -->
-    <!-- {% for tag in writeup.tags.all %}<meta property="article:tag" content="{{ tag.title }}" />{% endfor %} -->
+    <meta property="article:published_time" content="{{ lesson.title }}" />
 {% endblock %}cd
 {% block content %}
 <h2 class="article_list--title">{{ lesson.get_translation.title }}</h2>
