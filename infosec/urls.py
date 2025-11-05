@@ -10,7 +10,7 @@ from .views import (
 app_name = "infosec"
 urlpatterns = [
     path(
-        "writeups/<slug:category_slug>/<slug:writeup_slug>/",
+        "writeups/<slug:slug_category>/<slug:slug_writeup>/",
         writeup_detail,
         name="writeup_detail",
     ),

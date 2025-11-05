@@ -17,6 +17,7 @@ from .models import (
     Category,
     CategoryTranslation,
     Project,
+    ProjectTag,
 )
 
 
@@ -67,3 +68,4 @@ admin_site.register(Article, ArticleAdmin)
 admin_site.register(Category, CategoryAdmin)
 admin_site.register(Project, ProjectAdmin)
 admin_site.register(ArticleTag, TagAdmin)
+admin_site.register(ProjectTag, TagAdmin)
