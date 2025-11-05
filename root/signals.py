@@ -4,6 +4,8 @@ from django.db.utils import OperationalError, ProgrammingError
 from django.dispatch import receiver
 from django.apps import apps
 from django.conf import settings
+from django.utils.translation import gettext
+from django.utils import translation
 from .models import (
     SeoSettings,
     SiteSettings,
@@ -47,26 +49,14 @@ def create_undefined_categories(sender, **kwargs):
                             translation_model = rel_model
                             break
 
-                    if translation_model:
-                        for lang_code, _ in getattr(
-                            settings, "LANGUAGES", [("en", "English")]
-                        ):
-                            if lang_code.startswith("fr"):
-                                name = "Indéfini"
-                            elif lang_code.startswith("es"):
-                                name = "Indefinido"
-                            elif lang_code.startswith("de"):
-                                name = "Undefiniert"
-                            elif lang_code.startswith("it"):
-                                name = "Non definito"
-                            else:
-                                name = "Undefined"
-
-                            translation_model.objects.create(
-                                category=category,
-                                language=lang_code,
-                                title=name,
-                            )
+                    for lang_code, _ in settings.LANGUAGES:
+                        with translation.override(lang_code):
+                            title = gettext("Undefined")
+                        translation_model.objects.create(
+                            category=category,
+                            language=lang_code,
+                            title=title,
+                        )
 
     except (OperationalError, ProgrammingError):
         pass
