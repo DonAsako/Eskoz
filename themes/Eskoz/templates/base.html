@@ -31,7 +31,7 @@
     <meta name="twitter:description" content="{{ site_settings.seo_settings.twitter_description }}">
     <title>{{site_settings.site_name}}{% block title %}{% endblock%}</title>
     {% load static %}
-    {% with theme_css=ACTIVE_THEME|add:"/css/style.css" %}
+    {% with theme_css="Eskoz/css/style.css" %}
         <link rel="stylesheet" href="{% static theme_css %}">
     {% endwith %}
     {% block head %}{% endblock %}

@@ -11,13 +11,13 @@
         {% include "components/category_selector.html" with categories=categories base_url="writeups"%}
         
     </div>
-        {% if not articles %}
+        {% if not writeups %}
         <h2 class="message-wrapper"></h2>
             {% trans 'There is no writeups at the moment.' %}
         </h2>
         {% else %}    
             {% for writeup in writeups.all|dictsortreversed:"published_on" %}
-                <a class="article_card" href="{% url 'infosec:writeup_detail' writeup.ctf.slug writeup.slug %}">
+                <a class="article_card" href="{% url 'infosec:writeup_detail' writeup.category.slug writeup.slug %}">
                     <div class="article_card--top">
                         <div class="article_card--top-left">
                             <p class="article_card--title">{{ writeup.get_translation.title }}</p>
