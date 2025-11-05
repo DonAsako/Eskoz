@@ -1,6 +1,11 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.models import User
+from django.contrib.auth.admin import (
+    GroupAdmin as BaseGroupAdmin,
+)
+from django.contrib.auth.admin import (
+    UserAdmin as BaseUserAdmin,
+)
+from django.contrib.auth.models import Group, User
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.html import format_html
@@ -147,7 +152,10 @@ class UserAdmin(BaseUserAdmin):
     inlines = [UserProfileInline, UserLinkInline]
 
 
-# admin_site.unregister(User)
+class GroupAdmin(BaseGroupAdmin): ...
+
+
 admin_site.register(User, UserAdmin)
+admin_site.register(Group, GroupAdmin)
 admin_site.register(SiteSettings, SiteSettingsAdmin)
 admin_site.register(Page, PageAdmin)
