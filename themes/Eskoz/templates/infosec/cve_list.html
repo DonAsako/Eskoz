@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %} - {% trans 'CVEs' %}{% endblock %}
+    {% block SEO %}
+    <meta property="og:type" content="website" />
+    {% endblock %}
+{% block content %}
+    <div class="article_list">
+    <div class="article_list--top">
+        <h2 class="article_list--title">{% trans 'CVEs' %}</h2>
+    </div>
+        {% if not CVES %}
+        <h2 class="message-wrapper"></h2>
+            {% trans 'There is no CVE at the moment.' %}
+        </h2>
+        {% else %}    
+            {% for CVE in CVES %}      
+            WIP
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}

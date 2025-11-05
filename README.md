@@ -68,14 +68,11 @@ python3 manage.py list_themes
 Name                      Path                                                         Active
 ---------------------------------------------------------------------------------------------
 Eskoz                     /Eskoz/themes/Eskoz                                          Yes   
-EskozCyber                /Eskoz/themes/EskozCyber                                     No   
 
-Successfully listed 2 theme(s).
+Successfully listed 1 theme(s).
 ```
 - **Eskoz (Default)**
-![Eskoz's Preview](pictures/Eskoz.png)
-- **EskozCyber**
-![EskozCyber's Preview](pictures/EskozCyber.png)
+![Eskoz's Preview](pictures/EskozCyber.png)
 #### Create a new theme
 **To create a brand new theme with default structure:**
 ```sh

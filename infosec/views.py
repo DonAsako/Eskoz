@@ -1,34 +1,40 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, Http404
 from django.utils.translation import gettext_lazy as _
 
-from blog.views import post_detail, posts_list
-
-from .models import Category, Certification, Writeup
+from .models import Category, Certification, Writeup, CVE
 
 
-def writeup_detail(request, slug):
+def writeup_detail(request, slug_category, slug_writeup):
     """
     Render the detail page of a specific writeup.
 
-    Fetches the Writeup instance corresponding to the provided slug
-    and renders it using the blog's post_detail view.
-
     Args:
         request (HttpRequest): The HTTP request object.
-        slug (str): The slug of the writeup to retrieve.
+        slug_category (str): Slug identifying the category.
+        slug_writeup (str): Slug identifying the writeup.
 
     Returns:
         HttpResponse: The rendered writeup detail page.
     """
-    return post_detail(request, Writeup, slug, "blog/post_detail.html")
+    category = get_object_or_404(Category, slug=slug_category)
+    writeup = get_object_or_404(Writeup, category=category, slug=slug_writeup)
+    if writeup.visibility == "private" and not request.user.is_authenticated:
+        raise Http404
+
+    if writeup.visibility == "protected":
+        if request.method == "POST" and request.POST.get("password") == getattr(
+            writeup, "password", ""
+        ):
+            return render(request, "infosec/writeup_detail.html", {"writeup": writeup})
+
+        return render(request, "infosec/writeup_password.html")
+
+    return render(request, "infosec/writeup_detail.html", {"writeup": writeup})
 
 
 def writeup_list(request, slug=None):
     """
     Render a list of writeups.
-
-    Optionally filters writeups by a given category slug.
-    Uses the blog's posts_list view for rendering.
 
     Args:
         request (HttpRequest): The HTTP request object.
@@ -37,23 +43,28 @@ def writeup_list(request, slug=None):
     Returns:
         HttpResponse: The rendered list of writeups page.
     """
-    return posts_list(
+    writeups = Writeup.objects.all()
+    selected_category = None
+    if slug:
+        selected_category = get_object_or_404(Category, slug=slug)
+        writeups = Writeup.filter(category=selected_category)
+
+    categories = Category.objects.filter(writeups__isnull=False).distinct()
+
+    return render(
         request,
-        Writeup,
-        Category,
-        slug,
-        post_type="writeups",
-        post_type_trans=_("Writeups"),
-        detail_url_name="infosec:writeup_detail",
+        "infosec/writeup_list.html",
+        {
+            "writeups": writeups,
+            "categories": categories,
+            "selected_category": selected_category,
+        },
     )
 
 
 def certification_list(request):
     """
     Render a list of all certifications.
-
-    Fetches all Certification instances and passes them to the
-    'infosec/certification_list.html' template.
 
     Args:
         request (HttpRequest): The HTTP request object.
@@ -65,3 +76,17 @@ def certification_list(request):
     return render(
         request, "infosec/certification_list.html", {"certifications": certifications}
     )
+
+
+def cve_list(request):
+    """
+    Render a list of all CVEs
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered cve list page.
+    """
+    cve = CVE.objects.all()
+    return render(request, "infosec/cve_list.html", {"cve": cve})

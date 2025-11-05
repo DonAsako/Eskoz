@@ -1,23 +1,14 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% block title %} - {% trans 'course' %}{% endblock %}
+{% block title %} - {% trans 'Courses' %}{% endblock %}
     {% block SEO %}
     <meta property="og:type" content="website" />
     {% endblock %}
 {% block content %}
     <div class="article_list">
     <div class="article_list--top">
-        <h2 class="article_list--title">{% trans 'Course' %}</h2>
-        <select class="article_list--select" id='category-selector'>
-            <option value="">{% trans 'All' %}</option>
-            {% for category in categories %}
-                {% if selected_category == category%}
-                    <option value="{{category.slug}}" selected>{{category.get_translation.title|default:category.title}}</option>
-                {% else %}
-                    <option value="{{category.slug}}">{{category.get_translation.title|default:category.title}}</option>
-                {% endif %}
-            {% endfor %}
-        </select>
+        <h2 class="article_list--title">{% trans 'Courses' %}</h2>
+        {% include "components/category_selector.html" with categories=categories base_url="education"%}
     </div>
         {% if not courses %}
         <h2 class="message-wrapper"></h2>
@@ -25,18 +16,18 @@
         </h2>
         {% else %}    
             {% for course in courses.all %}      
-                <a class="article_card" href="{% url 'education:module_list' course.slug %}">
+                <a class="article_card" href="{% url "education:module_list" course.slug %}">
 
                     <div class="article_card--top">
                         <div class="article_card--top-left">
-                            <p class="article_card--title">{{ course.get_translation.title }}</p>
+                            <p class="article_card--title">{{ course.title }}</p>
                         </div>
                         {% if course.category %}
                             <p class="article_card--category">{{ course.category }}</p>
                         {% endif %}
                     </div>
                     {% if course.get_translation.description %}
-                        <p class="article_card--description">“{{ course.get_translation.description|default_if_none:'' }}”</p>
+                        <p class="article_card--description">“{{ course.description|default_if_none:'' }}”</p>
                     {% endif %}
                     <div class="article_card--bottom">
                         <p class="article_card--date">{{ course.published_on|date:"j F Y" }}</p>
@@ -51,16 +42,4 @@
             {% endfor %}
         {% endif %}
     </div>
-
-<script>
-    const categorySelector = document.getElementById('category-selector');
-    categorySelector.addEventListener('change', function () {
-        const selectedCategory = this.value;
-        if (selectedCategory) {
-            window.location.href = `/{{ course_type }}/${selectedCategory}`;
-        } else {
-            window.location.href = `/{{ course_type }}/`;
-        }
-    });
-</script>
 {% endblock %}

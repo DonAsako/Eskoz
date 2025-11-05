@@ -1,0 +1,24 @@
+{% load i18n %}
+
+<select class="article_list--select" id='category-selector'>
+    <option value="">{% trans 'All' %}</option>
+    {% for category in categories %}
+        {% if selected_category == category%}
+                <option value="{{category.slug}}" selected>{{category.get_translation.title|default:category.title}}</option>
+        {% else %}
+            <option value="{{category.slug}}">{{category.get_translation.title|default:category.title}}</option>
+        {% endif %}
+    {% endfor %}
+</select>
+
+<script>
+    const categorySelector = document.getElementById('category-selector');
+    categorySelector.addEventListener('change', function () {
+        const selectedCategory = this.value;
+        if (selectedCategory) {
+            window.location.href = `/{{ base_url }}/${selectedCategory}`;
+        } else {
+            window.location.href = `/{{ base_url }}/`;
+        }
+    });
+</script>

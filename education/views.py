@@ -9,8 +9,11 @@ def course_list(request):
 
 
 def module_list(request, slug_course=""):
-    modules = Module.objects.all()
-    return render(request, "education/course_list.html", {"modules": modules})
+    course = get_object_or_404(Course, slug=slug_course)
+    modules = Module.objects.filter(course=course)
+    return render(
+        request, "education/module_list.html", {"course": course, "modules": modules}
+    )
 
 
 def lesson_list(request, slug_course="", slug_module=""):

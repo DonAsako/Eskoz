@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %} - {{course}}{% endblock %}
+    {% block SEO %}
+    <meta property="og:type" content="website" />
+    {% endblock %}
+{% block content %}
+    <div class="article_list">
+    <div class="article_list--top">
+        <h2 class="article_list--title">{% trans 'Courses' %} > {{course.title}}</h2>
+        {% include "components/category_selector.html" with categories=categories base_url="education"%}
+    </div>
+        {% if not modules %}
+        <h2 class="message-wrapper"></h2>
+            {% trans 'There is no module at the moment.' %}
+        </h2>
+        {% else %}    
+            {% for module in modules.all %}      
+                <a class="article_card" href="{% url "education:lesson_list" course.slug module.slug %}">
+
+                    <div class="article_card--top">
+                        <div class="article_card--top-left">
+                            <p class="article_card--title">{{ module.title }}</p>
+                        </div>
+                        {% if module.category %}
+                            <p class="article_card--category">{{ module.category }}</p>
+                        {% endif %}
+                    </div>
+                    {% if module.get_translation.description %}
+                        <p class="article_card--description">“{{ module.description|default_if_none:'' }}”</p>
+                    {% endif %}
+                    <div class="article_card--bottom">
+                        <p class="article_card--date">{{ module.published_on|date:"j F Y" }}</p>
+
+                        <div class="article_card--tags">
+                            {% for tag in module.tags.all %}
+                                <p class="article_card--tag">{{ tag.title }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}
