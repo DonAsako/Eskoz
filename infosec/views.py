@@ -47,13 +47,15 @@ def writeup_list(request, slug=None):
     Returns:
         HttpResponse: The rendered list of writeups page.
     """
-    writeups = Writeup.objects.all()
+    writeups = Writeup.objects.filter(visibility="public")
     selected_category = None
     if slug:
         selected_category = get_object_or_404(Category, slug=slug)
         writeups = writeups.filter(category=selected_category)
 
-    categories = Category.objects.filter(writeups__isnull=False).distinct()
+    categories = Category.objects.filter(
+        writeups__isnull=False, writeups__visibility="public"
+    ).distinct()
 
     return render(
         request,

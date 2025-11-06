@@ -48,13 +48,15 @@ def article_list(request, slug=None):
     Returns:
         HttpResponse: Rendered articles list page.
     """
-    articles = Article.objects.all()
+    articles = Article.objects.filter(visibility="public")
     selected_category = None
     if slug:
         selected_category = get_object_or_404(Category, slug=slug)
         articles = articles.filter(category=selected_category)
 
-    categories = Category.objects.filter(articles__isnull=False).distinct()
+    categories = Category.objects.filter(
+        articles__isnull=False, articles__visibility="public"
+    ).distinct()
 
     return render(
         request,
