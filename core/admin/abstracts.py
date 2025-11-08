@@ -4,9 +4,9 @@ from django.core.exceptions import ValidationError
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
-from root.admin.utils import backup
-from root.forms import AbstractTranslatableMarkdownItemAdminForm
-from root.models import TranslatableMarkdownItemImage
+from core.admin.utils import backup
+from core.forms import AbstractTranslatableMarkdownItemAdminForm
+from core.models import TranslatableMarkdownItemImage
 
 
 class TranslatableMarkdownImageAdmin(GenericTabularInline):

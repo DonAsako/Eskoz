@@ -68,8 +68,8 @@ class Command(BaseCommand):
             path_static = new_theme_path / "static" / theme_name
             # List of files to create
             paths = [
-                path_template / "root" / "index.html",
-                path_template / "root" / "page.html",
+                path_template / "core" / "index.html",
+                path_template / "core" / "page.html",
                 path_template / "blog" / "article_detail.html",
                 path_template / "blog" / "article_list.html",
                 path_template / "blog" / "article_password.html",

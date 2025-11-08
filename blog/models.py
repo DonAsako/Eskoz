@@ -2,14 +2,14 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from root.models.abstracts import (
+from core.models.abstracts import (
     AbstractPost,
     AbstractPostTranslation,
     AbstractTag,
     AbstractTranslatableCategory,
     AbstractTranslatableCategoryTranslation,
 )
-from root.utils import upload_to_projects
+from core.utils import upload_to_projects
 
 
 class Category(AbstractTranslatableCategory): ...

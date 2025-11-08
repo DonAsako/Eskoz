@@ -2,7 +2,7 @@
 
 import django.db.models.deletion
 import pyotp
-import root.utils
+import core.utils
 from django.conf import settings
 from django.db import migrations, models
 
@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
                     models.ImageField(
                         blank=True,
                         null=True,
-                        upload_to=root.utils.upload_to_settings,
+                        upload_to=core.utils.upload_to_settings,
                         verbose_name="Logo",
                     ),
                 ),
@@ -47,7 +47,7 @@ class Migration(migrations.Migration):
                     models.ImageField(
                         blank=True,
                         null=True,
-                        upload_to=root.utils.upload_to_settings,
+                        upload_to=core.utils.upload_to_settings,
                         verbose_name="Favicon",
                     ),
                 ),
@@ -158,7 +158,7 @@ class Migration(migrations.Migration):
                     models.ImageField(
                         blank=True,
                         null=True,
-                        upload_to=root.utils.upload_to_settings,
+                        upload_to=core.utils.upload_to_settings,
                         verbose_name="Open Graph image",
                     ),
                 ),
@@ -192,7 +192,7 @@ class Migration(migrations.Migration):
                     models.ImageField(
                         blank=True,
                         null=True,
-                        upload_to=root.utils.upload_to_settings,
+                        upload_to=core.utils.upload_to_settings,
                         verbose_name="Twitter image",
                     ),
                 ),
@@ -201,7 +201,7 @@ class Migration(migrations.Migration):
                     models.OneToOneField(
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="seo_settings",
-                        to="root.sitesettings",
+                        to="core.sitesettings",
                         verbose_name="SEO settings",
                     ),
                 ),
@@ -242,7 +242,7 @@ class Migration(migrations.Migration):
                         null=True,
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="pages",
-                        to="root.sitesettings",
+                        to="core.sitesettings",
                     ),
                 ),
             ],
@@ -290,7 +290,7 @@ class Migration(migrations.Migration):
                     models.OneToOneField(
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="infosec",
-                        to="root.sitesettings",
+                        to="core.sitesettings",
                         verbose_name="Infosec settings",
                     ),
                 ),
@@ -325,7 +325,7 @@ class Migration(migrations.Migration):
                     models.OneToOneField(
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="education",
-                        to="root.sitesettings",
+                        to="core.sitesettings",
                         verbose_name="Education settings",
                     ),
                 ),
@@ -372,7 +372,7 @@ class Migration(migrations.Migration):
                     models.OneToOneField(
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="blog",
-                        to="root.sitesettings",
+                        to="core.sitesettings",
                         verbose_name="Blog settings",
                     ),
                 ),
@@ -394,7 +394,7 @@ class Migration(migrations.Migration):
                 (
                     "picture",
                     models.ImageField(
-                        upload_to=root.utils.upload_to_settings, verbose_name="Picture"
+                        upload_to=core.utils.upload_to_settings, verbose_name="Picture"
                     ),
                 ),
                 (
@@ -434,7 +434,7 @@ class Migration(migrations.Migration):
                     models.ImageField(
                         blank=True,
                         null=True,
-                        upload_to=root.utils.upload_to_users,
+                        upload_to=core.utils.upload_to_users,
                         verbose_name="Icon",
                     ),
                 ),
@@ -465,7 +465,7 @@ class Migration(migrations.Migration):
                     models.ImageField(
                         blank=True,
                         null=True,
-                        upload_to=root.utils.upload_to_users,
+                        upload_to=core.utils.upload_to_users,
                         verbose_name="Avatar",
                     ),
                 ),
@@ -515,7 +515,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="well_knowns",
-                        to="root.sitesettings",
+                        to="core.sitesettings",
                     ),
                 ),
             ],

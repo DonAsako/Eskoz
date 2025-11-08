@@ -3,14 +3,14 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from blog.models import Article
-from root.models.abstracts import (
+from core.models.abstracts import (
     AbstractPost,
     AbstractPostTranslation,
     AbstractTag,
     AbstractTranslatableCategory,
     AbstractTranslatableCategoryTranslation,
 )
-from root.utils import upload_to_certifications
+from core.utils import upload_to_certifications
 
 
 class Issuer(models.Model):

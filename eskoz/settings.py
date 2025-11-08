@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "root",
+    "core",
     "blog",
     "infosec",
     "education",
@@ -61,7 +61,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "root.middleware.ActiveThemeMiddleware",
+    "core.middleware.ActiveThemeMiddleware",
 ]
 
 ROOT_URLCONF = "eskoz.urls"
@@ -79,8 +79,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "root.context_processors.site_settings",
-                "root.context_processors.active_theme",
+                "core.context_processors.site_settings",
+                "core.context_processors.active_theme",
             ],
         },
     },

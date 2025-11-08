@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
-from root.admin.site import admin_site
-from root.admin import (
+from core.admin.site import admin_site
+from core.admin import (
     AbstractPostAdmin,
     AbstractPostTranslationAdmin,
     AbstractCategoryAdmin,

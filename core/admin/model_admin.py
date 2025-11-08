@@ -11,10 +11,10 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
-from root.admin.abstracts import AbstractSubModuleInline
-from root.admin.site import admin_site
-from root.forms import PageAdminForm, UserProfileAdminForm
-from root.models import (
+from core.admin.abstracts import AbstractSubModuleInline
+from core.admin.site import admin_site
+from core.forms import PageAdminForm, UserProfileAdminForm
+from core.models import (
     BlogSettings,
     EducationSettings,
     InfosecSettings,
@@ -99,7 +99,7 @@ class SiteSettingsAdmin(admin.ModelAdmin):
     def changelist_view(self, request, extra_context=None):
         obj = SiteSettings.objects.first()
         if obj:
-            url = reverse("admin:root_sitesettings_change", args=[obj.pk])
+            url = reverse("admin:core_sitesettings_change", args=[obj.pk])
             return redirect(url)
         return super().changelist_view(request, extra_context)
 

@@ -1,6 +1,6 @@
 from django.contrib import admin
-from root.admin.site import admin_site
-from root.admin.abstracts import (
+from core.admin.site import admin_site
+from core.admin.abstracts import (
     AbstractTranslatableMarkdownItemAdmin,
     AbstractTranslatableMarkdownItemTranslationAdmin,
     AbstractCategoryAdmin,

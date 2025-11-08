@@ -1,7 +1,7 @@
 {% load i18n %}
 <nav class="navbar">
     <div class="navbar-logo">
-        <a class="navbar-logo--link" href="{% url 'root:index' %}">
+        <a class="navbar-logo--link" href="{% url 'core:index' %}">
         {% if site_settings.logo %}
             <img class="navbar-logo--img" src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}'s logo">
         {% else %}
@@ -12,7 +12,7 @@
     <ul class="navbar-items">
         {% for page in site_settings.get_page_referenced %}
             <li class="navbar-item">
-                <a href="{% url 'root:page_detail' page.slug %}" class="navbar-item--link">{{ page.title }}</a>
+                <a href="{% url 'core:page_detail' page.slug %}" class="navbar-item--link">{{ page.title }}</a>
             </li>
             <li class="navbar-item navbar-item--separator">
                 /

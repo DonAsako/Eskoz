@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 
-from root.decorators import feature_active_required
+from core.decorators import feature_active_required
 
 from .models import Course, Lesson, Module
 

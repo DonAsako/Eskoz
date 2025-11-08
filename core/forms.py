@@ -2,8 +2,8 @@ import pyotp
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from root.models import Page, AbstractPostTranslation, UserProfile
-from root.widgets import ContentEditorWidget
+from core.models import Page, AbstractPostTranslation, UserProfile
+from core.widgets import ContentEditorWidget
 
 
 class PageAdminForm(forms.ModelForm):

@@ -1,6 +1,6 @@
 from functools import wraps
 from django.http import Http404
-from root.models.settings import SiteSettings
+from core.models.settings import SiteSettings
 
 
 def feature_active_required(module_name, feature_name=None):

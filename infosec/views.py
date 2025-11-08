@@ -1,7 +1,7 @@
 from django.shortcuts import Http404, get_object_or_404, render
 from django.utils.translation import gettext_lazy as _
 
-from root.decorators import feature_active_required
+from core.decorators import feature_active_required
 
 from .models import CVE, Category, Certification, Writeup, CTF
 

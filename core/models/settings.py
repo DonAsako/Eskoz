@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.translation import gettext
 from django.utils.translation import gettext_lazy as _
 
-from root.utils import upload_to_settings
+from core.utils import upload_to_settings
 
 
 class SiteSettings(models.Model):

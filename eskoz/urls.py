@@ -1,11 +1,11 @@
 from django.conf import settings
 from django.conf.urls.static import static
-from root.admin.site import admin_site
+from core.admin.site import admin_site
 from django.urls import include, path
 
 urlpatterns = [
     path(settings.ADMIN_URL + "/", admin_site.urls),
-    path("", include("root.urls")),
+    path("", include("core.urls")),
     path("", include("blog.urls")),
     path("", include("infosec.urls")),
     path("education/", include("education.urls")),

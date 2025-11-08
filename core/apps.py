@@ -1,9 +1,9 @@
 from django.apps import AppConfig
 
 
-class RootConfig(AppConfig):
+class CoreConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "root"
+    name = "core"
 
     def ready(self):
-        import root.signals
+        import core.signals

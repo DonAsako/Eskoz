@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
-from root.models.abstracts import (
+from core.models.abstracts import (
     AbstractTranslatableMarkdownItem,
     AbstractTranslatableMarkdownItemTranslation,
     AbstractTranslatableCategory,

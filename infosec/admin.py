@@ -1,13 +1,13 @@
 from django.contrib import admin
 
-from root.admin import (
+from core.admin import (
     AbstractCategoryAdmin,
     AbstractCategoryTranslationAdmin,
     AbstractPostAdmin,
     AbstractPostTranslationAdmin,
     AbstractTagAdmin,
 )
-from root.admin.site import admin_site
+from core.admin.site import admin_site
 
 from .models import (
     CTF,

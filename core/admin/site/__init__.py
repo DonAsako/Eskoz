@@ -4,13 +4,13 @@ from django.http import JsonResponse, HttpResponse
 
 from django.contrib.admin import AdminSite
 from django.utils.translation import gettext_lazy as _
-from root.models import SiteSettings
+from core.models import SiteSettings
 
 
 class EskozAdminSite(AdminSite):
     site_header = "Eskoz"
 
-    APP_ORDER = ["root", "auth", "infosec", "blog", "education"]
+    APP_ORDER = ["core", "auth", "infosec", "blog", "education"]
 
     def get_app_list(self, request, extra_context=None):
         app_list = super().get_app_list(request, extra_context)
@@ -33,7 +33,7 @@ class EskozAdminSite(AdminSite):
                 if site_settings.education.is_active:
                     filtered_apps.append(app)
 
-            elif label == "root":
+            elif label == "core":
                 app["name"] = _("Site")
                 filtered_apps.append(app)
 
