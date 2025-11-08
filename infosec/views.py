@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from root.decorators import feature_active_required
 
-from .models import CVE, Category, Certification, Writeup
+from .models import CVE, Category, Certification, Writeup, CTF
 
 
 @feature_active_required(module_name="infosec", feature_name="writeups")
@@ -53,6 +53,8 @@ def writeup_list(request, slug=None):
         selected_category = get_object_or_404(Category, slug=slug)
         writeups = writeups.filter(category=selected_category)
 
+    ctfs = CTF.objects.all()
+
     categories = Category.objects.filter(
         writeups__isnull=False, writeups__visibility="public"
     ).distinct()
@@ -64,6 +66,7 @@ def writeup_list(request, slug=None):
             "writeups": writeups,
             "categories": categories,
             "selected_category": selected_category,
+            "ctfs": ctfs,
         },
     )
 
