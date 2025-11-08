@@ -2,7 +2,7 @@ import pyotp
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from core.models import Page, AbstractPostTranslation, UserProfile
+from core.models import Page, UserProfile
 from core.widgets import ContentEditorWidget
 
 

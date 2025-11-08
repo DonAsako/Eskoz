@@ -1,5 +1,7 @@
 from functools import wraps
+
 from django.http import Http404
+
 from core.models.settings import SiteSettings
 
 

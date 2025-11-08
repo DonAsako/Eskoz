@@ -1,20 +1,21 @@
+from django.apps import apps
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models.signals import post_migrate, post_save
 from django.db.utils import OperationalError, ProgrammingError
 from django.dispatch import receiver
-from django.apps import apps
-from django.conf import settings
-from django.utils.translation import gettext
 from django.utils import translation
+from django.utils.translation import gettext
+
 from .models import (
+    AbstractTranslatableCategory,
+    AbstractTranslatableCategoryTranslation,
+    BlogSettings,
+    EducationSettings,
+    InfosecSettings,
     SeoSettings,
     SiteSettings,
     UserProfile,
-    InfosecSettings,
-    BlogSettings,
-    EducationSettings,
-    AbstractTranslatableCategory,
-    AbstractTranslatableCategoryTranslation,
 )
 
 
