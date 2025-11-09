@@ -1,11 +1,13 @@
-asgiref==3.10.0
-Django==5.2.8
+-r base.txt
+
+# Code quality
+flake8>=7.3.0
+isort>=7.0.0
+black>=25.9.0
+bandit>=1.8.6
+
+# Pre-commit
+pre_commit>=4.4.0
+
+# Django debug
 django-debug-toolbar==6.1.0
-Markdown==3.10
-pillow==12.0.0
-pymdown-extensions==10.16.1
-pyotp==2.9.0
-python-dotenv==1.2.1
-PyYAML==6.0.3
-qrcode==8.2
-sqlparse==0.5.3
