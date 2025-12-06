@@ -24,9 +24,7 @@ class Issuer(models.Model):
     """
 
     name = models.CharField(max_length=150, unique=True, verbose_name=_("Name"))
-    website = models.URLField(
-        max_length=255, blank=True, null=True, verbose_name=_("Website")
-    )
+    website = models.URLField(max_length=255, blank=True, null=True, verbose_name=_("Website"))
     description = models.TextField(blank=True, verbose_name=_("Description"))
 
     class Meta:
@@ -54,9 +52,7 @@ class Certification(models.Model):
         issuer (ForeignKey): Organization or platform that issued the certification.
     """
 
-    name = models.CharField(
-        max_length=100, blank=False, null=False, verbose_name=_("Name")
-    )
+    name = models.CharField(max_length=100, blank=False, null=False, verbose_name=_("Name"))
     description = models.TextField()
     certification_detail_url = models.URLField(
         max_length=200,
@@ -176,6 +172,17 @@ class CVE(models.Model):
         verbose_name=_("Author"),
     )
 
+    def cvss_severity(self) -> str:
+        score = self.cvss_score
+        if score >= 9:
+            return "critical"
+        elif score >= 7:
+            return "high"
+        elif score >= 4:
+            return "medium"
+        else:
+            return "low"
+
     def __str__(self):
         """Return the cve id as its string representation"""
         return self.cve_id
@@ -191,9 +198,7 @@ class CTF(models.Model):
         date_end (DateTimeField): End date and time of the CTF.
     """
 
-    name = models.CharField(
-        max_length=100, blank=False, null=False, verbose_name=_("Name")
-    )
+    name = models.CharField(max_length=100, blank=False, null=False, verbose_name=_("Name"))
     date_beginning = models.DateTimeField()
     date_end = models.DateTimeField()
 
@@ -273,9 +278,7 @@ class Writeup(AbstractPost):
         related_name="writeups",
         verbose_name=_("Category"),
     )
-    tags = models.ManyToManyField(
-        WriteupTag, related_name="posts", blank=True, verbose_name=_("Tags")
-    )
+    tags = models.ManyToManyField(WriteupTag, related_name="posts", blank=True, verbose_name=_("Tags"))
 
     def save(self, *args, **kwargs):
         if not self.category_id:

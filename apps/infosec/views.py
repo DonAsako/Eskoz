@@ -1,9 +1,8 @@
 from django.shortcuts import Http404, get_object_or_404, render
-from django.utils.translation import gettext_lazy as _
 
 from apps.core.decorators import feature_active_required
 
-from .models import CVE, Category, Certification, Writeup, CTF
+from .models import CTF, CVE, Category, Certification, Writeup
 
 
 @feature_active_required(module_name="infosec", feature_name="writeups")
@@ -25,9 +24,7 @@ def writeup_detail(request, slug_category, slug_writeup):
         raise Http404
 
     if writeup.visibility == "protected":
-        if request.method == "POST" and request.POST.get("password") == getattr(
-            writeup, "password", ""
-        ):
+        if request.method == "POST" and request.POST.get("password") == getattr(writeup, "password", ""):
             return render(request, "infosec/writeup_detail.html", {"writeup": writeup})
 
         return render(request, "infosec/writeup_password.html")
@@ -55,9 +52,7 @@ def writeup_list(request, slug=None):
 
     ctfs = CTF.objects.all()
 
-    categories = Category.objects.filter(
-        writeups__isnull=False, writeups__visibility="public"
-    ).distinct()
+    categories = Category.objects.filter(writeups__isnull=False, writeups__visibility="public").distinct()
 
     return render(
         request,
@@ -83,9 +78,7 @@ def certification_list(request):
         HttpResponse: The rendered certifications list page.
     """
     certifications = Certification.objects.all()
-    return render(
-        request, "infosec/certification_list.html", {"certifications": certifications}
-    )
+    return render(request, "infosec/certification_list.html", {"certifications": certifications})
 
 
 @feature_active_required(module_name="infosec", feature_name="cves")
@@ -99,5 +92,5 @@ def cve_list(request):
     Returns:
         HttpResponse: The rendered cve list page.
     """
-    cve = CVE.objects.all()
-    return render(request, "infosec/cve_list.html", {"cve": cve})
+    cves = CVE.objects.all()
+    return render(request, "infosec/cve_list.html", {"cves": cves})

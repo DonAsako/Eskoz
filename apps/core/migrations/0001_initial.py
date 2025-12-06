@@ -114,9 +114,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "google_tag_manager_id",
-                    models.CharField(
-                        blank=True, max_length=30, verbose_name="Google tag manager id"
-                    ),
+                    models.CharField(blank=True, max_length=30, verbose_name="Google tag manager id"),
                 ),
                 (
                     "google_site_verification",
@@ -166,9 +164,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "twitter_description",
-                    models.CharField(
-                        blank=True, max_length=200, verbose_name="Twitter description"
-                    ),
+                    models.CharField(blank=True, max_length=200, verbose_name="Twitter description"),
                 ),
                 (
                     "twitter_image",

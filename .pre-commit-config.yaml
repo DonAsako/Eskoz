@@ -36,7 +36,7 @@ repos:
         args:
           [
             "--max-line-length=148",
-            "--extend-ignore=E203,W503",
+            "--extend-ignore=E203,W503,E701",
             "--exclude=*/migrations/*,*/settings/*,venv,env",
           ]
 

@@ -42,9 +42,7 @@ def lesson_detail(request, slug_course="", slug_module="", slug_lesson=""):
     try:
         current_index = lesson_list.index(lesson)
         prev_lesson = lesson_list[current_index - 1] if current_index > 0 else None
-        next_lesson = (
-            lesson_list[current_index + 1] if current_index < len(lesson_list) - 1 else None
-        )
+        next_lesson = lesson_list[current_index + 1] if current_index < len(lesson_list) - 1 else None
     except ValueError:
         prev_lesson = None
         next_lesson = None
