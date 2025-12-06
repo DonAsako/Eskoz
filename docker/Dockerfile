@@ -8,18 +8,21 @@ RUN apt-get update && \
         build-essential \
         libpq-dev \
         gettext \
+        curl \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install --upgrade pip && pip install -r requirements.txt
+COPY requirements/ requirements/
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements/production.txt
 
 COPY . .
 
-RUN chmod +x entrypoint.sh
+RUN chmod +x docker/entrypoint.sh && \
+    mkdir -p logs staticfiles media
 
 EXPOSE 8000
 
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["./docker/entrypoint.sh"]
