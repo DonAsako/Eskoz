@@ -21,13 +21,13 @@ repos:
     hooks:
       - id: black
         language_version: python3.13
-        args: ["--line-length=100"]
+        args: ["--line-length=148"]
 
   - repo: https://github.com/pycqa/isort
     rev: 7.0.0
     hooks:
       - id: isort
-        args: ["--profile", "black", "--line-length", "100"]
+        args: ["--profile", "black", "--line-length", "148"]
 
   - repo: https://github.com/pycqa/flake8
     rev: 7.3.0
@@ -35,7 +35,7 @@ repos:
       - id: flake8
         args:
           [
-            "--max-line-length=100",
+            "--max-line-length=148",
             "--extend-ignore=E203,W503",
             "--exclude=*/migrations/*,*/settings/*,venv,env",
           ]
