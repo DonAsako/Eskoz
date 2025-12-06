@@ -1,0 +1,3 @@
+[submodule "themes/donasako"]
+	path = themes/donasako
+	url = https://github.com/DonAsako/DonAsakoTheme.git
