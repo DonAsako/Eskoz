@@ -34,28 +34,30 @@ POSTGRES_DB=                    # Name of the PostgreSQL database
 POSTGRES_USER=                  # PostgreSQL username
 POSTGRES_PASSWORD=              # PostgreSQL password
 
-# --- NGINX / Domain Configuration ---
+# --- Caddy / Domain Configuration ---
 DOMAIN=                         # Your domain name (e.g., example.com)
 EMAIL=                          # Email address used for SSL certificate
 ```
-### 4. Build and start the Docker containers in detached mode:
+
+## Deploy with Docker
+### 1. Build and start the Docker containers in detached mode:
 ```sh
-docker compose up --build -d
+docker compose -f docker/docker-compose.yml up --build -d
 ```
 
-### 5. Create the first admin user
+### 2. Create the first admin user
 To create the first Django superuser, run:
 ```sh
-docker compose exec web python manage.py createsuperuser
+docker compose -f docker/docker-compose.yml exec web python manage.py createsuperuser
 ```
 
-### 6. Update your config
+### 3. Update your config
 To update your config, run :
 ```sh
-docker compose exec web python manage.py config
+docker compose -f docker/docker-compose.yml exec web python manage.py config
 ```
 
-## Customization 
+## Customization
 ### Themes
 #### List available themes
 **To list all available themes with the following command:**
@@ -67,7 +69,7 @@ python3 manage.py list_themes
 ```sh
 Name                      Path                                                         Active
 ---------------------------------------------------------------------------------------------
-Eskoz                     /Eskoz/themes/Eskoz                                          Yes   
+Eskoz                     /Eskoz/themes/Eskoz                                          Yes  
 
 Successfully listed 1 theme(s).
 ```
@@ -99,13 +101,13 @@ To activate a theme, update the .env file:
 THEME=MyNewTheme
 ```
 The default theme is `Eskoz`.
-Then, rebuild your Docker environment: 
+Then, rebuild your Docker environment:
 ```sh
 docker compose up --build -d
 ```
 Your new theme should now be applied and visible on the site.
 
-## To-do 
+## To-do
 ### Logs
 - [ ] Add Django logging configuration
 - [ ] Set up log rotation (e.g. RotatingFileHandler)

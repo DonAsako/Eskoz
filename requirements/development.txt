@@ -1,0 +1,13 @@
+-r base.txt
+
+# Code quality
+flake8>=7.3.0
+isort>=7.0.0
+black>=25.9.0
+bandit>=1.8.6
+
+# Pre-commit
+pre_commit>=4.4.0
+
+# Django debug
+django-debug-toolbar==6.1.0
