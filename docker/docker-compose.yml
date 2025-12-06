@@ -5,7 +5,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     env_file:
-      - .env
+      - ../.env
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB:-eskoz} -U $${POSTGRES_USER:-eskoz}"]
@@ -25,7 +25,7 @@ services:
       - static_volume:/app/staticfiles
       - media_volume:/app/media
     env_file:
-      - .env
+      - ../.env
     environment:
       DJANGO_SETTINGS_MODULE: eskoz.settings.production
       DB_HOST: db
@@ -34,12 +34,6 @@ services:
       db:
         condition: service_healthy
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
     networks:
       - eskoz_network
 
@@ -58,11 +52,10 @@ services:
       - "443:443"
       - "443:443/udp"
     env_file:
-      - .env
+      - ../.env
     command: ["sh", "/usr/local/bin/caddy-init.sh"]
     depends_on:
-      web:
-        condition: service_healthy
+      - web
     restart: unless-stopped
     networks:
       - eskoz_network
