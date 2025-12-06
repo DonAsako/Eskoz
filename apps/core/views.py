@@ -2,16 +2,26 @@ from django.db.models import Count, Q
 from django.http import HttpResponse
 from django.shortcuts import Http404, get_object_or_404, render
 
+from apps.blog.models import Article, Project
+from apps.infosec.models import Writeup
+
 from .models import Page, WellKnownFile
 
 
 def index(request):
     page = Page.objects.filter(visibility="index").first()
-
+    articles = Article.objects.filter(visibility="public").order_by("-published_on")[:5]
+    writeups = Writeup.objects.filter(visibility="public").order_by("-published_on")[:5]
+    projects = Project.objects.all().order_by("-date_beginning")[:5]
+    context = {
+        "articles": articles,
+        "writeups": writeups,
+        "projects": projects,
+    }
     if page:
-        return render(request, "core/page.html", {"page": page})
+        return render(request, "core/page.html", {"page": page, **context})
     else:
-        return render(request, "core/index.html")
+        return render(request, "core/index.html", context)
 
 
 def page_detail(request, slug):
@@ -64,9 +74,7 @@ def post_detail(
         raise Http404
 
     if post.visibility == "protected":
-        if request.method == "POST" and request.POST.get("password") == getattr(
-            post, "password", ""
-        ):
+        if request.method == "POST" and request.POST.get("password") == getattr(post, "password", ""):
             return render(request, template_detail, {"post": post})
         return render(request, template_password)
 
@@ -99,9 +107,7 @@ def posts_list(
     Returns:
         HttpResponse: Rendered posts list page.
     """
-    posts = post_model.objects.filter(visibility="public").prefetch_related(
-        "translations", "tags"
-    )
+    posts = post_model.objects.filter(visibility="public").prefetch_related("translations", "tags")
     selected_category = None
     if slug:
         selected_category = get_object_or_404(category_model, slug=slug)
@@ -109,11 +115,9 @@ def posts_list(
     category_field = post_model._meta.get_field("category")
     related_name = category_field.remote_field.related_name
 
-    categories = category_model.objects.annotate(
-        num_posts=Count(
-            related_name, filter=Q(**{f"{related_name}__visibility": "public"})
-        )
-    ).filter(num_posts__gt=0)
+    categories = category_model.objects.annotate(num_posts=Count(related_name, filter=Q(**{f"{related_name}__visibility": "public"}))).filter(
+        num_posts__gt=0
+    )
 
     return render(
         request,
