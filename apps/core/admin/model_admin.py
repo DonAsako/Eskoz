@@ -1,10 +1,6 @@
 from django.contrib import admin
-from django.contrib.auth.admin import (
-    GroupAdmin as BaseGroupAdmin,
-)
-from django.contrib.auth.admin import (
-    UserAdmin as BaseUserAdmin,
-)
+from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group, User
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -127,14 +123,12 @@ class UserProfileInline(admin.StackedInline):
     ]
     readonly_fields = ("qr_code",)
 
+    @admin.display(description=_("Authentication QR Code"))
     def qr_code(self, obj):
         return format_html(
-            f"""
-        <div style="border-radius:5px; background: white; display: flex; align-itens:center; justify-content:center;">{obj.get_otp_qr_code()}</div>
-        """
+            '<div style="border-radius:5px; background: white; display: flex; align-items:center; justify-content:center;">{}</div>',
+            obj.get_otp_qr_code(),
         )
-
-    qr_code.short_description = "Authentication QR Code"
 
     class Media:
         js = ("admin/js/user_profil_edit.js",)
