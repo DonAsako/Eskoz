@@ -121,22 +121,22 @@ Your new theme should now be applied and visible on the site.
 
 ### Styling
 - [ ] Make the layout responsive
-- [ ] Improve article detail view
+- [x] Improve article detail view
 - [ ] Add article parameters to the article list page
-- [ ] Update Eskoz Theme
+- [x] Update Eskoz Theme
 
 ### Deployment
-- [ ] Add an automatic script to load SSL certificates and simplify deployment
+- [x] Add an automatic script to load SSL certificates and simplify deployment
 
 ### Authentication / Users
 - [ ] Finish connection with 2FA OTP
 
 ### Views / Pages
-- [ ] View Page Settings (block view if false)
+- [x] View Page Settings (block view if false)
 - [ ] Add members page
 
 ### New Apps
-- [ ] Create Course app
+- [X] Create Course app
 
 ## Key Features
 - Ready-to-use multilingual blog
