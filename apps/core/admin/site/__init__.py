@@ -1,9 +1,9 @@
 import markdown
-from django.urls import path
-from django.http import JsonResponse, HttpResponse
-
 from django.contrib.admin import AdminSite
+from django.http import HttpResponse, JsonResponse
+from django.urls import path
 from django.utils.translation import gettext_lazy as _
+
 from apps.core.models import SiteSettings
 
 
@@ -48,9 +48,7 @@ class EskozAdminSite(AdminSite):
         if site_settings:
             model_admin = self._registry.get(SiteSettings)
             if model_admin:
-                return model_admin.change_view(
-                    request, str(site_settings.pk), extra_context=extra_context
-                )
+                return model_admin.change_view(request, str(site_settings.pk), extra_context=extra_context)
         return super().index(request, extra_context)
 
     def get_urls(self):
@@ -75,6 +73,7 @@ class EskozAdminSite(AdminSite):
                     "fenced_code",
                     "toc",
                     "pymdownx.arithmatex",
+                    "pymdownx.details",
                 ],
                 extension_configs={
                     "pymdownx.arithmatex": {

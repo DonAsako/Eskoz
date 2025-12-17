@@ -51,17 +51,12 @@ class AbstractTranslatableCategory(models.Model):
         lang = language or get_language()
         translation = self.translations.filter(language=lang).first()
         if not translation:
-            translation = (
-                self.translations.filter(language="en").first()
-                or self.translations.filter().first()
-            )
+            translation = self.translations.filter(language="en").first() or self.translations.filter().first()
         return translation
 
     def delete(self, *args, **kwargs):
         if self.slug == "undefined" or self.title.lower() == "undefined":
-            raise ValidationError(
-                _("The default 'Undefined' category cannot be deleted.")
-            )
+            raise ValidationError(_("The default 'Undefined' category cannot be deleted."))
         super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
@@ -148,10 +143,7 @@ class AbstractTranslatableMarkdownItem(models.Model):
         lang = language or get_language()
         translation = self.translations.filter(language=lang).first()
         if not translation:
-            translation = (
-                self.translations.filter(language="en").first()
-                or self.translations.filter().first()
-            )
+            translation = self.translations.filter(language="en").first() or self.translations.filter().first()
         return translation
 
     def __str__(self):
@@ -182,13 +174,9 @@ class AbstractTranslatableMarkdownItemTranslation(models.Model):
         on_delete=models.CASCADE,
         verbose_name=_("Translatable Content"),
     )
-    language = models.CharField(
-        max_length=10, choices=settings.LANGUAGES, verbose_name=_("Language")
-    )
+    language = models.CharField(max_length=10, choices=settings.LANGUAGES, verbose_name=_("Language"))
     title = models.CharField(max_length=255, verbose_name=_("Title"))
-    description = models.TextField(
-        max_length=512, blank=True, null=True, verbose_name=_("Description")
-    )
+    description = models.TextField(max_length=512, blank=True, null=True, verbose_name=_("Description"))
     content = models.TextField(verbose_name=_("Content"))
 
     def get_reading_time(self):
@@ -215,6 +203,7 @@ class AbstractTranslatableMarkdownItemTranslation(models.Model):
                 "fenced_code",
                 "toc",
                 "pymdownx.arithmatex",
+                "pymdownx.details",
             ],
             extension_configs={
                 "pymdownx.arithmatex": {
@@ -259,22 +248,16 @@ class AbstractPost(AbstractTranslatableMarkdownItem):
         ("private", _("Private")),
     ]
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("Author"))
-    published_on = models.DateTimeField(
-        null=True, blank=True, verbose_name=_("Published on")
-    )
+    published_on = models.DateTimeField(null=True, blank=True, verbose_name=_("Published on"))
     edited_on = models.DateTimeField(auto_now=True, verbose_name=_("Edited on"))
-    picture = models.ImageField(
-        upload_to=upload_to_posts, blank=True, null=True, verbose_name=_("Picture")
-    )
+    picture = models.ImageField(upload_to=upload_to_posts, blank=True, null=True, verbose_name=_("Picture"))
     visibility = models.CharField(
         max_length=10,
         choices=VISIBILITY_CHOICES,
         default="public",
         verbose_name=_("Visibility"),
     )
-    password = models.CharField(
-        max_length=50, null=True, blank=True, verbose_name=_("Password")
-    )
+    password = models.CharField(max_length=50, null=True, blank=True, verbose_name=_("Password"))
 
     def save(self, *args, **kwargs):
         """
@@ -300,9 +283,7 @@ class AbstractPost(AbstractTranslatableMarkdownItem):
     @classmethod
     def check(cls, **kwargs):
         errors = super().check(**kwargs)
-        if not cls._meta.abstract and not any(
-            f.name == "category" for f in cls._meta.local_fields
-        ):
+        if not cls._meta.abstract and not any(f.name == "category" for f in cls._meta.local_fields):
             errors.append(
                 checks.Error(
                     "'category' field is required.",
@@ -330,9 +311,7 @@ class AbstractPostTranslation(AbstractTranslatableMarkdownItemTranslation):
         """
         Returns the parent post (must be implemented by subclass if ForeignKey name differs).
         """
-        raise NotImplementedError(
-            "Each subclass of AbstractPostTranslation must define a ForeignKey to its Post model."
-        )
+        raise NotImplementedError("Each subclass of AbstractPostTranslation must define a ForeignKey to its Post model.")
 
 
 class AbstractTag(models.Model):
