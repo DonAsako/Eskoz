@@ -72,6 +72,7 @@ class EskozAdminSite(AdminSite):
                     "codehilite",
                     "fenced_code",
                     "toc",
+                    "pymdownx.blocks.admonition",
                     "pymdownx.arithmatex",
                     "pymdownx.details",
                 ],
