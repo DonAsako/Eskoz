@@ -205,11 +205,37 @@ class AbstractTranslatableMarkdownItemTranslation(models.Model):
                 "pymdownx.blocks.admonition",
                 "pymdownx.arithmatex",
                 "pymdownx.details",
+                "pymdownx.superfences",
             ],
             extension_configs={
                 "pymdownx.arithmatex": {
                     "generic": True,
-                }
+                },
+                "pymdownx.blocks.admonition": {
+                    "types": [
+                        "note",
+                        "info",
+                        "tip",
+                        "success",
+                        "warning",
+                        "caution",
+                        "danger",
+                        "error",
+                        "example",
+                        "abstract",
+                        "summary",
+                        "tldr",
+                        "quote",
+                        "cite",
+                        "question",
+                        "faq",
+                        "help",
+                        "bug",
+                        "security",
+                        "flag",
+                        "ctf",
+                    ]
+                },
             },
         )
         return mark_safe(html)
