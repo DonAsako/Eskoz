@@ -82,6 +82,7 @@ def create_editor_group(sender, **kwargs):
         "blog": {
             "models": [
                 "article",
+                "articletranslation",
                 "articletag",
                 "category",
                 "categorytranslation",
@@ -110,8 +111,9 @@ def create_editor_group(sender, **kwargs):
                 "blogsettings",
                 "infosecsettings",
                 "educationsettings",
+                "translatablemarkdownitemimage",
             ],
-            "actions": ("view", "add"),
+            "actions": ("view", "add", "delete"),
         },
     }
 
