@@ -123,11 +123,22 @@ class UserProfileInline(admin.StackedInline):
     ]
     readonly_fields = ("qr_code",)
 
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = super().get_fieldsets(request, obj)
+        if not request.user.is_superuser and obj.id != request.user.id:
+            new_fieldsets = []
+            for title, options in fieldsets:
+                fields = options.get("fields", [])
+                fields = [f for f in fields if f not in ("otp_is_active", "otp_code", "qr_code")]
+                new_fieldsets.append((title, {"fields": fields}))
+            return new_fieldsets
+        return fieldsets
+
     @admin.display(description=_("Authentication QR Code"))
     def qr_code(self, obj):
         return format_html(
             '<div style="border-radius:5px; background: white; display: flex; align-items:center; justify-content:center;">{}</div>',
-            obj.get_otp_qr_code(),
+            format_html(obj.get_otp_qr_code()),
         )
 
     class Media:
@@ -144,6 +155,44 @@ class UserLinkInline(admin.TabularInline):
 
 class UserAdmin(BaseUserAdmin):
     inlines = [UserProfileInline, UserLinkInline]
+
+    list_display = ("username", "email", "is_staff")
+
+    def has_change_permission(self, request, obj=None):
+        if obj is None:
+            return True
+        if request.user.is_superuser:
+            return True
+        return obj.id == request.user.id
+
+    def has_delete_permission(self, request, obj=None):
+        if obj is None:
+            return True
+        if request.user.is_superuser:
+            return True
+        return obj.id == request.user.id
+
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = super().get_fieldsets(request, obj)
+
+        if request.user.is_superuser:
+            return fieldsets
+
+        new_fieldsets = []
+        for title, options in fieldsets:
+            if title == _("Permissions"):
+                continue
+
+            fields = options.get("fields", ())
+
+            if obj.id != request.user.id:
+                fields = tuple(f for f in fields if f != "password")
+
+            fields = tuple(f for f in fields if f not in ("user_permissions",))
+
+            new_fieldsets.append((title, {"fields": fields}))
+
+        return new_fieldsets
 
 
 class GroupAdmin(BaseGroupAdmin): ...
