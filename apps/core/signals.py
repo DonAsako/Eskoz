@@ -63,63 +63,9 @@ def create_undefined_categories(sender, **kwargs):
 @receiver(post_migrate)
 def create_editor_group(sender, **kwargs):
     editor, _ = Group.objects.get_or_create(name="Editor")
-    EDITOR_PERMISSIONS = {
-        "infosec": {
-            "models": [
-                "ctf",
-                "category",
-                "categorytranslation",
-                "certification",
-                "cve",
-                "issuer",
-                "tag",
-                "writeup",
-                "writeuptag",
-                "writeuptranslation",
-            ],
-            "actions": ("add", "change", "view", "delete"),
-        },
-        "blog": {
-            "models": [
-                "article",
-                "articletranslation",
-                "articletag",
-                "category",
-                "categorytranslation",
-                "project",
-                "projecttag",
-            ],
-            "actions": ("add", "change", "view", "delete"),
-        },
-        "education": {
-            "models": [
-                "category",
-                "categorytranslation",
-                "course",
-                "module",
-                "lesson",
-                "lessontranslation",
-            ],
-            "actions": ("add", "change", "view"),
-        },
-        "core": {
-            "models": [
-                "page",
-                "sitesettings",
-                "seosettings",
-                "wellknownfile",
-                "blogsettings",
-                "infosecsettings",
-                "educationsettings",
-                "translatablemarkdownitemimage",
-            ],
-            "actions": ("view", "add", "delete"),
-        },
-    }
-
     permissions = []
 
-    for app_label, config in EDITOR_PERMISSIONS.items():
+    for app_label, config in settings.EDITOR_PERMISSIONS.items():
         for model in config["models"]:
             for action in config["actions"]:
                 try:

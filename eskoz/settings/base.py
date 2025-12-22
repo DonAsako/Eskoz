@@ -116,3 +116,57 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 ADMIN_URL = os.getenv("ADMIN_URL") or "admin"
+
+EDITOR_PERMISSIONS = {
+    "infosec": {
+        "models": [
+            "ctf",
+            "category",
+            "categorytranslation",
+            "certification",
+            "cve",
+            "issuer",
+            "tag",
+            "writeup",
+            "writeuptag",
+            "writeuptranslation",
+        ],
+        "actions": ("add", "change", "view", "delete"),
+    },
+    "blog": {
+        "models": [
+            "article",
+            "articletranslation",
+            "articletag",
+            "category",
+            "categorytranslation",
+            "project",
+            "projecttag",
+        ],
+        "actions": ("add", "change", "view", "delete"),
+    },
+    "education": {
+        "models": [
+            "category",
+            "categorytranslation",
+            "course",
+            "module",
+            "lesson",
+            "lessontranslation",
+        ],
+        "actions": ("add", "change", "view"),
+    },
+    "core": {
+        "models": [
+            "page",
+            "sitesettings",
+            "seosettings",
+            "wellknownfile",
+            "blogsettings",
+            "infosecsettings",
+            "educationsettings",
+            "translatablemarkdownitemimage",
+        ],
+        "actions": ("view", "add", "delete"),
+    },
+}
