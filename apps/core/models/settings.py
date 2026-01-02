@@ -8,27 +8,18 @@ from apps.core.utils import upload_to_settings
 
 class SiteSettings(models.Model):
     site_name = models.CharField(max_length=100, verbose_name=_("Site name"))
-    logo = models.ImageField(
-        upload_to=upload_to_settings, blank=True, null=True, verbose_name=_("Logo")
-    )
-    favicon = models.ImageField(
-        upload_to=upload_to_settings, blank=True, null=True, verbose_name=_("Favicon")
-    )
+    logo = models.ImageField(upload_to=upload_to_settings, blank=True, null=True, verbose_name=_("Logo"))
+    favicon = models.ImageField(upload_to=upload_to_settings, blank=True, null=True, verbose_name=_("Favicon"))
     contact_email = models.EmailField(blank=True, verbose_name=_("Contact mail"))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated at"))
-    footer_credits = models.CharField(
-        max_length=250,
+    footer_credits = models.TextField(
         verbose_name=_("Footer credits"),
         default='Powered with ❤️ by <a href="https://github.com/DonAsako/eskoz">Eskoz</a>',
         null=True,
         blank=True,
     )
-    under_maintenance = models.BooleanField(
-        default=False, verbose_name=_("Under maintenance")
-    )
-    show_transition = models.BooleanField(
-        default=False, verbose_name=_("Show transition between page")
-    )
+    under_maintenance = models.BooleanField(default=False, verbose_name=_("Under maintenance"))
+    show_transition = models.BooleanField(default=False, verbose_name=_("Show transition between page"))
 
     def __str__(self):
         return gettext("Site settings")
@@ -54,33 +45,17 @@ class SeoSettings(models.Model):
         verbose_name=_("SEO settings"),
     )
 
-    meta_author = models.CharField(
-        max_length=100, blank=True, verbose_name=_("Meta author")
-    )
-    meta_description = models.CharField(
-        max_length=255, blank=True, verbose_name=_("Meta description")
-    )
-    meta_keywords = models.CharField(
-        max_length=255, blank=True, verbose_name=_("Meta keywords")
-    )
+    meta_author = models.CharField(max_length=100, blank=True, verbose_name=_("Meta author"))
+    meta_description = models.CharField(max_length=255, blank=True, verbose_name=_("Meta description"))
+    meta_keywords = models.CharField(max_length=255, blank=True, verbose_name=_("Meta keywords"))
 
-    google_analytics_id = models.CharField(
-        max_length=20, blank=True, verbose_name=_("Google analytics id")
-    )
-    google_tag_manager_id = models.CharField(
-        max_length=30, blank=True, verbose_name=_("Google tag manager id")
-    )
-    google_site_verification = models.CharField(
-        max_length=255, blank=True, verbose_name=_("Google site verification")
-    )
+    google_analytics_id = models.CharField(max_length=20, blank=True, verbose_name=_("Google analytics id"))
+    google_tag_manager_id = models.CharField(max_length=30, blank=True, verbose_name=_("Google tag manager id"))
+    google_site_verification = models.CharField(max_length=255, blank=True, verbose_name=_("Google site verification"))
 
     # Open Graph
-    og_title = models.CharField(
-        max_length=100, blank=True, verbose_name=_("Open Graph title")
-    )
-    og_description = models.CharField(
-        max_length=200, blank=True, verbose_name=_("Open Graph description")
-    )
+    og_title = models.CharField(max_length=100, blank=True, verbose_name=_("Open Graph title"))
+    og_description = models.CharField(max_length=200, blank=True, verbose_name=_("Open Graph description"))
     og_image = models.ImageField(
         upload_to=upload_to_settings,
         blank=True,
@@ -99,12 +74,8 @@ class SeoSettings(models.Model):
         blank=True,
         verbose_name=_("Twitter card type"),
     )
-    twitter_title = models.CharField(
-        max_length=70, blank=True, verbose_name=_("Twitter title")
-    )
-    twitter_description = models.CharField(
-        max_length=200, blank=True, verbose_name=_("Twitter description")
-    )
+    twitter_title = models.CharField(max_length=70, blank=True, verbose_name=_("Twitter title"))
+    twitter_description = models.CharField(max_length=200, blank=True, verbose_name=_("Twitter description"))
     twitter_image = models.ImageField(
         upload_to=upload_to_settings,
         blank=True,
@@ -120,9 +91,7 @@ class WellKnownFile(models.Model):
     filename = models.CharField(max_length=255, verbose_name=_("Filename"))
     content = models.TextField(verbose_name=_("Content"))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated at"))
-    site_settings = models.ForeignKey(
-        SiteSettings, on_delete=models.CASCADE, related_name="well_knowns"
-    )
+    site_settings = models.ForeignKey(SiteSettings, on_delete=models.CASCADE, related_name="well_knowns")
 
     def __str__(self):
         return self.filename
@@ -139,18 +108,10 @@ class BlogSettings(models.Model):
         related_name="blog",
         verbose_name=_("Blog settings"),
     )
-    is_active = models.BooleanField(
-        default=True, verbose_name=_("Activate Blog Module")
-    )
-    activate_members_view = models.BooleanField(
-        default=False, verbose_name=_("Show members page")
-    )
-    activate_projects_page = models.BooleanField(
-        default=True, verbose_name=_("Show projects page")
-    )
-    activate_articles_page = models.BooleanField(
-        default=True, verbose_name=_("Show articles page")
-    )
+    is_active = models.BooleanField(default=True, verbose_name=_("Activate Blog Module"))
+    activate_members_view = models.BooleanField(default=False, verbose_name=_("Show members page"))
+    activate_projects_page = models.BooleanField(default=True, verbose_name=_("Show projects page"))
+    activate_articles_page = models.BooleanField(default=True, verbose_name=_("Show articles page"))
 
     def __str__(self):
         return gettext("Active") if self.is_active else ""
@@ -163,19 +124,11 @@ class InfosecSettings(models.Model):
         related_name="infosec",
         verbose_name=_("Infosec settings"),
     )
-    is_active = models.BooleanField(
-        default=False, verbose_name=_("Activate Infosec Module")
-    )
-    activate_certifications_page = models.BooleanField(
-        default=True, verbose_name=_("Show certifications page")
-    )
+    is_active = models.BooleanField(default=False, verbose_name=_("Activate Infosec Module"))
+    activate_certifications_page = models.BooleanField(default=True, verbose_name=_("Show certifications page"))
 
-    activate_cves_page = models.BooleanField(
-        default=True, verbose_name=_("Show CVEs page")
-    )
-    activate_writeups_page = models.BooleanField(
-        default=True, verbose_name=_("Show writeups page")
-    )
+    activate_cves_page = models.BooleanField(default=True, verbose_name=_("Show CVEs page"))
+    activate_writeups_page = models.BooleanField(default=True, verbose_name=_("Show writeups page"))
 
     def __str__(self):
         return gettext("Active") if self.is_active else ""
@@ -188,12 +141,8 @@ class EducationSettings(models.Model):
         related_name="education",
         verbose_name=_("Education settings"),
     )
-    is_active = models.BooleanField(
-        default=False, verbose_name=_("Activate Education Module")
-    )
-    activate_courses_page = models.BooleanField(
-        default=False, verbose_name=_("Show courses page")
-    )
+    is_active = models.BooleanField(default=False, verbose_name=_("Activate Education Module"))
+    activate_courses_page = models.BooleanField(default=False, verbose_name=_("Show courses page"))
 
     def __str__(self):
         return gettext("Active") if self.is_active else ""
@@ -214,9 +163,7 @@ class Page(models.Model):
         default="public",
         verbose_name=_("Visibility"),
     )
-    site_settings = models.ForeignKey(
-        SiteSettings, on_delete=models.CASCADE, related_name="pages", null=True
-    )
+    site_settings = models.ForeignKey(SiteSettings, on_delete=models.CASCADE, related_name="pages", null=True)
 
     slug = models.SlugField(unique=True, blank=False, verbose_name=_("Slug"))
 
@@ -235,26 +182,14 @@ class Page(models.Model):
                 pages = pages.exclude(pk=self.pk)
 
             if pages.count() >= 4:
-                raise ValidationError(
-                    {
-                        "visibility": _(
-                            "You can only have up to 3 pages marked as 'referenced'."
-                        )
-                    }
-                )
+                raise ValidationError({"visibility": _("You can only have up to 3 pages marked as 'referenced'.")})
         if self.visibility == "index":
             pages = Page.objects.filter(visibility="index")
             if self.pk:
                 pages = pages.exclude(pk=self.pk)
 
             if pages.count() >= 4:
-                raise ValidationError(
-                    {
-                        "visibility": _(
-                            "You can only have up to 1 page marked as 'index'."
-                        )
-                    }
-                )
+                raise ValidationError({"visibility": _("You can only have up to 1 page marked as 'index'.")})
 
     def __str__(self):
         return self.title
