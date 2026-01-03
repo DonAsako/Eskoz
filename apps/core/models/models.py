@@ -1,3 +1,5 @@
+import secrets
+
 import pyotp
 import qrcode
 import qrcode.image.svg
@@ -20,6 +22,9 @@ class UserProfile(models.Model):
 
 
 class User2FA(models.Model):
+    BACKUP_CODE_COUNT = 10
+    BACKUP_CODE_LENGTH = 8
+
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
@@ -28,6 +33,8 @@ class User2FA(models.Model):
     )
     is_active = models.BooleanField(verbose_name=_("Is 2FA active"), default=False)
     secret_key = models.CharField(default=pyotp.random_base32, max_length=64, verbose_name=_("OTP secret key"))
+    backup_codes = models.JSONField(default=list, blank=True, verbose_name=_("Backup codes"))
+    backup_codes_viewed = models.BooleanField(default=False, verbose_name=_("Backup codes viewed"))
 
     def get_otpauth_uri(self):
         totp = pyotp.TOTP(self.secret_key)
@@ -45,8 +52,25 @@ class User2FA(models.Model):
 
         return qr_code_image.to_string().decode("utf_8")
 
+    def generate_backup_codes(self):
+        """Generate new backup codes and return them."""
+        codes = [secrets.token_hex(self.BACKUP_CODE_LENGTH // 2).upper() for _ in range(self.BACKUP_CODE_COUNT)]
+        self.backup_codes = codes
+        return codes
+
+    def verify_backup_code(self, code):
+        """Verify and consume a backup code. Returns True if valid."""
+        code = code.strip().upper().replace("-", "").replace(" ", "")
+        if code in self.backup_codes:
+            self.backup_codes.remove(code)
+            self.save()
+            return True
+        return False
+
     def reset_secret(self):
         self.secret_key = pyotp.random_base32()
+        self.backup_codes = []
+        self.backup_codes_viewed = False
         self.is_active = False
         self.save()
 

@@ -4,12 +4,12 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group, User
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.utils.html import format_html
+from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.admin.abstracts import AbstractSubModuleInline
 from apps.core.admin.site import admin_site
-from apps.core.forms import PageAdminForm, UserProfileAdminForm
+from apps.core.forms import PageAdminForm, User2FAAdminForm
 from apps.core.models import (
     BlogSettings,
     EducationSettings,
@@ -17,6 +17,7 @@ from apps.core.models import (
     Page,
     SeoSettings,
     SiteSettings,
+    User2FA,
     UserLink,
     UserProfile,
     WellKnownFile,
@@ -114,31 +115,101 @@ class PageAdmin(admin.ModelAdmin):
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
-    form = UserProfileAdminForm
-
     verbose_name = _("Profil")
     fieldsets = [
         (_("Description"), {"fields": ["avatar", "bio"]}),
-        (_("Security"), {"fields": ["otp_is_active", "otp_code", "qr_code"]}),
     ]
-    readonly_fields = ("qr_code",)
 
-    def get_fieldsets(self, request, obj=None):
-        fieldsets = super().get_fieldsets(request, obj)
-        if not request.user.is_superuser and obj.id != request.user.id:
-            new_fieldsets = []
-            for title, options in fieldsets:
-                fields = options.get("fields", [])
-                fields = [f for f in fields if f not in ("otp_is_active", "otp_code", "qr_code")]
-                new_fieldsets.append((title, {"fields": fields}))
-            return new_fieldsets
-        return fieldsets
+
+class User2FAInline(admin.StackedInline):
+    model = User2FA
+    can_delete = False
+    verbose_name = _("Two Factor Authentication")
+    form = User2FAAdminForm
+    fieldsets = [
+        (_("Security"), {"fields": ["is_active", "otp_code", "qr_code", "backup_codes_display"]}),
+    ]
+    readonly_fields = ("qr_code", "backup_codes_display")
 
     @admin.display(description=_("Authentication QR Code"))
     def qr_code(self, obj):
-        return format_html(
-            '<div style="border-radius:5px; background: white; display: flex; align-items:center; justify-content:center;">{}</div>',
-            format_html(obj.get_otp_qr_code()),
+        if not obj or not obj.secret_key:
+            return _("No 2FA secret key set")
+
+        uri = obj.get_otpauth_uri()
+        return mark_safe(
+            f"""
+            <div style="padding:10px; background:white; border-radius:6px; display:flex; justify-content:center; margin-bottom:12px;">
+                {obj.get_otp_qr_code()}
+            </div>
+            <div style="background:#1a1a1a; border:1px solid #333; border-radius:6px; padding:12px; margin-bottom:8px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="color:#888; font-size:12px; text-transform:uppercase;">{_("Secret Key")}</span>
+                    <button type="button" style="background:#2563eb; color:white; border:none;
+                            padding:4px 10px; border-radius:4px; cursor:pointer; font-size:12px;"
+                            onclick="navigator.clipboard.writeText('{obj.secret_key}')
+                            .then(() => this.textContent = '✓')">{_("Copy")}</button>
+                </div>
+                <code style="color:#e8e8e8; font-family:monospace; word-break:break-all;">{obj.secret_key}</code>
+            </div>
+            <div style="background:#1a1a1a; border:1px solid #333; border-radius:6px; padding:12px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="color:#888; font-size:12px; text-transform:uppercase;">{_("Full URI")}</span>
+                    <button type="button" style="background:#2563eb; color:white; border:none;
+                            padding:4px 10px; border-radius:4px; cursor:pointer; font-size:12px;"
+                            onclick="navigator.clipboard.writeText('{uri}')
+                            .then(() => this.textContent = '✓')">{_("Copy")}</button>
+                </div>
+                <code style="color:#e8e8e8; font-family:monospace; word-break:break-all; font-size:11px;">{uri}</code>
+            </div>
+            """
+        )
+
+    @admin.display(description=_("Backup Codes"))
+    def backup_codes_display(self, obj):
+        if not obj or not obj.is_active:
+            return ""
+
+        # Codes already viewed - show nothing
+        if obj.backup_codes_viewed:
+            return ""
+
+        if not obj.backup_codes:
+            return ""
+
+        code_style = (
+            "display:inline-block; background:#2a2a2a; padding:4px 8px; "
+            "margin:3px; border-radius:4px; font-family:monospace; letter-spacing:1px;"
+        )
+        codes_html = "".join([f'<code style="{code_style}">{code}</code>' for code in obj.backup_codes])
+
+        all_codes = "\\n".join(obj.backup_codes)
+
+        # Mark as viewed after displaying
+        if not obj.backup_codes_viewed:
+            obj.backup_codes_viewed = True
+            obj.save(update_fields=["backup_codes_viewed"])
+
+        return mark_safe(
+            f"""
+            <div style="background:#1a1a1a; border:1px solid #333; border-radius:6px; padding:12px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <span style="color:#888; font-size:12px; text-transform:uppercase;">
+                        {_("Recovery Codes")} ({len(obj.backup_codes)} {_("remaining")})
+                    </span>
+                    <button type="button" style="background:#2563eb; color:white; border:none;
+                            padding:4px 10px; border-radius:4px; cursor:pointer; font-size:12px;"
+                            onclick="navigator.clipboard.writeText('{all_codes}')
+                            .then(() => this.textContent = '✓')">{_("Copy All")}</button>
+                </div>
+                <div style="display:flex; flex-wrap:wrap; gap:4px; color:#e8e8e8;">
+                    {codes_html}
+                </div>
+                <p style="color:#dc2626; font-size:12px; margin-top:12px; margin-bottom:0; font-weight:bold;">
+                    ⚠️ {_("SAVE THESE CODES NOW! They will never be shown again.")}
+                </p>
+            </div>
+            """
         )
 
     class Media:
@@ -154,7 +225,7 @@ class UserLinkInline(admin.TabularInline):
 
 
 class UserAdmin(BaseUserAdmin):
-    inlines = [UserProfileInline, UserLinkInline]
+    inlines = [User2FAInline, UserProfileInline, UserLinkInline]
 
     list_display = ("username", "email", "is_staff")
 
