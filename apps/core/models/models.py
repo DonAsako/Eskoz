@@ -7,28 +7,51 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.utils import upload_to_users
 
+from .settings import SiteSettings
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     avatar = models.ImageField(upload_to=upload_to_users, blank=True, null=True, verbose_name=_("Avatar"))
     bio = models.TextField(blank=True, verbose_name=_("Biography"))
-    otp_is_active = models.BooleanField(verbose_name=_("Is 2FA active"), default=False)
-    otp_secret_key = models.CharField(default=pyotp.random_base32, max_length=64, verbose_name=_("OTP secret key"))
-
-    def get_otpauth(self):
-        return pyotp.totp.TOTP(self.otp_secret_key).provisioning_uri(name=self.user.get_username(), issuer_name="Eskoz")
-
-    def verify_otp(self, token):
-        return pyotp.TOTP(self.otp_secret_key).verify(token)
-
-    def get_otp_qr_code(self):
-        qrcode_uri = self.get_otpauth()
-        qr_code_image_factory = qrcode.image.svg.SvgPathImage
-        qr_code_image = qrcode.make(qrcode_uri, image_factory=qr_code_image_factory)
-        return qr_code_image.to_string().decode("utf_8")
 
     def __str__(self):
         return f"{self.user.get_username()}"
+
+
+class User2FA(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="two_factor",
+        verbose_name=_("User"),
+    )
+    is_active = models.BooleanField(verbose_name=_("Is 2FA active"), default=False)
+    secret_key = models.CharField(default=pyotp.random_base32, max_length=64, verbose_name=_("OTP secret key"))
+
+    def get_otpauth_uri(self):
+        totp = pyotp.TOTP(self.secret_key)
+        return totp.provisioning_uri(
+            name=self.user.get_username(),
+            issuer_name=SiteSettings.objects.first().site_name,
+        )
+
+    def verify_otp(self, token):
+        return pyotp.TOTP(self.secret_key).verify(token)
+
+    def get_otp_qr_code(self):
+        uri = self.get_otpauth_uri()
+        qr_code_image = qrcode.make(uri, image_factory=qrcode.image.svg.SvgPathImage)
+
+        return qr_code_image.to_string().decode("utf_8")
+
+    def reset_secret(self):
+        self.secret_key = pyotp.random_base32()
+        self.is_active = False
+        self.save()
+
+    def __str__(self):
+        return f"2FA for {self.user.username}"
 
 
 class UserLink(models.Model):
