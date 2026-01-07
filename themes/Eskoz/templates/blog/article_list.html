@@ -1,45 +1,46 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% block title %} -  {% trans 'Articles' %}{% endblock %}
-    {% block SEO %}
-    <meta property="og:type" content="website" />
-    {% endblock %}
+{% block title %} - {% trans 'Articles' %}{% endblock %}
+{% block SEO %}
+<meta property="og:type" content="website" />
+{% endblock %}
 {% block content %}
-    <div class="article_list">
+<div class="article_list">
     <div class="article_list--top">
         <h2 class="article_list--title">{% trans 'Articles' %}</h2>
-        {% include "components/category_selector.html" with categories=categories base_url="articles"%}
-        
+        {% include "components/category_selector.html" with categories=categories base_url="articles" %}
     </div>
-        {% if not articles %}
-        <h2 class="message-wrapper"></h2>
-            {% trans 'There is no article at the moment.' %}
-        </h2>
-        {% else %}    
-            {% for article in articles.all|dictsortreversed:"published_on" %}
-            <a class="article_card" href="{% url "blog:article_detail" article.category.slug article.slug %}">
-                <div class="article_card--top">
-                    <div class="article_card--top-left">
-                        <p class="article_card--title">{{ article.get_translation.title }}</p>
-                    </div>
-                    {% if article.category %}
-                        <p class="article_card--category">{{ article.category }}</p>
-                    {% endif %}
+    {% if not articles %}
+        <div class="message-wrapper">
+            <p>{% trans 'There is no article at the moment.' %}</p>
+        </div>
+    {% else %}
+        {% for article in articles.all|dictsortreversed:"published_on" %}
+        <a class="article_card" href="{% url "blog:article_detail" article.category.slug article.slug %}">
+            <div class="article_card--top">
+                <div class="article_card--top-left">
+                    <p class="article_card--title">{{ article.get_translation.title }}</p>
                 </div>
-                {% if article.get_translation.description %}
-                    <p class="article_card--description">“{{ article.get_translation.description|default_if_none:'' }}”</p>
+                {% if article.category %}
+                    <p class="article_card--category">{{ article.category }}</p>
                 {% endif %}
-                <div class="article_card--bottom">
-                    <p class="article_card--date">{{ article.published_on|date:"j F Y" }}</p>
-
-                    <div class="article_card--tags">
-                        {% for tag in article.tags.all %}
-                            <p class="article_card--tag">{{ tag.title }}</p>
-                        {% endfor %}
-                    </div>
+            </div>
+            {% if article.get_translation.description %}
+                <p class="article_card--description">{{ article.get_translation.description|default_if_none:'' }}</p>
+            {% endif %}
+            <div class="article_card--bottom">
+                <p class="article_card--date">{{ article.published_on|date:"j F Y" }}</p>
+                {% if article.get_translation.get_reading_time %}
+                <span class="article_card--reading-time">📖 {{ article.get_translation.get_reading_time }} min</span>
+                {% endif %}
+                <div class="article_card--tags">
+                    {% for tag in article.tags.all %}
+                        <p class="article_card--tag">{{ tag.title }}</p>
+                    {% endfor %}
                 </div>
-            </a>
-            {% endfor %}
-        {% endif %}
-    </div>
+            </div>
+        </a>
+        {% endfor %}
+    {% endif %}
+</div>
 {% endblock %}

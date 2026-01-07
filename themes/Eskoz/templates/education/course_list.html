@@ -1,45 +1,43 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% block title %} - {% trans 'Courses' %}{% endblock %}
-    {% block SEO %}
-    <meta property="og:type" content="website" />
-    {% endblock %}
+{% block SEO %}
+<meta property="og:type" content="website" />
+{% endblock %}
 {% block content %}
-    <div class="article_list">
+<div class="article_list">
     <div class="article_list--top">
         <h2 class="article_list--title">{% trans 'Courses' %}</h2>
-        {% include "components/category_selector.html" with categories=categories base_url="education"%}
+        {% include "components/category_selector.html" with categories=categories base_url="education" %}
     </div>
-        {% if not courses %}
-        <h2 class="message-wrapper"></h2>
-            {% trans 'There is no course at the moment.' %}
-        </h2>
-        {% else %}    
-            {% for course in courses.all %}      
-                <a class="article_card" href="{% url "education:module_list" course.slug %}">
-
-                    <div class="article_card--top">
-                        <div class="article_card--top-left">
-                            <p class="article_card--title">{{ course.title }}</p>
-                        </div>
-                        {% if course.category %}
-                            <p class="article_card--category">{{ course.category }}</p>
-                        {% endif %}
-                    </div>
-                    {% if course.get_translation.description %}
-                        <p class="article_card--description">“{{ course.description|default_if_none:'' }}”</p>
-                    {% endif %}
-                    <div class="article_card--bottom">
-                        <p class="article_card--date">{{ course.published_on|date:"j F Y" }}</p>
-
-                        <div class="article_card--tags">
-                            {% for tag in course.tags.all %}
-                                <p class="article_card--tag">{{ tag.title }}</p>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </a>
-            {% endfor %}
-        {% endif %}
-    </div>
+    {% if not courses %}
+        <div class="message-wrapper">
+            <p>{% trans 'There is no course at the moment.' %}</p>
+        </div>
+    {% else %}
+        {% for course in courses.all %}
+        <a class="article_card" href="{% url "education:module_list" course.slug %}">
+            <div class="article_card--top">
+                <div class="article_card--top-left">
+                    <p class="article_card--title">{{ course.title }}</p>
+                </div>
+                {% if course.category %}
+                    <p class="article_card--category">{{ course.category }}</p>
+                {% endif %}
+            </div>
+            {% if course.get_translation.description %}
+                <p class="article_card--description">{{ course.get_translation.description|default_if_none:'' }}</p>
+            {% endif %}
+            <div class="article_card--bottom">
+                <p class="article_card--date">{{ course.published_on|date:"j F Y" }}</p>
+                <div class="article_card--tags">
+                    {% for tag in course.tags.all %}
+                        <p class="article_card--tag">{{ tag.title }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    {% endif %}
+</div>
 {% endblock %}

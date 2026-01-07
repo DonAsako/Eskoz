@@ -1,19 +1,25 @@
 {% extends 'base.html' %}
 {% load i18n %}
-
-{% block title %}
-    {% trans " - Forbidden (CSRF)" %}
-{% endblock %}
-
 {% block SEO %}
     <meta property="og:type" content="website" />
     <meta name="robots" content="noindex" />
 {% endblock %}
 
+{% block title %} - {% trans "Security error" %}{% endblock %}
+
 {% block content %}
 <div class="message-wrapper">
-    <h2>{% trans "ERROR 403 - Forbidden" %}</h2>
-    <p>{% trans "CSRF verification failed. You do not have permission to access this page." %}</p>
-    <p>{% trans "Please refresh the page and try again. Make sure cookies are enabled in your browser." %}</p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+    <h2>{% trans '403 - CSRF verification failed' %}</h2>
+    <p>{% trans "Your request was rejected for security reasons. Please try again." %}</p>
+    <p style="margin-top: 1.5rem;">
+        <a href="/" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--accent-gradient); color: var(--bg-primary); border-radius: var(--radius-sm); font-weight: 600; text-decoration: none;">
+            ← {% trans "Back to homepage" %}
+        </a>
+    </p>
 </div>
 {% endblock %}

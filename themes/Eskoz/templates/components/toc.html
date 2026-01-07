@@ -1,4 +1,9 @@
-<aside class="article--toc" id="toc"></aside>
+{% load i18n %}
+<aside class="article--toc" id="toc">
+    <p style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.75rem;">
+        {% trans "On this page" %}
+    </p>
+</aside>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -8,7 +13,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!content || !toc) return;
 
     const headers = content.querySelectorAll("h1, h2, h3, h4");
-    if (!headers.length) return;
+    if (!headers.length) {
+        toc.style.display = 'none';
+        return;
+    }
 
     const ul = document.createElement("ul");
 
@@ -16,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const id = header.id;
         if (!id) return;
 
+        // Create anchor link wrapper
         const anchor = document.createElement("a");
         anchor.href = `#${id}`;
         anchor.className = "article--anchor-link";
@@ -23,20 +32,22 @@ document.addEventListener("DOMContentLoaded", () => {
         while (header.firstChild) {
             anchor.appendChild(header.firstChild);
         }
-        
+
         header.appendChild(anchor);
+
         if (!header.id) {
             header.id = header.textContent.trim().toLowerCase().replace(/\s+/g, '-');
         }
 
+        // Create TOC entry
         const li = document.createElement("li");
-
         const a = document.createElement("a");
-        a.style.marginLeft = `${(parseInt(header.tagName[1]) - 1) * 1}em`;
 
+        const level = parseInt(header.tagName[1]) - 1;
+        a.style.paddingLeft = `${level * 0.75}rem`;
         a.href = `#${header.id}`;
         a.textContent = header.textContent;
-        
+
         li.appendChild(a);
         ul.appendChild(li);
     });
@@ -48,24 +59,22 @@ document.addEventListener("DOMContentLoaded", () => {
         let current = null;
         headers.forEach(header => {
             const rect = header.getBoundingClientRect();
-            if (rect.top <= 100) {
+            if (rect.top <= 120) {
                 current = header.id;
             }
         });
 
         tocLinks.forEach(link => {
-            if (link.getAttribute('href') === `#${current}`) {
+            const href = link.getAttribute('href');
+            if (href && href === `#${current}`) {
                 link.parentElement.classList.add("active");
-            } else {
+            } else if (href) {
                 link.parentElement.classList.remove("active");
             }
         });
     }
 
-    document.addEventListener('scroll', onScroll);
-
+    document.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
-
-
 });
 </script>

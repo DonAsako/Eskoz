@@ -1,22 +1,42 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% block title %} - {% trans 'CVEs' %}{% endblock %}
-    {% block SEO %}
-    <meta property="og:type" content="website" />
-    {% endblock %}
+{% block SEO %}
+<meta property="og:type" content="website" />
+{% endblock %}
 {% block content %}
-    <div class="article_list">
+<div class="article_list">
     <div class="article_list--top">
         <h2 class="article_list--title">{% trans 'CVEs' %}</h2>
     </div>
-        {% if not CVES %}
-        <h2 class="message-wrapper"></h2>
-            {% trans 'There is no CVE at the moment.' %}
-        </h2>
-        {% else %}    
-            {% for CVE in CVES %}      
-            WIP
-            {% endfor %}
-        {% endif %}
-    </div>
+    {% if not CVES %}
+        <div class="message-wrapper">
+            <p>{% trans 'There is no CVE at the moment.' %}</p>
+        </div>
+    {% else %}
+        {% for CVE in CVES %}
+        <a class="article_card" {% if CVE.article %}href="{% url 'blog:article_detail' CVE.article.category.slug CVE.article.slug %}"{% endif %}>
+            <div class="article_card--top">
+                <div class="article_card--top-left">
+                    <p class="article_card--title">{{ CVE.cve_id }}</p>
+                </div>
+                {% if CVE.severity %}
+                <p class="article_card--category">{{ CVE.get_severity_display }}</p>
+                {% endif %}
+            </div>
+            {% if CVE.description %}
+            <p class="article_card--description">{{ CVE.description|default_if_none:'' }}</p>
+            {% endif %}
+            <div class="article_card--bottom">
+                <p class="article_card--date">{{ CVE.published_date|date:"j F Y" }}</p>
+                <div class="article_card--tags">
+                    {% if CVE.cvss_score %}
+                    <p class="article_card--tag">CVSS: {{ CVE.cvss_score }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    {% endif %}
+</div>
 {% endblock %}

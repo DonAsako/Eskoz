@@ -1,53 +1,47 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% block title %} - Certifications{% endblock %}
-    {% block SEO %}
-    <meta property="og:type" content="website" />
-    {% endblock %}
+{% block title %} - {% trans 'Certifications' %}{% endblock %}
+{% block SEO %}
+<meta property="og:type" content="website" />
+{% endblock %}
 {% block content %}
-    <div class="article_list">
-        <div class="article_list--top">
-            <h2 class="article_list--title">{% trans 'Certifications' %}</h2>
-        </div>
-            
-        {% if not certifications %}
-        <h2 class="message-wrapper"></h2>
-            {% trans 'There is no certifications at the moment.' %}
-        </h2>
-        {% else %}    
-            {% for certification in certifications %}      
-                <a class="article_card article_card-split" 
-                {% if certification.article %}    
-                href="{% url 'blog:article_detail' certification.article.slug %}"
-                {% endif %}
-                >
-                <div class="article_card_left">
-                    {% if certification.picture %}
-                        <img class="article_card--image" src="{{ certification.picture.url }}" />
-                    {% endif %}
-                </div>
-
-                    <div class="article_card_right">
-                        <div class="article_card-split--top">
-                            <div class="article_card--top">
-                                <div class="article_card--top-left">
-                                    <p class="article_card--title">{{ certification.name }}</p>
-                                </div>
-                                {% if certification.issuer %}
-                                    <p class="article_card--category">{{ certification.issuer.name }}</p>
-                                {% endif %}
-                            </div>
-                            {% if certification.description %}
-                                <p class="article_card--description">“{{ certification.description|default_if_none:'' }}”</p>
-                            {% endif %}
-                        </div>
-
-                        <div class="article_card--bottom">
-                            <p class="article_card--date">{% trans 'Obtained on' %} {{ certification.obtained_date|date }}</p>
-                        </div>
-                    </div>
-                </a>
-            {% endfor %}
-        {% endif %}
+<div class="article_list">
+    <div class="article_list--top">
+        <h2 class="article_list--title">{% trans 'Certifications' %}</h2>
     </div>
+    {% if not certifications %}
+    <div class="message-wrapper">
+        <p>{% trans 'There is no certifications at the moment.' %}</p>
+    </div>
+    {% else %}
+    {% for certification in certifications %}
+    <a class="article_card article_card-split" {% if certification.article
+        %}href="{% url 'blog:article_detail' certification.article.category.slug certification.article.slug %}" {% endif
+        %}>
+        <div class="article_card_left">
+            {% if certification.picture %}
+            <img class="article_card--image" src="{{ certification.picture.url }}" alt="{{ certification.name }}">
+            {% endif %}
+        </div>
+        <div class="article_card_right">
+            <div class="article_card--top">
+                <div class="article_card--top-left">
+                    <p class="article_card--title">{{ certification.name }}</p>
+                </div>
+                {% if certification.issuer %}
+                <p class="article_card--category">{{ certification.issuer.name }}</p>
+                {% endif %}
+            </div>
+            {% if certification.description %}
+            <p class="article_card--description">{{ certification.description|default_if_none:'' }}</p>
+            {% endif %}
+            <div class="article_card--bottom">
+                <p class="article_card--date">{% trans 'Obtained on' %} {{ certification.obtained_date|date:"j F Y" }}
+                </p>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+    {% endif %}
+</div>
 {% endblock %}

@@ -1,45 +1,42 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% block title %} - {{course}}{% endblock %}
-    {% block SEO %}
-    <meta property="og:type" content="website" />
-    {% endblock %}
+{% block title %} - {{ course.title }} › {{ module.title }}{% endblock %}
+{% block SEO %}
+<meta property="og:type" content="website" />
+{% endblock %}
 {% block content %}
-    <div class="article_list">
+<div class="article_list">
     <div class="article_list--top">
-        <h2 class="article_list--title">{% trans 'Courses' %} > {{course.title}} > {{ module.title}}</h2>
-        {% include "components/category_selector.html" with categories=categories base_url="education"%}
+        <h2 class="article_list--title">{{ course.title }} › {{ module.title }}</h2>
+        <span class="lesson-progress-counter"></span>
     </div>
-        {% if not lessons %}
-        <h2 class="message-wrapper"></h2>
-            {% trans 'There is no lesson at the moment.' %}
-        </h2>
-        {% else %}    
-            {% for lesson in lessons.all %}      
-                <a class="article_card" href="{% url "education:lesson_detail" course.slug module.slug lesson.slug %}">
-
-                    <div class="article_card--top">
-                        <div class="article_card--top-left">
-                            <p class="article_card--title">{{ lesson.title }}</p>
-                        </div>
-                        {% if lesson.category %}
-                            <p class="article_card--category">{{ lesson.category }}</p>
-                        {% endif %}
-                    </div>
-                    {% if lesson.get_translation.description %}
-                        <p class="article_card--description">“{{ lesson.description|default_if_none:'' }}”</p>
-                    {% endif %}
-                    <div class="article_card--bottom">
-                        <p class="article_card--date">{{ lesson.published_on|date:"j F Y" }}</p>
-
-                        <div class="article_card--tags">
-                            {% for tag in lesson.tags.all %}
-                                <p class="article_card--tag">{{ tag.title }}</p>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </a>
-            {% endfor %}
-        {% endif %}
-    </div>
+    {% if not lessons %}
+        <div class="message-wrapper">
+            <p>{% trans 'There is no lesson at the moment.' %}</p>
+        </div>
+    {% else %}
+        {% for lesson in lessons.all %}
+        <a class="article_card" href="{% url "education:lesson_detail" course.slug module.slug lesson.slug %}" data-lesson="{{ lesson.slug }}">
+            <div class="article_card--top">
+                <div class="article_card--top-left">
+                    <p class="article_card--title">{{ lesson.get_translation.title }}</p>
+                </div>
+            </div>
+            {% if lesson.get_translation.description %}
+                <p class="article_card--description">{{ lesson.get_translation.description|default_if_none:'' }}</p>
+            {% endif %}
+            <div class="article_card--bottom">
+                {% if lesson.get_translation.get_reading_time %}
+                <span class="article_card--reading-time">📖 {{ lesson.get_translation.get_reading_time }} min</span>
+                {% endif %}
+                <div class="article_card--tags">
+                    {% for tag in lesson.tags.all %}
+                        <p class="article_card--tag">{{ tag.title }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    {% endif %}
+</div>
 {% endblock %}

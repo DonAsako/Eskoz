@@ -1,22 +1,51 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% block title %} - {% trans 'Members' %}{% endblock %}
-    {% block SEO %}
-    <meta property="og:type" content="website" />
-    {% endblock %}
+{% block SEO %}
+<meta property="og:type" content="website" />
+{% endblock %}
 {% block content %}
-    <div class="article_list">
+<div class="article_list">
     <div class="article_list--top">
         <h2 class="article_list--title">{% trans 'Members' %}</h2>
     </div>
-        {% if not members %}
-        <h2 class="message-wrapper"></h2>
-            {% trans 'There is no members at the moment.' %}
-        </h2>
-        {% else %}    
-            {% for member in members %}      
-            WIP
-            {% endfor %}
-        {% endif %}
-    </div>
+    {% if not members %}
+        <div class="message-wrapper">
+            <p>{% trans 'There is no members at the moment.' %}</p>
+        </div>
+    {% else %}
+        {% for member in members %}
+        <div class="article_card article_card-split">
+            <div class="article_card_left">
+                {% if member.picture %}
+                <img class="article_card--image" src="{{ member.picture.url }}" alt="{{ member.username }}" style="border-radius: 50%;">
+                {% endif %}
+            </div>
+            <div class="article_card_right">
+                <div class="article_card--top">
+                    <div class="article_card--top-left">
+                        <p class="article_card--title">{{ member.username }}</p>
+                    </div>
+                    {% if member.role %}
+                    <p class="article_card--category">{{ member.role }}</p>
+                    {% endif %}
+                </div>
+                {% if member.bio %}
+                <p class="article_card--description">{{ member.bio|default_if_none:'' }}</p>
+                {% endif %}
+                <div class="article_card--bottom">
+                    <div class="article_card--tags">
+                        {% if member.website %}
+                        <a class="article_card--tag" href="{{ member.website }}" target="_blank" rel="noopener">{% trans 'Website' %}</a>
+                        {% endif %}
+                        {% if member.github %}
+                        <a class="article_card--tag" href="{{ member.github }}" target="_blank" rel="noopener">GitHub</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+</div>
 {% endblock %}

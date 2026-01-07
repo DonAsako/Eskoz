@@ -1,18 +1,24 @@
 {% extends 'base.html' %}
 {% load i18n %}
-
-{% block title %}
-    {% trans " - Forbidden" %}
-{% endblock %}
-
 {% block SEO %}
     <meta property="og:type" content="website" />
     <meta name="robots" content="noindex" />
 {% endblock %}
 
+{% block title %} - {% trans "Access denied" %}{% endblock %}
+
 {% block content %}
 <div class="message-wrapper">
-    <h2>{% trans "ERROR 403 - Forbidden" %}</h2>
-    <p>{% trans "You do not have permission to access this page." %}</p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+    </svg>
+    <h2>{% trans '403 - Access denied' %}</h2>
+    <p>{% trans "You don't have permission to access this page." %}</p>
+    <p style="margin-top: 1.5rem;">
+        <a href="/" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--accent-gradient); color: var(--bg-primary); border-radius: var(--radius-sm); font-weight: 600; text-decoration: none;">
+            ← {% trans "Back to homepage" %}
+        </a>
+    </p>
 </div>
 {% endblock %}
