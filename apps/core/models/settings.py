@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.translation import gettext
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.utils import upload_to_settings
+from apps.core.utils import get_content_as_html, upload_to_settings
 
 
 class SiteSettings(models.Model):
@@ -174,6 +174,9 @@ class Page(models.Model):
         self.full_clean()
 
         super().save(*args, **kwargs)
+
+    def get_content_as_html(self):
+        return get_content_as_html(self.content)
 
     def clean(self):
         if self.visibility == "referenced":

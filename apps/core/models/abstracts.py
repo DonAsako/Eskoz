@@ -1,4 +1,3 @@
-import markdown
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey
@@ -7,12 +6,11 @@ from django.core import checks
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
-from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.utils import upload_to_posts, upload_to_settings
+from apps.core.utils import get_content_as_html, upload_to_posts, upload_to_settings
 
 
 class AbstractTranslatableCategory(models.Model):
@@ -189,56 +187,7 @@ class AbstractTranslatableMarkdownItemTranslation(models.Model):
         return len(self.content.split(" ")) // 200
 
     def get_content_as_html(self):
-        """
-        Convert the Markdown content of the translatable markdown item to safe HTML.
-
-        Returns:
-            str: HTML representation of the post content.
-        """
-        html = markdown.markdown(
-            self.content,
-            extensions=[
-                "extra",
-                "codehilite",
-                "fenced_code",
-                "toc",
-                "pymdownx.blocks.admonition",
-                "pymdownx.arithmatex",
-                "pymdownx.details",
-                "pymdownx.superfences",
-            ],
-            extension_configs={
-                "pymdownx.arithmatex": {
-                    "generic": True,
-                },
-                "pymdownx.blocks.admonition": {
-                    "types": [
-                        "note",
-                        "info",
-                        "tip",
-                        "success",
-                        "warning",
-                        "caution",
-                        "danger",
-                        "error",
-                        "example",
-                        "abstract",
-                        "summary",
-                        "tldr",
-                        "quote",
-                        "cite",
-                        "question",
-                        "faq",
-                        "help",
-                        "bug",
-                        "security",
-                        "flag",
-                        "ctf",
-                    ]
-                },
-            },
-        )
-        return mark_safe(html)
+        return get_content_as_html(self.content)
 
     def __str__(self):
         """Return the TranslatableMarkdownItem slug and language code as the string representation."""
