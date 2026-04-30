@@ -26,14 +26,9 @@ def index(request):
 
 def page_detail(request, slug):
     page = get_object_or_404(Page, slug=slug)
-    if page.visibility == "private":
-        if request.user.is_authenticated:
-            return render(request, "core/page.html", {"page": page})
-        else:
-            raise Http404
-            print("ok")
-    else:
-        return render(request, "core/page.html", {"page": page})
+    if page.visibility == "private" and not request.user.is_authenticated:
+        raise Http404
+    return render(request, "core/page.html", {"page": page})
 
 
 def well_known(request, filename):
