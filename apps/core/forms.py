@@ -42,35 +42,31 @@ class User2FAAdminForm(forms.ModelForm):
         is_enabling = is_active_from_form and not was_active
         is_disabling = not is_active_from_form and was_active
 
-        if is_enabling or is_disabling:
-            if not otp_code:
-                if is_enabling:
-                    raise forms.ValidationError(_("To enable 2FA you must enter a valid OTP code."))
-                else:
-                    raise forms.ValidationError(_("To disable 2FA you must enter a valid OTP or backup code."))
+        if not (is_enabling or is_disabling):
+            return cleaned_data
 
-            code = otp_code.strip().replace(" ", "").replace("-", "")
-
-            # For enabling: only accept OTP codes
+        if not otp_code:
             if is_enabling:
-                totp = pyotp.TOTP(db_instance.secret_key)
-                if not totp.verify(code, valid_window=2):
-                    raise forms.ValidationError(_("OTP code is invalid."))
+                raise forms.ValidationError(_("To enable 2FA you must enter a valid OTP code."))
+            raise forms.ValidationError(_("To disable 2FA you must enter a valid OTP or backup code."))
 
-            # For disabling: accept OTP or backup code
-            if is_disabling:
-                totp = pyotp.TOTP(db_instance.secret_key)
-                is_valid_otp = totp.verify(code, valid_window=2)
-                is_valid_backup = code.upper() in db_instance.backup_codes
+        code = otp_code.strip().replace(" ", "").replace("-", "")
+        totp = pyotp.TOTP(db_instance.secret_key)
 
-                if not is_valid_otp and not is_valid_backup:
-                    raise forms.ValidationError(_("Invalid OTP or backup code."))
+        if is_enabling:
+            if not totp.verify(code, valid_window=2):
+                raise forms.ValidationError(_("OTP code is invalid."))
+            return cleaned_data
 
-                # Consume backup code if used
-                if is_valid_backup and not is_valid_otp:
-                    db_instance.backup_codes.remove(code.upper())
-                    db_instance.save(update_fields=["backup_codes"])
+        # Disabling: accept OTP or any unused backup code.
+        is_valid_otp = totp.verify(code, valid_window=2)
+        is_valid_backup = code.upper() in (db_instance.backup_codes or [])
 
+        if not is_valid_otp and not is_valid_backup:
+            raise forms.ValidationError(_("Invalid OTP or backup code."))
+
+        # No need to consume the backup code here: save() wipes the full list
+        # when 2FA is disabled.
         return cleaned_data
 
     def save(self, commit=True):
