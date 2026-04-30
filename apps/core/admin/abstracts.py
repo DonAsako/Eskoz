@@ -5,7 +5,7 @@ from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.admin.utils import backup
-from apps.core.forms import AbstractTranslatableMarkdownItemAdminForm
+from apps.core.forms import AbstractPostAdminForm, AbstractTranslatableMarkdownItemAdminForm
 from apps.core.models import TranslatableMarkdownItemImage
 
 
@@ -25,10 +25,7 @@ class TranslatableMarkdownImageAdmin(GenericTabularInline):
     def image_url(self, obj):
         if obj.pk and obj.picture:
             return format_html(
-                '<p style="text-decoration:underline;" '
-                "onclick=\"navigator.clipboard.writeText('{url}')\">"
-                "{}"
-                "</p>",
+                '<p style="text-decoration:underline;" ' "onclick=\"navigator.clipboard.writeText('{url}')\">" "{}" "</p>",
                 obj.picture.url,
                 url=obj.picture.url,
             )
@@ -53,9 +50,7 @@ class AbstractTranslatableMarkdownItemTranslationAdmin(admin.StackedInline):
     def get_extra(self, request, obj=None, **kwargs):
         if obj is None:
             return 1
-        return (
-            1 if not self.model.objects.filter(translatable_content=obj).exists() else 0
-        )
+        return 1 if not self.model.objects.filter(translatable_content=obj).exists() else 0
 
 
 class AbstractTranslatableMarkdownItemAdmin(admin.ModelAdmin):
@@ -66,15 +61,14 @@ class AbstractTranslatableMarkdownItemAdmin(admin.ModelAdmin):
     inlines = [TranslatableMarkdownImageAdmin]
 
 
-class AbstractPostTranslationAdmin(
-    AbstractTranslatableMarkdownItemTranslationAdmin
-): ...
+class AbstractPostTranslationAdmin(AbstractTranslatableMarkdownItemTranslationAdmin): ...
 
 
 class AbstractPostAdmin(AbstractTranslatableMarkdownItemAdmin):
     """Base admin for all Post-like models."""
 
     abstract = True
+    form = AbstractPostAdminForm
     list_display = ("title", "published_on", "visibility")
     autocomplete_fields = ["tags", "category"]
     readonly_fields = ["edited_on"]

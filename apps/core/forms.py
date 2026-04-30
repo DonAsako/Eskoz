@@ -103,3 +103,30 @@ class AbstractTranslatableMarkdownItemAdminForm(forms.ModelForm):
         abstract = True
         fields = "__all__"
         widgets = {"content": ContentEditorWidget}
+
+
+class AbstractPostAdminForm(forms.ModelForm):
+    """
+    Base ModelForm for AbstractPost subclasses.
+
+    Renders ``password`` as a PasswordInput that never re-displays the stored
+    hash. If the admin submits an empty value while editing, the existing
+    value in DB is preserved instead of being wiped.
+    """
+
+    password = forms.CharField(
+        required=False,
+        widget=forms.PasswordInput(render_value=False),
+        label=_("Password"),
+        help_text=_("Leave empty to keep the current password."),
+    )
+
+    class Meta:
+        abstract = True
+        fields = "__all__"
+
+    def clean_password(self):
+        new_password = self.cleaned_data.get("password")
+        if not new_password and self.instance and self.instance.pk:
+            return self.instance.password
+        return new_password

@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth.hashers import check_password, identify_hasher, make_password
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -233,17 +234,41 @@ class AbstractPost(AbstractTranslatableMarkdownItem):
         default="public",
         verbose_name=_("Visibility"),
     )
-    password = models.CharField(max_length=50, null=True, blank=True, verbose_name=_("Password"))
+    password = models.CharField(max_length=128, null=True, blank=True, verbose_name=_("Password"))
+
+    def _password_is_hashed(self):
+        """Return True if self.password is already a hashed value."""
+        if not self.password:
+            return False
+        try:
+            identify_hasher(self.password)
+            return True
+        except ValueError:
+            return False
+
+    def set_password(self, raw_password):
+        """Set the post password, hashing it. Pass None or '' to clear."""
+        self.password = make_password(raw_password) if raw_password else None
+
+    def check_password(self, raw_password):
+        """Verify a raw password against the stored hash."""
+        if not self.password or not raw_password:
+            return False
+        return check_password(raw_password, self.password)
 
     def save(self, *args, **kwargs):
         """
         Save the post instance.
 
         If this is the first save and published_on is not set, automatically
-        set published_on to the current time.
+        set published_on to the current time. Any plaintext value left in
+        ``password`` (e.g. typed in the admin) is hashed before storage.
         """
         if not self.published_on:
             self.published_on = timezone.now()
+
+        if self.password and not self._password_is_hashed():
+            self.password = make_password(self.password)
 
         super().save(*args, **kwargs)
 

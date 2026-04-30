@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
 from django.shortcuts import Http404, get_object_or_404, render
-from django.utils.translation import gettext_lazy as _
 
 from apps.core.decorators import feature_active_required
 
@@ -26,9 +25,7 @@ def article_detail(request, slug_category, slug_article):
         raise Http404
 
     if article.visibility == "protected":
-        if request.method == "POST" and request.POST.get("password") == getattr(
-            article, "password", ""
-        ):
+        if request.method == "POST" and article.check_password(request.POST.get("password", "")):
             return render(request, "blog/article_detail.html", {"article": article})
 
         return render(request, "blog/article_password.html")
@@ -54,9 +51,7 @@ def article_list(request, slug=None):
         selected_category = get_object_or_404(Category, slug=slug)
         articles = articles.filter(category=selected_category)
 
-    categories = Category.objects.filter(
-        articles__isnull=False, articles__visibility="public"
-    ).distinct()
+    categories = Category.objects.filter(articles__isnull=False, articles__visibility="public").distinct()
 
     return render(
         request,

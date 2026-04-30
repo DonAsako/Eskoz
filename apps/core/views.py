@@ -69,7 +69,7 @@ def post_detail(
         raise Http404
 
     if post.visibility == "protected":
-        if request.method == "POST" and request.POST.get("password") == getattr(post, "password", ""):
+        if request.method == "POST" and post.check_password(request.POST.get("password", "")):
             return render(request, template_detail, {"post": post})
         return render(request, template_password)
 

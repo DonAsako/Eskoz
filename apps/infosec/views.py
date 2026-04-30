@@ -24,7 +24,7 @@ def writeup_detail(request, slug_category, slug_writeup):
         raise Http404
 
     if writeup.visibility == "protected":
-        if request.method == "POST" and request.POST.get("password") == getattr(writeup, "password", ""):
+        if request.method == "POST" and writeup.check_password(request.POST.get("password", "")):
             return render(request, "infosec/writeup_detail.html", {"writeup": writeup})
 
         return render(request, "infosec/writeup_password.html")
