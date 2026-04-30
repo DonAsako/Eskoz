@@ -55,6 +55,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "apps.core.context_processors.site_settings",
                 "apps.core.context_processors.active_theme",
+                "apps.core.context_processors.pagination",
             ],
         },
     },
@@ -116,6 +117,9 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 ADMIN_URL = os.getenv("ADMIN_URL") or "admin"
+
+POSTS_PER_PAGE = 12
+POSTS_PER_PAGE_CHOICES = [12, 24, 36]
 
 EDITOR_PERMISSIONS = {
     "infosec": {

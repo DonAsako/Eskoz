@@ -1,0 +1,22 @@
+{% load i18n %}
+{% if page_obj.paginator.num_pages > 1 %}
+{% with pp=request.GET.per_page %}
+<nav class="pagination" aria-label="{% trans 'Pagination' %}">
+    {% if page_obj.has_previous %}
+        <a class="pagination--link pagination--prev" href="?page={{ page_obj.previous_page_number }}{% if pp %}&per_page={{ pp }}{% endif %}">&laquo; {% trans 'Previous' %}</a>
+    {% else %}
+        <span class="pagination--link pagination--disabled">&laquo; {% trans 'Previous' %}</span>
+    {% endif %}
+
+    <span class="pagination--status">
+        {% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}Page {{ current }} of {{ total }}{% endblocktrans %}
+    </span>
+
+    {% if page_obj.has_next %}
+        <a class="pagination--link pagination--next" href="?page={{ page_obj.next_page_number }}{% if pp %}&per_page={{ pp }}{% endif %}">{% trans 'Next' %} &raquo;</a>
+    {% else %}
+        <span class="pagination--link pagination--disabled">{% trans 'Next' %} &raquo;</span>
+    {% endif %}
+</nav>
+{% endwith %}
+{% endif %}

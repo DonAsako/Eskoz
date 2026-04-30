@@ -8,35 +8,37 @@
 <div class="article_list">
     <div class="article_list--top">
         <h2 class="article_list--title">{% trans 'CVEs' %}</h2>
+        {% include "components/per_page_selector.html" %}
     </div>
-    {% if not CVES %}
+    {% if not cves %}
         <div class="message-wrapper">
             <p>{% trans 'There is no CVE at the moment.' %}</p>
         </div>
     {% else %}
-        {% for CVE in CVES %}
-        <a class="article_card" {% if CVE.article %}href="{% url 'blog:article_detail' CVE.article.category.slug CVE.article.slug %}"{% endif %}>
+        {% for cve in cves %}
+        <a class="article_card" {% if cve.article %}href="{% url 'blog:article_detail' cve.article.category.slug cve.article.slug %}"{% endif %}>
             <div class="article_card--top">
                 <div class="article_card--top-left">
-                    <p class="article_card--title">{{ CVE.cve_id }}</p>
+                    <p class="article_card--title">{{ cve.cve_id }}</p>
                 </div>
-                {% if CVE.severity %}
-                <p class="article_card--category">{{ CVE.get_severity_display }}</p>
+                {% if cve.cvss_score %}
+                <p class="article_card--category">{{ cve.cvss_severity }}</p>
                 {% endif %}
             </div>
-            {% if CVE.description %}
-            <p class="article_card--description">{{ CVE.description|default_if_none:'' }}</p>
+            {% if cve.description %}
+            <p class="article_card--description">{{ cve.description|default_if_none:'' }}</p>
             {% endif %}
             <div class="article_card--bottom">
-                <p class="article_card--date">{{ CVE.published_date|date:"j F Y" }}</p>
+                <p class="article_card--date">{{ cve.published_date|date:"j F Y" }}</p>
                 <div class="article_card--tags">
-                    {% if CVE.cvss_score %}
-                    <p class="article_card--tag">CVSS: {{ CVE.cvss_score }}</p>
+                    {% if cve.cvss_score %}
+                    <p class="article_card--tag">CVSS: {{ cve.cvss_score }}</p>
                     {% endif %}
                 </div>
             </div>
         </a>
         {% endfor %}
+        {% include "components/pagination.html" %}
     {% endif %}
 </div>
 {% endblock %}

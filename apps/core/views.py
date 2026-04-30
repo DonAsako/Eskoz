@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Count, Q
 from django.http import HttpResponse
 from django.shortcuts import Http404, get_object_or_404, render
@@ -6,6 +8,46 @@ from apps.blog.models import Article, Project
 from apps.infosec.models import Writeup
 
 from .models import Page, WellKnownFile
+
+
+def resolve_per_page(request):
+    """
+    Read ``?per_page=N`` from the request, validate it against
+    ``settings.POSTS_PER_PAGE_CHOICES``, and fall back to
+    ``settings.POSTS_PER_PAGE`` otherwise.
+    """
+    raw = request.GET.get("per_page")
+    if raw is None:
+        return settings.POSTS_PER_PAGE
+    try:
+        candidate = int(raw)
+    except (TypeError, ValueError):
+        return settings.POSTS_PER_PAGE
+    if candidate in settings.POSTS_PER_PAGE_CHOICES:
+        return candidate
+    return settings.POSTS_PER_PAGE
+
+
+def paginate_queryset(request, queryset, per_page=None):
+    """
+    Paginate ``queryset`` using the ``page`` and ``per_page`` GET parameters.
+
+    Out-of-range pages clamp to first/last; a non-integer page falls back to 1.
+    ``per_page`` is read from ``?per_page=`` when not provided explicitly and is
+    validated against ``settings.POSTS_PER_PAGE_CHOICES``.
+
+    Returns a ``django.core.paginator.Page`` ready to iterate in templates.
+    """
+    if per_page is None:
+        per_page = resolve_per_page(request)
+    paginator = Paginator(queryset, per_page)
+    page_number = request.GET.get("page")
+    try:
+        return paginator.page(page_number)
+    except PageNotAnInteger:
+        return paginator.page(1)
+    except EmptyPage:
+        return paginator.page(paginator.num_pages)
 
 
 def index(request):

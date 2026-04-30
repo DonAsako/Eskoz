@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import Http404, get_object_or_404, render
 
 from apps.core.decorators import feature_active_required
+from apps.core.views import paginate_queryset
 
 from .models import Article, Category, Project
 
@@ -45,7 +46,9 @@ def article_list(request, slug=None):
     Returns:
         HttpResponse: Rendered articles list page.
     """
-    articles = Article.objects.filter(visibility="public")
+    articles = (
+        Article.objects.filter(visibility="public").select_related("category").prefetch_related("translations", "tags").order_by("-published_on")
+    )
     selected_category = None
     if slug:
         selected_category = get_object_or_404(Category, slug=slug)
@@ -53,11 +56,14 @@ def article_list(request, slug=None):
 
     categories = Category.objects.filter(articles__isnull=False, articles__visibility="public").distinct()
 
+    page_obj = paginate_queryset(request, articles)
+
     return render(
         request,
         "blog/article_list.html",
         {
-            "articles": articles,
+            "articles": page_obj,
+            "page_obj": page_obj,
             "categories": categories,
             "selected_category": selected_category,
         },

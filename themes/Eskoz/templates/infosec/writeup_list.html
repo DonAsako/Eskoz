@@ -9,13 +9,14 @@
     <div class="article_list--top">
         <h2 class="article_list--title">{% trans 'Writeups' %}</h2>
         {% include "components/category_selector.html" with categories=categories base_url="writeups" %}
+        {% include "components/per_page_selector.html" %}
     </div>
     {% if not writeups %}
         <div class="message-wrapper">
             <p>{% trans 'There is no writeups at the moment.' %}</p>
         </div>
     {% else %}
-        {% for writeup in writeups.all|dictsortreversed:"published_on" %}
+        {% for writeup in writeups %}
         <a class="article_card" href="{% url 'infosec:writeup_detail' writeup.category.slug writeup.slug %}">
             <div class="article_card--top">
                 <div class="article_card--top-left">
@@ -41,6 +42,7 @@
             </div>
         </a>
         {% endfor %}
+        {% include "components/pagination.html" %}
     {% endif %}
 </div>
 {% endblock %}

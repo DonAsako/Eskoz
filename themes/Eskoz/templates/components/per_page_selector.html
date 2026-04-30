@@ -1,0 +1,17 @@
+{% load i18n %}
+<form method="get" class="per-page-form" aria-label="{% trans 'Items per page' %}">
+    {% for key, values in request.GET.lists %}
+        {% if key != "per_page" and key != "page" %}
+            {% for value in values %}
+                <input type="hidden" name="{{ key }}" value="{{ value }}">
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+    <label for="per_page_select" class="per-page-form--label">{% trans 'Per page' %}:</label>
+    <select id="per_page_select" name="per_page" class="per-page-form--select" onchange="this.form.submit()">
+        {% for choice in POSTS_PER_PAGE_CHOICES %}
+            <option value="{{ choice }}"{% if choice == POSTS_PER_PAGE %} selected{% endif %}>{{ choice }}</option>
+        {% endfor %}
+    </select>
+    <noscript><button type="submit" class="per-page-form--submit">{% trans 'Apply' %}</button></noscript>
+</form>

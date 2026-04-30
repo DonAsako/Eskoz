@@ -9,13 +9,14 @@
     <div class="article_list--top">
         <h2 class="article_list--title">{% trans 'Articles' %}</h2>
         {% include "components/category_selector.html" with categories=categories base_url="articles" %}
+        {% include "components/per_page_selector.html" %}
     </div>
     {% if not articles %}
         <div class="message-wrapper">
             <p>{% trans 'There is no article at the moment.' %}</p>
         </div>
     {% else %}
-        {% for article in articles.all|dictsortreversed:"published_on" %}
+        {% for article in articles %}
         <a class="article_card" href="{% url "blog:article_detail" article.category.slug article.slug %}">
             <div class="article_card--top">
                 <div class="article_card--top-left">
@@ -41,6 +42,7 @@
             </div>
         </a>
         {% endfor %}
+        {% include "components/pagination.html" %}
     {% endif %}
 </div>
 {% endblock %}

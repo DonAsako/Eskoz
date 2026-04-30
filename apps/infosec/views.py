@@ -1,6 +1,7 @@
 from django.shortcuts import Http404, get_object_or_404, render
 
 from apps.core.decorators import feature_active_required
+from apps.core.views import paginate_queryset
 
 from .models import CTF, CVE, Category, Certification, Writeup
 
@@ -44,7 +45,12 @@ def writeup_list(request, slug=None):
     Returns:
         HttpResponse: The rendered list of writeups page.
     """
-    writeups = Writeup.objects.filter(visibility="public")
+    writeups = (
+        Writeup.objects.filter(visibility="public")
+        .select_related("category", "ctf")
+        .prefetch_related("translations", "tags")
+        .order_by("-published_on")
+    )
     selected_category = None
     if slug:
         selected_category = get_object_or_404(Category, slug=slug)
@@ -54,11 +60,14 @@ def writeup_list(request, slug=None):
 
     categories = Category.objects.filter(writeups__isnull=False, writeups__visibility="public").distinct()
 
+    page_obj = paginate_queryset(request, writeups)
+
     return render(
         request,
         "infosec/writeup_list.html",
         {
-            "writeups": writeups,
+            "writeups": page_obj,
+            "page_obj": page_obj,
             "categories": categories,
             "selected_category": selected_category,
             "ctfs": ctfs,
@@ -92,5 +101,6 @@ def cve_list(request):
     Returns:
         HttpResponse: The rendered cve list page.
     """
-    cves = CVE.objects.all()
-    return render(request, "infosec/cve_list.html", {"cves": cves})
+    cves = CVE.objects.all().order_by("-published_date", "-id")
+    page_obj = paginate_queryset(request, cves)
+    return render(request, "infosec/cve_list.html", {"cves": page_obj, "page_obj": page_obj})
