@@ -42,6 +42,9 @@ class AbstractTranslatableMarkdownItemTranslationAdmin(admin.StackedInline):
 
     readonly_fields = ["reading_time"]
 
+    class Media:
+        js = ("admin/js/translation_tabs.js",)
+
     def reading_time(self, obj):
         return f"{obj.get_reading_time()} {_('min')}"
 
