@@ -91,6 +91,53 @@ header {
   text-decoration: none;
 }
 
+.search-form {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.search-form--input {
+  flex: 1;
+  padding: 0.6rem 0.9rem;
+  background: var(--bg-elevated, rgba(255, 255, 255, 0.04));
+  color: var(--text);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+.search-form--input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.search-form--button {
+  padding: 0.6rem 1.2rem;
+  background: var(--accent-gradient);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.search-summary {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.search-group--title {
+  margin: 2rem 0 0.75rem;
+  font-size: 1rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
 .lang-switcher {
   position: relative;
   display: inline-block;

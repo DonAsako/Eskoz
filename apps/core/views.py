@@ -102,6 +102,24 @@ def ratelimited(request, exception):
     return response
 
 
+def search_view(request):
+    """Cross-app search across translated posts in the active language."""
+    from apps.core.search import search_posts
+
+    query = request.GET.get("q", "").strip()
+    results = search_posts(query, get_language()) if query else None
+    total = sum(len(v) for v in results.values()) if results else 0
+    return render(
+        request,
+        "core/search.html",
+        {
+            "query": query,
+            "results": results,
+            "total": total,
+        },
+    )
+
+
 def redirect_to_available_translation(post, url_name, url_args):
     """
     If the active language has no translation for ``post``, return a 301 to
