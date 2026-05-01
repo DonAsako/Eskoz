@@ -66,7 +66,11 @@
                 <li class="navbar-item">
                     <a href="{% url 'education:course_list' %}" class="navbar-item--link">{% trans 'Education' %}</a>
                 </li>
+                <li class="navbar-item navbar-item--separator">/</li>
             {% endif %}
         {% endif %}
+        <li class="navbar-item navbar-item--lang">
+            {% include "components/language_switcher.html" %}
+        </li>
     </ul>
 </nav>

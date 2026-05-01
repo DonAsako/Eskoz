@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import Http404, get_object_or_404, render
 
 from apps.core.decorators import feature_active_required
-from apps.core.views import paginate_queryset
+from apps.core.views import paginate_queryset, redirect_to_available_translation
 
 from .models import Article, Category, Project
 
@@ -24,6 +24,10 @@ def article_detail(request, slug_category, slug_article):
     article = get_object_or_404(Article, category=category, slug=slug_article)
     if article.visibility == "private" and not request.user.is_authenticated:
         raise Http404
+
+    redirect_response = redirect_to_available_translation(article, "blog:article_detail", [slug_category, slug_article])
+    if redirect_response is not None:
+        return redirect_response
 
     if article.visibility == "protected":
         if request.method == "POST" and article.check_password(request.POST.get("password", "")):

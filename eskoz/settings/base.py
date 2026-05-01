@@ -28,7 +28,9 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "apps.core.middleware.LegacyURLPermanentRedirectMiddleware",
     "django.middleware.locale.LocaleMiddleware",
+    "apps.core.middleware.AdminDefaultLanguageMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -111,19 +113,30 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = "fr-fr"
+LANGUAGES = [
+    ("en", _("English")),
+    ("fr", _("French")),
+    ("it", _("Italian")),
+]
+
+# Default site language. Drives:
+#   - The URL prefix served when no language is in the path (e.g. /fr/articles/...)
+#   - The 301 target when a translation is missing in the requested language
+#   - The admin back-office language
+# Editable via `python manage.py config` (LANGUAGE_CODE in .env).
+LANGUAGE_CODE = os.getenv("LANGUAGE_CODE", "fr")
+
+# Hard-fail at startup if the configured default isn't in LANGUAGES, otherwise
+# i18n_patterns would silently route requests to the Django default ("en").
+_LANG_CODES = {code for code, _label in LANGUAGES}
+if LANGUAGE_CODE not in _LANG_CODES:
+    raise ValueError(f"LANGUAGE_CODE={LANGUAGE_CODE!r} is not in LANGUAGES {_LANG_CODES}")
 
 TIME_ZONE = "Europe/Paris"
 
 USE_I18N = True
 
 USE_TZ = True
-
-LANGUAGES = [
-    ("en", _("English")),
-    ("fr", _("French")),
-    ("it", _("Italian")),
-]
 
 LOCALE_PATHS = [
     BASE_DIR / "locale",

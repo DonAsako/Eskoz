@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 
 from apps.core.decorators import feature_active_required
+from apps.core.views import redirect_to_available_translation
 
 from .models import Course, Lesson, Module
 
@@ -35,6 +36,10 @@ def lesson_detail(request, slug_course="", slug_module="", slug_lesson=""):
     course = get_object_or_404(Course, slug=slug_course)
     module = get_object_or_404(Module, slug=slug_module, course=course)
     lesson = get_object_or_404(Lesson, slug=slug_lesson, module=module)
+
+    redirect_response = redirect_to_available_translation(lesson, "education:lesson_detail", [slug_course, slug_module, slug_lesson])
+    if redirect_response is not None:
+        return redirect_response
 
     lessons = Lesson.objects.filter(module=module).order_by("order")
     lesson_list = list(lessons)

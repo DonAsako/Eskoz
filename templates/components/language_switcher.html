@@ -1,0 +1,23 @@
+{% load i18n %}
+{% get_current_language as CURRENT_LANG %}
+{% get_available_languages as LANGUAGES %}
+{# Strip the existing /<lang>/ prefix so we can swap it for each alternate. #}
+{% with path_after_lang=request.path|slice:"3:" %}
+<details class="lang-switcher">
+    <summary class="lang-switcher--current" aria-label="{% trans 'Switch language' %}">
+        <span>{{ CURRENT_LANG|upper }}</span>
+        <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+            <path d="M2 4l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </summary>
+    <ul class="lang-switcher--menu">
+        {% for lang_code, lang_name in LANGUAGES %}
+            {% if lang_code != CURRENT_LANG %}
+                <li>
+                    <a href="/{{ lang_code }}{{ path_after_lang }}" hreflang="{{ lang_code }}" rel="alternate">{{ lang_code|upper }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</details>
+{% endwith %}
