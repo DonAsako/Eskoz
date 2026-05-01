@@ -868,3 +868,69 @@ button.status-badge--toggle:active {
 .inline-group--translation-tabs .inline-related > h3 {
     display: none;
 }
+
+/* ============================================================
+ * AUTOSAVE — restore banner + transient "Draft saved" toast.
+ * ============================================================ */
+
+.autosave-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0 0 1rem;
+    padding: 0.75rem 1rem;
+    background: var(--eskoz-warn-bg);
+    border: 1px solid var(--eskoz-warn);
+    border-radius: 8px;
+    color: var(--body-loud-color);
+    font-size: 0.88rem;
+}
+.autosave-banner__text strong {
+    color: var(--eskoz-warn);
+    font-weight: 600;
+    margin-right: 0.25rem;
+}
+.autosave-banner__actions {
+    display: flex;
+    gap: 0.5rem;
+}
+.autosave-banner__btn {
+    appearance: none;
+    border: 1px solid var(--hairline-color);
+    background: var(--body-bg);
+    color: var(--body-fg);
+    padding: 0.35rem 0.85rem;
+    font-size: 0.82rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: filter 80ms ease;
+}
+.autosave-banner__btn:hover { filter: brightness(0.97); }
+.autosave-banner__btn--primary {
+    background: var(--eskoz-accent);
+    border-color: var(--eskoz-accent);
+    color: #fff;
+}
+.autosave-banner__btn--primary:hover { background: var(--eskoz-accent-hover); }
+
+.autosave-indicator {
+    position: fixed;
+    bottom: 1.25rem;
+    right: 1.25rem;
+    background: var(--body-loud-color);
+    color: var(--body-bg);
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    transition: opacity 200ms ease, transform 200ms ease;
+    z-index: 1100;
+}
+.autosave-indicator.is-visible {
+    opacity: 0.92;
+    transform: translateY(0);
+}

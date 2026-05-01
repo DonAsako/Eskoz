@@ -20,4 +20,5 @@
     {% if site_settings.favicon %}
         <link rel="shortcut icon" href="{{ site_settings.favicon.url }}" type="image/x-icon">
     {% endif %}
+    <script defer src="{% static 'admin/js/autosave_draft.js' %}"></script>
 {% endblock %}
