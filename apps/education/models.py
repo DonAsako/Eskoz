@@ -1,12 +1,12 @@
 from django.db import models
-from django.utils.text import slugify
+from django.utils.translation import gettext_lazy as _
+
 from apps.core.models.abstracts import (
-    AbstractTranslatableMarkdownItem,
-    AbstractTranslatableMarkdownItemTranslation,
     AbstractTranslatableCategory,
     AbstractTranslatableCategoryTranslation,
+    AbstractTranslatableMarkdownItem,
+    AbstractTranslatableMarkdownItemTranslation,
 )
-from django.utils.translation import gettext_lazy as _
 
 
 class Category(AbstractTranslatableCategory): ...
@@ -38,9 +38,7 @@ class Course(models.Model):
     description = models.TextField(blank=True, null=True)
     version = models.FloatField(default=0.01)
     slug = models.SlugField()
-    category = models.ForeignKey(
-        Category, on_delete=models.CASCADE, related_name="courses", blank=True
-    )
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="courses", blank=True)
 
     def save(self, *args, **kwargs):
         if not self.category_id:
@@ -93,7 +91,13 @@ class Lesson(AbstractTranslatableMarkdownItem):
         title (CharField): Title of the lesson.
         content (TextField): The lesson content (text, HTML, or Markdown).
         order (PositiveIntegerField): Display order of the lesson in the module.
+        visibility (CharField): Public/private gate.
     """
+
+    VISIBILITY_CHOICES = [
+        ("public", _("Public")),
+        ("private", _("Private")),
+    ]
 
     module = models.ForeignKey(
         Module,
@@ -102,6 +106,12 @@ class Lesson(AbstractTranslatableMarkdownItem):
         verbose_name=_("Module"),
     )
     order = models.PositiveIntegerField(default=0, verbose_name=_("Order"))
+    visibility = models.CharField(
+        max_length=10,
+        choices=VISIBILITY_CHOICES,
+        default="public",
+        verbose_name=_("Visibility"),
+    )
 
     def __str__(self):
         """Return the lesson title as its string representation"""
@@ -110,11 +120,7 @@ class Lesson(AbstractTranslatableMarkdownItem):
     class Meta(AbstractTranslatableMarkdownItem.Meta):
         verbose_name = _("Lesson")
         verbose_name_plural = _("Lessons")
-        constraints = [
-            models.UniqueConstraint(
-                fields=["module", "slug"], name="unique_slug_per_module"
-            )
-        ]
+        constraints = [models.UniqueConstraint(fields=["module", "slug"], name="unique_slug_per_module")]
 
 
 class LessonTranslation(AbstractTranslatableMarkdownItemTranslation):

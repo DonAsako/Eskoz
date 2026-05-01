@@ -1,0 +1,49 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans 'Two-factor verification' %} | {{ site_settings.site_name }}{% endblock %}
+
+{% block bodyclass %}{{ block.super }} login auth-page{% endblock %}
+
+{% block usertools %}{% endblock %}
+{% block nav-global %}{% endblock %}
+{% block nav-sidebar %}{% endblock %}
+{% block content_title %}{% endblock %}
+{% block nav-breadcrumbs %}{% endblock %}
+{% block header %}{% endblock %}
+
+{% block content %}
+<main class="auth">
+    <section class="auth__panel">
+        <header class="auth__brand">
+            <span class="auth__wordmark">{{ site_settings.site_name|default:"Eskoz" }}</span>
+        </header>
+
+        <h1 class="auth__title">{% trans "Two-factor verification" %}</h1>
+        <p class="auth__lede">
+            {% blocktrans %}Signed in as <strong>{{ username }}</strong>.{% endblocktrans %}
+        </p>
+
+        {% if error %}
+            <p class="auth__error">{{ error }}</p>
+        {% endif %}
+
+        <form method="post" action="" class="auth__form">{% csrf_token %}
+            <label class="auth__field">
+                <span class="auth__field-label">{% trans "Authentication code" %}</span>
+                <input type="text" name="code" id="id_code" autofocus autocomplete="one-time-code" inputmode="numeric" pattern="[A-Za-z0-9 \-]*" required class="auth__field-input--otp">
+            </label>
+            <p class="auth__hint">
+                {% trans "6-digit code from your authenticator app, or one of your backup codes." %}
+            </p>
+            {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+            <button type="submit" class="auth__submit">{% trans "Verify" %}</button>
+        </form>
+    </section>
+
+    <form method="post" action="{{ logout_url }}" class="auth__footer-form">
+        {% csrf_token %}
+        <button type="submit">{% trans "Sign out instead" %}</button>
+    </form>
+</main>
+{% endblock %}

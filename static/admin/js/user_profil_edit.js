@@ -32,4 +32,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
     isActiveInput.addEventListener("change", toggleOtpFields);
     toggleOtpFields();
+
+    // Wire up "Copy" buttons in the 2FA panel.
+    document.querySelectorAll(".tfa-copy__btn").forEach((btn) => {
+        const original = btn.dataset.copyLabel || btn.textContent.trim();
+        btn.addEventListener("click", async () => {
+            try {
+                await navigator.clipboard.writeText(btn.dataset.clipboardText || "");
+                btn.textContent = "✓";
+                btn.classList.add("tfa-copy__btn--ok");
+                setTimeout(() => {
+                    btn.textContent = original;
+                    btn.classList.remove("tfa-copy__btn--ok");
+                }, 1500);
+            } catch (e) {
+                btn.textContent = "!";
+                setTimeout(() => { btn.textContent = original; }, 1500);
+            }
+        });
+    });
 });

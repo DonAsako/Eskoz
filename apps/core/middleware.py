@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.http import HttpResponseRedirect
 from django.utils import translation
 
 
@@ -36,6 +37,71 @@ class SecurityHeadersMiddleware:
         response.setdefault("Cross-Origin-Resource-Policy", "same-origin")
         response.setdefault("X-Permitted-Cross-Domain-Policies", "none")
         return response
+
+
+class Force2FAMiddleware:
+    """
+    Force users with active 2FA through the OTP verify page before they can
+    reach any admin URL beyond login/logout/static.
+
+    Flow:
+      1. Standard admin password login completes — user is authenticated.
+      2. On the next admin request, this middleware checks:
+         - the user is authenticated (not anonymous)
+         - the user has ``User2FA.is_active=True``
+         - the session has NOT been marked ``2fa_verified``
+         If all three hold, redirect to ``admin:verify_2fa``.
+      3. The verify view marks the session ``2fa_verified=True`` on a valid
+         OTP/backup-code submission and lets the user proceed.
+
+    The exempt list keeps logout reachable so a user who lost their device
+    AND has no backup codes can at least sign out (then run the
+    ``disable_2fa`` management command from the host).
+
+    Sits AFTER AuthenticationMiddleware so ``request.user`` is populated.
+    """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+        self._admin_prefix = "/" + settings.ADMIN_URL.strip("/") + "/"
+
+    def __call__(self, request):
+        if not request.path.startswith(self._admin_prefix):
+            return self.get_response(request)
+
+        # Allowlist URLs that must be reachable in the unverified-2FA state.
+        path = request.path
+        exempt_suffixes = ("login/", "logout/", "verify/", "jsi18n/")
+        if any(path.endswith("/" + s) or path.endswith(s) for s in exempt_suffixes):
+            return self.get_response(request)
+        # Static/media files served by Django in dev shouldn't trip the gate.
+        if "/static/" in path or "/media/" in path:
+            return self.get_response(request)
+
+        user = getattr(request, "user", None)
+        if not user or not user.is_authenticated:
+            return self.get_response(request)
+
+        if request.session.get("2fa_verified"):
+            return self.get_response(request)
+
+        # Lazy import — User2FA lives in apps.core which imports this module.
+        from apps.core.models import User2FA
+
+        try:
+            tfa = user.two_factor
+        except User2FA.DoesNotExist:
+            return self.get_response(request)
+
+        if not tfa.is_active:
+            return self.get_response(request)
+
+        from django.urls import reverse
+
+        verify_url = reverse("admin:verify_2fa")
+        if request.get_full_path() != verify_url:
+            verify_url = f"{verify_url}?next={request.get_full_path()}"
+        return HttpResponseRedirect(verify_url)
 
 
 class AdminDefaultLanguageMiddleware:

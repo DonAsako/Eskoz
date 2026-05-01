@@ -1,23 +1,24 @@
 {% extends 'admin/base.html' %}
 {% load static i18n %}
 
-{% block title %}{{ site_settings.site_name }} - Eskoz{% endblock %}
+{% block title %}{{ site_settings.site_name|default:"Eskoz" }} admin{% endblock %}
+
+{% block branding %}
+    <div id="site-name">
+        <a href="{% url 'admin:index' %}">{{ site_settings.site_name|default:"Eskoz" }}</a>
+    </div>
+{% endblock %}
 
 {% block extrastyle %}
+    {{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static 'admin/css/admin.css' %}">
 {% endblock %}
+
 {% block extrahead %}
+    {{ block.super }}
     <meta name="theme-name" content="{{ request.theme }}">
-{% if site_settings.favicon %}
-    <link rel="shortcut icon" href="{{ site_settings.favicon.url }}" type="image/x-icon">
-{% endif %}
-{% endblock %}
-
-{% block header %}
-    {% include 'admin/components/navbar.html' %}
-{% endblock %}
-
-
-{% block extrabody %}
-    <script src="{% static 'admin/js/toggleTheme.js' %}"></script>
+    {% if site_settings.favicon %}
+        <link rel="shortcut icon" href="{{ site_settings.favicon.url }}" type="image/x-icon">
+    {% endif %}
+    <script defer src="{% static 'admin/js/autosave_draft.js' %}"></script>
 {% endblock %}

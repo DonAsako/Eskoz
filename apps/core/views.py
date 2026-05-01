@@ -1,11 +1,12 @@
 from django.conf import settings
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Count, Q
-from django.http import HttpResponse, HttpResponsePermanentRedirect
+from django.http import HttpResponse, HttpResponsePermanentRedirect, HttpResponseRedirect
 from django.shortcuts import Http404, get_object_or_404, render
 from django.urls import reverse
 from django.utils import translation
 from django.utils.translation import get_language
+from django.utils.translation import gettext_lazy as _
 
 from apps.blog.models import Article, Project
 from apps.infosec.models import Writeup
@@ -100,6 +101,75 @@ def ratelimited(request, exception):
     response = render(request, "429.html", status=429)
     response["Retry-After"] = "900"
     return response
+
+
+def verify_2fa_view(request):
+    """Second-factor gate for users who have ``User2FA.is_active=True``.
+
+    Reached by ``Force2FAMiddleware`` after a successful password login.
+    Accepts either a TOTP code or one of the user's backup codes (the
+    backup code is consumed on success). Marks the session as verified so
+    the rest of the admin opens up. Rate-limited at the IP level via the
+    middleware that wraps the project (``RATELIMIT_2FA_IP``).
+    """
+    from django.contrib import messages
+    from django_ratelimit.core import is_ratelimited
+    from django_ratelimit.exceptions import Ratelimited
+
+    from apps.core.models import User2FA
+
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("admin:login"))
+
+    try:
+        tfa = request.user.two_factor
+    except User2FA.DoesNotExist:
+        # User reached this view without 2FA configured — let them through.
+        request.session["2fa_verified"] = True
+        return HttpResponseRedirect(request.GET.get("next") or reverse("admin:index"))
+
+    if not tfa.is_active:
+        request.session["2fa_verified"] = True
+        return HttpResponseRedirect(request.GET.get("next") or reverse("admin:index"))
+
+    error = None
+    if request.method == "POST":
+        if is_ratelimited(
+            request,
+            group="verify-2fa",
+            key="ip",
+            rate=settings.RATELIMIT_2FA_IP,
+            method="POST",
+            increment=True,
+        ):
+            raise Ratelimited()
+
+        code = (request.POST.get("code") or "").strip().replace(" ", "").replace("-", "")
+        if tfa.verify_otp(code):
+            request.session["2fa_verified"] = True
+            return HttpResponseRedirect(request.GET.get("next") or reverse("admin:index"))
+        if tfa.verify_backup_code(code):
+            request.session["2fa_verified"] = True
+            messages.warning(
+                request,
+                _("Backup code consumed. %(remaining)d codes remain — generate new ones soon.") % {"remaining": len(tfa.backup_codes)},
+            )
+            return HttpResponseRedirect(request.GET.get("next") or reverse("admin:index"))
+        error = _("Invalid code. Try again.")
+
+    # GET (or POST with bad code): render the form. We deliberately keep this
+    # page reachable while authenticated-but-unverified — logout link is the
+    # escape hatch for users who lost their device (and have no backup code).
+    return render(
+        request,
+        "admin/verify_2fa.html",
+        {
+            "error": error,
+            "username": request.user.get_username(),
+            "next": request.GET.get("next", ""),
+            "logout_url": reverse("admin:logout"),
+        },
+    )
 
 
 def search_view(request):

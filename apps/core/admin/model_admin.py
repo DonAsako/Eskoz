@@ -12,6 +12,7 @@ from django_ratelimit.exceptions import Ratelimited
 
 from apps.core.admin.abstracts import AbstractSubModuleInline
 from apps.core.admin.site import admin_site
+from apps.core.admin.utils import visibility_badge_field
 from apps.core.forms import PageAdminForm, User2FAAdminForm
 from apps.core.models import (
     BlogSettings,
@@ -113,6 +114,11 @@ class PageAdmin(admin.ModelAdmin):
     exclude = ["site_settings"]
     form = PageAdminForm
     prepopulated_fields = {"slug": ("title",)}
+    list_display = ("title", "slug", "visibility_badge")
+    visibility_badge = visibility_badge_field("visibility")
+
+    class Media:
+        js = ("admin/js/visibility_toggle.js",)
 
 
 class UserProfileInline(admin.StackedInline):
@@ -137,33 +143,30 @@ class User2FAInline(admin.StackedInline):
     @admin.display(description=_("Authentication QR Code"))
     def qr_code(self, obj):
         if not obj or not obj.secret_key:
-            return _("No 2FA secret key set")
+            return mark_safe(f'<p class="tfa-empty">{_("No 2FA secret key set yet.")}</p>')
 
         uri = obj.get_otpauth_uri()
+        copy_label = _("Copy")
         return mark_safe(
             f"""
-            <div style="padding:10px; background:white; border-radius:6px; display:flex; justify-content:center; margin-bottom:12px;">
-                {obj.get_otp_qr_code()}
-            </div>
-            <div style="background:#1a1a1a; border:1px solid #333; border-radius:6px; padding:12px; margin-bottom:8px;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                    <span style="color:#888; font-size:12px; text-transform:uppercase;">{_("Secret Key")}</span>
-                    <button type="button" style="background:#2563eb; color:white; border:none;
-                            padding:4px 10px; border-radius:4px; cursor:pointer; font-size:12px;"
-                            onclick="navigator.clipboard.writeText('{obj.secret_key}')
-                            .then(() => this.textContent = '✓')">{_("Copy")}</button>
+            <div class="tfa-grid">
+                <div class="tfa-qr">{obj.get_otp_qr_code()}</div>
+                <div class="tfa-copy-stack">
+                    <div class="tfa-copy">
+                        <span class="tfa-copy__label">{_("Secret key")}</span>
+                        <code class="tfa-copy__value">{obj.secret_key}</code>
+                        <button type="button" class="tfa-copy__btn"
+                                data-clipboard-text="{obj.secret_key}"
+                                data-copy-label="{copy_label}">{copy_label}</button>
+                    </div>
+                    <div class="tfa-copy">
+                        <span class="tfa-copy__label">{_("Provisioning URI")}</span>
+                        <code class="tfa-copy__value tfa-copy__value--small">{uri}</code>
+                        <button type="button" class="tfa-copy__btn"
+                                data-clipboard-text="{uri}"
+                                data-copy-label="{copy_label}">{copy_label}</button>
+                    </div>
                 </div>
-                <code style="color:#e8e8e8; font-family:monospace; word-break:break-all;">{obj.secret_key}</code>
-            </div>
-            <div style="background:#1a1a1a; border:1px solid #333; border-radius:6px; padding:12px;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                    <span style="color:#888; font-size:12px; text-transform:uppercase;">{_("Full URI")}</span>
-                    <button type="button" style="background:#2563eb; color:white; border:none;
-                            padding:4px 10px; border-radius:4px; cursor:pointer; font-size:12px;"
-                            onclick="navigator.clipboard.writeText('{uri}')
-                            .then(() => this.textContent = '✓')">{_("Copy")}</button>
-                </div>
-                <code style="color:#e8e8e8; font-family:monospace; word-break:break-all; font-size:11px;">{uri}</code>
             </div>
             """
         )
@@ -173,20 +176,17 @@ class User2FAInline(admin.StackedInline):
         if not obj or not obj.is_active:
             return ""
 
-        # Codes already viewed - show nothing
         if obj.backup_codes_viewed:
-            return ""
+            return mark_safe(
+                f'<p class="tfa-empty">{_("Backup codes have already been displayed once. Disable then re-enable 2FA to regenerate them.")}</p>'
+            )
 
         if not obj.backup_codes:
             return ""
 
-        code_style = (
-            "display:inline-block; background:#2a2a2a; padding:4px 8px; "
-            "margin:3px; border-radius:4px; font-family:monospace; letter-spacing:1px;"
-        )
-        codes_html = "".join([f'<code style="{code_style}">{code}</code>' for code in obj.backup_codes])
-
+        codes_html = "".join([f'<code class="tfa-backup__code">{code}</code>' for code in obj.backup_codes])
         all_codes = "\\n".join(obj.backup_codes)
+        copy_label = _("Copy all")
 
         # Mark as viewed after displaying
         if not obj.backup_codes_viewed:
@@ -195,22 +195,15 @@ class User2FAInline(admin.StackedInline):
 
         return mark_safe(
             f"""
-            <div style="background:#1a1a1a; border:1px solid #333; border-radius:6px; padding:12px;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                    <span style="color:#888; font-size:12px; text-transform:uppercase;">
-                        {_("Recovery Codes")} ({len(obj.backup_codes)} {_("remaining")})
-                    </span>
-                    <button type="button" style="background:#2563eb; color:white; border:none;
-                            padding:4px 10px; border-radius:4px; cursor:pointer; font-size:12px;"
-                            onclick="navigator.clipboard.writeText('{all_codes}')
-                            .then(() => this.textContent = '✓')">{_("Copy All")}</button>
+            <div class="tfa-backup">
+                <div class="tfa-backup__head">
+                    <span class="tfa-copy__label">{_("Recovery codes")} <span class="tfa-backup__count">{len(obj.backup_codes)}</span></span>
+                    <button type="button" class="tfa-copy__btn"
+                            data-clipboard-text="{all_codes}"
+                            data-copy-label="{copy_label}">{copy_label}</button>
                 </div>
-                <div style="display:flex; flex-wrap:wrap; gap:4px; color:#e8e8e8;">
-                    {codes_html}
-                </div>
-                <p style="color:#dc2626; font-size:12px; margin-top:12px; margin-bottom:0; font-weight:bold;">
-                    ⚠️ {_("SAVE THESE CODES NOW! They will never be shown again.")}
-                </p>
+                <div class="tfa-backup__grid">{codes_html}</div>
+                <p class="tfa-backup__warn">{_("Save these codes now. They will not be shown again.")}</p>
             </div>
             """
         )

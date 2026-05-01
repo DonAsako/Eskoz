@@ -1,80 +1,938 @@
-:root {
-    --primary-color: var(--header-bg);
-    --secondary-color: var(--secondary);
-    --background-color: var(--body-bg);
-    --text-color: var(--primary-fg);
+/* ============================================================
+ * Eskoz admin — minimal skin.
+ *
+ * Strategy: don't fight Django. Override only the design tokens it
+ * exposes (light + dark via [data-theme]) so the standard chrome
+ * inherits our brand. Custom CSS is scoped to the bits we actually
+ * built ourselves: the auth pages (login + 2FA verify), the
+ * dashboard widgets, the User2FA inline panel, and a few status
+ * badges. Everything else is plain Django admin.
+ * ============================================================ */
+
+/* ============================================================
+ * TOKENS — light + dark themes
+ * Django sets data-theme="light"|"dark"|"auto" on <html> via its
+ * own toggle. We override every Django admin CSS variable so the
+ * entire chrome (header, sidebar, breadcrumbs, tables, buttons,
+ * forms, links) follows our palette in both modes — not just the
+ * accent color.
+ * ============================================================ */
+
+:root,
+html[data-theme="light"] {
+    /* Brand */
+    --eskoz-accent:        #2563eb;
+    --eskoz-accent-hover:  #1d4ed8;
+    --eskoz-accent-soft:   rgba(37, 99, 235, 0.08);
+
+    --eskoz-good:          #15803d;
+    --eskoz-good-bg:       #dcfce7;
+    --eskoz-warn:          #a16207;
+    --eskoz-warn-bg:       #fef3c7;
+    --eskoz-bad:           #b91c1c;
+    --eskoz-bad-bg:        #fee2e2;
+    --eskoz-info:          #1d4ed8;
+    --eskoz-info-bg:       #dbeafe;
+    --eskoz-mute:          #52525b;
+    --eskoz-mute-bg:       #f4f4f5;
+
+    /* Surfaces */
+    --body-bg:                   #ffffff;
+    --body-fg:                   #18181b;
+    --body-quiet-color:          #71717a;
+    --body-medium-color:         #3f3f46;
+    --body-loud-color:           #09090b;
+    --darkened-bg:               #fafafa;
+    --hairline-color:            #e4e4e7;
+    --border-color:              #e4e4e7;
+
+    /* Header (top bar + breadcrumbs) */
+    --header-bg:                 #ffffff;
+    --header-color:              #18181b;
+    --header-branding-color:     #18181b;
+    --header-link-color:         #52525b;
+    --breadcrumbs-bg:            #fafafa;
+    --breadcrumbs-fg:            #71717a;
+    --breadcrumbs-link-fg:       #2563eb;
+
+    /* Accent surfaces */
+    --primary:                   #18181b;
+    --primary-fg:                #ffffff;
+    --secondary:                 #fafafa;
+    --accent:                    var(--eskoz-accent);
+    --link-fg:                   var(--eskoz-accent);
+    --link-hover-color:          var(--eskoz-accent-hover);
+    --link-selected-fg:          var(--eskoz-accent-hover);
+    --selected-bg:               var(--eskoz-accent-soft);
+    --selected-row:              var(--eskoz-accent-soft);
+
+    /* Buttons */
+    --button-fg:                 #ffffff;
+    --button-bg:                 var(--eskoz-accent);
+    --button-hover-bg:           var(--eskoz-accent-hover);
+    --default-button-bg:         var(--eskoz-accent);
+    --default-button-hover-bg:   var(--eskoz-accent-hover);
+    --close-button-bg:           #71717a;
+    --close-button-hover-bg:     #52525b;
+    --delete-button-bg:          var(--eskoz-bad);
+    --delete-button-hover-bg:    #991b1b;
+    --object-tools-fg:           #ffffff;
+    --object-tools-bg:           #18181b;
+    --object-tools-hover-bg:     #3f3f46;
+
+    --message-success-bg:        var(--eskoz-good-bg);
+    --message-warning-bg:        var(--eskoz-warn-bg);
+    --message-error-bg:           var(--eskoz-bad-bg);
+    --error-fg:                  var(--eskoz-bad);
 }
-.navbar-logo--link h1, .navbar-item--link {
-    padding: 0;
+
+/* Dark theme — Django sets [data-theme="dark"] explicitly,
+   plus we mirror onto auto mode via the system preference. */
+html[data-theme="dark"] {
+    --eskoz-accent:        #60a5fa;
+    --eskoz-accent-hover:  #93c5fd;
+    --eskoz-accent-soft:   rgba(96, 165, 250, 0.12);
+
+    --eskoz-good-bg:       rgba(22, 163, 74, 0.18);
+    --eskoz-warn-bg:       rgba(202, 138, 4, 0.20);
+    --eskoz-bad-bg:        rgba(220, 38, 38, 0.20);
+    --eskoz-info-bg:       rgba(59, 130, 246, 0.18);
+    --eskoz-mute-bg:       rgba(63, 63, 70, 0.40);
+
+    --body-bg:                   #09090b;
+    --body-fg:                   #fafafa;
+    --body-quiet-color:          #a1a1aa;
+    --body-medium-color:         #d4d4d8;
+    --body-loud-color:           #ffffff;
+    --darkened-bg:               #18181b;
+    --hairline-color:            #27272a;
+    --border-color:              #27272a;
+
+    --header-bg:                 #0f0f12;
+    --header-color:              #fafafa;
+    --header-branding-color:     #ffffff;
+    --header-link-color:         #a1a1aa;
+    --breadcrumbs-bg:            #0f0f12;
+    --breadcrumbs-fg:            #a1a1aa;
+    --breadcrumbs-link-fg:       #60a5fa;
+
+    --primary:                   #fafafa;
+    --primary-fg:                #09090b;
+    --secondary:                 #18181b;
+
+    --button-fg:                 #ffffff;
+    --button-bg:                 var(--eskoz-accent);
+    --button-hover-bg:           var(--eskoz-accent-hover);
+    --default-button-bg:         var(--eskoz-accent);
+    --default-button-hover-bg:   var(--eskoz-accent-hover);
+    --close-button-bg:           #71717a;
+    --close-button-hover-bg:     #a1a1aa;
+    --delete-button-bg:          #ef4444;
+    --delete-button-hover-bg:    #f87171;
+    --object-tools-fg:           #18181b;
+    --object-tools-bg:           #fafafa;
+    --object-tools-hover-bg:     #d4d4d8;
+}
+
+/* Auto mode (system preference) — Django uses [data-theme="auto"] or
+   no attribute. Mirror the dark tokens when the OS is in dark mode. */
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"],
+    html:not([data-theme]) {
+        --eskoz-accent:        #60a5fa;
+        --eskoz-accent-hover:  #93c5fd;
+        --eskoz-accent-soft:   rgba(96, 165, 250, 0.12);
+
+        --eskoz-good-bg:       rgba(22, 163, 74, 0.18);
+        --eskoz-warn-bg:       rgba(202, 138, 4, 0.20);
+        --eskoz-bad-bg:        rgba(220, 38, 38, 0.20);
+        --eskoz-info-bg:       rgba(59, 130, 246, 0.18);
+        --eskoz-mute-bg:       rgba(63, 63, 70, 0.40);
+
+        --body-bg:                   #09090b;
+        --body-fg:                   #fafafa;
+        --body-quiet-color:          #a1a1aa;
+        --body-medium-color:         #d4d4d8;
+        --body-loud-color:           #ffffff;
+        --darkened-bg:               #18181b;
+        --hairline-color:            #27272a;
+        --border-color:              #27272a;
+
+        --header-bg:                 #0f0f12;
+        --header-color:              #fafafa;
+        --header-branding-color:     #ffffff;
+        --header-link-color:         #a1a1aa;
+        --breadcrumbs-bg:            #0f0f12;
+        --breadcrumbs-fg:            #a1a1aa;
+        --breadcrumbs-link-fg:       #60a5fa;
+
+        --primary:                   #fafafa;
+        --primary-fg:                #09090b;
+        --secondary:                 #18181b;
+
+        --close-button-bg:           #71717a;
+        --close-button-hover-bg:     #a1a1aa;
+        --delete-button-bg:          #ef4444;
+        --delete-button-hover-bg:    #f87171;
+        --object-tools-fg:           #18181b;
+        --object-tools-bg:           #fafafa;
+        --object-tools-hover-bg:     #d4d4d8;
+    }
+}
+
+/* ============================================================
+ * AUTH PAGES (login + 2FA verify)
+ * Standalone layout — no Django chrome. Reset every wrapper so
+ * the .auth flex container can fill the viewport.
+ * ============================================================ */
+
+body.auth-page {
+    background: var(--body-bg);
     margin: 0;
-    font-weight: bold;
-    color: var(--text-color);
+    min-height: 100vh;
 }
-.navbar {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+
+body.auth-page,
+body.auth-page #container,
+body.auth-page .main,
+body.auth-page #main,
+body.auth-page main.content,
+body.auth-page #content,
+body.auth-page #content.colM,
+body.auth-page #content-main {
+    display: block !important;
+    grid-template-columns: none !important;
+    grid-template-rows: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+body.auth-page main.auth {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    min-height: 100vh !important;
+    width: 100% !important;
+}
+
+body.auth-page #header,
+body.auth-page #nav-sidebar,
+body.auth-page .skip-to-content-link { display: none !important; }
+
+.auth {
+    box-sizing: border-box;
+    padding: 3rem 1.25rem;
+    gap: 1rem;
+    background: var(--body-bg);
+}
+
+.auth__rule { display: none; }
+
+.auth__panel {
     width: 100%;
-    padding: 1em;
-    background-color: var(--primary-color);
-    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    max-width: 380px;
+    background: var(--body-bg);
+    padding: 2rem;
+    border: 1px solid var(--hairline-color);
+    border-radius: 8px;
 }
-.navbar-logo--link {
+
+.auth__brand {
     display: flex;
-    align-items: center;
-    text-decoration: none;
+    justify-content: center;
+    margin-bottom: 1.75rem;
 }
-.navbar-items {
-    display: flex;
-    align-items: center;
-    margin: 0;
+
+.auth__mark { display: none; }
+
+.auth__wordmark {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--body-loud-color);
+    letter-spacing: -0.01em;
 }
-.navbar-item {
-    padding: 0 1em;
-    list-style: none;
-}
-.navbar-item--link,
-.navbar-item--link:visited,
-.navbar-item--link:hover,
-.navbar-item--link:focus,
-.navbar-logo--link:focus {
-    color: var(--text-color) !important;
-    text-decoration: none;
-}
-.navbar-item--link:hover {
-    border-bottom: 1px solid;
-}
-main {
-    display: initial !important;
-}
-#login-form .submit-row input:hover {
-    color: var(--accent);
-}
-#login-form .submit-row input {
-    width: 100%;
-    padding: 12px;
-}
-.logout-form button{
-    background-color: transparent;
-    border: none;
-    color: var(--text-color);
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-}
-.logout-form button:hover {
-    color: var(--text-color);
-    border-bottom: 1px solid;
-}
-.toggle_theme-button {
-    position: relative;
-    right: 0;
-    width: 45px;
-    height: 45px;
+
+.auth__eyebrow { display: none; }
+
+.auth__title {
+    font-weight: 600;
+    font-size: 1.4rem;
+    line-height: 1.2;
+    margin: 0 0 0.4rem;
+    letter-spacing: -0.015em;
+    color: var(--body-loud-color);
     text-align: center;
+}
+
+.auth__lede {
+    margin: 0 0 1.75rem;
+    font-size: 0.875rem;
+    color: var(--body-quiet-color);
+    line-height: 1.5;
+    text-align: center;
+}
+
+.auth__lede strong { color: var(--body-medium-color); font-weight: 600; }
+
+.auth__error {
+    margin: 0 0 1rem;
+    padding: 0.65rem 0.85rem;
+    background: var(--eskoz-bad-bg);
+    color: var(--eskoz-bad);
+    border: 1px solid color-mix(in srgb, var(--eskoz-bad) 25%, transparent);
+    border-radius: 6px;
+    font-size: 0.825rem;
+    text-align: center;
+}
+
+.auth__form { display: flex; flex-direction: column; gap: 0.85rem; }
+.auth__field { display: flex; flex-direction: column; gap: 0.35rem; }
+
+.auth__field-label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--body-medium-color);
+}
+
+.auth__field input {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    background: var(--body-bg);
+    color: var(--body-fg);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.auth__field input:focus {
+    outline: none;
+    border-color: var(--eskoz-accent);
+    box-shadow: 0 0 0 3px var(--eskoz-accent-soft);
+}
+
+.auth__field-input--otp {
+    text-align: center;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 1.1rem;
+    letter-spacing: 0.3em;
+}
+
+.auth__hint {
+    margin: 0;
+    font-size: 0.78rem;
+    color: var(--body-quiet-color);
+    line-height: 1.5;
+    text-align: center;
+}
+
+.auth__submit {
+    margin-top: 0.5rem;
+    width: 100%;
+    padding: 0.7rem 1rem;
+    background: var(--eskoz-accent);
+    color: #ffffff;
     border: none;
-    background-color: var(--secondary-color);
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
-    font-size: 1em;
+    border-radius: 6px;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.12s ease;
+}
+
+.auth__submit:hover { background: var(--eskoz-accent-hover); }
+.auth__submit-arrow { display: none; }
+
+.auth__minor {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.825rem;
+    color: var(--body-quiet-color);
+    text-align: center;
+    text-decoration: none;
+}
+
+.auth__minor:hover { color: var(--eskoz-accent); }
+
+.auth__footer { margin: 0; text-align: center; font-size: 0.825rem; color: var(--body-quiet-color); }
+.auth__footer a { color: var(--body-quiet-color); text-decoration: none; }
+.auth__footer a:hover { color: var(--body-loud-color); }
+
+.auth__footer-form { margin: 0; }
+.auth__footer-form button {
+    background: none; border: none; padding: 0.25rem 0.5rem;
+    color: var(--body-quiet-color); font-family: inherit; font-size: 0.825rem; cursor: pointer;
+}
+.auth__footer-form button:hover { color: var(--body-loud-color); }
+
+/* ============================================================
+ * DASHBOARD (/admin/)
+ * ============================================================ */
+
+.console { width: 100%; }
+
+.console__header { margin: 0 0 2rem; }
+
+.console__title {
+    font-weight: 600;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: var(--body-loud-color);
+    margin: 0 0 0.3rem;
+}
+
+.console__subtitle {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--body-quiet-color);
+}
+
+.console__eyebrow { display: none; }
+
+/* Metrics row */
+.metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0;
+    border: 1px solid var(--hairline-color);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--body-bg);
+    margin-bottom: 1.5rem;
+}
+
+.metric {
+    display: flex;
+    flex-direction: column;
+    padding: 1.1rem 1.1rem;
+    text-decoration: none;
+    background: transparent;
+    border-right: 1px solid var(--hairline-color);
+    color: var(--body-fg) !important;
+    transition: background 0.12s ease;
+}
+
+.metric:last-child { border-right: none; }
+.metric:hover { background: var(--darkened-bg); }
+
+.metric__value {
+    font-weight: 600;
+    font-size: 1.7rem;
+    line-height: 1;
+    color: var(--body-loud-color);
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    margin-bottom: 0.45rem;
+}
+
+.metric__label {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--body-quiet-color);
+}
+
+.metric__sub {
+    margin-top: 0.2rem;
+    font-size: 0.72rem;
+    color: var(--body-quiet-color);
+    opacity: 0.75;
+}
+
+/* Quick actions */
+.quick {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 2rem;
+}
+
+.quick__item {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.45rem 0.85rem;
+    background: var(--body-bg);
+    border: 1px solid var(--hairline-color);
+    border-radius: 6px;
+    color: var(--body-fg) !important;
+    text-decoration: none;
+    font-size: 0.825rem;
+    font-weight: 500;
+    transition: border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
+}
+
+.quick__item:hover {
+    border-color: var(--eskoz-accent);
+    color: var(--eskoz-accent) !important;
+    background: var(--eskoz-accent-soft);
+}
+
+.quick__item--ghost {
+    color: var(--body-quiet-color) !important;
+    margin-left: auto;
+}
+
+.quick__item--ghost:hover {
+    color: var(--body-loud-color) !important;
+    background: var(--darkened-bg);
+}
+
+/* Section blocks (Recent activity, Sections) */
+.block { margin-bottom: 2rem; }
+
+.block__title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--body-quiet-color);
+    margin: 0 0 0.7rem;
+}
+
+/* Activity feed */
+.feed {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--hairline-color);
+}
+
+.feed__row {
+    display: grid;
+    grid-template-columns: 80px 90px 1fr 110px;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid var(--hairline-color);
+    font-size: 0.85rem;
+}
+
+.feed__time {
+    color: var(--body-quiet-color);
+    font-size: 0.78rem;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+}
+
+.feed__actor {
+    color: var(--body-quiet-color);
+    font-size: 0.78rem;
+    text-align: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.feed__verb {
+    font-size: 0.78rem;
+    font-weight: 500;
+    text-align: left;
+}
+
+.feed__verb--add    { color: var(--eskoz-good); }
+.feed__verb--update { color: var(--eskoz-info); }
+.feed__verb--delete { color: var(--eskoz-bad); }
+.feed__verb--access { color: var(--body-quiet-color); }
+
+.feed__what {
+    color: var(--body-medium-color);
+    font-size: 0.85rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.feed__type {
+    color: var(--body-quiet-color);
+    font-size: 0.75rem;
+    margin-right: 0.4rem;
+}
+
+.feed__name { color: var(--body-loud-color); font-weight: 500; }
+
+@media (max-width: 720px) {
+    .feed__row { grid-template-columns: 1fr; gap: 0.15rem; padding: 0.65rem 0; }
+    .feed__actor { text-align: left; }
+}
+
+/* Apps section: let Django's default app_list render normally */
+.apps-shell .module {
+    margin-bottom: 0.5rem;
+}
+
+/* ============================================================
+ * STATUS BADGES (used by visibility_badge_field)
+ * ============================================================ */
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.18rem 0.55rem;
+    font-size: 0.72rem;
+    font-weight: 500;
+    text-transform: capitalize;
+    border-radius: 999px;
+}
+
+.status-badge::before {
+    content: "";
+    display: inline-block;
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
+    background: currentColor;
+}
+
+.status-badge--public     { color: var(--eskoz-good); background: var(--eskoz-good-bg); }
+.status-badge--private    { color: var(--eskoz-mute); background: var(--eskoz-mute-bg); }
+.status-badge--protected  { color: var(--eskoz-warn); background: var(--eskoz-warn-bg); }
+.status-badge--unlisted   { color: var(--eskoz-info); background: var(--eskoz-info-bg); }
+.status-badge--referenced { color: var(--eskoz-info); background: var(--eskoz-info-bg); }
+.status-badge--index      { color: var(--eskoz-info); background: var(--eskoz-info-bg); }
+.status-badge--active     { color: var(--eskoz-good); background: var(--eskoz-good-bg); }
+.status-badge--inactive   { color: var(--eskoz-mute); background: var(--eskoz-mute-bg); }
+
+/* Toggle variant — clickable badge in changelist. */
+button.status-badge--toggle {
+    appearance: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font: inherit;
+    line-height: 1;
+    transition: filter 80ms ease, transform 80ms ease;
+}
+button.status-badge--toggle:hover {
+    filter: brightness(0.95);
+}
+button.status-badge--toggle:active {
+    transform: translateY(1px);
+}
+.status-badge--flash-ok  { background: var(--eskoz-good-bg); color: var(--eskoz-good); }
+.status-badge--flash-bad { background: var(--eskoz-bad-bg);  color: var(--eskoz-bad);  }
+
+/* Visibility popover. */
+.visibility-pop {
+    z-index: 1000;
+    min-width: 180px;
+    background: var(--body-bg);
+    border: 1px solid var(--hairline-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+}
+.visibility-pop.is-loading { opacity: 0.55; pointer-events: none; }
+
+.visibility-pop__item {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    color: var(--body-fg);
+    text-align: left;
+    padding: 0.45rem 0.6rem;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    cursor: pointer;
+}
+.visibility-pop__item:hover { background: var(--darkened-bg); }
+.visibility-pop__item.is-current { background: var(--eskoz-accent-soft); }
+
+.visibility-pop__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex: 0 0 8px;
+}
+.visibility-pop__dot--public     { background: var(--eskoz-good); }
+.visibility-pop__dot--private    { background: var(--eskoz-mute); }
+.visibility-pop__dot--protected  { background: var(--eskoz-warn); }
+.visibility-pop__dot--unlisted   { background: var(--eskoz-info); }
+.visibility-pop__dot--referenced { background: var(--eskoz-info); }
+.visibility-pop__dot--index      { background: var(--eskoz-info); }
+
+/* ============================================================
+ * 2FA panel (User change view inline)
+ * ============================================================ */
+
+.tfa-empty {
+    color: var(--body-quiet-color);
+    font-size: 0.85rem;
+    font-style: italic;
+    margin: 0;
+    padding: 0.85rem;
+    background: var(--darkened-bg);
+    border-radius: 6px;
+}
+
+.tfa-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 1.25rem;
+    align-items: start;
+}
+
+@media (max-width: 720px) { .tfa-grid { grid-template-columns: 1fr; } }
+
+.tfa-qr {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.85rem;
+    background: #ffffff;
+    border: 1px solid var(--hairline-color);
+    border-radius: 6px;
+}
+
+.tfa-qr svg { width: 100%; height: auto; max-width: 180px; }
+
+.tfa-copy-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+}
+
+.tfa-copy {
+    background: var(--darkened-bg);
+    border: 1px solid var(--hairline-color);
+    border-radius: 6px;
+    padding: 0.7rem 0.85rem;
+}
+
+.tfa-copy__label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--body-quiet-color);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+}
+
+.tfa-copy__value {
+    display: block;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.82rem;
+    color: var(--body-fg);
+    word-break: break-all;
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+.tfa-copy__value--small { font-size: 0.72rem; color: var(--body-medium-color); }
+
+.tfa-copy__btn {
+    background: var(--eskoz-accent);
+    color: #ffffff;
+    border: none;
+    padding: 0.3rem 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 500;
+    transition: background 0.12s ease;
+}
+
+.tfa-copy__btn:hover { background: var(--eskoz-accent-hover); }
+.tfa-copy__btn--ok { background: var(--eskoz-good) !important; }
+
+.tfa-backup {
+    background: var(--darkened-bg);
+    border: 1px solid var(--eskoz-warn);
+    border-left-width: 3px;
+    border-radius: 6px;
+    padding: 0.95rem 1.05rem;
+}
+
+.tfa-backup__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.85rem;
+    gap: 0.75rem;
+}
+
+.tfa-backup__count {
+    color: var(--body-quiet-color);
+    font-weight: 400;
+    margin-left: 0.25rem;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.tfa-backup__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 0.4rem;
+    margin-bottom: 0.85rem;
+}
+
+.tfa-backup__code {
+    display: inline-block;
+    text-align: center;
+    padding: 0.45rem 0.5rem;
+    background: var(--body-bg);
+    border: 1px solid var(--hairline-color);
+    border-radius: 6px;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    color: var(--body-loud-color);
+}
+
+.tfa-backup__warn {
+    margin: 0;
+    color: var(--eskoz-warn);
+    font-size: 0.78rem;
+    font-weight: 500;
+}
+
+.field-qr_code .readonly,
+.field-backup_codes_display .readonly {
+    display: block;
+    padding: 0;
+}
+
+/* ============================================================
+ * TRANSLATION TABS — replaces the vertical stack on translation
+ * inlines with a tab strip (one per language + a "+" button).
+ * Hides inline-related forms whose tab is not active.
+ * ============================================================ */
+
+.inline-group--translation-tabs .inline-related.is-hidden-tab {
+    display: none;
+}
+
+/* Hide the "Add another" link — the "+" tab replaces it. */
+.inline-group--translation-tabs .add-row {
+    display: none;
+}
+
+.translation-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    margin: 0 0 1rem;
+    padding: 4px;
+    background: var(--darkened-bg);
+    border: 1px solid var(--hairline-color);
+    border-radius: 8px;
+    width: max-content;
+    max-width: 100%;
+}
+
+.translation-tabs__tab {
+    appearance: none;
+    background: transparent;
+    color: var(--body-quiet-color);
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: background-color 80ms ease, color 80ms ease;
+}
+
+.translation-tabs__tab:hover {
+    color: var(--body-loud-color);
+    background: var(--body-bg);
+}
+
+.translation-tabs__tab.is-active {
+    color: var(--body-loud-color);
+    background: var(--body-bg);
+    border-color: var(--hairline-color);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.translation-tabs__add {
+    font-weight: 600;
+    color: var(--eskoz-accent);
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+}
+
+/* When a translation form is shown, drop the heavy stacked-inline
+   chrome since the tab strip already names the row. */
+.inline-group--translation-tabs .inline-related > h3 {
+    display: none;
+}
+
+/* ============================================================
+ * AUTOSAVE — restore banner + transient "Draft saved" toast.
+ * ============================================================ */
+
+.autosave-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0 0 1rem;
+    padding: 0.75rem 1rem;
+    background: var(--eskoz-warn-bg);
+    border: 1px solid var(--eskoz-warn);
+    border-radius: 8px;
+    color: var(--body-loud-color);
+    font-size: 0.88rem;
+}
+.autosave-banner__text strong {
+    color: var(--eskoz-warn);
+    font-weight: 600;
+    margin-right: 0.25rem;
+}
+.autosave-banner__actions {
+    display: flex;
+    gap: 0.5rem;
+}
+.autosave-banner__btn {
+    appearance: none;
+    border: 1px solid var(--hairline-color);
+    background: var(--body-bg);
+    color: var(--body-fg);
+    padding: 0.35rem 0.85rem;
+    font-size: 0.82rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: filter 80ms ease;
+}
+.autosave-banner__btn:hover { filter: brightness(0.97); }
+.autosave-banner__btn--primary {
+    background: var(--eskoz-accent);
+    border-color: var(--eskoz-accent);
+    color: #fff;
+}
+.autosave-banner__btn--primary:hover { background: var(--eskoz-accent-hover); }
+
+.autosave-indicator {
+    position: fixed;
+    bottom: 1.25rem;
+    right: 1.25rem;
+    background: var(--body-loud-color);
+    color: var(--body-bg);
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    transition: opacity 200ms ease, transform 200ms ease;
+    z-index: 1100;
+}
+.autosave-indicator.is-visible {
+    opacity: 0.92;
+    transform: translateY(0);
 }
