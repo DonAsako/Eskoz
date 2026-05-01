@@ -42,15 +42,22 @@ def get_content_as_html(content):
         content,
         extensions=[
             "extra",
-            "codehilite",
             "fenced_code",
             "toc",
             "pymdownx.blocks.admonition",
             "pymdownx.arithmatex",
             "pymdownx.details",
             "pymdownx.superfences",
+            "pymdownx.highlight",
         ],
         extension_configs={
+            # Disable server-side Pygments — hljs (loaded on the page)
+            # owns syntax highlighting, and use_pygments=False makes
+            # superfences emit `<code class="language-X">` so both hljs
+            # and the theme JS topbar can read the language.
+            "pymdownx.highlight": {
+                "use_pygments": False,
+            },
             "pymdownx.arithmatex": {
                 "generic": True,
             },

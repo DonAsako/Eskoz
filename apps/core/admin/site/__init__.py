@@ -185,15 +185,18 @@ class EskozAdminSite(AdminSite):
                 content,
                 extensions=[
                     "extra",
-                    "codehilite",
                     "fenced_code",
                     "toc",
                     "pymdownx.blocks.admonition",
                     "pymdownx.arithmatex",
                     "pymdownx.details",
                     "pymdownx.superfences",
+                    "pymdownx.highlight",
                 ],
                 extension_configs={
+                    "pymdownx.highlight": {
+                        "use_pygments": False,
+                    },
                     "pymdownx.arithmatex": {
                         "generic": True,
                     },
