@@ -464,6 +464,168 @@ ul.messagelist li {
     margin-bottom: 0.5rem;
 }
 
+/* ---------- Dashboard ---------- */
+.dashboard-quick-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1.25rem 0;
+}
+
+.dashboard-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1rem;
+    background: var(--eskoz-accent);
+    color: #ffffff !important;
+    border-radius: var(--eskoz-radius-sm);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    box-shadow: var(--eskoz-shadow-sm);
+    transition: background 0.15s ease, transform 0.05s ease;
+}
+
+.dashboard-action:hover {
+    background: var(--eskoz-accent-hover);
+    color: #ffffff !important;
+}
+
+.dashboard-action:active {
+    transform: translateY(1px);
+}
+
+.dashboard-action__icon {
+    font-size: 1.05rem;
+    line-height: 1;
+    font-weight: 600;
+}
+
+.dashboard-action--ghost {
+    background: transparent;
+    color: var(--body-medium-color) !important;
+    border: 1px solid var(--border-color);
+    box-shadow: none;
+}
+
+.dashboard-action--ghost:hover {
+    background: var(--darkened-bg);
+    color: var(--body-loud-color) !important;
+}
+
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.75rem;
+    margin: 1rem 0 1.5rem;
+}
+
+.dashboard-stat-card {
+    display: block;
+    padding: 1rem 1.1rem;
+    background: var(--breadcrumbs-bg);
+    border: 1px solid var(--hairline-color);
+    border-radius: var(--eskoz-radius-md);
+    text-decoration: none !important;
+    color: var(--body-fg) !important;
+    box-shadow: var(--eskoz-shadow-sm);
+    transition: border-color 0.15s ease, transform 0.05s ease, box-shadow 0.15s ease;
+}
+
+.dashboard-stat-card:hover {
+    border-color: var(--eskoz-accent);
+    box-shadow: var(--eskoz-shadow-md);
+    color: var(--body-loud-color) !important;
+}
+
+.dashboard-stat-card:active {
+    transform: translateY(1px);
+}
+
+.dashboard-stat-card__total {
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--body-loud-color);
+}
+
+.dashboard-stat-card__label {
+    margin-top: 0.25rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--body-medium-color);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.dashboard-stat-card__sub {
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    color: var(--body-quiet-color);
+}
+
+.dashboard-activity {
+    margin-top: 1.5rem;
+}
+
+.dashboard-activity__table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.dashboard-activity__table td {
+    padding: 0.55rem 1rem;
+    border-bottom: 1px solid var(--hairline-color);
+    font-size: 0.85rem;
+    vertical-align: middle;
+}
+
+.dashboard-activity__table tr:last-child td {
+    border-bottom: none;
+}
+
+.dashboard-activity__when {
+    color: var(--body-quiet-color);
+    font-family: var(--eskoz-font-mono);
+    white-space: nowrap;
+    width: 1%;
+}
+
+.dashboard-activity__actor {
+    color: var(--body-medium-color);
+    white-space: nowrap;
+    width: 1%;
+}
+
+.dashboard-activity__what {
+    color: var(--body-fg);
+}
+
+.dashboard-badge {
+    display: inline-block;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.dashboard-badge--add { background: #ecfdf5; color: #047857; }
+.dashboard-badge--update { background: #eff6ff; color: #1d4ed8; }
+.dashboard-badge--delete { background: #fef2f2; color: #b91c1c; }
+.dashboard-badge--access { background: #f5f3ff; color: #6d28d9; }
+
+[data-theme="dark"] .dashboard-badge--add { background: rgba(4, 120, 87, 0.2); color: #6ee7b7; }
+[data-theme="dark"] .dashboard-badge--update { background: rgba(29, 78, 216, 0.2); color: #93c5fd; }
+[data-theme="dark"] .dashboard-badge--delete { background: rgba(185, 28, 28, 0.2); color: #fca5a5; }
+[data-theme="dark"] .dashboard-badge--access { background: rgba(109, 40, 217, 0.2); color: #c4b5fd; }
+
+.dashboard-apps {
+    margin-top: 2rem;
+}
+
 /* ---------- Breadcrumbs ---------- */
 div.breadcrumbs {
     padding: 0.75rem 1.25rem;

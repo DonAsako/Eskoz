@@ -12,6 +12,7 @@ from apps.core.models import SiteSettings
 
 class EskozAdminSite(AdminSite):
     site_header = "Eskoz"
+    index_template = "admin/eskoz_index.html"
 
     @method_decorator(ratelimit(key="ip", rate=settings.RATELIMIT_LOGIN_IP, method="POST", block=True))
     @method_decorator(ratelimit(key="post:username", rate=settings.RATELIMIT_LOGIN_USERNAME, method="POST", block=True))
@@ -52,12 +53,55 @@ class EskozAdminSite(AdminSite):
         return filtered_apps
 
     def index(self, request, extra_context=None):
+        """Render the dashboard with content stats + recent activity.
+
+        The default Django admin index just lists apps; we keep that list
+        further down the page (via ``admin/index.html`` which extends the
+        original) and surface the operational data first: counts, audit
+        trail, quick actions to the most-used create forms.
+        """
+        from auditlog.models import LogEntry
+
+        from apps.blog.models import Article, Project
+        from apps.core.models import Page
+        from apps.education.models import Course, Lesson
+        from apps.infosec.models import CVE, Writeup
+
+        def _public(model):
+            return model.objects.filter(visibility="public").count() if hasattr(model, "visibility") else model.objects.count()
+
         site_settings = SiteSettings.objects.first()
+        site_settings_url = None
         if site_settings:
             model_admin = self._registry.get(SiteSettings)
             if model_admin:
-                return model_admin.change_view(request, str(site_settings.pk), extra_context=extra_context)
-        return super().index(request, extra_context)
+                from django.urls import reverse as _reverse
+
+                site_settings_url = _reverse(
+                    "admin:core_sitesettings_change",
+                    args=[site_settings.pk],
+                    current_app=self.name,
+                )
+
+        stats = [
+            {"label": "Articles", "total": Article.objects.count(), "public": _public(Article), "add_url": "admin:blog_article_add"},
+            {"label": "Writeups", "total": Writeup.objects.count(), "public": _public(Writeup), "add_url": "admin:infosec_writeup_add"},
+            {"label": "Lessons", "total": Lesson.objects.count(), "public": Lesson.objects.count(), "add_url": "admin:education_lesson_add"},
+            {"label": "CVEs", "total": CVE.objects.count(), "public": CVE.objects.count(), "add_url": "admin:infosec_cve_add"},
+            {"label": "Projects", "total": Project.objects.count(), "public": Project.objects.count(), "add_url": "admin:blog_project_add"},
+            {"label": "Courses", "total": Course.objects.count(), "public": Course.objects.count(), "add_url": "admin:education_course_add"},
+            {"label": "Pages", "total": Page.objects.count(), "public": _public(Page), "add_url": "admin:core_page_add"},
+        ]
+
+        recent_activity = LogEntry.objects.select_related("actor", "content_type").order_by("-timestamp")[:8]
+
+        context = {
+            **(extra_context or {}),
+            "dashboard_stats": stats,
+            "dashboard_recent_activity": recent_activity,
+            "dashboard_site_settings_url": site_settings_url,
+        }
+        return super().index(request, context)
 
     def get_urls(self):
         from apps.core.views import verify_2fa_view

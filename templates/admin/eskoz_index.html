@@ -1,0 +1,72 @@
+{% extends "admin/index.html" %}
+{% load i18n static %}
+
+{% block content %}
+<div id="content-main">
+
+    <section class="dashboard-quick-actions">
+        <a href="{% url 'admin:blog_article_add' %}" class="dashboard-action">
+            <span class="dashboard-action__icon" aria-hidden="true">+</span>
+            <span class="dashboard-action__label">{% trans 'New article' %}</span>
+        </a>
+        <a href="{% url 'admin:infosec_writeup_add' %}" class="dashboard-action">
+            <span class="dashboard-action__icon" aria-hidden="true">+</span>
+            <span class="dashboard-action__label">{% trans 'New writeup' %}</span>
+        </a>
+        <a href="{% url 'admin:core_page_add' %}" class="dashboard-action">
+            <span class="dashboard-action__icon" aria-hidden="true">+</span>
+            <span class="dashboard-action__label">{% trans 'New page' %}</span>
+        </a>
+        <a href="{% url 'admin:infosec_cve_add' %}" class="dashboard-action">
+            <span class="dashboard-action__icon" aria-hidden="true">+</span>
+            <span class="dashboard-action__label">{% trans 'New CVE' %}</span>
+        </a>
+        {% if dashboard_site_settings_url %}
+        <a href="{{ dashboard_site_settings_url }}" class="dashboard-action dashboard-action--ghost">
+            <span class="dashboard-action__icon" aria-hidden="true">⚙</span>
+            <span class="dashboard-action__label">{% trans 'Site config' %}</span>
+        </a>
+        {% endif %}
+    </section>
+
+    <section class="dashboard-stats">
+        {% for stat in dashboard_stats %}
+        <a href="{% url stat.add_url %}" class="dashboard-stat-card">
+            <div class="dashboard-stat-card__total">{{ stat.total }}</div>
+            <div class="dashboard-stat-card__label">{{ stat.label }}</div>
+            {% if stat.total != stat.public %}
+            <div class="dashboard-stat-card__sub">{{ stat.public }} {% trans 'public' %}</div>
+            {% endif %}
+        </a>
+        {% endfor %}
+    </section>
+
+    {% if dashboard_recent_activity %}
+    <section class="dashboard-activity module">
+        <h2>{% trans 'Recent activity' %}</h2>
+        <table class="dashboard-activity__table">
+            <tbody>
+            {% for entry in dashboard_recent_activity %}
+                <tr>
+                    <td class="dashboard-activity__when">{{ entry.timestamp|timesince }} {% trans 'ago' %}</td>
+                    <td class="dashboard-activity__actor">{{ entry.actor|default:"—" }}</td>
+                    <td class="dashboard-activity__action">
+                        {% if entry.action == 0 %}<span class="dashboard-badge dashboard-badge--add">{% trans 'created' %}</span>
+                        {% elif entry.action == 1 %}<span class="dashboard-badge dashboard-badge--update">{% trans 'updated' %}</span>
+                        {% elif entry.action == 2 %}<span class="dashboard-badge dashboard-badge--delete">{% trans 'deleted' %}</span>
+                        {% elif entry.action == 3 %}<span class="dashboard-badge dashboard-badge--access">{% trans 'accessed' %}</span>
+                        {% endif %}
+                    </td>
+                    <td class="dashboard-activity__what">{{ entry.content_type.model|capfirst }} <strong>{{ entry.object_repr|truncatechars:50 }}</strong></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </section>
+    {% endif %}
+
+    <section class="dashboard-apps">
+        {{ block.super }}
+    </section>
+</div>
+{% endblock %}
