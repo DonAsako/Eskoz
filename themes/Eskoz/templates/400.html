@@ -1,9 +1,6 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% block SEO %}
-    <meta property="og:type" content="website" />
-    <meta name="robots" content="noindex" />
-{% endblock %}
+{% block robots %}<meta name="robots" content="noindex,nofollow">{% endblock %}
 
 {% block title %} - {% trans "Bad request" %}{% endblock %}
 

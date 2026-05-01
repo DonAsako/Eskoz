@@ -78,6 +78,20 @@ def well_known(request, filename):
     return HttpResponse(WellKnown_file.content, content_type="text/plain")
 
 
+def robots_txt(request):
+    """Serve robots.txt with a Sitemap directive pointing at the live host."""
+    sitemap_url = request.build_absolute_uri("/sitemap.xml")
+    lines = [
+        "User-agent: *",
+        f"Disallow: /{settings.ADMIN_URL}/",
+        "Disallow: /accounts/",
+        "",
+        f"Sitemap: {sitemap_url}",
+        "",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
+
+
 def post_detail(
     request,
     post_model,

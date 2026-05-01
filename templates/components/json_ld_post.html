@@ -1,0 +1,38 @@
+{% comment %}
+JSON-LD structured data for an AbstractPost (Article, Writeup).
+Required context: `post` (an AbstractPost instance) and a `schema_type`
+("Article" or "TechArticle"). Falls back to "Article" if unset.
+{% endcomment %}
+{% load i18n %}
+{% spaceless %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "{{ schema_type|default:'Article' }}",
+    "headline": "{{ post.get_translation.title|escapejs }}",
+    {% if post.get_translation.description %}"description": "{{ post.get_translation.description|escapejs }}",{% endif %}
+    {% if post.picture %}"image": ["{{ request.scheme }}://{{ request.get_host }}{{ post.picture.url }}"],{% endif %}
+    "datePublished": "{{ post.published_on.isoformat }}",
+    "dateModified": "{{ post.edited_on.isoformat }}",
+    "inLanguage": "{{ LANGUAGE_CODE }}",
+    "author": {
+        "@type": "Person",
+        "name": "{{ post.author.get_full_name|default:post.author.username|escapejs }}"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "{{ site_settings.site_name|escapejs }}"{% if site_settings.logo %},
+        "logo": {
+            "@type": "ImageObject",
+            "url": "{{ request.scheme }}://{{ request.get_host }}{{ site_settings.logo.url }}"
+        }{% endif %}
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "{{ CANONICAL_URL }}"
+    }{% if post.tags.all %},
+    "keywords": "{% for tag in post.tags.all %}{{ tag.title|escapejs }}{% if not forloop.last %}, {% endif %}{% endfor %}"{% endif %}{% if post.category %},
+    "articleSection": "{{ post.category|escapejs }}"{% endif %}
+}
+</script>
+{% endspaceless %}

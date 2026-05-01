@@ -6,29 +6,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+    {% block meta_keywords %}
     <meta name="keywords" content="{{ site_settings.seo_settings.meta_keywords }}">
+    {% endblock %}
+
+    {% block meta_description %}
     <meta name="description" content="{{ site_settings.seo_settings.meta_description }}">
+    {% endblock %}
+
+    {% block meta_author %}
     <meta name="author" content="{{ site_settings.seo_settings.meta_author }}">
+    {% endblock %}
+
     {% if site_settings.favicon %}<link rel="shortcut icon" href="{{ site_settings.favicon.url }}" type="image/x-icon">{% endif %}
 
-    <!-- OG -->
-    {% block SEO %}{% endblock%}
-    <meta property="og:title" content="{{ site_settings.seo_settings.og_title }}">
-    <meta property="og:description" content="{{ site_settings.seo_settings.og_description }}">
-    <meta property="og:url" content="{{ request.get_host }}">
-    {% if site_settings.seo_settings.og_image %}
-    <meta property="og:image" content="{{ site_settings.seo_settings.og_image.url }}">
-    <meta property="og:image:width" content="{{ site_settings.seo_settings.og_image.width }}"/>
-    <meta property="og:image:height" content="{{ site_settings.seo_settings.og_image.height }}"/>
+    {% block canonical %}
+    <link rel="canonical" href="{{ CANONICAL_URL }}">
+    {% endblock %}
+
+    {% block robots %}{% endblock %}
+
+    {% if site_settings.seo_settings.google_site_verification %}
+    <meta name="google-site-verification" content="{{ site_settings.seo_settings.google_site_verification }}">
     {% endif %}
 
+    <!-- Open Graph -->
+    {% block og_type %}
+    <meta property="og:type" content="website">
+    {% endblock %}
+
+    {% block og_title %}
+    <meta property="og:title" content="{{ site_settings.seo_settings.og_title|default:site_settings.site_name }}">
+    {% endblock %}
+
+    {% block og_description %}
+    <meta property="og:description" content="{{ site_settings.seo_settings.og_description|default:site_settings.seo_settings.meta_description }}">
+    {% endblock %}
+
+    {% block og_url %}
+    <meta property="og:url" content="{{ CANONICAL_URL }}">
+    {% endblock %}
+
+    {% block og_site_name %}
+    <meta property="og:site_name" content="{{ site_settings.site_name }}">
+    {% endblock %}
+
+    {% block og_locale %}
+    <meta property="og:locale" content="{{ OG_LOCALE }}">
+    {% for alt in OG_LOCALE_ALTERNATES %}<meta property="og:locale:alternate" content="{{ alt }}">{% endfor %}
+    {% endblock %}
+
+    {% block og_image %}
+    {% if site_settings.seo_settings.og_image %}
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ site_settings.seo_settings.og_image.url }}">
+    <meta property="og:image:width" content="{{ site_settings.seo_settings.og_image.width }}">
+    <meta property="og:image:height" content="{{ site_settings.seo_settings.og_image.height }}">
+    {% endif %}
+    {% endblock %}
+
+    {% block meta_properties %}{% endblock %}
+
     <!-- Twitter -->
-    <meta name="twitter:card" content="{{ site_settings.seo_settings.twitter_card_type }}">
-    <meta name="twitter:site" content="{{ request.get_host }}">
-    <meta name="twitter:creator" content="{{ site_settings.seo_settings.twitter_creator}}">
-    <meta name="twitter:title" content="{{ site_settings.seo_settings.twitter_title }}">
-    {% if site_settings.seo_settings.twitter_image %}<meta name="twitter:image" content="{{ site_settings.seo_settings.twitter_image.url }}">{% endif %}
-    <meta name="twitter:description" content="{{ site_settings.seo_settings.twitter_description }}">
+    {% block twitter %}
+    <meta name="twitter:card" content="{{ site_settings.seo_settings.twitter_card_type|default:'summary' }}">
+    <meta name="twitter:title" content="{{ site_settings.seo_settings.twitter_title|default:site_settings.site_name }}">
+    <meta name="twitter:description" content="{{ site_settings.seo_settings.twitter_description|default:site_settings.seo_settings.meta_description }}">
+    {% if site_settings.seo_settings.twitter_image %}<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ site_settings.seo_settings.twitter_image.url }}">{% endif %}
+    {% endblock %}
+
+    {% block structured_data %}{% endblock %}
+
     <title>{{site_settings.site_name}}{% block title %}{% endblock%}</title>
     {% load static %}
     {% with theme_css="Eskoz/css/style.css" %}

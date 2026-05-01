@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% block title %} - {% trans 'Writeups' %}{% endblock %}
-{% block SEO %}
-<meta property="og:type" content="website" />
-{% endblock %}
+{% block og_title %}<meta property="og:title" content="{% trans 'Writeups' %} | {{ site_settings.site_name }}">{% endblock %}
+{% block meta_description %}<meta name="description" content="{% trans 'CTF and pentest writeups: exploitation techniques, exploit breakdowns and tactical notes.' %}">{% endblock %}
+{% block og_description %}<meta property="og:description" content="{% trans 'CTF and pentest writeups: exploitation techniques, exploit breakdowns and tactical notes.' %}">{% endblock %}
 {% block content %}
 <div class="article_list">
     <div class="article_list--top">

@@ -13,11 +13,42 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js" integrity="sha512-EBLzUL8XLl+va/zAsmXwS7Z2B1F9HUHkZwyS/VKwh3S7T/U0nF4BaU29EP/ZSf6zgiIxYAnKLu6bJ8dqpmX5uw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {% endblock %}
 {% block title %} - {{ writeup.get_translation.title }}{% endblock %}
-{% block SEO %}
-    <meta property="og:type" content="article" />
-    <meta property="article:published_time" content="{{ writeup.published_on.isoformat }}" />
-    <meta property="article:modified_time" content="{{ writeup.edited_on.isoformat }}" />
-    {% for tag in writeup.tags.all %}<meta property="article:tag" content="{{ tag.title }}" />{% endfor %}
+
+{% block meta_description %}
+<meta name="description" content="{{ writeup.get_translation.description|default:site_settings.seo_settings.meta_description }}">
+{% endblock %}
+
+{% block og_type %}<meta property="og:type" content="article">{% endblock %}
+{% block og_title %}<meta property="og:title" content="{{ writeup.get_translation.title }}">{% endblock %}
+{% block og_description %}<meta property="og:description" content="{{ writeup.get_translation.description|default:site_settings.seo_settings.meta_description }}">{% endblock %}
+
+{% block og_image %}
+{% if writeup.picture %}
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ writeup.picture.url }}">
+<meta property="og:image:width" content="{{ writeup.picture.width }}">
+<meta property="og:image:height" content="{{ writeup.picture.height }}">
+{% elif site_settings.seo_settings.og_image %}
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ site_settings.seo_settings.og_image.url }}">
+{% endif %}
+{% endblock %}
+
+{% block meta_properties %}
+<meta property="article:published_time" content="{{ writeup.published_on.isoformat }}">
+<meta property="article:modified_time" content="{{ writeup.edited_on.isoformat }}">
+<meta property="article:author" content="{{ writeup.author.get_full_name|default:writeup.author.username }}">
+{% if writeup.category %}<meta property="article:section" content="{{ writeup.category }}">{% endif %}
+{% for tag in writeup.tags.all %}<meta property="article:tag" content="{{ tag.title }}">{% endfor %}
+{% endblock %}
+
+{% block twitter %}
+<meta name="twitter:card" content="{% if writeup.picture %}summary_large_image{% else %}{{ site_settings.seo_settings.twitter_card_type|default:'summary' }}{% endif %}">
+<meta name="twitter:title" content="{{ writeup.get_translation.title }}">
+<meta name="twitter:description" content="{{ writeup.get_translation.description|default:site_settings.seo_settings.meta_description }}">
+{% if writeup.picture %}<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ writeup.picture.url }}">{% endif %}
+{% endblock %}
+
+{% block structured_data %}
+{% include "components/json_ld_post.html" with post=writeup schema_type="TechArticle" %}
 {% endblock %}
 {% block content %}
 <div class="article--container">
