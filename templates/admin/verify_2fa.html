@@ -13,43 +13,48 @@
 {% block header %}{% endblock %}
 
 {% block content %}
-<main class="auth-shell">
-    <div class="auth-card">
-        <header class="auth-card__brand">
-            {% if site_settings.logo %}
-                <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}" class="auth-card__logo">
-            {% else %}
-                <div class="auth-card__wordmark">{{ site_settings.site_name|default:"Eskoz" }}</div>
-            {% endif %}
+<main class="auth">
+    <div class="auth__rule auth__rule--top" aria-hidden="true"></div>
+
+    <section class="auth__panel">
+        <header class="auth__brand">
+            <span class="auth__mark" aria-hidden="true">◆</span>
+            <span class="auth__wordmark">{{ site_settings.site_name|default:"Eskoz" }}</span>
         </header>
 
-        <div class="auth-card__body">
-            <h1 class="auth-card__title">{% trans 'Two-factor verification' %}</h1>
-            <p class="auth-card__subtitle">
-                {% blocktrans %}Signed in as <strong>{{ username }}</strong>.{% endblocktrans %}
+        <p class="auth__eyebrow">/ second factor</p>
+        <h1 class="auth__title">Verify identity.</h1>
+        <p class="auth__lede">
+            Signed in as <strong>{{ username }}</strong>. Confirm with your authenticator code or one of your backup codes.
+        </p>
+
+        {% if error %}
+            <p class="auth__error">{{ error }}</p>
+        {% endif %}
+
+        <form method="post" action="" class="auth__form">{% csrf_token %}
+            <label class="auth__field">
+                <span class="auth__field-label">Authentication code</span>
+                <input type="text" name="code" id="id_code" autofocus autocomplete="one-time-code" inputmode="numeric" pattern="[A-Za-z0-9 \-]*" required class="auth__field-input--otp">
+            </label>
+            <p class="auth__hint">
+                Six digits from your authenticator app, or any unused backup code.
             </p>
+            {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+            <button type="submit" class="auth__submit">
+                <span>Verify</span>
+                <span class="auth__submit-arrow" aria-hidden="true">→</span>
+            </button>
+        </form>
+    </section>
 
-            {% if error %}
-                <p class="auth-error">{{ error }}</p>
-            {% endif %}
+    <footer class="auth__footer">
+        <form method="post" action="{{ logout_url }}" class="auth__footer-form">
+            {% csrf_token %}
+            <button type="submit">sign out instead</button>
+        </form>
+    </footer>
 
-            <form method="post" action="" class="auth-form">{% csrf_token %}
-                <div class="auth-field">
-                    <label for="id_code">{% trans 'Authentication code' %}</label>
-                    <input type="text" name="code" id="id_code" autofocus autocomplete="one-time-code" inputmode="numeric" pattern="[A-Za-z0-9 \-]*" required>
-                    <p class="auth-hint">
-                        {% trans 'Enter the 6-digit code from your authenticator app, or one of your backup codes.' %}
-                    </p>
-                </div>
-                {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
-                <button type="submit" class="auth-submit">{% trans 'Verify' %}</button>
-            </form>
-        </div>
-    </div>
-
-    <form method="post" action="{{ logout_url }}" class="auth-footer-form">
-        {% csrf_token %}
-        <button type="submit" class="auth-footer-button">{% trans 'Sign out instead' %}</button>
-    </form>
+    <div class="auth__rule auth__rule--bottom" aria-hidden="true"></div>
 </main>
 {% endblock %}
