@@ -1,6 +1,7 @@
 from django.apps import apps
 from django.conf import settings
 from django.contrib.auth.models import Group, Permission, User
+from django.contrib.auth.signals import user_logged_in
 from django.core.cache import cache
 from django.db.models.signals import post_delete, post_migrate, post_save
 from django.db.utils import OperationalError, ProgrammingError
@@ -99,6 +100,18 @@ def create_related_settings(sender, instance, **kwargs):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
+
+
+@receiver(user_logged_in)
+def reset_2fa_verified_flag(sender, request, user, **kwargs):
+    """Force every fresh login through the 2FA gate again.
+
+    Without this, a stale ``2fa_verified=True`` from a previous session
+    could (in theory) survive ``cycle_key`` on anon → auth and bypass the
+    second factor.
+    """
+    if request and hasattr(request, "session"):
+        request.session.pop("2fa_verified", None)
 
 
 def _bust_active_language_cache(sender, **kwargs):

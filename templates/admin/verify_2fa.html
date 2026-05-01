@@ -1,0 +1,36 @@
+{% extends 'admin/login.html' %}
+{% load i18n %}
+
+{% block title %}{% trans 'Two-factor verification' %} | {{ site_settings.site_name }}{% endblock %}
+
+{% block branding %}
+    <h1 id="site-name">{{ site_settings.site_name }}</h1>
+    <p style="margin-top: -0.5rem; color: var(--body-quiet-color); font-size: 0.85rem;">
+        {% blocktrans %}Signed in as <strong>{{ username }}</strong>{% endblocktrans %}
+    </p>
+{% endblock %}
+
+{% block content %}
+{% if error %}
+    <p class="errornote">{{ error }}</p>
+{% endif %}
+
+<form method="post" action="">
+    {% csrf_token %}
+    <div class="form-row">
+        <label for="id_code">{% trans 'Authentication code' %}</label>
+        <input type="text" name="code" id="id_code" autofocus autocomplete="one-time-code" inputmode="numeric" pattern="[A-Za-z0-9 \-]*" required>
+        <p class="help">
+            {% trans 'Enter the 6-digit code from your authenticator app, or one of your backup codes.' %}
+        </p>
+    </div>
+    {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+    <div class="submit-row">
+        <input type="submit" value="{% trans 'Verify' %}">
+    </div>
+</form>
+
+<p style="margin-top: 1.5rem; text-align: center; font-size: 0.85rem;">
+    <a href="{{ logout_url }}">{% trans 'Sign out instead' %}</a>
+</p>
+{% endblock %}

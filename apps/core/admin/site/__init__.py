@@ -60,12 +60,24 @@ class EskozAdminSite(AdminSite):
         return super().index(request, extra_context)
 
     def get_urls(self):
+        from apps.core.views import verify_2fa_view
+
         urls = super().get_urls()
         custom_urls = [
             path(
                 "content_preview/",
                 self.admin_view(self.content_preview),
                 name="content_preview",
+            ),
+            # Logged-in (post-password) users land here when they have 2FA
+            # active and the session has not been verified yet. We do NOT
+            # wrap with self.admin_view because the user IS authenticated —
+            # they just need the second factor before any other admin URL
+            # is reachable (Force2FAMiddleware handles the gate).
+            path(
+                "verify/",
+                verify_2fa_view,
+                name="verify_2fa",
             ),
         ]
         return custom_urls + urls
