@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.admin.utils import backup
+from apps.core.admin.utils import backup, visibility_badge_field
 from apps.core.forms import AbstractPostAdminForm, AbstractTranslatableMarkdownItemAdminForm
 from apps.core.models import TranslatableMarkdownItemImage
 
@@ -69,7 +69,8 @@ class AbstractPostAdmin(AbstractTranslatableMarkdownItemAdmin):
 
     abstract = True
     form = AbstractPostAdminForm
-    list_display = ("title", "published_on", "visibility")
+    list_display = ("title", "published_on", "visibility_badge")
+    visibility_badge = visibility_badge_field("visibility")
     autocomplete_fields = ["tags", "category"]
     readonly_fields = ["edited_on"]
     prepopulated_fields = {"slug": ("title",)}

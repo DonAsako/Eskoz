@@ -3,8 +3,40 @@ import zipfile
 
 from django.contrib import admin
 from django.http import HttpResponse
+from django.utils.html import format_html
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
+
+
+def visibility_badge_field(field_name="visibility", description=None):
+    """Build a ModelAdmin display callable that renders ``field_name`` as a
+    color-coded ``status-badge`` span (CSS in ``static/admin/css/admin.css``).
+
+    Drop into a ``list_display`` tuple — easier than writing the wrapper
+    boilerplate on every model::
+
+        class ArticleAdmin(admin.ModelAdmin):
+            list_display = ("title", "visibility_badge", "published_on")
+            visibility_badge = visibility_badge_field()
+    """
+
+    @admin.display(description=description or field_name.replace("_", " ").title(), ordering=field_name)
+    def _display(self, obj):
+        value = getattr(obj, field_name, None)
+        if value in (None, ""):
+            return ""
+        # Boolean fields render to "active"/"inactive" badges.
+        if value is True:
+            css, label = "active", _("Active")
+        elif value is False:
+            css, label = "inactive", _("Inactive")
+        else:
+            css = str(value).lower()
+            getter = getattr(obj, f"get_{field_name}_display", None)
+            label = getter() if callable(getter) else value
+        return format_html('<span class="status-badge status-badge--{}">{}</span>', css, label)
+
+    return _display
 
 
 @admin.action(description=_("Backup selected articles"))

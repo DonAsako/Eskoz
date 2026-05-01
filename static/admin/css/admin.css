@@ -626,6 +626,272 @@ ul.messagelist li {
     margin-top: 2rem;
 }
 
+/* ---------- Changelist (object list pages) ---------- */
+#changelist {
+    background: transparent;
+}
+
+#changelist-form {
+    background: var(--breadcrumbs-bg);
+    border-radius: var(--eskoz-radius-md);
+    border: 1px solid var(--hairline-color);
+    overflow: hidden;
+    box-shadow: var(--eskoz-shadow-sm);
+}
+
+#changelist table {
+    border: none;
+}
+
+#changelist table thead th {
+    position: sticky;
+    top: 0;
+    background: var(--darkened-bg);
+    color: var(--body-medium-color);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.7rem 0.85rem;
+    border-bottom: 1px solid var(--hairline-color);
+    z-index: 1;
+}
+
+#changelist table thead th a {
+    color: inherit;
+    text-decoration: none;
+}
+
+#changelist table thead th a:hover {
+    color: var(--eskoz-accent);
+}
+
+#changelist table tbody td {
+    padding: 0.7rem 0.85rem;
+    font-size: 0.875rem;
+    border-bottom: 1px solid var(--hairline-color);
+    vertical-align: middle;
+}
+
+#changelist table tbody tr:hover td {
+    background: var(--eskoz-accent-soft);
+}
+
+#changelist table tbody tr.row1 td,
+#changelist table tbody tr.row2 td {
+    background-color: transparent;
+}
+
+#changelist table tbody tr.row2 td {
+    background-color: var(--darkened-bg);
+}
+
+#changelist table tbody tr.row2:hover td {
+    background-color: var(--eskoz-accent-soft);
+}
+
+#changelist .actions {
+    padding: 0.75rem 1rem;
+    background: var(--darkened-bg);
+    border-bottom: 1px solid var(--hairline-color);
+    border-radius: 0;
+}
+
+#changelist .actions select {
+    border-radius: var(--eskoz-radius-sm);
+    border: 1px solid var(--border-color);
+    padding: 0.35rem 0.6rem;
+}
+
+#changelist-search {
+    padding: 0.85rem 1rem 0;
+}
+
+#changelist-search input[type="text"] {
+    border-radius: var(--eskoz-radius-sm);
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 0.7rem;
+    font-size: 0.9rem;
+    min-width: 220px;
+}
+
+#changelist-search input[type="text"]:focus {
+    outline: none;
+    border-color: var(--eskoz-accent);
+    box-shadow: 0 0 0 3px var(--eskoz-accent-soft);
+}
+
+#changelist-search input[type="submit"] {
+    background: var(--eskoz-accent);
+    color: #fff;
+    border: none;
+    padding: 0.5rem 0.9rem;
+    border-radius: var(--eskoz-radius-sm);
+    cursor: pointer;
+    font-weight: 500;
+}
+
+#changelist-filter {
+    background: var(--breadcrumbs-bg);
+    border: 1px solid var(--hairline-color);
+    border-radius: var(--eskoz-radius-md);
+    padding: 1rem;
+    box-shadow: var(--eskoz-shadow-sm);
+}
+
+#changelist-filter h2 {
+    background: transparent;
+    color: var(--body-medium-color);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0 0 0.5rem;
+    border-bottom: 1px solid var(--hairline-color);
+    margin-bottom: 0.5rem;
+}
+
+#changelist-filter h3 {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--body-loud-color);
+    margin: 1rem 0 0.4rem;
+}
+
+#changelist-filter ul li {
+    padding: 0.15rem 0;
+}
+
+#changelist-filter ul li.selected a {
+    background: var(--eskoz-accent-soft);
+    color: var(--eskoz-accent);
+    border-radius: var(--eskoz-radius-sm);
+    padding: 0.15rem 0.5rem;
+    font-weight: 500;
+}
+
+/* Visibility badge cells — opt-in via list_display methods that return
+   <span class="status-badge status-badge--public">public</span> */
+.status-badge {
+    display: inline-block;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.status-badge--public { background: #ecfdf5; color: #047857; }
+.status-badge--private { background: #f1f5f9; color: #475569; }
+.status-badge--protected { background: #fef3c7; color: #92400e; }
+.status-badge--referenced { background: #eff6ff; color: #1d4ed8; }
+.status-badge--index { background: #ede9fe; color: #5b21b6; }
+.status-badge--active { background: #ecfdf5; color: #047857; }
+.status-badge--inactive { background: #f1f5f9; color: #475569; }
+
+[data-theme="dark"] .status-badge--public { background: rgba(4, 120, 87, 0.2); color: #6ee7b7; }
+[data-theme="dark"] .status-badge--private { background: rgba(71, 85, 105, 0.3); color: #cbd5e1; }
+[data-theme="dark"] .status-badge--protected { background: rgba(146, 64, 14, 0.25); color: #fcd34d; }
+[data-theme="dark"] .status-badge--referenced { background: rgba(29, 78, 216, 0.2); color: #93c5fd; }
+[data-theme="dark"] .status-badge--index { background: rgba(91, 33, 182, 0.25); color: #c4b5fd; }
+[data-theme="dark"] .status-badge--active { background: rgba(4, 120, 87, 0.2); color: #6ee7b7; }
+[data-theme="dark"] .status-badge--inactive { background: rgba(71, 85, 105, 0.3); color: #cbd5e1; }
+
+/* ---------- Changeform (model edit pages) ---------- */
+.change-form #content {
+    padding-bottom: 5rem;
+}
+
+#content-main fieldset.module {
+    margin-bottom: 1.25rem;
+}
+
+fieldset.module .form-row {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--hairline-color);
+}
+
+fieldset.module .form-row:last-child {
+    border-bottom: none;
+}
+
+fieldset.module label {
+    color: var(--body-medium-color);
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+
+.help, .help-tooltip {
+    color: var(--body-quiet-color);
+    font-size: 0.8rem;
+}
+
+/* Sticky save bar — long forms always show the save buttons. */
+.submit-row {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    background: var(--breadcrumbs-bg);
+    border-top: 1px solid var(--hairline-color);
+    padding: 0.85rem 1rem;
+    box-shadow: 0 -4px 12px rgba(15, 23, 42, 0.06);
+    border-radius: 0;
+    margin: 1.5rem 0 0;
+}
+
+[data-theme="dark"] .submit-row {
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.submit-row input[type="submit"],
+.submit-row .deletelink {
+    border-radius: var(--eskoz-radius-sm);
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+}
+
+.submit-row .deletelink {
+    background: transparent;
+    color: var(--delete-button-bg);
+    border: 1px solid var(--delete-button-bg);
+}
+
+.submit-row .deletelink:hover {
+    background: var(--delete-button-bg);
+    color: #ffffff;
+}
+
+/* Inline groups */
+.inline-group {
+    margin-top: 1rem;
+    border-radius: var(--eskoz-radius-md);
+    border: 1px solid var(--hairline-color);
+    overflow: hidden;
+}
+
+.inline-group .tabular tr.has_original td,
+.inline-group .tabular tr.add-row td {
+    padding: 0.55rem 0.7rem;
+}
+
+.add-row a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.85rem;
+    background: var(--eskoz-accent-soft);
+    color: var(--eskoz-accent);
+    border-radius: var(--eskoz-radius-sm);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.add-row a:hover {
+    background: var(--eskoz-accent);
+    color: #ffffff;
+}
+
 /* ---------- Breadcrumbs ---------- */
 div.breadcrumbs {
     padding: 0.75rem 1.25rem;
