@@ -1,28 +1,23 @@
 {% extends 'admin/base.html' %}
 {% load static i18n %}
 
-{% block title %}{{ site_settings.site_name }} - Eskoz{% endblock %}
+{% block title %}{{ site_settings.site_name|default:"Eskoz" }} admin{% endblock %}
+
+{% block branding %}
+    <div id="site-name">
+        <a href="{% url 'admin:index' %}">{{ site_settings.site_name|default:"Eskoz" }}</a>
+    </div>
+{% endblock %}
 
 {% block extrastyle %}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+    {{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static 'admin/css/admin.css' %}">
 {% endblock %}
+
 {% block extrahead %}
+    {{ block.super }}
     <meta name="theme-name" content="{{ request.theme }}">
-{% if site_settings.favicon %}
-    <link rel="shortcut icon" href="{{ site_settings.favicon.url }}" type="image/x-icon">
-{% endif %}
-{% endblock %}
-
-{% block header %}
-    {% if user.is_authenticated %}
-        {% include 'admin/components/navbar.html' %}
+    {% if site_settings.favicon %}
+        <link rel="shortcut icon" href="{{ site_settings.favicon.url }}" type="image/x-icon">
     {% endif %}
-{% endblock %}
-
-
-{% block extrabody %}
-    <script src="{% static 'admin/js/toggleTheme.js' %}"></script>
 {% endblock %}

@@ -12,17 +12,13 @@
 
 {% block content %}
 <main class="auth">
-    <div class="auth__rule auth__rule--top" aria-hidden="true"></div>
-
     <section class="auth__panel">
         <header class="auth__brand">
-            <span class="auth__mark" aria-hidden="true">◆</span>
             <span class="auth__wordmark">{{ site_settings.site_name|default:"Eskoz" }}</span>
         </header>
 
-        <p class="auth__eyebrow">/ console access</p>
-        <h1 class="auth__title">Sign in.</h1>
-        <p class="auth__lede">Enter your credentials to reach the editorial backline.</p>
+        <h1 class="auth__title">{% trans "Sign in" %}</h1>
+        <p class="auth__lede">{% trans "Access the administration panel." %}</p>
 
         {% if form.non_field_errors %}
             {% for error in form.non_field_errors %}
@@ -30,34 +26,29 @@
             {% endfor %}
         {% endif %}
         {% if form.errors and not form.non_field_errors %}
-            <p class="auth__error">{% trans 'Please correct the error below.' %}</p>
+            <p class="auth__error">{% trans "Please correct the error below." %}</p>
         {% endif %}
 
         <form action="{{ app_path }}" method="post" class="auth__form">{% csrf_token %}
             <label class="auth__field">
-                <span class="auth__field-label">Username</span>
+                <span class="auth__field-label">{% trans "Username" %}</span>
                 <input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" required id="id_username">
             </label>
             <label class="auth__field">
-                <span class="auth__field-label">Password</span>
+                <span class="auth__field-label">{% trans "Password" %}</span>
                 <input type="password" name="password" autocomplete="current-password" required id="id_password">
             </label>
             <input type="hidden" name="next" value="{{ next }}">
-            <button type="submit" class="auth__submit">
-                <span>Sign in</span>
-                <span class="auth__submit-arrow" aria-hidden="true">→</span>
-            </button>
+            <button type="submit" class="auth__submit">{% trans "Sign in" %}</button>
             {% url 'admin_password_reset' as password_reset_url %}
             {% if password_reset_url %}
-                <a href="{{ password_reset_url }}" class="auth__minor">Forgotten your password?</a>
+                <a href="{{ password_reset_url }}" class="auth__minor">{% trans "Forgotten your password?" %}</a>
             {% endif %}
         </form>
     </section>
 
-    <footer class="auth__footer">
-        <a href="{% url 'core:index' %}">← back to {{ site_settings.site_name|default:"site" }}</a>
-    </footer>
-
-    <div class="auth__rule auth__rule--bottom" aria-hidden="true"></div>
+    <p class="auth__footer">
+        <a href="{% url 'core:index' %}">← {% trans "Back to site" %}</a>
+    </p>
 </main>
 {% endblock %}

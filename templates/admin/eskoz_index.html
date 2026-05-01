@@ -5,93 +5,54 @@
 <div id="content-main" class="console">
 
     <header class="console__header">
-        <p class="console__eyebrow">/ {{ site_settings.site_name|default:"console" }}</p>
-        <h1 class="console__title">Welcome back, <em>{{ user.username }}</em>.</h1>
-        <p class="console__subtitle">Here's the state of the editorial backline.</p>
+        <h1 class="console__title">{% blocktrans with name=user.username %}Welcome back, {{ name }}.{% endblocktrans %}</h1>
+        <p class="console__subtitle">{% trans "Overview of your content." %}</p>
     </header>
 
-    {% if dashboard_site_settings_url or 1 %}
-    <section class="panel panel--actions">
-        <div class="panel__head">
-            <span class="panel__label">Quick actions</span>
-        </div>
-        <div class="panel__body panel__body--row">
-            <a href="{% url 'admin:blog_article_add' %}" class="action">
-                <span class="action__plus" aria-hidden="true">＋</span>
-                <span class="action__label">New article</span>
-            </a>
-            <a href="{% url 'admin:infosec_writeup_add' %}" class="action">
-                <span class="action__plus" aria-hidden="true">＋</span>
-                <span class="action__label">New writeup</span>
-            </a>
-            <a href="{% url 'admin:core_page_add' %}" class="action">
-                <span class="action__plus" aria-hidden="true">＋</span>
-                <span class="action__label">New page</span>
-            </a>
-            <a href="{% url 'admin:infosec_cve_add' %}" class="action">
-                <span class="action__plus" aria-hidden="true">＋</span>
-                <span class="action__label">New CVE</span>
-            </a>
-            {% if dashboard_site_settings_url %}
-            <a href="{{ dashboard_site_settings_url }}" class="action action--ghost">
-                <span class="action__plus" aria-hidden="true">⚙</span>
-                <span class="action__label">Site config</span>
-            </a>
+    <section class="metrics">
+        {% for stat in dashboard_stats %}
+        <a href="{% url stat.add_url %}" class="metric">
+            <span class="metric__value">{{ stat.total }}</span>
+            <span class="metric__label">{{ stat.label }}</span>
+            {% if stat.total != stat.public %}
+            <span class="metric__sub">{{ stat.public }} {% trans "public" %}</span>
             {% endif %}
-        </div>
+        </a>
+        {% endfor %}
     </section>
-    {% endif %}
 
-    <section class="panel panel--metrics">
-        <div class="panel__head">
-            <span class="panel__label">Content overview</span>
-        </div>
-        <div class="metrics">
-            {% for stat in dashboard_stats %}
-            <a href="{% url stat.add_url %}" class="metric">
-                <span class="metric__value">{{ stat.total }}</span>
-                <span class="metric__label">{{ stat.label|lower }}</span>
-                {% if stat.total != stat.public %}
-                <span class="metric__sub">{{ stat.public }} public</span>
-                {% endif %}
-            </a>
-            {% endfor %}
-        </div>
+    <section class="quick">
+        <a href="{% url 'admin:blog_article_add' %}" class="quick__item">+ {% trans "Article" %}</a>
+        <a href="{% url 'admin:infosec_writeup_add' %}" class="quick__item">+ {% trans "Writeup" %}</a>
+        <a href="{% url 'admin:core_page_add' %}" class="quick__item">+ {% trans "Page" %}</a>
+        <a href="{% url 'admin:infosec_cve_add' %}" class="quick__item">+ {% trans "CVE" %}</a>
+        {% if dashboard_site_settings_url %}
+        <a href="{{ dashboard_site_settings_url }}" class="quick__item quick__item--ghost">{% trans "Site settings" %} →</a>
+        {% endif %}
     </section>
 
     {% if dashboard_recent_activity %}
-    <section class="panel panel--feed">
-        <div class="panel__head">
-            <span class="panel__label">Activity log</span>
-            <span class="panel__hint">last 8 events</span>
-        </div>
+    <section class="block">
+        <h2 class="block__title">{% trans "Recent activity" %}</h2>
         <ol class="feed">
             {% for entry in dashboard_recent_activity %}
             <li class="feed__row">
                 <time class="feed__time">{{ entry.timestamp|timesince }}</time>
-                <span class="feed__actor">{{ entry.actor|default:"system"|truncatechars:12 }}</span>
-                <span class="feed__verb feed__verb--{% if entry.action == 0 %}add{% elif entry.action == 1 %}update{% elif entry.action == 2 %}delete{% else %}access{% endif %}">
-                    {% if entry.action == 0 %}created
-                    {% elif entry.action == 1 %}updated
-                    {% elif entry.action == 2 %}deleted
-                    {% elif entry.action == 3 %}accessed
-                    {% endif %}
-                </span>
+                <span class="feed__verb feed__verb--{% if entry.action == 0 %}add{% elif entry.action == 1 %}update{% elif entry.action == 2 %}delete{% else %}access{% endif %}">{% if entry.action == 0 %}{% trans "created" %}{% elif entry.action == 1 %}{% trans "updated" %}{% elif entry.action == 2 %}{% trans "deleted" %}{% else %}{% trans "accessed" %}{% endif %}</span>
                 <span class="feed__what">
                     <span class="feed__type">{{ entry.content_type.model }}</span>
                     <span class="feed__name">{{ entry.object_repr|truncatechars:60 }}</span>
                 </span>
+                <span class="feed__actor">{{ entry.actor|default:"system"|truncatechars:14 }}</span>
             </li>
             {% endfor %}
         </ol>
     </section>
     {% endif %}
 
-    <section class="panel panel--apps">
-        <div class="panel__head">
-            <span class="panel__label">All sections</span>
-        </div>
-        <div class="panel__body">
+    <section class="block">
+        <h2 class="block__title">{% trans "Sections" %}</h2>
+        <div class="apps-shell">
             {{ block.super }}
         </div>
     </section>
