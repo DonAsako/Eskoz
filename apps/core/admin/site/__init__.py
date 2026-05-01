@@ -1,7 +1,8 @@
 import markdown
+from django.apps import apps
 from django.conf import settings
 from django.contrib.admin import AdminSite
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed, JsonResponse
 from django.urls import path
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
@@ -123,8 +124,59 @@ class EskozAdminSite(AdminSite):
                 verify_2fa_view,
                 name="verify_2fa",
             ),
+            path(
+                "set_visibility/<str:app_label>/<str:model_name>/<int:pk>/",
+                self.admin_view(self.set_visibility),
+                name="set_visibility",
+            ),
         ]
         return custom_urls + urls
+
+    def set_visibility(self, request, app_label, model_name, pk):
+        """Swap the ``visibility`` of a single object from a changelist
+        click. Validates that the user has change perms for the model and
+        that ``protected`` is only set on objects that already have a
+        password configured. Returns the new badge HTML so the JS can
+        update in place.
+        """
+        if request.method != "POST":
+            return HttpResponseNotAllowed(["POST"])
+
+        try:
+            model = apps.get_model(app_label, model_name)
+        except LookupError:
+            return HttpResponseBadRequest("Unknown model")
+
+        model_admin = self._registry.get(model)
+        if model_admin is None:
+            return HttpResponseBadRequest("Model not registered")
+
+        if not request.user.has_perm(f"{app_label}.change_{model._meta.model_name}"):
+            return JsonResponse({"error": "forbidden"}, status=403)
+
+        new_value = request.POST.get("visibility", "").strip()
+        valid = {c[0] for c in model._meta.get_field("visibility").choices}
+        if new_value not in valid:
+            return HttpResponseBadRequest("Invalid visibility")
+
+        obj = model.objects.filter(pk=pk).first()
+        if obj is None:
+            return JsonResponse({"error": "not_found"}, status=404)
+
+        if new_value == "protected" and not getattr(obj, "password", None):
+            return JsonResponse(
+                {
+                    "error": "needs_password",
+                    "message": str(_("Set a password on the object first.")),
+                },
+                status=400,
+            )
+
+        obj.visibility = new_value
+        obj.save(update_fields=["visibility"])
+
+        label = obj.get_visibility_display()
+        return JsonResponse({"value": new_value, "label": str(label), "css": new_value})
 
     def content_preview(self, request):
         if request.method == "POST":

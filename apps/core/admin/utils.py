@@ -3,6 +3,7 @@ import zipfile
 
 from django.contrib import admin
 from django.http import HttpResponse
+from django.urls import NoReverseMatch, reverse
 from django.utils.html import format_html
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
@@ -34,6 +35,27 @@ def visibility_badge_field(field_name="visibility", description=None):
             css = str(value).lower()
             getter = getattr(obj, f"get_{field_name}_display", None)
             label = getter() if callable(getter) else value
+        # For the ``visibility`` field on Post-like models we render an
+        # interactive button so the JS popover (visibility_toggle.js) can
+        # swap the value in place from the changelist.
+        if field_name == "visibility" and value not in (True, False):
+            meta = type(obj)._meta
+            try:
+                url = reverse(
+                    "admin:set_visibility",
+                    args=[meta.app_label, meta.model_name, obj.pk],
+                )
+            except NoReverseMatch:
+                url = ""
+            if url:
+                return format_html(
+                    '<button type="button" class="status-badge status-badge--{} status-badge--toggle"'
+                    ' data-url="{}" data-current="{}">{}</button>',
+                    css,
+                    url,
+                    value,
+                    label,
+                )
         return format_html('<span class="status-badge status-badge--{}">{}</span>', css, label)
 
     return _display

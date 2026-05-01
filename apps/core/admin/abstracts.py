@@ -94,7 +94,10 @@ class AbstractPostAdmin(AbstractTranslatableMarkdownItemAdmin):
     ]
 
     class Media:
-        js = ("admin/js/post_visibility_edit.js",)
+        js = (
+            "admin/js/post_visibility_edit.js",
+            "admin/js/visibility_toggle.js",
+        )
 
 
 class AbstractCategoryAdmin(admin.ModelAdmin):

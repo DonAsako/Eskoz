@@ -593,10 +593,71 @@ body.auth-page .skip-to-content-link { display: none !important; }
 .status-badge--public     { color: var(--eskoz-good); background: var(--eskoz-good-bg); }
 .status-badge--private    { color: var(--eskoz-mute); background: var(--eskoz-mute-bg); }
 .status-badge--protected  { color: var(--eskoz-warn); background: var(--eskoz-warn-bg); }
+.status-badge--unlisted   { color: var(--eskoz-info); background: var(--eskoz-info-bg); }
 .status-badge--referenced { color: var(--eskoz-info); background: var(--eskoz-info-bg); }
 .status-badge--index      { color: var(--eskoz-info); background: var(--eskoz-info-bg); }
 .status-badge--active     { color: var(--eskoz-good); background: var(--eskoz-good-bg); }
 .status-badge--inactive   { color: var(--eskoz-mute); background: var(--eskoz-mute-bg); }
+
+/* Toggle variant — clickable badge in changelist. */
+button.status-badge--toggle {
+    appearance: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font: inherit;
+    line-height: 1;
+    transition: filter 80ms ease, transform 80ms ease;
+}
+button.status-badge--toggle:hover {
+    filter: brightness(0.95);
+}
+button.status-badge--toggle:active {
+    transform: translateY(1px);
+}
+.status-badge--flash-ok  { background: var(--eskoz-good-bg); color: var(--eskoz-good); }
+.status-badge--flash-bad { background: var(--eskoz-bad-bg);  color: var(--eskoz-bad);  }
+
+/* Visibility popover. */
+.visibility-pop {
+    z-index: 1000;
+    min-width: 180px;
+    background: var(--body-bg);
+    border: 1px solid var(--hairline-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+}
+.visibility-pop.is-loading { opacity: 0.55; pointer-events: none; }
+
+.visibility-pop__item {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    color: var(--body-fg);
+    text-align: left;
+    padding: 0.45rem 0.6rem;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    cursor: pointer;
+}
+.visibility-pop__item:hover { background: var(--darkened-bg); }
+.visibility-pop__item.is-current { background: var(--eskoz-accent-soft); }
+
+.visibility-pop__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex: 0 0 8px;
+}
+.visibility-pop__dot--public    { background: var(--eskoz-good); }
+.visibility-pop__dot--private   { background: var(--eskoz-mute); }
+.visibility-pop__dot--protected { background: var(--eskoz-warn); }
+.visibility-pop__dot--unlisted  { background: var(--eskoz-info); }
 
 /* ============================================================
  * 2FA panel (User change view inline)
