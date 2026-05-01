@@ -7,8 +7,16 @@ function toggleTheme() {
     updateIframeTheme(newTheme);
 }
 function updateThemeIcon(theme) {
-    const icon = document.getElementById("themeIcon");
-    icon.textContent = theme === "dark" ? "🌙" : "☀️";
+    const sun = document.getElementById("themeIconLight");
+    const moon = document.getElementById("themeIconDark");
+    if (!sun || !moon) return;
+    if (theme === "dark") {
+        sun.style.display = "none";
+        moon.style.display = "block";
+    } else {
+        sun.style.display = "block";
+        moon.style.display = "none";
+    }
 }
 document.addEventListener("DOMContentLoaded", () => {
     const savedTheme = localStorage.getItem("theme") || "light";
