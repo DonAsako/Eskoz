@@ -54,6 +54,26 @@ def paginate_queryset(request, queryset, per_page=None):
         return paginator.page(paginator.num_pages)
 
 
+def group_by_year(queryset, date_field="published_on"):
+    """Bucket ``queryset`` items by year of ``date_field`` (descending).
+
+    Returns a list of ``{"year": int|None, "items": [...]}`` dicts so
+    templates can render archive-style sections without doing any
+    grouping logic themselves. Items missing the date land in a
+    trailing ``None`` bucket.
+    """
+    groups = []
+    current = object()
+    for obj in queryset:
+        date = getattr(obj, date_field, None)
+        year = date.year if date else None
+        if year != current:
+            groups.append({"year": year, "items": []})
+            current = year
+        groups[-1]["items"].append(obj)
+    return groups
+
+
 def index(request):
     page = Page.objects.filter(visibility="index").first()
     articles = Article.objects.filter(visibility="public").order_by("-published_on")[:5]

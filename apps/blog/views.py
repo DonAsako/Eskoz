@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import Http404, get_object_or_404, render
 
 from apps.core.decorators import feature_active_required
-from apps.core.views import paginate_queryset, redirect_to_available_translation
+from apps.core.views import group_by_year, paginate_queryset, redirect_to_available_translation
 
 from .models import Article, Category, Project
 
@@ -60,13 +60,24 @@ def article_list(request, slug=None):
 
     categories = Category.objects.filter(articles__isnull=False, articles__visibility="public").distinct()
 
-    page_obj = paginate_queryset(request, articles)
+    # Below the threshold we render the whole archive grouped by year
+    # (no pagination, no per-page selector). Past the threshold we keep
+    # standard pagination but still group within each page.
+    GROUP_THRESHOLD = 40
+    total = articles.count()
+    if total <= GROUP_THRESHOLD:
+        page_obj = None
+        groups = group_by_year(articles)
+    else:
+        page_obj = paginate_queryset(request, articles)
+        groups = group_by_year(page_obj.object_list)
 
     return render(
         request,
         "blog/article_list.html",
         {
-            "articles": page_obj,
+            "articles": page_obj if page_obj is not None else articles,
+            "article_groups": groups,
             "page_obj": page_obj,
             "categories": categories,
             "selected_category": selected_category,

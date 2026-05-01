@@ -1,7 +1,7 @@
 from django.shortcuts import Http404, get_object_or_404, render
 
 from apps.core.decorators import feature_active_required
-from apps.core.views import paginate_queryset, redirect_to_available_translation
+from apps.core.views import group_by_year, paginate_queryset, redirect_to_available_translation
 
 from .models import CTF, CVE, Category, Certification, Writeup
 
@@ -64,13 +64,21 @@ def writeup_list(request, slug=None):
 
     categories = Category.objects.filter(writeups__isnull=False, writeups__visibility="public").distinct()
 
-    page_obj = paginate_queryset(request, writeups)
+    GROUP_THRESHOLD = 40
+    total = writeups.count()
+    if total <= GROUP_THRESHOLD:
+        page_obj = None
+        groups = group_by_year(writeups)
+    else:
+        page_obj = paginate_queryset(request, writeups)
+        groups = group_by_year(page_obj.object_list)
 
     return render(
         request,
         "infosec/writeup_list.html",
         {
-            "writeups": page_obj,
+            "writeups": page_obj if page_obj is not None else writeups,
+            "writeup_groups": groups,
             "page_obj": page_obj,
             "categories": categories,
             "selected_category": selected_category,
