@@ -28,13 +28,35 @@ def writeup_detail(request, slug_category, slug_writeup):
     if redirect_response is not None:
         return redirect_response
 
+    related = list(
+        Writeup.objects.filter(visibility="public", category=category)
+        .exclude(pk=writeup.pk)
+        .select_related("category")
+        .order_by("-published_on")[:4]
+    )
+    if len(related) < 4:
+        seen = {w.pk for w in related} | {writeup.pk}
+        fill = (
+            Writeup.objects.filter(visibility="public")
+            .exclude(pk__in=seen)
+            .select_related("category")
+            .order_by("-published_on")[: 4 - len(related)]
+        )
+        related += list(fill)
+
+    context = {
+        "writeup": writeup,
+        "related_posts": related,
+        "related_post_url_name": "infosec:writeup_detail",
+    }
+
     if writeup.visibility == "protected":
         if request.method == "POST" and writeup.check_password(request.POST.get("password", "")):
-            return render(request, "infosec/writeup_detail.html", {"writeup": writeup})
+            return render(request, "infosec/writeup_detail.html", context)
 
         return render(request, "infosec/writeup_password.html")
 
-    return render(request, "infosec/writeup_detail.html", {"writeup": writeup})
+    return render(request, "infosec/writeup_detail.html", context)
 
 
 @feature_active_required(module_name="infosec", feature_name="writeups")

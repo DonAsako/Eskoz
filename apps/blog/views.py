@@ -29,13 +29,37 @@ def article_detail(request, slug_category, slug_article):
     if redirect_response is not None:
         return redirect_response
 
+    related = list(
+        Article.objects.filter(visibility="public", category=category)
+        .exclude(pk=article.pk)
+        .select_related("category")
+        .order_by("-published_on")[:4]
+    )
+    if len(related) < 4:
+        # Top up with recent public articles outside this category so the
+        # "See also" block always has at least a few suggestions.
+        seen = {a.pk for a in related} | {article.pk}
+        fill = (
+            Article.objects.filter(visibility="public")
+            .exclude(pk__in=seen)
+            .select_related("category")
+            .order_by("-published_on")[: 4 - len(related)]
+        )
+        related += list(fill)
+
+    context = {
+        "article": article,
+        "related_posts": related,
+        "related_post_url_name": "blog:article_detail",
+    }
+
     if article.visibility == "protected":
         if request.method == "POST" and article.check_password(request.POST.get("password", "")):
-            return render(request, "blog/article_detail.html", {"article": article})
+            return render(request, "blog/article_detail.html", context)
 
         return render(request, "blog/article_password.html")
 
-    return render(request, "blog/article_detail.html", {"article": article})
+    return render(request, "blog/article_detail.html", context)
 
 
 @feature_active_required(module_name="blog", feature_name="articles")
