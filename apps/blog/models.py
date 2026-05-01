@@ -42,9 +42,7 @@ class Article(AbstractPost):
         related_name="articles",
         verbose_name=_("Category"),
     )
-    tags = models.ManyToManyField(
-        ArticleTag, related_name="posts", blank=True, verbose_name=_("Tags")
-    )
+    tags = models.ManyToManyField(ArticleTag, related_name="posts", blank=True, verbose_name=_("Tags"))
 
     def save(self, *args, **kwargs):
         if not self.category_id:
@@ -96,15 +94,11 @@ class Project(models.Model):
         date_end (DateField): Project end date.
     """
 
-    name = models.CharField(
-        max_length=100, blank=False, null=False, verbose_name=_("Name")
-    )
+    name = models.CharField(max_length=100, blank=False, null=False, verbose_name=_("Name"))
     description = models.TextField()
     source_link = models.URLField(max_length=200, blank=True, null=True)
     website = models.URLField(max_length=200, blank=True, null=True)
-    picture = models.ImageField(
-        upload_to=upload_to_projects, blank=True, null=True, verbose_name=_("Picture")
-    )
+    picture = models.ImageField(upload_to=upload_to_projects, blank=True, null=True, verbose_name=_("Picture"))
     maintainer = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -123,8 +117,16 @@ class Project(models.Model):
     )
     date_beginning = models.DateField(null=True, blank=True)
     date_end = models.DateField(null=True, blank=True)
-    tags = models.ManyToManyField(
-        ProjectTag, related_name="posts", blank=True, verbose_name=_("Tags")
+    tags = models.ManyToManyField(ProjectTag, related_name="posts", blank=True, verbose_name=_("Tags"))
+    VISIBILITY_CHOICES = [
+        ("public", _("Public")),
+        ("private", _("Private")),
+    ]
+    visibility = models.CharField(
+        max_length=10,
+        choices=VISIBILITY_CHOICES,
+        default="public",
+        verbose_name=_("Visibility"),
     )
 
     def short_description(self):
@@ -134,11 +136,7 @@ class Project(models.Model):
         Returns:
             str: First 75 characters of the description followed by "..." if truncated.
         """
-        return (
-            (self.description[:75] + "...")
-            if len(self.description) > 75
-            else self.description
-        )
+        return (self.description[:75] + "...") if len(self.description) > 75 else self.description
 
     def __str__(self):
         """Return the name of the project as its string representation."""

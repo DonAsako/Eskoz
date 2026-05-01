@@ -1,14 +1,16 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
-from apps.core.admin.site import admin_site
+
 from apps.core.admin import (
-    AbstractPostAdmin,
-    AbstractPostTranslationAdmin,
     AbstractCategoryAdmin,
     AbstractCategoryTranslationAdmin,
+    AbstractPostAdmin,
+    AbstractPostTranslationAdmin,
     AbstractTagAdmin,
 )
+from apps.core.admin.site import admin_site
+from apps.core.admin.utils import visibility_badge_field
 
 from .models import (
     Article,
@@ -44,11 +46,16 @@ class ProjectAdmin(admin.ModelAdmin):
         "source_link",
         "website",
         "picture_thumbnail",
+        "visibility_badge",
     )
+    visibility_badge = visibility_badge_field("visibility")
     search_fields = ("name", "description")
     list_filter = ()
     ordering = ("name",)
     autocomplete_fields = ["tags"]
+
+    class Media:
+        js = ("admin/js/visibility_toggle.js",)
 
     def picture_thumbnail(self, obj):
         if obj.picture:
