@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
+from django.contrib.sitemaps.views import index as sitemap_index
 from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
 
@@ -12,7 +13,8 @@ from apps.core.views import robots_txt
 # crawler endpoints, language switcher).
 urlpatterns = [
     path(settings.ADMIN_URL + "/", admin_site.urls),
-    path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="django.contrib.sitemaps.views.sitemap"),
+    path("sitemap.xml", sitemap_index, {"sitemaps": sitemaps, "sitemap_url_name": "sitemap_section"}, name="django.contrib.sitemaps.views.index"),
+    path("sitemap-<section>.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap_section"),
     path("robots.txt", robots_txt, name="robots_txt"),
     path("i18n/", include("django.conf.urls.i18n")),
 ]
