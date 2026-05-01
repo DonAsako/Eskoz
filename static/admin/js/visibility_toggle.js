@@ -10,12 +10,22 @@
 (function () {
     "use strict";
 
-    const CHOICES = [
+    const FALLBACK_CHOICES = [
         { value: "public", label: "Public" },
         { value: "unlisted", label: "Unlisted" },
         { value: "protected", label: "Protected" },
         { value: "private", label: "Private" },
     ];
+
+    function getChoices(badge) {
+        const raw = badge.dataset.choices;
+        if (!raw) return FALLBACK_CHOICES;
+        try {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed) && parsed.length) return parsed;
+        } catch (_) {}
+        return FALLBACK_CHOICES;
+    }
 
     function getCookie(name) {
         const value = `; ${document.cookie}`;
@@ -30,7 +40,8 @@
         pop.setAttribute("role", "menu");
 
         const current = badge.dataset.current;
-        CHOICES.forEach((c) => {
+        const choices = getChoices(badge);
+        choices.forEach((c) => {
             const item = document.createElement("button");
             item.type = "button";
             item.className =

@@ -654,10 +654,12 @@ button.status-badge--toggle:active {
     border-radius: 50%;
     flex: 0 0 8px;
 }
-.visibility-pop__dot--public    { background: var(--eskoz-good); }
-.visibility-pop__dot--private   { background: var(--eskoz-mute); }
-.visibility-pop__dot--protected { background: var(--eskoz-warn); }
-.visibility-pop__dot--unlisted  { background: var(--eskoz-info); }
+.visibility-pop__dot--public     { background: var(--eskoz-good); }
+.visibility-pop__dot--private    { background: var(--eskoz-mute); }
+.visibility-pop__dot--protected  { background: var(--eskoz-warn); }
+.visibility-pop__dot--unlisted   { background: var(--eskoz-info); }
+.visibility-pop__dot--referenced { background: var(--eskoz-info); }
+.visibility-pop__dot--index      { background: var(--eskoz-info); }
 
 /* ============================================================
  * 2FA panel (User change view inline)

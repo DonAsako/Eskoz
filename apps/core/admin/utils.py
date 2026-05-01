@@ -48,12 +48,16 @@ def visibility_badge_field(field_name="visibility", description=None):
             except NoReverseMatch:
                 url = ""
             if url:
+                import json
+
+                choices = [{"value": code, "label": str(label_)} for code, label_ in meta.get_field("visibility").choices]
                 return format_html(
                     '<button type="button" class="status-badge status-badge--{} status-badge--toggle"'
-                    ' data-url="{}" data-current="{}">{}</button>',
+                    ' data-url="{}" data-current="{}" data-choices="{}">{}</button>',
                     css,
                     url,
                     value,
+                    json.dumps(choices),
                     label,
                 )
         return format_html('<span class="status-badge status-badge--{}">{}</span>', css, label)

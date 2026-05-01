@@ -12,6 +12,7 @@ from django_ratelimit.exceptions import Ratelimited
 
 from apps.core.admin.abstracts import AbstractSubModuleInline
 from apps.core.admin.site import admin_site
+from apps.core.admin.utils import visibility_badge_field
 from apps.core.forms import PageAdminForm, User2FAAdminForm
 from apps.core.models import (
     BlogSettings,
@@ -113,6 +114,11 @@ class PageAdmin(admin.ModelAdmin):
     exclude = ["site_settings"]
     form = PageAdminForm
     prepopulated_fields = {"slug": ("title",)}
+    list_display = ("title", "slug", "visibility_badge")
+    visibility_badge = visibility_badge_field("visibility")
+
+    class Media:
+        js = ("admin/js/visibility_toggle.js",)
 
 
 class UserProfileInline(admin.StackedInline):
