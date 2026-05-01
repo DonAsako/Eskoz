@@ -14,7 +14,9 @@
 {% endblock %}
 
 {% block header %}
-    {% include 'admin/components/navbar.html' %}
+    {% if user.is_authenticated %}
+        {% include 'admin/components/navbar.html' %}
+    {% endif %}
 {% endblock %}
 
 

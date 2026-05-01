@@ -1,0 +1,62 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}{% endblock %}
+
+{% block bodyclass %}{{ block.super }} login auth-page{% endblock %}
+
+{% block usertools %}{% endblock %}
+{% block nav-global %}{% endblock %}
+{% block nav-sidebar %}{% endblock %}
+{% block content_title %}{% endblock %}
+{% block nav-breadcrumbs %}{% endblock %}
+{% block header %}{% endblock %}
+
+{% block content %}
+<main class="auth-shell">
+    <div class="auth-card">
+        <header class="auth-card__brand">
+            {% if site_settings.logo %}
+                <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}" class="auth-card__logo">
+            {% else %}
+                <div class="auth-card__wordmark">{{ site_settings.site_name|default:"Eskoz" }}</div>
+            {% endif %}
+        </header>
+
+        <div class="auth-card__body">
+            <h1 class="auth-card__title">{% trans 'Sign in' %}</h1>
+            <p class="auth-card__subtitle">{% trans 'Access the administration panel.' %}</p>
+
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                    <p class="auth-error">{{ error }}</p>
+                {% endfor %}
+            {% endif %}
+            {% if form.errors and not form.non_field_errors %}
+                <p class="auth-error">{% trans 'Please correct the error below.' %}</p>
+            {% endif %}
+
+            <form action="{{ app_path }}" method="post" class="auth-form">{% csrf_token %}
+                <div class="auth-field">
+                    <label for="id_username">{% trans 'Username' %}</label>
+                    <input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" required id="id_username">
+                </div>
+                <div class="auth-field">
+                    <label for="id_password">{% trans 'Password' %}</label>
+                    <input type="password" name="password" autocomplete="current-password" required id="id_password">
+                </div>
+                <input type="hidden" name="next" value="{{ next }}">
+                <button type="submit" class="auth-submit">{% trans 'Sign in' %}</button>
+                {% url 'admin_password_reset' as password_reset_url %}
+                {% if password_reset_url %}
+                    <a href="{{ password_reset_url }}" class="auth-link">{% trans 'Forgotten your password?' %}</a>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+    <p class="auth-footer">
+        <a href="{% url 'core:index' %}">← {% trans 'Back to site' %}</a>
+    </p>
+</main>
+{% endblock %}
