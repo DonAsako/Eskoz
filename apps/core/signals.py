@@ -1,11 +1,14 @@
 from django.apps import apps
 from django.conf import settings
 from django.contrib.auth.models import Group, Permission, User
-from django.db.models.signals import post_migrate, post_save
+from django.core.cache import cache
+from django.db.models.signals import post_delete, post_migrate, post_save
 from django.db.utils import OperationalError, ProgrammingError
 from django.dispatch import receiver
 from django.utils import translation
 from django.utils.translation import gettext
+
+from apps.core.context_processors import ACTIVE_LANGUAGES_CACHE_KEY
 
 from .models import (
     AbstractTranslatableCategory,
@@ -47,14 +50,18 @@ def create_undefined_categories(sender, **kwargs):
                             translation_model = rel_model
                             break
 
-                    for lang_code, _ in settings.LANGUAGES:
-                        with translation.override(lang_code):
-                            title = gettext("Undefined")
-                        translation_model.objects.create(
-                            category=category,
-                            language=lang_code,
-                            title=title,
-                        )
+                    # Seed only the configured default language. The site
+                    # supports the full Django LANGUAGES universe but it
+                    # would be wasteful to create ~100 placeholder rows
+                    # per category on a fresh install.
+                    lang_code = settings.LANGUAGE_CODE
+                    with translation.override(lang_code):
+                        title = gettext("Undefined")
+                    translation_model.objects.create(
+                        category=category,
+                        language=lang_code,
+                        title=title,
+                    )
 
     except (OperationalError, ProgrammingError):
         pass
@@ -92,3 +99,36 @@ def create_related_settings(sender, instance, **kwargs):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
+
+
+def _bust_active_language_cache(sender, **kwargs):
+    """Drop the cached language list whenever a Translation row changes.
+
+    Subscribed lazily inside ready() so we can iterate the concrete
+    Translation models without import-cycling against this module.
+    """
+    cache.delete(ACTIVE_LANGUAGES_CACHE_KEY)
+
+
+def register_translation_cache_invalidators():
+    """Wire post_save/post_delete on every concrete *Translation model."""
+    from apps.blog.models import ArticleTranslation
+    from apps.blog.models import CategoryTranslation as BlogCategoryTranslation
+    from apps.education.models import CategoryTranslation as EducationCategoryTranslation
+    from apps.education.models import LessonTranslation
+    from apps.infosec.models import CategoryTranslation as InfosecCategoryTranslation
+    from apps.infosec.models import WriteupTranslation
+
+    for model in (
+        ArticleTranslation,
+        WriteupTranslation,
+        LessonTranslation,
+        BlogCategoryTranslation,
+        InfosecCategoryTranslation,
+        EducationCategoryTranslation,
+    ):
+        post_save.connect(_bust_active_language_cache, sender=model, weak=False)
+        post_delete.connect(_bust_active_language_cache, sender=model, weak=False)
+
+
+register_translation_cache_invalidators()

@@ -100,7 +100,7 @@ class AbstractTranslatableCategoryTranslation(models.Model):
         on_delete=models.CASCADE,
         verbose_name=_("Category"),
     )
-    language = models.CharField(max_length=10, choices=settings.LANGUAGES)
+    language = models.CharField(max_length=20, choices=settings.LANGUAGES)
     title = models.CharField(max_length=255, verbose_name=_("Title"))
 
     def __str__(self):
@@ -173,7 +173,7 @@ class AbstractTranslatableMarkdownItemTranslation(models.Model):
         on_delete=models.CASCADE,
         verbose_name=_("Translatable Content"),
     )
-    language = models.CharField(max_length=10, choices=settings.LANGUAGES, verbose_name=_("Language"))
+    language = models.CharField(max_length=20, choices=settings.LANGUAGES, verbose_name=_("Language"))
     title = models.CharField(max_length=255, verbose_name=_("Title"))
     description = models.TextField(max_length=512, blank=True, null=True, verbose_name=_("Description"))
     content = models.TextField(verbose_name=_("Content"))

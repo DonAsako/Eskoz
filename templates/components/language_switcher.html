@@ -1,8 +1,10 @@
 {% load i18n %}
 {% get_current_language as CURRENT_LANG %}
-{% get_available_languages as LANGUAGES %}
-{# Strip the existing /<lang>/ prefix so we can swap it for each alternate. #}
-{% with path_after_lang=request.path|slice:"3:" %}
+{% comment %}
+SITE_LANGUAGES and PATH_AFTER_LANG come from apps.core.context_processors.languages.
+SITE_LANGUAGES = languages with actual translations in DB (so we don't list ~100 Django codes).
+PATH_AFTER_LANG = request.path with the active /<lang>/ stripped, safe for multi-char codes.
+{% endcomment %}
 <details class="lang-switcher">
     <summary class="lang-switcher--current" aria-label="{% trans 'Switch language' %}">
         <span>{{ CURRENT_LANG|upper }}</span>
@@ -11,13 +13,12 @@
         </svg>
     </summary>
     <ul class="lang-switcher--menu">
-        {% for lang_code, lang_name in LANGUAGES %}
+        {% for lang_code, lang_name in SITE_LANGUAGES %}
             {% if lang_code != CURRENT_LANG %}
                 <li>
-                    <a href="/{{ lang_code }}{{ path_after_lang }}" hreflang="{{ lang_code }}" rel="alternate">{{ lang_code|upper }}</a>
+                    <a href="/{{ lang_code }}{{ PATH_AFTER_LANG }}" hreflang="{{ lang_code }}" rel="alternate" title="{{ lang_name }}">{{ lang_code|upper }}</a>
                 </li>
             {% endif %}
         {% endfor %}
     </ul>
 </details>
-{% endwith %}
