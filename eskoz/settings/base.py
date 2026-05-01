@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sitemaps",
+    "auditlog",
     "apps.core",
     "apps.blog",
     "apps.infosec",
@@ -33,10 +34,35 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_ratelimit.middleware.RatelimitMiddleware",
+    "auditlog.middleware.AuditlogMiddleware",
     "apps.core.middleware.ActiveThemeMiddleware",
+    "apps.core.middleware.SecurityHeadersMiddleware",
 ]
 
 ROOT_URLCONF = "eskoz.urls"
+
+# Security hardening — applied in every environment.
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+X_FRAME_OPTIONS = "DENY"
+SECURE_BROWSER_XSS_FILTER = True
+
+# Cross-process cache backing django-ratelimit counters. DB-backed so a
+# single Postgres/SQLite holds the truth across all gunicorn workers
+# without requiring Redis. Run `manage.py createcachetable` once.
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "django_cache",
+    }
+}
+
+# Rate-limit policy for the admin login + 2FA management endpoints.
+RATELIMIT_LOGIN_IP = "10/15m"
+RATELIMIT_LOGIN_USERNAME = "5/15m"
+RATELIMIT_2FA_IP = "10/15m"
+RATELIMIT_VIEW = "apps.core.views.ratelimited"
 
 ACTIVE_THEME = os.getenv("THEME", "Eskoz")
 

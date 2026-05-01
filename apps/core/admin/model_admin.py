@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
@@ -6,6 +7,8 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
+from django_ratelimit.core import is_ratelimited
+from django_ratelimit.exceptions import Ratelimited
 
 from apps.core.admin.abstracts import AbstractSubModuleInline
 from apps.core.admin.site import admin_site
@@ -228,6 +231,24 @@ class UserAdmin(BaseUserAdmin):
     inlines = [User2FAInline, UserProfileInline, UserLinkInline]
 
     list_display = ("username", "email", "is_staff")
+
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        # Rate-limit OTP/backup-code submissions narrowly so a session-hijack
+        # attacker cannot brute-force the 6-digit code to disable 2FA.
+        # Targets only POSTs that actually carry an otp_code value, so other
+        # admin saves on the same user are unaffected.
+        if request.method == "POST" and any(k.endswith("otp_code") and v.strip() for k, v in request.POST.items()):
+            limited = is_ratelimited(
+                request,
+                group="user2fa-otp",
+                key="ip",
+                rate=settings.RATELIMIT_2FA_IP,
+                method="POST",
+                increment=True,
+            )
+            if limited:
+                raise Ratelimited()
+        return super().change_view(request, object_id, form_url, extra_context)
 
     def has_change_permission(self, request, obj=None):
         if obj is None:

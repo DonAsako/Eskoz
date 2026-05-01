@@ -1,14 +1,22 @@
 import markdown
+from django.conf import settings
 from django.contrib.admin import AdminSite
 from django.http import HttpResponse, JsonResponse
 from django.urls import path
+from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
+from django_ratelimit.decorators import ratelimit
 
 from apps.core.models import SiteSettings
 
 
 class EskozAdminSite(AdminSite):
     site_header = "Eskoz"
+
+    @method_decorator(ratelimit(key="ip", rate=settings.RATELIMIT_LOGIN_IP, method="POST", block=True))
+    @method_decorator(ratelimit(key="post:username", rate=settings.RATELIMIT_LOGIN_USERNAME, method="POST", block=True))
+    def login(self, request, extra_context=None):
+        return super().login(request, extra_context)
 
     APP_ORDER = ["core", "auth", "infosec", "blog", "education"]
 

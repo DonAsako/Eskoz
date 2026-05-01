@@ -92,6 +92,13 @@ def robots_txt(request):
     return HttpResponse("\n".join(lines), content_type="text/plain")
 
 
+def ratelimited(request, exception):
+    """Render a 429 page when django-ratelimit blocks a request."""
+    response = render(request, "429.html", status=429)
+    response["Retry-After"] = "900"
+    return response
+
+
 def post_detail(
     request,
     post_model,
