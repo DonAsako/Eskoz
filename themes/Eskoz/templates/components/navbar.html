@@ -69,6 +69,14 @@
                 <li class="navbar-item navbar-item--separator">/</li>
             {% endif %}
         {% endif %}
+        <li class="navbar-item navbar-item--search">
+            <a href="{% url 'core:search' %}" class="navbar-item--link" aria-label="{% trans 'Search' %}">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <circle cx="7" cy="7" r="5"/>
+                    <line x1="14" y1="14" x2="10.5" y2="10.5" stroke-linecap="round"/>
+                </svg>
+            </a>
+        </li>
         <li class="navbar-item navbar-item--lang">
             {% include "components/language_switcher.html" %}
         </li>
