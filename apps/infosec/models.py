@@ -171,6 +171,16 @@ class CVE(models.Model):
         related_name="cve",
         verbose_name=_("Author"),
     )
+    VISIBILITY_CHOICES = [
+        ("public", _("Public")),
+        ("private", _("Private")),
+    ]
+    visibility = models.CharField(
+        max_length=10,
+        choices=VISIBILITY_CHOICES,
+        default="public",
+        verbose_name=_("Visibility"),
+    )
 
     def cvss_severity(self) -> str:
         score = self.cvss_score

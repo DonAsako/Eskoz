@@ -1,17 +1,20 @@
 from django.contrib import admin
-from apps.core.admin.site import admin_site
+
 from apps.core.admin.abstracts import (
-    AbstractTranslatableMarkdownItemAdmin,
-    AbstractTranslatableMarkdownItemTranslationAdmin,
     AbstractCategoryAdmin,
     AbstractCategoryTranslationAdmin,
+    AbstractTranslatableMarkdownItemAdmin,
+    AbstractTranslatableMarkdownItemTranslationAdmin,
 )
+from apps.core.admin.site import admin_site
+from apps.core.admin.utils import visibility_badge_field
+
 from .models import (
+    Category,
+    CategoryTranslation,
+    Course,
     Lesson,
     LessonTranslation,
-    CategoryTranslation,
-    Category,
-    Course,
     Module,
 )
 
@@ -43,12 +46,16 @@ class LessonAdmin(AbstractTranslatableMarkdownItemAdmin):
     fieldsets = [
         (
             "Course information",
-            {"fields": [("title", "module", "order"), ("slug")]},
+            {"fields": [("title", "module", "order"), ("slug"), ("visibility",)]},
         ),
     ]
     prepopulated_fields = {"slug": ("title",)}
-    list_display = ("module__course", "module", "title", "order")
+    list_display = ("module__course", "module", "title", "order", "visibility_badge")
+    visibility_badge = visibility_badge_field("visibility")
     inlines = AbstractTranslatableMarkdownItemAdmin.inlines + [LessonTranslationAdmin]
+
+    class Media:
+        js = ("admin/js/visibility_toggle.js",)
 
 
 admin_site.register(Course, CourseAdmin)

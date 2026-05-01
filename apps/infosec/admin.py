@@ -8,6 +8,7 @@ from apps.core.admin import (
     AbstractTagAdmin,
 )
 from apps.core.admin.site import admin_site
+from apps.core.admin.utils import visibility_badge_field
 
 from .models import (
     CTF,
@@ -52,10 +53,19 @@ class CategoryAdmin(AbstractCategoryAdmin):
 class TagAdmin(AbstractTagAdmin): ...
 
 
+class CVEAdmin(admin.ModelAdmin):
+    list_display = ("cve_id", "cvss_score", "published_date", "visibility_badge")
+    visibility_badge = visibility_badge_field("visibility")
+    search_fields = ("cve_id", "vulnerable_product")
+
+    class Media:
+        js = ("admin/js/visibility_toggle.js",)
+
+
 admin_site.register(Writeup, WritupAdmin)
 admin_site.register(CTF, admin.ModelAdmin)
 admin_site.register(Certification, admin.ModelAdmin)
 admin_site.register(Issuer, admin.ModelAdmin)
-admin_site.register(CVE, admin.ModelAdmin)
+admin_site.register(CVE, CVEAdmin)
 admin_site.register(WriteupTag, TagAdmin)
 admin_site.register(Category, CategoryAdmin)
