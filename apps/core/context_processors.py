@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.cache import cache
 from django.utils.translation import get_language
 
 from .models import SiteSettings
@@ -8,6 +9,44 @@ OG_LOCALE_MAP = {
     "en": "en_US",
     "it": "it_IT",
 }
+
+# Languages exposed to the navbar switcher are derived from real DB content
+# (any translation row counts), not from settings.LANGUAGES which now spans
+# the full ~100 Django locales. Cached aggressively — invalidated by signals
+# on every translation save/delete (apps/core/signals.py).
+ACTIVE_LANGUAGES_CACHE_KEY = "site:active_languages"
+ACTIVE_LANGUAGES_CACHE_TTL = 60 * 60  # 1h
+
+
+def get_active_language_codes():
+    """Return the set of language codes that have at least one translation."""
+    cached = cache.get(ACTIVE_LANGUAGES_CACHE_KEY)
+    if cached is not None:
+        return cached
+
+    from apps.blog.models import ArticleTranslation
+    from apps.blog.models import CategoryTranslation as BlogCategoryTranslation
+    from apps.education.models import CategoryTranslation as EducationCategoryTranslation
+    from apps.education.models import LessonTranslation
+    from apps.infosec.models import CategoryTranslation as InfosecCategoryTranslation
+    from apps.infosec.models import WriteupTranslation
+
+    codes = set()
+    for model in (
+        ArticleTranslation,
+        WriteupTranslation,
+        LessonTranslation,
+        BlogCategoryTranslation,
+        InfosecCategoryTranslation,
+        EducationCategoryTranslation,
+    ):
+        codes.update(model.objects.values_list("language", flat=True).distinct())
+    # Default language must always be reachable even on a brand-new install
+    # with no translations yet, so the user still sees their own language.
+    codes.add(settings.LANGUAGE_CODE)
+
+    cache.set(ACTIVE_LANGUAGES_CACHE_KEY, codes, ACTIVE_LANGUAGES_CACHE_TTL)
+    return codes
 
 
 def site_settings(request):
@@ -28,6 +67,29 @@ def pagination(request):
     return {
         "POSTS_PER_PAGE_CHOICES": settings.POSTS_PER_PAGE_CHOICES,
         "POSTS_PER_PAGE": resolve_per_page(request),
+    }
+
+
+def languages(request):
+    """Expose the languages the site has actual content in for the switcher.
+
+    Also pre-computes ``PATH_AFTER_LANG`` — the request path with its leading
+    ``/<active-lang>/`` stripped — so the template can build alternate-lang
+    URLs without doing fragile slicing (which would break for multi-char
+    codes like ``zh-hans``).
+    """
+    codes = get_active_language_codes()
+    label_map = dict(settings.LANGUAGES)
+    site_languages = sorted(((c, str(label_map.get(c, c.upper()))) for c in codes), key=lambda x: x[0])
+
+    active = get_language() or settings.LANGUAGE_CODE
+    prefix = f"/{active}/"
+    path = request.path
+    path_after_lang = path[len(prefix) - 1 :] if path.startswith(prefix) else path
+
+    return {
+        "SITE_LANGUAGES": site_languages,
+        "PATH_AFTER_LANG": path_after_lang,
     }
 
 

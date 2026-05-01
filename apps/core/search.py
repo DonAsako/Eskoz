@@ -22,13 +22,39 @@ from apps.blog.models import Article, ArticleTranslation
 from apps.education.models import Lesson, LessonTranslation
 from apps.infosec.models import Writeup, WriteupTranslation
 
-# Map our short language codes to PostgreSQL ts_config names. Only languages
-# Postgres ships with by default — if you add e.g. Italian content and want
-# proper stemming, this map is the single place to update.
+# Map our short language codes to PostgreSQL ts_config names. Postgres ships
+# with stemming for these ~16 languages out of the box; anything else falls
+# back to ``simple`` (no stemming, no stop-words — exact-token match only).
+# Source: SELECT cfgname FROM pg_ts_config in a stock Postgres install.
 PG_TEXT_SEARCH_CONFIG = {
-    "fr": "french",
+    "ar": "arabic",
+    "ca": "catalan",
+    "da": "danish",
+    "de": "german",
+    "el": "greek",
     "en": "english",
+    "es": "spanish",
+    "eu": "basque",
+    "fi": "finnish",
+    "fr": "french",
+    "ga": "irish",
+    "hi": "hindi",
+    "hu": "hungarian",
+    "hy": "armenian",
+    "id": "indonesian",
     "it": "italian",
+    "lt": "lithuanian",
+    "ne": "nepali",
+    "nl": "dutch",
+    "no": "norwegian",
+    "pt": "portuguese",
+    "ro": "romanian",
+    "ru": "russian",
+    "sr": "serbian",
+    "sv": "swedish",
+    "ta": "tamil",
+    "tr": "turkish",
+    "yi": "yiddish",
 }
 
 POST_TYPES = (

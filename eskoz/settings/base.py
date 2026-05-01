@@ -1,7 +1,8 @@
 import os
 from pathlib import Path
 
-from django.utils.translation import gettext_lazy as _
+from django.conf.global_settings import LANGUAGES as DJANGO_LANGUAGES
+from django.utils.translation import gettext_lazy as _  # noqa: F401  (kept for translated UI strings elsewhere)
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -85,6 +86,7 @@ TEMPLATES = [
                 "apps.core.context_processors.site_settings",
                 "apps.core.context_processors.active_theme",
                 "apps.core.context_processors.pagination",
+                "apps.core.context_processors.languages",
                 "apps.core.context_processors.seo",
             ],
         },
@@ -113,11 +115,14 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGES = [
-    ("en", _("English")),
-    ("fr", _("French")),
-    ("it", _("Italian")),
-]
+# Open the language universe to every locale Django ships with (~100 codes).
+# This means:
+#   - admins can write a Translation in any language, no hardcoded allow-list
+#   - URL routing accepts /<any-lang>/... but the post-detail fallback will
+#     301 to the default language when no translation exists
+#   - the navbar switcher does NOT iterate this list — it's bound to the
+#     languages that have actual content in DB (see context_processors)
+LANGUAGES = DJANGO_LANGUAGES
 
 # Default site language. Drives:
 #   - The URL prefix served when no language is in the path (e.g. /fr/articles/...)
@@ -126,11 +131,11 @@ LANGUAGES = [
 # Editable via `python manage.py config` (LANGUAGE_CODE in .env).
 LANGUAGE_CODE = os.getenv("LANGUAGE_CODE", "fr")
 
-# Hard-fail at startup if the configured default isn't in LANGUAGES, otherwise
-# i18n_patterns would silently route requests to the Django default ("en").
+# Hard-fail at startup if the configured default isn't a real Django locale
+# code, otherwise i18n_patterns would silently route requests to "en".
 _LANG_CODES = {code for code, _label in LANGUAGES}
 if LANGUAGE_CODE not in _LANG_CODES:
-    raise ValueError(f"LANGUAGE_CODE={LANGUAGE_CODE!r} is not in LANGUAGES {_LANG_CODES}")
+    raise ValueError(f"LANGUAGE_CODE={LANGUAGE_CODE!r} is not a valid Django language code")
 
 TIME_ZONE = "Europe/Paris"
 

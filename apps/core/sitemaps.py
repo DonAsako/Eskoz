@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.utils import translation
 
 from apps.blog.models import Article
+from apps.core.context_processors import get_active_language_codes
 from apps.education.models import Course, Lesson
 from apps.infosec.models import Writeup
 
@@ -14,7 +15,9 @@ class StaticViewSitemap(Sitemap):
     """Sitemap entries for the always-on landing/list URLs.
 
     UI labels are translated per language, so each list lives at a different
-    URL per language (``/fr/articles/``, ``/en/articles/``, …).
+    URL per language (``/fr/articles/``, ``/en/articles/``, …). We scope the
+    iteration to languages with real DB content — otherwise i18n=True would
+    blow this up to 100×N entries with full hreflang alternates.
     """
 
     priority = 0.6
@@ -33,6 +36,9 @@ class StaticViewSitemap(Sitemap):
             "infosec:cve_list",
             "education:course_list",
         ]
+
+    def get_languages_for_item(self, item):
+        return list(get_active_language_codes())
 
     def location(self, item):
         return reverse(item)
