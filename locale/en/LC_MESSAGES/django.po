@@ -4,8 +4,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-02 00:06+0200\n"
 "PO-Revision-Date: 2026-05-02 00:00+0000\n"
-"Language-Team: Italian\n"
-"Language: it\n"
+"Language-Team: English\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,7 +13,7 @@ msgstr ""
 
 #: apps/blog/admin.py:68
 msgid "Thumbnail"
-msgstr "Miniatura"
+msgstr "Thumbnail"
 
 #: apps/blog/models.py:25 apps/blog/models.py:43
 #: apps/core/models/abstracts.py:76 apps/core/models/abstracts.py:101
@@ -22,16 +22,16 @@ msgstr "Miniatura"
 #: themes/donasako/templates/blog/article_detail.html:72
 #: themes/donasako/templates/infosec/writeup_detail.html:72
 msgid "Category"
-msgstr "Categoria"
+msgstr "Category"
 
 #: apps/blog/models.py:45 apps/blog/models.py:120
 #: apps/core/models/abstracts.py:334 apps/infosec/models.py:291
 msgid "Tags"
-msgstr "Etichette"
+msgstr "Tags"
 
 #: apps/blog/models.py:53 templates/admin/eskoz_index.html:25
 msgid "Article"
-msgstr "Articolo"
+msgstr "Article"
 
 #: apps/blog/models.py:54 themes/Eskoz/templates/blog/article_list.html:3
 #: themes/Eskoz/templates/blog/article_list.html:4
@@ -45,59 +45,59 @@ msgstr "Articolo"
 #: themes/donasako/templates/core/search.html:28
 #: themes/donasako/templates/core/tag_detail.html:17
 msgid "Articles"
-msgstr "Articoli"
+msgstr "Articles"
 
 #: apps/blog/models.py:66
 msgid "Translatable Article"
-msgstr "Articolo traducibile"
+msgstr "Translatable Article"
 
 #: apps/blog/models.py:70
 msgid "Article Translation"
-msgstr "Traduzione articolo"
+msgstr "Article Translation"
 
 #: apps/blog/models.py:71
 msgid "Article Translations"
-msgstr "Traduzioni articolo"
+msgstr "Article Translations"
 
 #: apps/blog/models.py:97 apps/infosec/models.py:26 apps/infosec/models.py:55
 #: apps/infosec/models.py:211
 msgid "Name"
-msgstr "Nome"
+msgstr "Name"
 
 #: apps/blog/models.py:101 apps/core/models/abstracts.py:230
 #: apps/core/models/abstracts.py:347 apps/infosec/models.py:74
 msgid "Picture"
-msgstr "Immagine"
+msgstr "Picture"
 
 #: apps/blog/models.py:108
 msgid "Maintainer"
-msgstr "Manutentore"
+msgstr "Maintainer"
 
 #: apps/blog/models.py:116 apps/infosec/models.py:82
 msgid "Related Article"
-msgstr "Articolo correlato"
+msgstr "Related Article"
 
 #: apps/blog/models.py:122 apps/core/models/abstracts.py:222
 #: apps/core/models/settings.py:153 apps/education/models.py:98
 #: apps/infosec/models.py:175
 msgid "Public"
-msgstr "Pubblico"
+msgstr "Public"
 
 #: apps/blog/models.py:123 apps/core/models/abstracts.py:225
 #: apps/core/models/settings.py:154 apps/education/models.py:99
 #: apps/infosec/models.py:176
 msgid "Private"
-msgstr "Privato"
+msgstr "Private"
 
 #: apps/blog/models.py:129 apps/core/models/abstracts.py:235
 #: apps/core/models/settings.py:164 apps/education/models.py:113
 #: apps/infosec/models.py:182
 msgid "Visibility"
-msgstr "Visibilità"
+msgstr "Visibility"
 
 #: apps/blog/models.py:146
 msgid "Project"
-msgstr "Progetto"
+msgstr "Project"
 
 #: apps/blog/models.py:147 themes/Eskoz/templates/blog/project_list.html:3
 #: themes/Eskoz/templates/blog/project_list.html:7
@@ -106,11 +106,11 @@ msgstr "Progetto"
 #: themes/donasako/templates/blog/project_list.html:7
 #: themes/donasako/templates/components/navbar.html:28
 msgid "Projects"
-msgstr "Progetti"
+msgstr "Projects"
 
 #: apps/core/admin/abstracts.py:21
 msgid "No image yet"
-msgstr "Nessuna immagine ancora"
+msgstr "No image yet"
 
 #: apps/core/admin/abstracts.py:49
 msgid "min"
@@ -118,146 +118,146 @@ msgstr "min"
 
 #: apps/core/admin/abstracts.py:51
 msgid "Reading time"
-msgstr "Tempo di lettura"
+msgstr "Reading time"
 
 #: apps/core/admin/model_admin.py:35
 msgid "Well-Known file"
-msgstr "File Well-Known"
+msgstr "Well-Known file"
 
 #: apps/core/admin/model_admin.py:42
 msgid "SEO Settings"
-msgstr "Impostazioni SEO"
+msgstr "SEO Settings"
 
 #: apps/core/admin/model_admin.py:72
 msgid "Education Settings"
-msgstr "Impostazioni Formazione"
+msgstr "Education Settings"
 
 #: apps/core/admin/model_admin.py:77
 msgid "Infosec Settings"
-msgstr "Impostazioni Infosec"
+msgstr "Infosec Settings"
 
 #: apps/core/admin/model_admin.py:82
 msgid "Blog Settings"
-msgstr "Impostazioni Blog"
+msgstr "Blog Settings"
 
 #: apps/core/admin/model_admin.py:113 apps/core/models/settings.py:201
 #: templates/admin/eskoz_index.html:27
 msgid "Page"
-msgstr "Pagina"
+msgstr "Page"
 
 #: apps/core/admin/model_admin.py:127
 msgid "Profil"
-msgstr "Profilo"
+msgstr "Profile"
 
 #: apps/core/admin/model_admin.py:129 apps/core/models/abstracts.py:178
 #: apps/infosec/models.py:28
 msgid "Description"
-msgstr "Descrizione"
+msgstr "Description"
 
 #: apps/core/admin/model_admin.py:136
 msgid "Two Factor Authentication"
-msgstr "Autenticazione a due fattori"
+msgstr "Two Factor Authentication"
 
 #: apps/core/admin/model_admin.py:139
 msgid "Security"
-msgstr "Sicurezza"
+msgstr "Security"
 
 #: apps/core/admin/model_admin.py:143
 msgid "Authentication QR Code"
-msgstr "QR Code di autenticazione"
+msgstr "Authentication QR Code"
 
 #: apps/core/admin/model_admin.py:146
 msgid "No 2FA secret key set yet."
-msgstr "Nessuna chiave segreta 2FA impostata."
+msgstr "No 2FA secret key set yet."
 
 #: apps/core/admin/model_admin.py:149
 msgid "Copy"
-msgstr "Copia"
+msgstr "Copy"
 
 #: apps/core/admin/model_admin.py:156
 msgid "Secret key"
-msgstr "Chiave segreta"
+msgstr "Secret key"
 
 #: apps/core/admin/model_admin.py:163
 msgid "Provisioning URI"
-msgstr "URI di provisioning"
+msgstr "Provisioning URI"
 
 #: apps/core/admin/model_admin.py:174
 msgid "Backup Codes"
-msgstr "Codici di riserva"
+msgstr "Backup Codes"
 
 #: apps/core/admin/model_admin.py:181
 msgid "Backup codes have already been displayed once. Disable then re-enable 2FA to regenerate them."
-msgstr "I codici di riserva sono già stati visualizzati una volta. Disabilita e riabilita il 2FA per rigenerarli."
+msgstr "Backup codes have already been displayed once. Disable then re-enable 2FA to regenerate them."
 
 #: apps/core/admin/model_admin.py:189
 msgid "Copy all"
-msgstr "Copia tutto"
+msgstr "Copy all"
 
 #: apps/core/admin/model_admin.py:200
 msgid "Recovery codes"
-msgstr "Codici di recupero"
+msgstr "Recovery codes"
 
 #: apps/core/admin/model_admin.py:206
 msgid "Save these codes now. They will not be shown again."
-msgstr "Salva questi codici ora. Non verranno più mostrati."
+msgstr "Save these codes now. They will not be shown again."
 
 #: apps/core/admin/model_admin.py:219
 msgid "External link"
-msgstr "Link esterno"
+msgstr "External link"
 
 #: apps/core/admin/model_admin.py:220
 msgid "External links"
-msgstr "Link esterni"
+msgstr "External links"
 
 #: apps/core/admin/model_admin.py:268
 msgid "Permissions"
-msgstr "Permessi"
+msgstr "Permissions"
 
 #: apps/core/admin/site/__init__.py:47
 msgid "Site"
-msgstr "Sito"
+msgstr "Site"
 
 #: apps/core/admin/site/__init__.py:170
 msgid "Set a password on the object first."
-msgstr "Imposta prima una password sull'oggetto."
+msgstr "Set a password on the object first."
 
 #: apps/core/admin/utils.py:31 apps/core/models/settings.py:117
 #: apps/core/models/settings.py:134 apps/core/models/settings.py:148
 msgid "Active"
-msgstr "Attivo"
+msgstr "Active"
 
 #: apps/core/admin/utils.py:33
 msgid "Inactive"
-msgstr "Inattivo"
+msgstr "Inactive"
 
 #: apps/core/admin/utils.py:68
 msgid "Backup selected articles"
-msgstr "Esegui backup degli articoli selezionati"
+msgstr "Backup selected articles"
 
 #: apps/core/forms.py:20
 msgid "OTP / Backup code"
-msgstr "OTP / Codice di riserva"
+msgstr "OTP / Backup code"
 
 #: apps/core/forms.py:21
 msgid "Enter the code from your authentication app or a backup code"
-msgstr "Inserisci il codice dall'app di autenticazione o un codice di riserva"
+msgstr "Enter the code from your authentication app or a backup code"
 
 #: apps/core/forms.py:50
 msgid "To enable 2FA you must enter a valid OTP code."
-msgstr "Per abilitare il 2FA devi inserire un codice OTP valido."
+msgstr "To enable 2FA you must enter a valid OTP code."
 
 #: apps/core/forms.py:51
 msgid "To disable 2FA you must enter a valid OTP or backup code."
-msgstr "Per disabilitare il 2FA devi inserire un codice OTP o di riserva valido."
+msgstr "To disable 2FA you must enter a valid OTP or backup code."
 
 #: apps/core/forms.py:58
 msgid "OTP code is invalid."
-msgstr "Il codice OTP non è valido."
+msgstr "OTP code is invalid."
 
 #: apps/core/forms.py:66
 msgid "Invalid OTP or backup code."
-msgstr "OTP o codice di riserva non valido."
+msgstr "Invalid OTP or backup code."
 
 #: apps/core/forms.py:120 apps/core/models/abstracts.py:237
 #: templates/admin/login.html:38
@@ -268,13 +268,13 @@ msgstr "Password"
 
 #: apps/core/forms.py:121
 msgid "Leave empty to keep the current password."
-msgstr "Lascia vuoto per mantenere la password attuale."
+msgstr "Leave empty to keep the current password."
 
 #: apps/core/models/abstracts.py:34 apps/core/models/abstracts.py:104
 #: apps/core/models/abstracts.py:126 apps/core/models/abstracts.py:177
 #: apps/core/models/models.py:83 apps/core/models/settings.py:158
 msgid "Title"
-msgstr "Titolo"
+msgstr "Title"
 
 #: apps/core/models/abstracts.py:35 apps/core/models/abstracts.py:127
 #: apps/core/models/settings.py:168
@@ -283,62 +283,62 @@ msgstr "Slug"
 
 #: apps/core/models/abstracts.py:58
 msgid "The default 'Undefined' category cannot be deleted."
-msgstr "La categoria predefinita 'Non definita' non può essere eliminata."
+msgstr "The default 'Undefined' category cannot be deleted."
 
 #: apps/core/models/abstracts.py:77
 msgid "Categories"
-msgstr "Categorie"
+msgstr "Categories"
 
 #: apps/core/models/abstracts.py:113 apps/core/models/abstracts.py:200
 msgid "Translation"
-msgstr "Traduzione"
+msgstr "Translation"
 
 #: apps/core/models/abstracts.py:114 apps/core/models/abstracts.py:201
 msgid "Translations"
-msgstr "Traduzioni"
+msgstr "Translations"
 
 #: apps/core/models/abstracts.py:154
 msgid "Translatable Markdown Item"
-msgstr "Elemento Markdown traducibile"
+msgstr "Translatable Markdown Item"
 
 #: apps/core/models/abstracts.py:155
 msgid "Translatable Markdown Items"
-msgstr "Elementi Markdown traducibili"
+msgstr "Translatable Markdown Items"
 
 #: apps/core/models/abstracts.py:174
 msgid "Translatable Content"
-msgstr "Contenuto traducibile"
+msgstr "Translatable Content"
 
 #: apps/core/models/abstracts.py:176
 msgid "Language"
-msgstr "Lingua"
+msgstr "Language"
 
 #: apps/core/models/abstracts.py:179 apps/core/models/settings.py:92
 #: apps/core/models/settings.py:159
 msgid "Content"
-msgstr "Contenuto"
+msgstr "Content"
 
 #: apps/core/models/abstracts.py:223
 msgid "Unlisted"
-msgstr "Non in elenco"
+msgstr "Unlisted"
 
 #: apps/core/models/abstracts.py:224
 #: themes/Eskoz/templates/blog/article_password.html:6
 #: themes/Eskoz/templates/infosec/writeup_password.html:6
 msgid "Protected"
-msgstr "Protetto"
+msgstr "Protected"
 
 #: apps/core/models/abstracts.py:227 apps/infosec/models.py:172
 msgid "Author"
-msgstr "Autore"
+msgstr "Author"
 
 #: apps/core/models/abstracts.py:228
 msgid "Published on"
-msgstr "Pubblicato il"
+msgstr "Published on"
 
 #: apps/core/models/abstracts.py:229
 msgid "Edited on"
-msgstr "Modificato il"
+msgstr "Edited on"
 
 #: apps/core/models/abstracts.py:281
 msgid "Post"
@@ -346,34 +346,34 @@ msgstr "Post"
 
 #: apps/core/models/abstracts.py:282
 msgid "Posts"
-msgstr "Post"
+msgstr "Posts"
 
 #: apps/core/models/abstracts.py:307
 msgid "Post Translation"
-msgstr "Traduzione post"
+msgstr "Post Translation"
 
 #: apps/core/models/abstracts.py:308
 msgid "Post Translations"
-msgstr "Traduzioni post"
+msgstr "Post Translations"
 
 #: apps/core/models/abstracts.py:333
 #: themes/donasako/templates/core/tag_detail.html:3
 #: themes/donasako/templates/core/tag_detail.html:4
 #: themes/donasako/templates/core/tag_detail.html:10
 msgid "Tag"
-msgstr "Etichetta"
+msgstr "Tag"
 
 #: apps/core/models/abstracts.py:348
 msgid "Uploaded on"
-msgstr "Caricato il"
+msgstr "Uploaded on"
 
 #: apps/core/models/abstracts.py:351
 msgid "Markdown Image"
-msgstr "Immagine Markdown"
+msgstr "Markdown Image"
 
 #: apps/core/models/abstracts.py:352
 msgid "Markdown Images"
-msgstr "Immagini Markdown"
+msgstr "Markdown Images"
 
 #: apps/core/models/models.py:17
 msgid "Avatar"
@@ -381,27 +381,27 @@ msgstr "Avatar"
 
 #: apps/core/models/models.py:18
 msgid "Biography"
-msgstr "Biografia"
+msgstr "Biography"
 
 #: apps/core/models/models.py:32
 msgid "User"
-msgstr "Utente"
+msgstr "User"
 
 #: apps/core/models/models.py:34
 msgid "Is 2FA active"
-msgstr "2FA è attivo"
+msgstr "Is 2FA active"
 
 #: apps/core/models/models.py:35
 msgid "OTP secret key"
-msgstr "Chiave segreta OTP"
+msgstr "OTP secret key"
 
 #: apps/core/models/models.py:36
 msgid "Backup codes"
-msgstr "Codici di riserva"
+msgstr "Backup codes"
 
 #: apps/core/models/models.py:37
 msgid "Backup codes viewed"
-msgstr "Codici di riserva visualizzati"
+msgstr "Backup codes viewed"
 
 #: apps/core/models/models.py:84
 msgid "URL"
@@ -409,11 +409,11 @@ msgstr "URL"
 
 #: apps/core/models/models.py:85
 msgid "Icon"
-msgstr "Icona"
+msgstr "Icon"
 
 #: apps/core/models/settings.py:10
 msgid "Site name"
-msgstr "Nome del sito"
+msgstr "Site name"
 
 #: apps/core/models/settings.py:11
 msgid "Logo"
@@ -425,194 +425,194 @@ msgstr "Favicon"
 
 #: apps/core/models/settings.py:13
 msgid "Contact mail"
-msgstr "Email di contatto"
+msgstr "Contact mail"
 
 #: apps/core/models/settings.py:14 apps/core/models/settings.py:93
 msgid "Updated at"
-msgstr "Aggiornato il"
+msgstr "Updated at"
 
 #: apps/core/models/settings.py:16
 msgid "Footer credits"
-msgstr "Crediti a piè di pagina"
+msgstr "Footer credits"
 
 #: apps/core/models/settings.py:21
 msgid "Under maintenance"
-msgstr "In manutenzione"
+msgstr "Under maintenance"
 
 #: apps/core/models/settings.py:22
 msgid "Show transition between page"
-msgstr "Mostra transizione tra le pagine"
+msgstr "Show transition between page"
 
 #: apps/core/models/settings.py:25 apps/core/models/settings.py:37
 #: templates/admin/eskoz_index.html:30
 msgid "Site settings"
-msgstr "Impostazioni del sito"
+msgstr "Site settings"
 
 #: apps/core/models/settings.py:45
 msgid "SEO settings"
-msgstr "Impostazioni SEO"
+msgstr "SEO settings"
 
 #: apps/core/models/settings.py:48
 msgid "Meta author"
-msgstr "Autore meta"
+msgstr "Meta author"
 
 #: apps/core/models/settings.py:49
 msgid "Meta description"
-msgstr "Descrizione meta"
+msgstr "Meta description"
 
 #: apps/core/models/settings.py:50
 msgid "Meta keywords"
-msgstr "Parole chiave meta"
+msgstr "Meta keywords"
 
 #: apps/core/models/settings.py:52
 msgid "Google analytics id"
-msgstr "ID di Google Analytics"
+msgstr "Google analytics id"
 
 #: apps/core/models/settings.py:53
 msgid "Google tag manager id"
-msgstr "ID di Google Tag Manager"
+msgstr "Google tag manager id"
 
 #: apps/core/models/settings.py:54
 msgid "Google site verification"
-msgstr "Verifica sito Google"
+msgstr "Google site verification"
 
 #: apps/core/models/settings.py:57
 msgid "Open Graph title"
-msgstr "Titolo Open Graph"
+msgstr "Open Graph title"
 
 #: apps/core/models/settings.py:58
 msgid "Open Graph description"
-msgstr "Descrizione Open Graph"
+msgstr "Open Graph description"
 
 #: apps/core/models/settings.py:63
 msgid "Open Graph image"
-msgstr "Immagine Open Graph"
+msgstr "Open Graph image"
 
 #: apps/core/models/settings.py:70
 msgid "Summary"
-msgstr "Sommario"
+msgstr "Summary"
 
 #: apps/core/models/settings.py:71
 msgid "Summary Large Image"
-msgstr "Immagine grande sommario"
+msgstr "Summary Large Image"
 
 #: apps/core/models/settings.py:75
 msgid "Twitter card type"
-msgstr "Tipo di card Twitter"
+msgstr "Twitter card type"
 
 #: apps/core/models/settings.py:77
 msgid "Twitter title"
-msgstr "Titolo Twitter"
+msgstr "Twitter title"
 
 #: apps/core/models/settings.py:78
 msgid "Twitter description"
-msgstr "Descrizione Twitter"
+msgstr "Twitter description"
 
 #: apps/core/models/settings.py:83
 msgid "Twitter image"
-msgstr "Immagine Twitter"
+msgstr "Twitter image"
 
 #: apps/core/models/settings.py:91
 msgid "Filename"
-msgstr "Nome del file"
+msgstr "Filename"
 
 #: apps/core/models/settings.py:100
 msgid "WellKnown File"
-msgstr "File WellKnown"
+msgstr "WellKnown File"
 
 #: apps/core/models/settings.py:101
 msgid "WellKnown Files"
-msgstr "File WellKnown"
+msgstr "WellKnown Files"
 
 #: apps/core/models/settings.py:109
 msgid "Blog settings"
-msgstr "Impostazioni Blog"
+msgstr "Blog settings"
 
 #: apps/core/models/settings.py:111
 msgid "Activate Blog Module"
-msgstr "Attiva modulo Blog"
+msgstr "Activate Blog Module"
 
 #: apps/core/models/settings.py:112
 msgid "Show members page"
-msgstr "Mostra pagina membri"
+msgstr "Show members page"
 
 #: apps/core/models/settings.py:113
 msgid "Show projects page"
-msgstr "Mostra pagina progetti"
+msgstr "Show projects page"
 
 #: apps/core/models/settings.py:114
 msgid "Show articles page"
-msgstr "Mostra pagina articoli"
+msgstr "Show articles page"
 
 #: apps/core/models/settings.py:125
 msgid "Infosec settings"
-msgstr "Impostazioni Infosec"
+msgstr "Infosec settings"
 
 #: apps/core/models/settings.py:127
 msgid "Activate Infosec Module"
-msgstr "Attiva modulo Infosec"
+msgstr "Activate Infosec Module"
 
 #: apps/core/models/settings.py:128
 msgid "Show certifications page"
-msgstr "Mostra pagina certificazioni"
+msgstr "Show certifications page"
 
 #: apps/core/models/settings.py:130
 msgid "Show CVEs page"
-msgstr "Mostra pagina CVE"
+msgstr "Show CVEs page"
 
 #: apps/core/models/settings.py:131
 msgid "Show writeups page"
-msgstr "Mostra pagina writeup"
+msgstr "Show writeups page"
 
 #: apps/core/models/settings.py:142
 msgid "Education settings"
-msgstr "Impostazioni Formazione"
+msgstr "Education settings"
 
 #: apps/core/models/settings.py:144
 msgid "Activate Education Module"
-msgstr "Attiva modulo Formazione"
+msgstr "Activate Education Module"
 
 #: apps/core/models/settings.py:145
 msgid "Show courses page"
-msgstr "Mostra pagina corsi"
+msgstr "Show courses page"
 
 #: apps/core/models/settings.py:155
 msgid "Referenced"
-msgstr "Referenziata"
+msgstr "Referenced"
 
 #: apps/core/models/settings.py:156
 msgid "Index"
-msgstr "Indice"
+msgstr "Index"
 
 #: apps/core/models/settings.py:188
 msgid "You can only have up to 3 pages marked as 'referenced'."
-msgstr "Puoi avere al massimo 3 pagine contrassegnate come 'referenziate'."
+msgstr "You can only have up to 3 pages marked as 'referenced'."
 
 #: apps/core/models/settings.py:195
 msgid "You can only have up to 1 page marked as 'index'."
-msgstr "Puoi avere solo una pagina contrassegnata come 'indice'."
+msgstr "You can only have up to 1 page marked as 'index'."
 
 #: apps/core/models/settings.py:202
 msgid "Pages"
-msgstr "Pagine"
+msgstr "Pages"
 
 #: apps/core/signals.py:60
 msgid "Undefined"
-msgstr "Non definito"
+msgstr "Undefined"
 
 #: apps/core/views.py:235
 #, python-format
 msgid "Backup code consumed. %(remaining)d codes remain — generate new ones soon."
-msgstr "Codice di riserva utilizzato. %(remaining)d codici rimanenti — genera presto nuovi codici."
+msgstr "Backup code consumed. %(remaining)d codes remain — generate new ones soon."
 
 #: apps/core/views.py:238
 msgid "Invalid code. Try again."
-msgstr "Codice non valido. Riprova."
+msgstr "Invalid code. Try again."
 
 #: apps/education/models.py:54
 #: themes/donasako/templates/education/lesson_detail.html:74
 msgid "Course"
-msgstr "Corso"
+msgstr "Course"
 
 #: apps/education/models.py:55
 #: themes/Eskoz/templates/education/course_list.html:3
@@ -624,136 +624,136 @@ msgstr "Corso"
 #: themes/donasako/templates/education/lesson_list.html:7
 #: themes/donasako/templates/education/module_list.html:7
 msgid "Courses"
-msgstr "Corsi"
+msgstr "Courses"
 
 #: apps/education/models.py:81 apps/education/models.py:106
 #: themes/donasako/templates/education/lesson_detail.html:68
 #: themes/donasako/templates/education/lesson_list.html:19
 msgid "Module"
-msgstr "Modulo"
+msgstr "Module"
 
 #: apps/education/models.py:82
 msgid "Modules"
-msgstr "Moduli"
+msgstr "Modules"
 
 #: apps/education/models.py:108
 msgid "Order"
-msgstr "Ordine"
+msgstr "Order"
 
 #: apps/education/models.py:121
 #: themes/donasako/templates/education/lesson_detail.html:62
 msgid "Lesson"
-msgstr "Lezione"
+msgstr "Lesson"
 
 #: apps/education/models.py:122 themes/Eskoz/templates/core/search.html:57
 #: themes/donasako/templates/core/search.html:58
 msgid "Lessons"
-msgstr "Lezioni"
+msgstr "Lessons"
 
 #: apps/education/models.py:135
 msgid "Translatable Lesson"
-msgstr "Lezione traducibile"
+msgstr "Translatable Lesson"
 
 #: apps/education/models.py:139
 msgid "Lesson Translation"
-msgstr "Traduzione lezione"
+msgstr "Lesson Translation"
 
 #: apps/education/models.py:140
 msgid "Lesson Translations"
-msgstr "Traduzioni lezione"
+msgstr "Lesson Translations"
 
 #: apps/infosec/models.py:27 themes/Eskoz/templates/blog/member_list.html:36
 #: themes/Eskoz/templates/blog/project_list.html:40
 msgid "Website"
-msgstr "Sito web"
+msgstr "Website"
 
 #: apps/infosec/models.py:31 apps/infosec/models.py:98
 msgid "Issuer"
-msgstr "Emittente"
+msgstr "Issuer"
 
 #: apps/infosec/models.py:32
 msgid "Issuers"
-msgstr "Emittenti"
+msgstr "Issuers"
 
 #: apps/infosec/models.py:61
 msgid "Certification URL"
-msgstr "URL certificazione"
+msgstr "Certification URL"
 
 #: apps/infosec/models.py:62
 msgid "Link to the official page of the certification"
-msgstr "Link alla pagina ufficiale della certificazione"
+msgstr "Link to the official page of the certification"
 
 #: apps/infosec/models.py:67
 msgid "Obtained Date"
-msgstr "Data ottenimento"
+msgstr "Obtained Date"
 
 #: apps/infosec/models.py:68
 msgid "Date when the certification was obtained"
-msgstr "Data in cui è stata ottenuta la certificazione"
+msgstr "Date when the certification was obtained"
 
 #: apps/infosec/models.py:90
 msgid "Owner"
-msgstr "Proprietario"
+msgstr "Owner"
 
 #: apps/infosec/models.py:99
 msgid "Organization or platform that issued the certification"
-msgstr "Organizzazione o piattaforma che ha rilasciato la certificazione"
+msgstr "Organization or platform that issued the certification"
 
 #: apps/infosec/models.py:125
 msgid "cve_id"
-msgstr "ID CVE"
+msgstr "cve_id"
 
 #: apps/infosec/models.py:126
 msgid "the unique identifier for the CVE (e.g., CVE-2025-12345)"
-msgstr "L'identificatore univoco del CVE (es. CVE-2025-12345)"
+msgstr "the unique identifier for the CVE (e.g., CVE-2025-12345)"
 
 #: apps/infosec/models.py:129
 msgid "description"
-msgstr "descrizione"
+msgstr "description"
 
 #: apps/infosec/models.py:130
 msgid "a detailed description of the vulnerability"
-msgstr "una descrizione dettagliata della vulnerabilità"
+msgstr "a detailed description of the vulnerability"
 
 #: apps/infosec/models.py:135
 msgid "published_date"
-msgstr "data di pubblicazione"
+msgstr "published_date"
 
 #: apps/infosec/models.py:136
 msgid "date when the CVE was published"
-msgstr "data di pubblicazione del CVE"
+msgstr "date when the CVE was published"
 
 #: apps/infosec/models.py:141
 msgid "last_modified_date"
-msgstr "data ultima modifica"
+msgstr "last_modified_date"
 
 #: apps/infosec/models.py:142
 msgid "date when the CVE was last updated"
-msgstr "data dell'ultimo aggiornamento del CVE"
+msgstr "date when the CVE was last updated"
 
 #: apps/infosec/models.py:149
 msgid "cvss_score"
-msgstr "punteggio CVSS"
+msgstr "cvss_score"
 
 #: apps/infosec/models.py:150
 msgid "the severity score of the vulnerability"
-msgstr "il punteggio di gravità della vulnerabilità"
+msgstr "the severity score of the vulnerability"
 
 #: apps/infosec/models.py:156
 msgid "vulnerable_product"
-msgstr "prodotto vulnerabile"
+msgstr "vulnerable_product"
 
 #: apps/infosec/models.py:157
 msgid "the affected product(s)"
-msgstr "il/i prodotto/i interessato/i"
+msgstr "the affected product(s)"
 
 #: apps/infosec/models.py:163
 msgid "references_url"
-msgstr "URL riferimenti"
+msgstr "references_url"
 
 #: apps/infosec/models.py:164
 msgid "link to official references or advisories"
-msgstr "link ai riferimenti ufficiali o avvisi"
+msgstr "link to official references or advisories"
 
 #: apps/infosec/models.py:220 apps/infosec/models.py:263
 msgid "CTF"
@@ -761,43 +761,43 @@ msgstr "CTF"
 
 #: apps/infosec/models.py:221
 msgid "CTFs"
-msgstr "CTF"
+msgstr "CTFs"
 
 #: apps/infosec/models.py:254
 msgid "Easy"
-msgstr "Facile"
+msgstr "Easy"
 
 #: apps/infosec/models.py:255
 msgid "Medium"
-msgstr "Medio"
+msgstr "Medium"
 
 #: apps/infosec/models.py:256
 msgid "Hard"
-msgstr "Difficile"
+msgstr "Hard"
 
 #: apps/infosec/models.py:257
 msgid "Insane"
-msgstr "Estremo"
+msgstr "Insane"
 
 #: apps/infosec/models.py:271
 msgid "Difficulty"
-msgstr "Difficoltà"
+msgstr "Difficulty"
 
 #: apps/infosec/models.py:275
 msgid "Points"
-msgstr "Punti"
+msgstr "Points"
 
 #: apps/infosec/models.py:276
 msgid "Score or point value for this challenge."
-msgstr "Punteggio o valore in punti per questa sfida."
+msgstr "Score or point value for this challenge."
 
 #: apps/infosec/models.py:280
 msgid "Number of solvers"
-msgstr "Numero di risolutori"
+msgstr "Number of solvers"
 
 #: apps/infosec/models.py:281
 msgid "Optional: number of people who solved it."
-msgstr "Opzionale: numero di persone che lo hanno risolto."
+msgstr "Optional: number of people who solved it."
 
 #: apps/infosec/models.py:303 templates/admin/eskoz_index.html:26
 msgid "Writeup"
@@ -815,32 +815,32 @@ msgstr "Writeup"
 #: themes/donasako/templates/infosec/writeup_list.html:4
 #: themes/donasako/templates/infosec/writeup_list.html:13
 msgid "Writeups"
-msgstr "Writeup"
+msgstr "Writeups"
 
 #: apps/infosec/models.py:316
 msgid "Translatable Writeup"
-msgstr "Writeup traducibile"
+msgstr "Translatable Writeup"
 
 #: apps/infosec/models.py:320
 msgid "Writeup Translation"
-msgstr "Traduzione writeup"
+msgstr "Writeup Translation"
 
 #: apps/infosec/models.py:321
 msgid "Writeup Translations"
-msgstr "Traduzioni writeup"
+msgstr "Writeup Translations"
 
 #: templates/admin/eskoz_index.html:8
 #, python-format
 msgid "Welcome back, %(name)s."
-msgstr "Bentornato, %(name)s."
+msgstr "Welcome back, %(name)s."
 
 #: templates/admin/eskoz_index.html:9
 msgid "Overview of your content."
-msgstr "Panoramica dei tuoi contenuti."
+msgstr "Overview of your content."
 
 #: templates/admin/eskoz_index.html:18
 msgid "public"
-msgstr "pubblico"
+msgstr "public"
 
 #: templates/admin/eskoz_index.html:28
 #: themes/donasako/templates/infosec/cve_list.html:25
@@ -849,159 +849,159 @@ msgstr "CVE"
 
 #: templates/admin/eskoz_index.html:36
 msgid "Recent activity"
-msgstr "Attività recente"
+msgstr "Recent activity"
 
 #: templates/admin/eskoz_index.html:41
 msgid "created"
-msgstr "creato"
+msgstr "created"
 
 #: templates/admin/eskoz_index.html:41
 #: themes/donasako/templates/components/post_footer.html:20
 msgid "updated"
-msgstr "aggiornato"
+msgstr "updated"
 
 #: templates/admin/eskoz_index.html:41
 msgid "deleted"
-msgstr "eliminato"
+msgstr "deleted"
 
 #: templates/admin/eskoz_index.html:41
 msgid "accessed"
-msgstr "acceduto"
+msgstr "accessed"
 
 #: templates/admin/eskoz_index.html:54
 msgid "Sections"
-msgstr "Sezioni"
+msgstr "Sections"
 
 #: templates/admin/login.html:20 templates/admin/login.html:42
 msgid "Sign in"
-msgstr "Accedi"
+msgstr "Sign in"
 
 #: templates/admin/login.html:21
 msgid "Access the administration panel."
-msgstr "Accedi al pannello di amministrazione."
+msgstr "Access the administration panel."
 
 #: templates/admin/login.html:29
 msgid "Please correct the error below."
-msgstr "Si prega di correggere l'errore di seguito."
+msgstr "Please correct the error below."
 
 #: templates/admin/login.html:34
 msgid "Username"
-msgstr "Nome utente"
+msgstr "Username"
 
 #: templates/admin/login.html:45
 msgid "Forgotten your password?"
-msgstr "Hai dimenticato la password?"
+msgstr "Forgotten your password?"
 
 #: templates/admin/login.html:51
 msgid "Back to site"
-msgstr "Torna al sito"
+msgstr "Back to site"
 
 #: templates/admin/verify_2fa.html:4 templates/admin/verify_2fa.html:22
 msgid "Two-factor verification"
-msgstr "Verifica a due fattori"
+msgstr "Two-factor verification"
 
 #: templates/admin/verify_2fa.html:24
 #, python-format
 msgid "Signed in as <strong>%(username)s</strong>."
-msgstr "Connesso come <strong>%(username)s</strong>."
+msgstr "Signed in as <strong>%(username)s</strong>."
 
 #: templates/admin/verify_2fa.html:33
 msgid "Authentication code"
-msgstr "Codice di autenticazione"
+msgstr "Authentication code"
 
 #: templates/admin/verify_2fa.html:37
 msgid "6-digit code from your authenticator app, or one of your backup codes."
-msgstr "Codice a 6 cifre dall'app di autenticazione o uno dei codici di riserva."
+msgstr "6-digit code from your authenticator app, or one of your backup codes."
 
 #: templates/admin/verify_2fa.html:40
 msgid "Verify"
-msgstr "Verifica"
+msgstr "Verify"
 
 #: templates/admin/verify_2fa.html:46
 msgid "Sign out instead"
-msgstr "Disconnettiti invece"
+msgstr "Sign out instead"
 
 #: templates/components/language_switcher.html:9
 msgid "Switch language"
-msgstr "Cambia lingua"
+msgstr "Switch language"
 
 #: themes/Eskoz/templates/400.html:5 themes/donasako/templates/400.html:7
 msgid "Bad request"
-msgstr "Richiesta non valida"
+msgstr "Bad request"
 
 #: themes/Eskoz/templates/400.html:14
 msgid "400 - Bad request"
-msgstr "400 - Richiesta non valida"
+msgstr "400 - Bad request"
 
 #: themes/Eskoz/templates/400.html:15
 msgid "The request could not be understood by the server."
-msgstr "La richiesta non è stata compresa dal server."
+msgstr "The request could not be understood by the server."
 
 #: themes/Eskoz/templates/400.html:18 themes/Eskoz/templates/403.html:17
 #: themes/Eskoz/templates/403_csrf.html:18 themes/Eskoz/templates/404.html:19
 #: themes/Eskoz/templates/429.html:17 themes/Eskoz/templates/500.html:18
 msgid "Back to homepage"
-msgstr "Torna alla home"
+msgstr "Back to homepage"
 
 #: themes/Eskoz/templates/403.html:5 themes/donasako/templates/403.html:7
 msgid "Access denied"
-msgstr "Accesso negato"
+msgstr "Access denied"
 
 #: themes/Eskoz/templates/403.html:13
 msgid "403 - Access denied"
-msgstr "403 - Accesso negato"
+msgstr "403 - Access denied"
 
 #: themes/Eskoz/templates/403.html:14
 msgid "You don't have permission to access this page."
-msgstr "Non hai il permesso di accedere a questa pagina."
+msgstr "You don't have permission to access this page."
 
 #: themes/Eskoz/templates/403_csrf.html:5
 msgid "Security error"
-msgstr "Errore di sicurezza"
+msgstr "Security error"
 
 #: themes/Eskoz/templates/403_csrf.html:14
 msgid "403 - CSRF verification failed"
-msgstr "403 - Verifica CSRF fallita"
+msgstr "403 - CSRF verification failed"
 
 #: themes/Eskoz/templates/403_csrf.html:15
 msgid "Your request was rejected for security reasons. Please try again."
-msgstr "La tua richiesta è stata rifiutata per motivi di sicurezza. Riprova."
+msgstr "Your request was rejected for security reasons. Please try again."
 
 #: themes/Eskoz/templates/404.html:5 themes/donasako/templates/404.html:7
 msgid "Page not found"
-msgstr "Pagina non trovata"
+msgstr "Page not found"
 
 #: themes/Eskoz/templates/404.html:15
 msgid "404 - Page not found"
-msgstr "404 - Pagina non trovata"
+msgstr "404 - Page not found"
 
 #: themes/Eskoz/templates/404.html:16
 msgid "The page you're looking for doesn't exist or has been moved."
-msgstr "La pagina che stai cercando non esiste o è stata spostata."
+msgstr "The page you're looking for doesn't exist or has been moved."
 
 #: themes/Eskoz/templates/429.html:5
 msgid "Too many requests"
-msgstr "Troppe richieste"
+msgstr "Too many requests"
 
 #: themes/Eskoz/templates/429.html:13
 msgid "429 - Too many requests"
-msgstr "429 - Troppe richieste"
+msgstr "429 - Too many requests"
 
 #: themes/Eskoz/templates/429.html:14
 msgid "You have made too many attempts. Please wait a few minutes and try again."
-msgstr "Hai effettuato troppi tentativi. Attendi qualche minuto e riprova."
+msgstr "You have made too many attempts. Please wait a few minutes and try again."
 
 #: themes/Eskoz/templates/500.html:5
 msgid "Server error"
-msgstr "Errore del server"
+msgstr "Server error"
 
 #: themes/Eskoz/templates/500.html:14
 msgid "500 - Server error"
-msgstr "500 - Errore del server"
+msgstr "500 - Server error"
 
 #: themes/Eskoz/templates/500.html:15
 msgid "Something went wrong on our end. Please try again later."
-msgstr "Qualcosa è andato storto da parte nostra. Riprova più tardi."
+msgstr "Something went wrong on our end. Please try again later."
 
 #: themes/Eskoz/templates/blog/article_detail.html:64
 #: themes/Eskoz/templates/education/lesson_detail.html:50
@@ -1010,74 +1010,74 @@ msgstr "Qualcosa è andato storto da parte nostra. Riprova più tardi."
 #: themes/donasako/templates/education/lesson_detail.html:83
 #: themes/donasako/templates/infosec/writeup_detail.html:78
 msgid "read"
-msgstr "letto"
+msgstr "read"
 
 #: themes/Eskoz/templates/blog/article_list.html:5
 #: themes/Eskoz/templates/blog/article_list.html:6
 #, python-format
 msgid "Articles published on %(name)s: technical writeups, deep dives and notes."
-msgstr "Articoli pubblicati su %(name)s: writeup tecnici, analisi approfondite e note."
+msgstr "Articles published on %(name)s: technical writeups, deep dives and notes."
 
 #: themes/Eskoz/templates/blog/article_list.html:16
 msgid "There is no article at the moment."
-msgstr "Non ci sono articoli al momento."
+msgstr "There is no article at the moment."
 
 #: themes/Eskoz/templates/blog/article_password.html:15
 msgid "This article is protected"
-msgstr "Questo articolo è protetto"
+msgstr "This article is protected"
 
 #: themes/Eskoz/templates/blog/article_password.html:16
 #: themes/Eskoz/templates/infosec/writeup_password.html:16
 msgid "Please enter the password to continue"
-msgstr "Inserisci la password per continuare"
+msgstr "Please enter the password to continue"
 
 #: themes/Eskoz/templates/blog/article_password.html:20
 #: themes/Eskoz/templates/infosec/writeup_password.html:20
 #: themes/donasako/templates/blog/article_password.html:12
 #: themes/donasako/templates/infosec/writeup_password.html:12
 msgid "Unlock"
-msgstr "Sblocca"
+msgstr "Unlock"
 
 #: themes/Eskoz/templates/blog/member_list.html:3
 #: themes/Eskoz/templates/blog/member_list.html:7
 #: themes/Eskoz/templates/components/navbar.html:39
 #: themes/donasako/templates/blog/member_list.html:3
 msgid "Members"
-msgstr "Membri"
+msgstr "Members"
 
 #: themes/Eskoz/templates/blog/member_list.html:11
 msgid "There is no members at the moment."
-msgstr "Non ci sono membri al momento."
+msgstr "There is no members at the moment."
 
 #: themes/Eskoz/templates/blog/project_list.html:11
 msgid "There is no projects at the moment."
-msgstr "Non ci sono progetti al momento."
+msgstr "There is no projects at the moment."
 
 #: themes/Eskoz/templates/blog/project_list.html:34
 msgid "Now"
-msgstr "Ora"
+msgstr "Now"
 
 #: themes/Eskoz/templates/blog/project_list.html:43
 msgid "Source"
-msgstr "Fonte"
+msgstr "Source"
 
 #: themes/Eskoz/templates/components/category_selector.html:4
 #: themes/donasako/templates/components/category_selector.html:5
 msgid "All"
-msgstr "Tutti"
+msgstr "All"
 
 #: themes/Eskoz/templates/components/maintenance.html:6
 #: themes/donasako/templates/components/maintenance.html:3
 msgid "Under Maintenance"
-msgstr "In manutenzione"
+msgstr "Under Maintenance"
 
 #: themes/Eskoz/templates/components/maintenance.html:7
 msgid "We're currently performing some updates. Please check back soon!"
-msgstr "Stiamo eseguendo alcuni aggiornamenti. Torna presto!"
+msgstr "We're currently performing some updates. Please check back soon!"
 
 #: themes/Eskoz/templates/components/navbar.html:12
 msgid "Toggle navigation menu"
-msgstr "Attiva/disattiva menu di navigazione"
+msgstr "Toggle navigation menu"
 
 #: themes/Eskoz/templates/components/navbar.html:47
 #: themes/Eskoz/templates/infosec/certification_list.html:3
@@ -1085,7 +1085,7 @@ msgstr "Attiva/disattiva menu di navigazione"
 #: themes/donasako/templates/infosec/certification_list.html:3
 #: themes/donasako/templates/infosec/certification_list.html:7
 msgid "Certifications"
-msgstr "Certificazioni"
+msgstr "Certifications"
 
 #: themes/Eskoz/templates/components/navbar.html:59
 #: themes/Eskoz/templates/infosec/cve_list.html:3
@@ -1093,11 +1093,11 @@ msgstr "Certificazioni"
 #: themes/donasako/templates/components/navbar.html:40
 #: themes/donasako/templates/infosec/cve_list.html:3
 msgid "CVEs"
-msgstr "CVE"
+msgstr "CVEs"
 
 #: themes/Eskoz/templates/components/navbar.html:67
 msgid "Education"
-msgstr "Formazione"
+msgstr "Education"
 
 #: themes/Eskoz/templates/components/navbar.html:73
 #: themes/Eskoz/templates/core/search.html:4
@@ -1110,12 +1110,12 @@ msgstr "Formazione"
 #: themes/donasako/templates/core/search.html:12
 #: themes/donasako/templates/core/search.html:15
 msgid "Search"
-msgstr "Cerca"
+msgstr "Search"
 
 #: themes/Eskoz/templates/components/pagination.html:4
 #: themes/donasako/templates/components/pagination.html:4
 msgid "Pagination"
-msgstr "Paginazione"
+msgstr "Pagination"
 
 #: themes/Eskoz/templates/components/pagination.html:6
 #: themes/Eskoz/templates/components/pagination.html:8
@@ -1124,13 +1124,13 @@ msgstr "Paginazione"
 #: themes/donasako/templates/education/lesson_detail.html:96
 #: themes/donasako/templates/education/lesson_detail.html:99
 msgid "Previous"
-msgstr "Precedente"
+msgstr "Previous"
 
 #: themes/Eskoz/templates/components/pagination.html:12
 #: themes/donasako/templates/components/pagination.html:12
 #, python-format
 msgid "Page %(current)s of %(total)s"
-msgstr "Pagina %(current)s di %(total)s"
+msgstr "Page %(current)s of %(total)s"
 
 #: themes/Eskoz/templates/components/pagination.html:16
 #: themes/Eskoz/templates/components/pagination.html:18
@@ -1139,31 +1139,31 @@ msgstr "Pagina %(current)s di %(total)s"
 #: themes/donasako/templates/education/lesson_detail.html:107
 #: themes/donasako/templates/education/lesson_detail.html:109
 msgid "Next"
-msgstr "Successivo"
+msgstr "Next"
 
 #: themes/Eskoz/templates/components/per_page_selector.html:2
 #: themes/donasako/templates/components/per_page_selector.html:2
 msgid "Items per page"
-msgstr "Elementi per pagina"
+msgstr "Items per page"
 
 #: themes/Eskoz/templates/components/per_page_selector.html:10
 #: themes/donasako/templates/components/per_page_selector.html:10
 msgid "Per page"
-msgstr "Per pagina"
+msgstr "Per page"
 
 #: themes/Eskoz/templates/components/per_page_selector.html:16
 #: themes/donasako/templates/components/per_page_selector.html:16
 msgid "Apply"
-msgstr "Applica"
+msgstr "Apply"
 
 #: themes/Eskoz/templates/components/toc.html:4
 #: themes/donasako/templates/components/toc.html:3
 msgid "On this page"
-msgstr "In questa pagina"
+msgstr "On this page"
 
 #: themes/Eskoz/templates/core/index.html:5
 msgid "Welcome to your Eskoz site!"
-msgstr "Benvenuto nel tuo sito Eskoz!"
+msgstr "Welcome to your Eskoz site!"
 
 #: themes/Eskoz/templates/core/index.html:8
 #, python-format
@@ -1173,131 +1173,131 @@ msgid ""
 "        "
 msgstr ""
 "\n"
-"            Puoi configurare questa pagina dal tuo <a href=\"%(admin_url)s\">pannello di amministrazione</a>.\n"
+"            You can configure this page from your <a href=\"%(admin_url)s\">administration panel</a>.\n"
 "        "
 
 #: themes/Eskoz/templates/core/search.html:7
 #: themes/donasako/templates/core/search.html:7
 msgid "Search articles, writeups and lessons across the site."
-msgstr "Cerca articoli, writeup e lezioni nel sito."
+msgstr "Search articles, writeups and lessons across the site."
 
 #: themes/Eskoz/templates/core/search.html:16
 #: themes/donasako/templates/core/search.html:14
 msgid "Search articles, writeups, lessons…"
-msgstr "Cerca articoli, writeup, lezioni…"
+msgstr "Search articles, writeups, lessons…"
 
 #: themes/Eskoz/templates/core/search.html:16
 #: themes/donasako/templates/core/search.html:14
 msgid "Search query"
-msgstr "Ricerca"
+msgstr "Search query"
 
 #: themes/Eskoz/templates/core/search.html:22
 #: themes/donasako/templates/core/search.html:21
 #, python-format
 msgid "%(counter)s result for \"%(query)s\""
 msgid_plural "%(counter)s results for \"%(query)s\""
-msgstr[0] "%(counter)s risultato per \"%(query)s\""
-msgstr[1] "%(counter)s risultati per \"%(query)s\""
+msgstr[0] "%(counter)s result for \"%(query)s\""
+msgstr[1] "%(counter)s results for \"%(query)s\""
 
 #: themes/Eskoz/templates/core/search.html:27
 #: themes/donasako/templates/core/search.html:25
 msgid "No matching content. Try different keywords or check the spelling."
-msgstr "Nessun contenuto corrispondente. Prova parole chiave diverse o controlla l'ortografia."
+msgstr "No matching content. Try different keywords or check the spelling."
 
 #: themes/Eskoz/templates/education/course_list.html:12
 msgid "There is no course at the moment."
-msgstr "Non ci sono corsi al momento."
+msgstr "There is no course at the moment."
 
 #: themes/Eskoz/templates/education/lesson_detail.html:77
 #: themes/donasako/templates/education/lesson_detail.html:103
 #: themes/donasako/templates/education/lesson_detail.html:145
 msgid "Mark as read"
-msgstr "Segna come letto"
+msgstr "Mark as read"
 
 #: themes/Eskoz/templates/education/lesson_list.html:12
 msgid "There is no lesson at the moment."
-msgstr "Non ci sono lezioni al momento."
+msgstr "There is no lesson at the moment."
 
 #: themes/Eskoz/templates/education/module_list.html:11
 msgid "There is no module at the moment."
-msgstr "Non ci sono moduli al momento."
+msgstr "There is no module at the moment."
 
 #: themes/Eskoz/templates/infosec/certification_list.html:11
 msgid "There is no certifications at the moment."
-msgstr "Non ci sono certificazioni al momento."
+msgstr "There is no certifications at the moment."
 
 #: themes/Eskoz/templates/infosec/certification_list.html:36
 msgid "Obtained on"
-msgstr "Ottenuto il"
+msgstr "Obtained on"
 
 #: themes/Eskoz/templates/infosec/cve_list.html:4
 #: themes/donasako/templates/infosec/cve_list.html:4
 #: themes/donasako/templates/infosec/cve_list.html:12
 msgid "CVE Discoveries"
-msgstr "Scoperte CVE"
+msgstr "CVE Discoveries"
 
 #: themes/Eskoz/templates/infosec/cve_list.html:5
 #: themes/Eskoz/templates/infosec/cve_list.html:6
 msgid "Vulnerability disclosures and security advisories indexed with CVSS scoring."
-msgstr "Divulgazioni di vulnerabilità e avvisi di sicurezza indicizzati con punteggio CVSS."
+msgstr "Vulnerability disclosures and security advisories indexed with CVSS scoring."
 
 #: themes/Eskoz/templates/infosec/cve_list.html:15
 msgid "There is no CVE at the moment."
-msgstr "Non ci sono CVE al momento."
+msgstr "There is no CVE at the moment."
 
 #: themes/Eskoz/templates/infosec/writeup_list.html:5
 #: themes/Eskoz/templates/infosec/writeup_list.html:6
 msgid "CTF and pentest writeups: exploitation techniques, exploit breakdowns and tactical notes."
-msgstr "Writeup CTF e pentest: tecniche di sfruttamento, analisi degli exploit e note tattiche."
+msgstr "CTF and pentest writeups: exploitation techniques, exploit breakdowns and tactical notes."
 
 #: themes/Eskoz/templates/infosec/writeup_list.html:16
 msgid "There is no writeups at the moment."
-msgstr "Non ci sono writeup al momento."
+msgstr "There is no writeups at the moment."
 
 #: themes/Eskoz/templates/infosec/writeup_password.html:15
 msgid "This writeup is protected"
-msgstr "Questo writeup è protetto"
+msgstr "This writeup is protected"
 
 #: themes/donasako/templates/400.html:8 themes/donasako/templates/403.html:8
 #: themes/donasako/templates/403_csrf.html:8
 #: themes/donasako/templates/404.html:8 themes/donasako/templates/429.html:9
 msgid "Back to home"
-msgstr "Torna alla home"
+msgstr "Back to home"
 
 #: themes/donasako/templates/403_csrf.html:7
 msgid "CSRF verification failed"
-msgstr "Verifica CSRF fallita"
+msgstr "CSRF verification failed"
 
 #: themes/donasako/templates/429.html:8
 msgid "Too many requests — please wait a few minutes and try again."
-msgstr "Troppe richieste — attendi qualche minuto e riprova."
+msgstr "Too many requests — please wait a few minutes and try again."
 
 #: themes/donasako/templates/blog/article_detail.html:61
 #: themes/donasako/templates/components/post_footer.html:18
 #: themes/donasako/templates/infosec/cve_list.html:28
 #: themes/donasako/templates/infosec/writeup_detail.html:61
 msgid "Published"
-msgstr "Pubblicato"
+msgstr "Published"
 
 #: themes/donasako/templates/blog/article_detail.html:66
 #: themes/donasako/templates/infosec/writeup_detail.html:66
 msgid "Updated"
-msgstr "Aggiornato"
+msgstr "Updated"
 
 #: themes/donasako/templates/blog/article_list.html:5
 #: themes/donasako/templates/blog/article_list.html:6
 #: themes/donasako/templates/blog/article_list.html:13
 msgid "Security research, technical writeups, and deep dives"
-msgstr "Ricerca sulla sicurezza, writeup tecnici e analisi approfondite"
+msgstr "Security research, technical writeups, and deep dives"
 
 #: themes/donasako/templates/blog/article_list.html:25
 msgid "No articles published yet."
-msgstr "Nessun articolo pubblicato ancora."
+msgstr "No articles published yet."
 
 #: themes/donasako/templates/blog/article_list.html:31
 #: themes/donasako/templates/infosec/writeup_list.html:33
 msgid "Undated"
-msgstr "Senza data"
+msgstr "Undated"
 
 #: themes/donasako/templates/blog/article_list.html:33
 #: themes/donasako/templates/core/tag_detail.html:12
@@ -1309,128 +1309,128 @@ msgstr "post"
 #: themes/donasako/templates/core/tag_detail.html:12
 #: themes/donasako/templates/infosec/writeup_list.html:35
 msgid "posts"
-msgstr "post"
+msgstr "posts"
 
 #: themes/donasako/templates/blog/article_password.html:3
 msgid "Protected Article"
-msgstr "Articolo protetto"
+msgstr "Protected Article"
 
 #: themes/donasako/templates/blog/article_password.html:7
 #: themes/donasako/templates/infosec/writeup_password.html:7
 msgid "Protected Content"
-msgstr "Contenuto protetto"
+msgstr "Protected Content"
 
 #: themes/donasako/templates/blog/article_password.html:8
 msgid "This article requires a password to access."
-msgstr "Questo articolo richiede una password per accedere."
+msgstr "This article requires a password to access."
 
 #: themes/donasako/templates/blog/article_password.html:11
 #: themes/donasako/templates/infosec/writeup_password.html:11
 msgid "Enter password"
-msgstr "Inserisci password"
+msgstr "Enter password"
 
 #: themes/donasako/templates/blog/member_list.html:7
 msgid "Team Members"
-msgstr "Membri del team"
+msgstr "Team Members"
 
 #: themes/donasako/templates/blog/member_list.html:16
 msgid "No members yet."
-msgstr "Nessun membro ancora."
+msgstr "No members yet."
 
 #: themes/donasako/templates/blog/project_list.html:8
 msgid "Open source tools and security projects"
-msgstr "Strumenti open source e progetti di sicurezza"
+msgstr "Open source tools and security projects"
 
 #: themes/donasako/templates/blog/project_list.html:12
 msgid "No projects published yet."
-msgstr "Nessun progetto pubblicato ancora."
+msgstr "No projects published yet."
 
 #: themes/donasako/templates/components/footer.html:8
 msgid "Contact"
-msgstr "Contatto"
+msgstr "Contact"
 
 #: themes/donasako/templates/components/maintenance.html:4
 msgid "We are currently performing maintenance. Please check back soon."
-msgstr "Stiamo eseguendo manutenzione. Torna presto."
+msgstr "We are currently performing maintenance. Please check back soon."
 
 #: themes/donasako/templates/components/navbar.html:9
 msgid "Toggle menu"
-msgstr "Attiva/disattiva menu"
+msgstr "Toggle menu"
 
 #: themes/donasako/templates/components/navbar.html:45
 msgid "Certs"
-msgstr "Cert"
+msgstr "Certs"
 
 #: themes/donasako/templates/components/post_footer.html:12
 msgid "Tagged"
-msgstr "Etichettato"
+msgstr "Tagged"
 
 #: themes/donasako/templates/components/post_footer.html:20
 msgid "ago"
-msgstr "fa"
+msgstr "ago"
 
 #: themes/donasako/templates/components/post_footer.html:25
 #: themes/donasako/templates/components/post_footer.html:26
 msgid "See also"
-msgstr "Vedi anche"
+msgstr "See also"
 
 #: themes/donasako/templates/core/tag_detail.html:5
 #, python-format
 msgid "All posts tagged %(tag)s"
-msgstr "Tutti i post taggati %(tag)s"
+msgstr "All posts tagged %(tag)s"
 
 #: themes/donasako/templates/education/course_list.html:8
 msgid "Structured learning paths for security research"
-msgstr "Percorsi di apprendimento strutturati per la ricerca sulla sicurezza"
+msgstr "Structured learning paths for security research"
 
 #: themes/donasako/templates/education/course_list.html:12
 msgid "No courses available yet."
-msgstr "Nessun corso disponibile ancora."
+msgstr "No courses available yet."
 
 #: themes/donasako/templates/education/course_list.html:26
 msgid "modules"
-msgstr "moduli"
+msgstr "modules"
 
 #: themes/donasako/templates/education/lesson_detail.html:137
 #: themes/donasako/templates/education/lesson_detail.html:150
 #: themes/donasako/templates/education/lesson_list.html:42
 msgid "Read"
-msgstr "Letto"
+msgstr "Read"
 
 #: themes/donasako/templates/education/lesson_list.html:20
 #: themes/donasako/templates/education/module_list.html:34
 msgid "lessons"
-msgstr "lezioni"
+msgstr "lessons"
 
 #: themes/donasako/templates/education/lesson_list.html:26
 msgid "No lessons available yet."
-msgstr "Nessuna lezione disponibile ancora."
+msgstr "No lessons available yet."
 
 #: themes/donasako/templates/education/module_list.html:17
 msgid "Version"
-msgstr "Versione"
+msgstr "Version"
 
 #: themes/donasako/templates/education/module_list.html:23
 msgid "No modules available yet."
-msgstr "Nessun modulo disponibile ancora."
+msgstr "No modules available yet."
 
 #: themes/donasako/templates/infosec/certification_list.html:8
 msgid "Professional security certifications and credentials"
-msgstr "Certificazioni professionali di sicurezza"
+msgstr "Professional security certifications and credentials"
 
 #: themes/donasako/templates/infosec/certification_list.html:12
 msgid "No certifications listed yet."
-msgstr "Nessuna certificazione elencata ancora."
+msgstr "No certifications listed yet."
 
 #: themes/donasako/templates/infosec/cve_list.html:5
 #: themes/donasako/templates/infosec/cve_list.html:6
 #: themes/donasako/templates/infosec/cve_list.html:13
 msgid "Vulnerability disclosures and security advisories"
-msgstr "Divulgazioni di vulnerabilità e avvisi di sicurezza"
+msgstr "Vulnerability disclosures and security advisories"
 
 #: themes/donasako/templates/infosec/cve_list.html:19
 msgid "No CVEs published yet."
-msgstr "Nessun CVE pubblicato ancora."
+msgstr "No CVEs published yet."
 
 #: themes/donasako/templates/infosec/cve_list.html:26
 msgid "CVSS"
@@ -1438,22 +1438,22 @@ msgstr "CVSS"
 
 #: themes/donasako/templates/infosec/cve_list.html:27
 msgid "Product"
-msgstr "Prodotto"
+msgstr "Product"
 
 #: themes/donasako/templates/infosec/writeup_list.html:5
 #: themes/donasako/templates/infosec/writeup_list.html:6
 #: themes/donasako/templates/infosec/writeup_list.html:14
 msgid "Deep-dive penetration testing reports, exploit breakdowns, and tactical lessons that I keep for future recon, audits, and CTF warmups."
-msgstr "Report approfonditi di penetration testing, analisi degli exploit e lezioni tattiche che conservo per future ricognizioni, audit e riscaldamento CTF."
+msgstr "Deep-dive penetration testing reports, exploit breakdowns, and tactical lessons that I keep for future recon, audits, and CTF warmups."
 
 #: themes/donasako/templates/infosec/writeup_list.html:27
 msgid "No writeups published yet."
-msgstr "Nessun writeup pubblicato ancora."
+msgstr "No writeups published yet."
 
 #: themes/donasako/templates/infosec/writeup_password.html:3
 msgid "Protected Writeup"
-msgstr "Writeup protetto"
+msgstr "Protected Writeup"
 
 #: themes/donasako/templates/infosec/writeup_password.html:8
 msgid "This writeup requires a password to access."
-msgstr "Questo writeup richiede una password per accedere."
+msgstr "This writeup requires a password to access."
