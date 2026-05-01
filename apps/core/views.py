@@ -1,7 +1,11 @@
 from django.conf import settings
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Count, Q
-from django.http import HttpResponse, HttpResponsePermanentRedirect, HttpResponseRedirect
+from django.http import (
+    HttpResponse,
+    HttpResponsePermanentRedirect,
+    HttpResponseRedirect,
+)
 from django.shortcuts import Http404, get_object_or_404, render
 from django.urls import reverse
 from django.utils import translation
@@ -95,6 +99,62 @@ def page_detail(request, slug):
     if page.visibility == "private" and not request.user.is_authenticated:
         raise Http404
     return render(request, "core/page.html", {"page": page})
+
+
+def tag_detail(request, slug):
+    """List every public article + writeup whose tag title slugifies to slug.
+
+    Article and writeup tags are stored as separate models with no
+    explicit slug field. We compare slugify(tag.title) to the URL slug
+    on the fly so the same `[kerberos]` tag in articles and writeups
+    lands on the same page.
+    """
+    from django.utils.text import slugify
+
+    from apps.blog.models import ArticleTag
+    from apps.infosec.models import WriteupTag
+
+    titles = set()
+    for Tag in (ArticleTag, WriteupTag):
+        for t in Tag.objects.all():
+            if slugify(t.title) == slug:
+                titles.add(t.title)
+
+    if not titles:
+        raise Http404
+
+    articles = (
+        Article.objects.filter(visibility="public", tags__title__in=titles)
+        .select_related("category")
+        .prefetch_related("translations", "tags")
+        .distinct()
+        .order_by("-published_on")
+    )
+    writeups = (
+        Writeup.objects.filter(visibility="public", tags__title__in=titles)
+        .select_related("category")
+        .prefetch_related("translations", "tags")
+        .distinct()
+        .order_by("-published_on")
+    )
+
+    if not (articles.exists() or writeups.exists()):
+        raise Http404
+
+    # Pick the canonical display title (longest, prefer with capitals).
+    display_title = sorted(titles, key=lambda t: (-len(t), t))[0]
+
+    return render(
+        request,
+        "core/tag_detail.html",
+        {
+            "tag_title": display_title,
+            "tag_slug": slug,
+            "articles": articles,
+            "writeups": writeups,
+            "total": articles.count() + writeups.count(),
+        },
+    )
 
 
 def well_known(request, filename):
