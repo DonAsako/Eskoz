@@ -1,7 +1,7 @@
 from django.shortcuts import Http404, get_object_or_404, render
 
 from apps.core.decorators import feature_active_required
-from apps.core.views import paginate_queryset
+from apps.core.views import paginate_queryset, redirect_to_available_translation
 
 from .models import CTF, CVE, Category, Certification, Writeup
 
@@ -23,6 +23,10 @@ def writeup_detail(request, slug_category, slug_writeup):
     writeup = get_object_or_404(Writeup, category=category, slug=slug_writeup)
     if writeup.visibility == "private" and not request.user.is_authenticated:
         raise Http404
+
+    redirect_response = redirect_to_available_translation(writeup, "infosec:writeup_detail", [slug_category, slug_writeup])
+    if redirect_response is not None:
+        return redirect_response
 
     if writeup.visibility == "protected":
         if request.method == "POST" and writeup.check_password(request.POST.get("password", "")):

@@ -1,8 +1,11 @@
 from django.conf import settings
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Count, Q
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponsePermanentRedirect
 from django.shortcuts import Http404, get_object_or_404, render
+from django.urls import reverse
+from django.utils import translation
+from django.utils.translation import get_language
 
 from apps.blog.models import Article, Project
 from apps.infosec.models import Writeup
@@ -97,6 +100,31 @@ def ratelimited(request, exception):
     response = render(request, "429.html", status=429)
     response["Retry-After"] = "900"
     return response
+
+
+def redirect_to_available_translation(post, url_name, url_args):
+    """
+    If the active language has no translation for ``post``, return a 301 to
+    the same view in the configured default language; if that one is also
+    missing, fall back to the first available translation alphabetically (so
+    redirects are deterministic across requests).
+
+    Returns ``None`` when the active language is already covered, in which
+    case the caller renders the page normally.
+    """
+    available = set(post.translations.values_list("language", flat=True))
+    if not available:
+        return None  # Orphan post with zero translations — let the caller render.
+    current = get_language()
+    if current in available:
+        return None
+    if settings.LANGUAGE_CODE in available:
+        target = settings.LANGUAGE_CODE
+    else:
+        target = sorted(available)[0]
+    with translation.override(target):
+        url = reverse(url_name, args=url_args)
+    return HttpResponsePermanentRedirect(url)
 
 
 def post_detail(
