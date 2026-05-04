@@ -95,7 +95,12 @@ class LessonSitemap(_TranslatablePostSitemap):
     priority = 0.7
 
     def items(self):
-        return Lesson.objects.prefetch_related("translations").select_related("module__course").order_by("module__course_id", "module_id", "order")
+        return (
+            Lesson.objects.filter(visibility="public")
+            .prefetch_related("translations")
+            .select_related("module__course")
+            .order_by("module__course_id", "module_id", "order")
+        )
 
     def location(self, obj):
         return reverse(

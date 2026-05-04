@@ -1,9 +1,24 @@
+from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 
 from apps.core.decorators import feature_active_required
 from apps.core.views import redirect_to_available_translation
 
 from .models import Course, Lesson, Module
+
+
+def _visible_lessons(module, user):
+    """Lessons in a module the given user is allowed to see.
+
+    Mirrors the Article/Writeup pattern: ``private`` lessons are hidden from
+    anonymous users and only listed to authenticated ones. The list, detail,
+    and prev/next nav must agree, otherwise we'd leak slugs through sibling
+    links even when direct access is blocked.
+    """
+    qs = Lesson.objects.filter(module=module).order_by("order")
+    if not user.is_authenticated:
+        qs = qs.filter(visibility="public")
+    return qs
 
 
 @feature_active_required(module_name="education", feature_name="courses")
@@ -23,7 +38,7 @@ def module_list(request, slug_course=""):
 def lesson_list(request, slug_course="", slug_module=""):
     course = get_object_or_404(Course, slug=slug_course)
     module = get_object_or_404(Module, slug=slug_module, course=course)
-    lessons = Lesson.objects.filter(module=module).order_by("order")
+    lessons = _visible_lessons(module, request.user)
     return render(
         request,
         "education/lesson_list.html",
@@ -37,12 +52,14 @@ def lesson_detail(request, slug_course="", slug_module="", slug_lesson=""):
     module = get_object_or_404(Module, slug=slug_module, course=course)
     lesson = get_object_or_404(Lesson, slug=slug_lesson, module=module)
 
+    if lesson.visibility == "private" and not request.user.is_authenticated:
+        raise Http404
+
     redirect_response = redirect_to_available_translation(lesson, "education:lesson_detail", [slug_course, slug_module, slug_lesson])
     if redirect_response is not None:
         return redirect_response
 
-    lessons = Lesson.objects.filter(module=module).order_by("order")
-    lesson_list = list(lessons)
+    lesson_list = list(_visible_lessons(module, request.user))
 
     try:
         current_index = lesson_list.index(lesson)

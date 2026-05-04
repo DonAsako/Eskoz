@@ -136,9 +136,9 @@ def _fallback_search(query: str, language: str) -> dict[str, list[SearchHit]]:
 def _filter_published(translations: Iterable, post_model) -> list:
     """Drop hits whose parent post isn't publicly visible.
 
-    Lessons don't carry a ``visibility`` field — they're gated by the parent
-    Module/Course access, so we accept all of them here and let the existing
-    view-level checks handle restrictions.
+    Article, Writeup and Lesson all carry a `visibility` field; we never
+    surface ``private`` rows in search results, even to authenticated users
+    — search is a public-content discovery surface.
     """
     if not hasattr(post_model, "visibility"):
         return list(translations)

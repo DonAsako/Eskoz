@@ -51,9 +51,9 @@
         </div>
 
         <div class="lesson-navigation">
-            {% if previous_lesson %}
-            <a href="{% url 'education:lesson_detail' course.slug module.slug previous_lesson.slug %}" class="lesson-nav-btn">
-                ← {{ previous_lesson.get_translation.title|truncatechars:30 }}
+            {% if prev_lesson %}
+            <a href="{% url 'education:lesson_detail' course.slug module.slug prev_lesson.slug %}" class="lesson-nav-btn">
+                ← {{ prev_lesson.get_translation.title|truncatechars:30 }}
             </a>
             {% else %}
             <span></span>
