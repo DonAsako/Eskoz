@@ -54,9 +54,33 @@ def site_settings(request):
     return {"site_settings": site_settings}
 
 
+# Single source of truth for third-party assets pulled in by theme detail
+# pages (KaTeX for math, highlight.js for code). Bumping a version means
+# updating both the URL and the SRI integrity hash here, in one place.
+MARKDOWN_CDN = {
+    "katex": {
+        "version": "0.16.25",
+        "css": "https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.css",
+        "css_sri": "sha384-WcoG4HRXMzYzfCgiyfrySxx90XSl2rxY5mnVY5TwtWE6KLrArNKn0T/mOgNL0Mmi",
+        "js": "https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.js",
+        "js_sri": "sha384-J+9dG2KMoiR9hqcFao0IBLwxt6zpcyN68IgwzsCSkbreXUjmNVRhPFTssqdSGjwQ",
+        "auto_render": "https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/contrib/auto-render.min.js",
+        "auto_render_sri": "sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh",
+    },
+    "highlight": {
+        "version": "11.11.1",
+        "css_light": "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css",
+        "css_dark": "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css",
+        "js": "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js",
+        "js_sri": "sha512-EBLzUL8XLl+va/zAsmXwS7Z2B1F9HUHkZwyS/VKwh3S7T/U0nF4BaU29EP/ZSf6zgiIxYAnKLu6bJ8dqpmX5uw==",
+    },
+}
+
+
 def active_theme(request):
     return {
         "ACTIVE_THEME": settings.ACTIVE_THEME,
+        "MARKDOWN_CDN": MARKDOWN_CDN,
     }
 
 
