@@ -1,22 +1,11 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% block head %}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.css" integrity="sha384-WcoG4HRXMzYzfCgiyfrySxx90XSl2rxY5mnVY5TwtWE6KLrArNKn0T/mOgNL0Mmi" crossorigin="anonymous">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.js" integrity="sha384-J+9dG2KMoiR9hqcFao0IBLwxt6zpcyN68IgwzsCSkbreXUjmNVRhPFTssqdSGjwQ" crossorigin="anonymous"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"
-        onload="renderMathInElement(document.querySelector('.article--content'));"></script>
-{% load static %}
-{% with markdown_css=ACTIVE_THEME|add:"/css/markdown.css" %}
-    <link rel="stylesheet" href="{% static markdown_css %}">
-{% endwith %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/vs.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js" integrity="sha512-EBLzUL8XLl+va/zAsmXwS7Z2B1F9HUHkZwyS/VKwh3S7T/U0nF4BaU29EP/ZSf6zgiIxYAnKLu6bJ8dqpmX5uw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% include 'components/markdown_assets.html' %}
 {% endblock %}
 {% block title %} - {{ article.get_translation.title }}{% endblock %}
 
-{% block meta_description %}
-<meta name="description" content="{{ article.get_translation.description|default:site_settings.seo_settings.meta_description }}">
-{% endblock %}
+{% block meta_description %}<meta name="description" content="{{ article.get_translation.description|default:site_settings.seo_settings.meta_description }}">{% endblock %}
 
 {% block og_type %}<meta property="og:type" content="article">{% endblock %}
 {% block og_title %}<meta property="og:title" content="{{ article.get_translation.title }}">{% endblock %}
@@ -50,24 +39,19 @@
 {% block structured_data %}
 {% include "components/json_ld_post.html" with post=article schema_type="Article" %}
 {% endblock %}
+
 {% block content %}
 <div class="article--container">
     <div class="article--wrapper">
         <div class="article--header">
             <h1>{{ article.get_translation.title }}</h1>
             <div class="article--meta">
-                <span class="article--meta-item">
-                    📅 {{ article.published_on|date:"j F Y" }}
-                </span>
+                <span class="article--meta-item">{% include 'components/icons.html' with name='calendar' %} {{ article.published_on|date:"j F Y" }}</span>
                 {% if article.get_translation.get_reading_time %}
-                <span class="article--meta-item">
-                    📖 {{ article.get_translation.get_reading_time }} min {% trans "read" %}
-                </span>
+                <span class="article--meta-item">{% include 'components/icons.html' with name='clock' %} {{ article.get_translation.get_reading_time }} min {% trans "read" %}</span>
                 {% endif %}
                 {% if article.category %}
-                <span class="article--meta-item">
-                    📂 {{ article.category }}
-                </span>
+                <span class="article--meta-item">{% include 'components/icons.html' with name='folder' %} {{ article.category }}</span>
                 {% endif %}
             </div>
         </div>
@@ -79,20 +63,12 @@
         <div class="article--content markdown-body">
             {{ article.get_translation.get_content_as_html }}
         </div>
+        {% include 'components/post_footer.html' %}
     </div>
     {% include 'components/toc.html' %}
 </div>
-<script>
-    hljs.highlightAll();
-    document.addEventListener("DOMContentLoaded", function() {
-        renderMathInElement(document.body, {
-            delimiters: [
-                {left: "\\[", right: "\\]", display: true},
-                {left: "$$", right: "$$", display: true},
-                {left: "$", right: "$", display: false},
-                {left: "\\(", right: "\\)", display: false}
-            ]
-        });
-    });
-</script>
+{% endblock %}
+
+{% block scripts %}
+{% include 'components/markdown_init.html' %}
 {% endblock %}

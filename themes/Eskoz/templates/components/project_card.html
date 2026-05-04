@@ -1,0 +1,36 @@
+{% load i18n %}
+<div class="article_card article_card--no-link">
+    <div class="article_card--top">
+        <div class="article_card--top-left">
+            {% if project.article %}
+            <a class="article_card--title-link" href="{% url 'blog:article_detail' project.article.category.slug project.article.slug %}">
+                <span class="article_card--title">{{ project.name }}</span>
+            </a>
+            {% else %}
+            <span class="article_card--title">{{ project.name }}</span>
+            {% endif %}
+        </div>
+        {% if project.maintainer %}
+        <p class="article_card--category">{{ project.maintainer.username }}</p>
+        {% endif %}
+    </div>
+    {% if project.description %}
+    <p class="article_card--description">{{ project.description }}</p>
+    {% endif %}
+    <div class="article_card--bottom">
+        {% if project.date_beginning %}
+        <span class="article_card--date">
+            {{ project.date_beginning|date:"F Y" }} —
+            {% if project.date_end %}{{ project.date_end|date:"F Y" }}{% else %}{% trans "Now" %}{% endif %}
+        </span>
+        {% endif %}
+        <div class="article_card--tags">
+            {% if project.website %}
+            <a class="article_card--tag" href="{{ project.website }}" target="_blank" rel="noopener">{% trans 'Website' %}</a>
+            {% endif %}
+            {% if project.source_link %}
+            <a class="article_card--tag" href="{{ project.source_link }}" target="_blank" rel="noopener">{% trans 'Source' %}</a>
+            {% endif %}
+        </div>
+    </div>
+</div>

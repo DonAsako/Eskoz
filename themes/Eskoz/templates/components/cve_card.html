@@ -1,0 +1,21 @@
+<a class="article_card"{% if cve.article %} href="{% url 'blog:article_detail' cve.article.category.slug cve.article.slug %}"{% endif %}>
+    <div class="article_card--top">
+        <div class="article_card--top-left">
+            <p class="article_card--title">{{ cve.cve_id }}</p>
+        </div>
+        {% if cve.cvss_score %}
+        <p class="article_card--category">{{ cve.cvss_severity }}</p>
+        {% endif %}
+    </div>
+    {% if cve.description %}
+    <p class="article_card--description">{{ cve.description }}</p>
+    {% endif %}
+    <div class="article_card--bottom">
+        <span class="article_card--date">{{ cve.published_date|date:"j F Y" }}</span>
+        {% if cve.cvss_score %}
+        <div class="article_card--tags">
+            <span class="article_card--tag">CVSS: {{ cve.cvss_score }}</span>
+        </div>
+        {% endif %}
+    </div>
+</a>

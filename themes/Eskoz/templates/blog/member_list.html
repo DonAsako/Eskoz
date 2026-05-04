@@ -12,36 +12,7 @@
         </div>
     {% else %}
         {% for member in members %}
-        <div class="article_card article_card-split">
-            <div class="article_card_left">
-                {% if member.picture %}
-                <img class="article_card--image" src="{{ member.picture.url }}" alt="{{ member.username }}" style="border-radius: 50%;">
-                {% endif %}
-            </div>
-            <div class="article_card_right">
-                <div class="article_card--top">
-                    <div class="article_card--top-left">
-                        <p class="article_card--title">{{ member.username }}</p>
-                    </div>
-                    {% if member.role %}
-                    <p class="article_card--category">{{ member.role }}</p>
-                    {% endif %}
-                </div>
-                {% if member.bio %}
-                <p class="article_card--description">{{ member.bio|default_if_none:'' }}</p>
-                {% endif %}
-                <div class="article_card--bottom">
-                    <div class="article_card--tags">
-                        {% if member.website %}
-                        <a class="article_card--tag" href="{{ member.website }}" target="_blank" rel="noopener">{% trans 'Website' %}</a>
-                        {% endif %}
-                        {% if member.github %}
-                        <a class="article_card--tag" href="{{ member.github }}" target="_blank" rel="noopener">GitHub</a>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
+            {% include 'components/member_card.html' with member=member %}
         {% endfor %}
     {% endif %}
 </div>

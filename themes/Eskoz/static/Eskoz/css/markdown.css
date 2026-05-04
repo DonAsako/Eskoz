@@ -84,19 +84,20 @@
 .markdown-body code {
   font-family: "SF Mono", "Consolas", monospace;
   font-size: 0.9em;
-  color: #1a1a1a;
+  color: var(--text);
 }
 
 .markdown-body :not(pre) > code {
-  background: #f0f0f0;
+  background: var(--bg-inline-code);
   padding: 0.2em 0.4em;
-  border-radius: 3px;
-  color: #c7254e;
+  border-radius: var(--radius-sm);
+  color: var(--inline-code);
 }
 
 .markdown-body pre {
-  background: #f8f8f8;
+  background: var(--bg-code);
   border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
   padding: 1rem;
   overflow-x: auto;
   margin: 1rem 0;
@@ -107,7 +108,7 @@
   padding: 0;
   font-size: 0.85rem;
   line-height: 1.6;
-  color: #1a1a1a;
+  color: var(--text);
 }
 
 /* Blockquotes */
@@ -181,46 +182,47 @@
 
 .markdown-body .admonition.note,
 .markdown-body .admonition.info {
-  border-left-color: #2563eb;
+  border-left-color: var(--accent);
 }
 .markdown-body .admonition.note .admonition-title,
 .markdown-body .admonition.info .admonition-title {
-  color: #2563eb;
+  color: var(--accent);
 }
 
 .markdown-body .admonition.tip,
 .markdown-body .admonition.hint,
 .markdown-body .admonition.success {
-  border-left-color: #16a34a;
+  border-left-color: var(--success);
 }
 .markdown-body .admonition.tip .admonition-title,
 .markdown-body .admonition.hint .admonition-title,
 .markdown-body .admonition.success .admonition-title {
-  color: #16a34a;
+  color: var(--success);
 }
 
 .markdown-body .admonition.warning,
 .markdown-body .admonition.caution {
-  border-left-color: #ca8a04;
+  border-left-color: var(--warning);
 }
 .markdown-body .admonition.warning .admonition-title,
 .markdown-body .admonition.caution .admonition-title {
-  color: #ca8a04;
+  color: var(--warning);
 }
 
 .markdown-body .admonition.danger,
 .markdown-body .admonition.error {
-  border-left-color: #dc2626;
+  border-left-color: var(--danger);
 }
 .markdown-body .admonition.danger .admonition-title,
 .markdown-body .admonition.error .admonition-title {
-  color: #dc2626;
+  color: var(--danger);
 }
 
 /* Details */
 .markdown-body details {
   margin: 1rem 0;
   border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
 }
 
 .markdown-body details summary {

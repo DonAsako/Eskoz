@@ -1,0 +1,23 @@
+<a class="article_card" href="{% url 'education:module_list' course.slug %}">
+    <div class="article_card--top">
+        <div class="article_card--top-left">
+            <p class="article_card--title">{{ course.title }}</p>
+        </div>
+        {% if course.category %}
+        <p class="article_card--category">{{ course.category }}</p>
+        {% endif %}
+    </div>
+    {% if course.get_translation.description %}
+    <p class="article_card--description">{{ course.get_translation.description }}</p>
+    {% endif %}
+    <div class="article_card--bottom">
+        <span class="article_card--date">{{ course.published_on|date:"j F Y" }}</span>
+        {% if course.tags.all %}
+        <div class="article_card--tags">
+            {% for tag in course.tags.all %}
+            <span class="article_card--tag">{{ tag.title }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</a>

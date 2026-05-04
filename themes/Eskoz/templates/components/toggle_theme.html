@@ -1,1 +1,17 @@
-<button class="toggle_theme-button" onclick="toggleTheme()"><span id="themeIcon">🌙</span></button>
+{% load i18n %}
+<button class="navbar-icon-btn theme-toggle" data-theme-toggle aria-label="{% trans 'Toggle theme' %}" type="button">
+    <svg class="theme-toggle--sun" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="8" cy="8" r="3"/>
+        <line x1="8" y1="1.5" x2="8" y2="3"/>
+        <line x1="8" y1="13" x2="8" y2="14.5"/>
+        <line x1="1.5" y1="8" x2="3" y2="8"/>
+        <line x1="13" y1="8" x2="14.5" y2="8"/>
+        <line x1="3.2" y1="3.2" x2="4.3" y2="4.3"/>
+        <line x1="11.7" y1="11.7" x2="12.8" y2="12.8"/>
+        <line x1="3.2" y1="12.8" x2="4.3" y2="11.7"/>
+        <line x1="11.7" y1="4.3" x2="12.8" y2="3.2"/>
+    </svg>
+    <svg class="theme-toggle--moon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M13.5 9.5A6 6 0 1 1 6.5 2.5a4.5 4.5 0 0 0 7 7z"/>
+    </svg>
+</button>

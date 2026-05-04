@@ -1,80 +1,69 @@
 {% load i18n %}
-<aside class="article--toc" id="toc">
-    <p style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.75rem;">
-        {% trans "On this page" %}
-    </p>
+<aside class="article--toc" id="toc" data-toc>
+    <p class="article--toc-title">{% trans "On this page" %}</p>
 </aside>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-    const content = document.querySelector(".article--content");
+(function () {
     const toc = document.getElementById("toc");
+    if (!toc || toc.dataset.tocBuilt === "1") return;
 
-    if (!content || !toc) return;
+    function build() {
+        const content = document.querySelector(".article--content");
+        if (!content) { toc.style.display = "none"; return; }
 
-    const headers = content.querySelectorAll("h1, h2, h3, h4");
-    if (!headers.length) {
-        toc.style.display = 'none';
-        return;
-    }
+        const headers = content.querySelectorAll("h1, h2, h3, h4");
+        if (!headers.length) { toc.style.display = "none"; return; }
 
-    const ul = document.createElement("ul");
+        toc.dataset.tocBuilt = "1";
 
-    headers.forEach(header => {
-        const id = header.id;
-        if (!id) return;
+        const ul = document.createElement("ul");
 
-        // Create anchor link wrapper
-        const anchor = document.createElement("a");
-        anchor.href = `#${id}`;
-        anchor.className = "article--anchor-link";
-
-        while (header.firstChild) {
-            anchor.appendChild(header.firstChild);
-        }
-
-        header.appendChild(anchor);
-
-        if (!header.id) {
-            header.id = header.textContent.trim().toLowerCase().replace(/\s+/g, '-');
-        }
-
-        // Create TOC entry
-        const li = document.createElement("li");
-        const a = document.createElement("a");
-
-        const level = parseInt(header.tagName[1]) - 1;
-        a.style.paddingLeft = `${level * 0.75}rem`;
-        a.href = `#${header.id}`;
-        a.textContent = header.textContent;
-
-        li.appendChild(a);
-        ul.appendChild(li);
-    });
-
-    toc.appendChild(ul);
-    const tocLinks = toc.querySelectorAll("a");
-
-    function onScroll() {
-        let current = null;
         headers.forEach(header => {
-            const rect = header.getBoundingClientRect();
-            if (rect.top <= 120) {
-                current = header.id;
+            if (!header.id) {
+                header.id = header.textContent.trim().toLowerCase().replace(/\s+/g, "-");
             }
+
+            // Wrap heading content in an anchor link, only once.
+            if (!header.querySelector(":scope > .article--anchor-link")) {
+                const anchor = document.createElement("a");
+                anchor.href = "#" + header.id;
+                anchor.className = "article--anchor-link";
+                while (header.firstChild) anchor.appendChild(header.firstChild);
+                header.appendChild(anchor);
+            }
+
+            const li = document.createElement("li");
+            const a = document.createElement("a");
+            const level = parseInt(header.tagName[1], 10) - 1;
+            a.style.paddingLeft = (level * 0.75) + "rem";
+            a.href = "#" + header.id;
+            a.textContent = header.textContent;
+            li.appendChild(a);
+            ul.appendChild(li);
         });
 
-        tocLinks.forEach(link => {
-            const href = link.getAttribute('href');
-            if (href && href === `#${current}`) {
-                link.parentElement.classList.add("active");
-            } else if (href) {
-                link.parentElement.classList.remove("active");
-            }
-        });
+        toc.appendChild(ul);
+
+        const tocLinks = toc.querySelectorAll("a");
+        function onScroll() {
+            let current = null;
+            headers.forEach(h => {
+                if (h.getBoundingClientRect().top <= 120) current = h.id;
+            });
+            tocLinks.forEach(link => {
+                const href = link.getAttribute("href");
+                link.parentElement && link.parentElement.classList.toggle("active", href === "#" + current);
+            });
+        }
+        document.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
     }
 
-    document.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-});
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", build);
+    } else {
+        build();
+    }
+})();
 </script>

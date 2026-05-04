@@ -14,7 +14,7 @@
 
     <form method="get" action="{% url 'core:search' %}" class="search-form" role="search">
         <input type="search" name="q" value="{{ query }}" placeholder="{% trans 'Search articles, writeups, lessons…' %}" autofocus aria-label="{% trans 'Search query' %}" class="search-form--input">
-        <button type="submit" class="search-form--button">{% trans 'Search' %}</button>
+        <button type="submit" class="btn btn--ghost">{% trans 'Search' %}</button>
     </form>
 
     {% if query %}

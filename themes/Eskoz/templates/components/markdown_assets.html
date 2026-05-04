@@ -1,0 +1,10 @@
+{% load static %}
+{% with markdown_css=ACTIVE_THEME|add:"/css/markdown.css" %}
+<link rel="stylesheet" href="{% static markdown_css %}">
+{% endwith %}
+<link rel="stylesheet" href="{{ MARKDOWN_CDN.katex.css }}" integrity="{{ MARKDOWN_CDN.katex.css_sri }}" crossorigin="anonymous">
+<link rel="stylesheet" data-hljs-theme="light" href="{{ MARKDOWN_CDN.highlight.css_light }}" crossorigin="anonymous" referrerpolicy="no-referrer">
+<link rel="stylesheet" data-hljs-theme="dark" href="{{ MARKDOWN_CDN.highlight.css_dark }}" crossorigin="anonymous" referrerpolicy="no-referrer" disabled>
+<script defer src="{{ MARKDOWN_CDN.katex.js }}" integrity="{{ MARKDOWN_CDN.katex.js_sri }}" crossorigin="anonymous"></script>
+<script defer src="{{ MARKDOWN_CDN.katex.auto_render }}" integrity="{{ MARKDOWN_CDN.katex.auto_render_sri }}" crossorigin="anonymous"></script>
+<script defer src="{{ MARKDOWN_CDN.highlight.js }}" integrity="{{ MARKDOWN_CDN.highlight.js_sri }}" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

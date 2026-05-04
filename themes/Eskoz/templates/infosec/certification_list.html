@@ -7,38 +7,13 @@
         <h2 class="article_list--title">{% trans 'Certifications' %}</h2>
     </div>
     {% if not certifications %}
-    <div class="message-wrapper">
-        <p>{% trans 'There is no certifications at the moment.' %}</p>
-    </div>
+        <div class="message-wrapper">
+            <p>{% trans 'There is no certifications at the moment.' %}</p>
+        </div>
     {% else %}
-    {% for certification in certifications %}
-    <a class="article_card article_card-split" {% if certification.article
-        %}href="{% url 'blog:article_detail' certification.article.category.slug certification.article.slug %}" {% endif
-        %}>
-        <div class="article_card_left">
-            {% if certification.picture %}
-            <img class="article_card--image" src="{{ certification.picture.url }}" alt="{{ certification.name }}">
-            {% endif %}
-        </div>
-        <div class="article_card_right">
-            <div class="article_card--top">
-                <div class="article_card--top-left">
-                    <p class="article_card--title">{{ certification.name }}</p>
-                </div>
-                {% if certification.issuer %}
-                <p class="article_card--category">{{ certification.issuer.name }}</p>
-                {% endif %}
-            </div>
-            {% if certification.description %}
-            <p class="article_card--description">{{ certification.description|default_if_none:'' }}</p>
-            {% endif %}
-            <div class="article_card--bottom">
-                <p class="article_card--date">{% trans 'Obtained on' %} {{ certification.obtained_date|date:"j F Y" }}
-                </p>
-            </div>
-        </div>
-    </a>
-    {% endfor %}
+        {% for certification in certifications %}
+            {% include 'components/certification_card.html' with certification=certification %}
+        {% endfor %}
     {% endif %}
 </div>
 {% endblock %}

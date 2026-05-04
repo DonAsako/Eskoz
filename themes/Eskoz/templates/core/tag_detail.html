@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %} - {% trans 'Tag' %} · {{ tag_title }}{% endblock %}
+{% block og_title %}<meta property="og:title" content="{% trans 'Tag' %} · {{ tag_title }} | {{ site_settings.site_name }}">{% endblock %}
+{% block meta_description %}<meta name="description" content="{% blocktrans with tag=tag_title %}All posts tagged {{ tag }}{% endblocktrans %}">{% endblock %}
+
+{% block content %}
+<div class="article_list">
+    <div class="article_list--top">
+        <div>
+            <p class="tag-page__eyebrow">{% trans 'Tag' %}</p>
+            <h2 class="article_list--title">[{{ tag_title }}]</h2>
+        </div>
+        <span class="pagination--status">{{ total }} {% if total == 1 %}{% trans 'post' %}{% else %}{% trans 'posts' %}{% endif %}</span>
+    </div>
+
+    {% if articles %}
+    <section class="tag-page__group">
+        <h3 class="tag-page__group-title">{% trans 'Articles' %} <span class="tag-page__group-count">({{ articles|length }})</span></h3>
+        {% for article in articles %}
+            {% include 'components/article_card.html' with article=article %}
+        {% endfor %}
+    </section>
+    {% endif %}
+
+    {% if writeups %}
+    <section class="tag-page__group">
+        <h3 class="tag-page__group-title">{% trans 'Writeups' %} <span class="tag-page__group-count">({{ writeups|length }})</span></h3>
+        {% for writeup in writeups %}
+            {% include 'components/writeup_card.html' with writeup=writeup %}
+        {% endfor %}
+    </section>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% load i18n %}
+{% if related_posts %}
+<aside class="post-footer">
+    <p class="post-footer__title">{% trans 'Related posts' %}</p>
+    <ul class="post-footer__list">
+        {% for post in related_posts %}
+        <li class="post-footer__item">
+            <a href="{% url related_post_url_name post.category.slug post.slug %}">{{ post.get_translation.title }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</aside>
+{% endif %}

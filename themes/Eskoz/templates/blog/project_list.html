@@ -12,39 +12,7 @@
         </div>
     {% else %}
         {% for project in projects %}
-        <a class="article_card" {% if project.article %}href="{% url 'blog:article_detail' project.article.category.slug project.article.slug %}"{% endif %}>
-            <div class="article_card--top">
-                <div class="article_card--top-left">
-                    <p class="article_card--title">{{ project.name }}</p>
-                </div>
-                {% if project.maintainer %}
-                <p class="article_card--category">{{ project.maintainer.username }}</p>
-                {% endif %}
-            </div>
-            {% if project.description %}
-            <p class="article_card--description">{{ project.description|default_if_none:'' }}</p>
-            {% endif %}
-            <div class="article_card--bottom">
-                {% if project.date_beginning %}
-                <p class="article_card--date">
-                    {{ project.date_beginning|date:"F Y" }} -
-                    {% if project.date_end %}
-                        {{ project.date_end|date:"F Y" }}
-                    {% else %}
-                        {% trans "Now" %}
-                    {% endif %}
-                </p>
-                {% endif %}
-                <div class="article_card--tags">
-                    {% if project.website %}
-                    <a class="article_card--tag" href="{{ project.website }}" target="_blank" rel="noopener" onclick="event.stopPropagation();">{% trans 'Website' %}</a>
-                    {% endif %}
-                    {% if project.source_link %}
-                    <a class="article_card--tag" href="{{ project.source_link }}" target="_blank" rel="noopener" onclick="event.stopPropagation();">{% trans 'Source' %}</a>
-                    {% endif %}
-                </div>
-            </div>
-        </a>
+            {% include 'components/project_card.html' with project=project %}
         {% endfor %}
     {% endif %}
 </div>

@@ -1,84 +1,75 @@
 {% load i18n %}
-<nav class="navbar">
-    <div class="navbar-logo">
-        <a class="navbar-logo--link" href="{% url 'core:index' %}">
-        {% if site_settings.logo %}
-            <img class="navbar-logo--img" src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}'s logo">
-        {% else %}
-            <h1>{{ site_settings.site_name }}</h1>
-        {% endif %}
-        </a>
-    </div>
-    <button class="navbar-hamburger" aria-label="{% trans 'Toggle navigation menu' %}" aria-expanded="false">
+{% with ns=request.resolver_match.namespace url_name=request.resolver_match.url_name current_slug=request.resolver_match.kwargs.slug %}
+<nav class="navbar" aria-label="{% trans 'Main navigation' %}">
+    <a class="navbar-brand" href="{% url 'core:index' %}" aria-label="{{ site_settings.site_name }}">
+    {% if site_settings.logo %}
+        <img class="navbar-brand--img" src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}">
+    {% else %}
+        <span class="navbar-brand--name">{{ site_settings.site_name }}</span>
+    {% endif %}
+    </a>
+    <button class="navbar-hamburger" aria-label="{% trans 'Toggle navigation menu' %}" aria-expanded="false" aria-controls="navbar-menu">
         <span></span>
         <span></span>
         <span></span>
     </button>
-    <ul class="navbar-items">
-        {% for page in site_settings.get_page_referenced %}
-            <li class="navbar-item">
-                <a href="{% url 'core:page_detail' page.slug %}" class="navbar-item--link">{{ page.title }}</a>
-            </li>
-            <li class="navbar-item navbar-item--separator">/</li>
-        {% endfor %}
-        {% if site_settings.blog.is_active %}
-            {% if site_settings.blog.activate_projects_page %}
-                <li class="navbar-item">
-                    <a href="{% url 'blog:project_list' %}" class="navbar-item--link">{% trans 'Projects' %}</a>
+    <div class="navbar-menu" id="navbar-menu">
+        <ul class="navbar-items">
+            {% for page in site_settings.get_page_referenced %}
+                <li class="navbar-item{% if ns == 'core' and url_name == 'page_detail' and current_slug == page.slug %} navbar-item--active{% endif %}">
+                    <a href="{% url 'core:page_detail' page.slug %}" class="navbar-item--link">{{ page.title }}</a>
                 </li>
-                <li class="navbar-item navbar-item--separator">/</li>
+            {% endfor %}
+            {% if site_settings.blog.is_active %}
+                {% if site_settings.blog.activate_articles_page %}
+                    <li class="navbar-item{% if ns == 'blog' and 'article' in url_name %} navbar-item--active{% endif %}">
+                        <a href="{% url 'blog:article_list' %}" class="navbar-item--link">{% trans 'Articles' %}</a>
+                    </li>
+                {% endif %}
+                {% if site_settings.blog.activate_projects_page %}
+                    <li class="navbar-item{% if ns == 'blog' and url_name == 'project_list' %} navbar-item--active{% endif %}">
+                        <a href="{% url 'blog:project_list' %}" class="navbar-item--link">{% trans 'Projects' %}</a>
+                    </li>
+                {% endif %}
+                {% if site_settings.blog.activate_members_page %}
+                    <li class="navbar-item{% if ns == 'blog' and 'member' in url_name %} navbar-item--active{% endif %}">
+                        <a href="{% url 'blog:member_list' %}" class="navbar-item--link">{% trans 'Members' %}</a>
+                    </li>
+                {% endif %}
             {% endif %}
-            {% if site_settings.blog.activate_articles_page %}
-                <li class="navbar-item">
-                    <a href="{% url 'blog:article_list' %}" class="navbar-item--link">{% trans 'Articles' %}</a>
-                </li>
-                <li class="navbar-item navbar-item--separator">/</li>
+            {% if site_settings.infosec.is_active %}
+                {% if site_settings.infosec.activate_writeups_page %}
+                    <li class="navbar-item{% if ns == 'infosec' and 'writeup' in url_name %} navbar-item--active{% endif %}">
+                        <a href="{% url 'infosec:writeup_list' %}" class="navbar-item--link">{% trans 'Writeups' %}</a>
+                    </li>
+                {% endif %}
+                {% if site_settings.infosec.activate_cves_page %}
+                    <li class="navbar-item{% if ns == 'infosec' and 'cve' in url_name %} navbar-item--active{% endif %}">
+                        <a href="{% url 'infosec:cve_list' %}" class="navbar-item--link">{% trans 'CVEs' %}</a>
+                    </li>
+                {% endif %}
+                {% if site_settings.infosec.activate_certifications_page %}
+                    <li class="navbar-item{% if ns == 'infosec' and 'certification' in url_name %} navbar-item--active{% endif %}">
+                        <a href="{% url 'infosec:certification_list' %}" class="navbar-item--link">{% trans 'Certifications' %}</a>
+                    </li>
+                {% endif %}
             {% endif %}
-            {% if site_settings.blog.activate_members_page %}
-                <li class="navbar-item">
-                    <a href="{% url 'blog:member_list' %}" class="navbar-item--link">{% trans 'Members' %}</a>
-                </li>
-                <li class="navbar-item navbar-item--separator">/</li>
-            {% endif %}
-        {% endif %}
-        {% if site_settings.infosec.is_active %}
-            {% if site_settings.infosec.activate_certifications_page %}
-                <li class="navbar-item">
-                    <a href="{% url 'infosec:certification_list' %}" class="navbar-item--link">{% trans 'Certifications' %}</a>
-                </li>
-                <li class="navbar-item navbar-item--separator">/</li>
-            {% endif %}
-            {% if site_settings.infosec.activate_writeups_page %}
-                <li class="navbar-item">
-                    <a href="{% url 'infosec:writeup_list' %}" class="navbar-item--link">{% trans 'Writeups' %}</a>
-                </li>
-                <li class="navbar-item navbar-item--separator">/</li>
-            {% endif %}
-            {% if site_settings.infosec.activate_cves_page %}
-                <li class="navbar-item">
-                    <a href="{% url 'infosec:cve_list' %}" class="navbar-item--link">{% trans 'CVEs' %}</a>
-                </li>
-                <li class="navbar-item navbar-item--separator">/</li>
-            {% endif %}
-        {% endif %}
-        {% if site_settings.education.is_active %}
-            {% if site_settings.education.activate_courses_page %}
-                <li class="navbar-item">
+            {% if site_settings.education.is_active and site_settings.education.activate_courses_page %}
+                <li class="navbar-item{% if ns == 'education' %} navbar-item--active{% endif %}">
                     <a href="{% url 'education:course_list' %}" class="navbar-item--link">{% trans 'Education' %}</a>
                 </li>
-                <li class="navbar-item navbar-item--separator">/</li>
             {% endif %}
-        {% endif %}
-        <li class="navbar-item navbar-item--search">
-            <a href="{% url 'core:search' %}" class="navbar-item--link" aria-label="{% trans 'Search' %}">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        </ul>
+        <div class="navbar-actions">
+            <a href="{% url 'core:search' %}" class="navbar-icon-btn{% if url_name == 'search' %} navbar-icon-btn--active{% endif %}" aria-label="{% trans 'Search' %}">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
                     <circle cx="7" cy="7" r="5"/>
                     <line x1="14" y1="14" x2="10.5" y2="10.5" stroke-linecap="round"/>
                 </svg>
             </a>
-        </li>
-        <li class="navbar-item navbar-item--lang">
+            {% include "components/toggle_theme.html" %}
             {% include "components/language_switcher.html" %}
-        </li>
-    </ul>
+        </div>
+    </div>
 </nav>
+{% endwith %}

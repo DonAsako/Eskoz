@@ -12,10 +12,6 @@
     </svg>
     <h2>{% trans '403 - Access denied' %}</h2>
     <p>{% trans "You don't have permission to access this page." %}</p>
-    <p style="margin-top: 1.5rem;">
-        <a href="/" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--accent-gradient); color: var(--bg-primary); border-radius: var(--radius-sm); font-weight: 600; text-decoration: none;">
-            ← {% trans "Back to homepage" %}
-        </a>
-    </p>
+    <a class="btn btn--ghost" href="/">← {% trans "Back to homepage" %}</a>
 </div>
 {% endblock %}

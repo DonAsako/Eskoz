@@ -1,0 +1,22 @@
+<a class="article_card" href="{% url 'education:lesson_detail' course.slug module.slug lesson.slug %}" data-lesson="{{ lesson.slug }}">
+    <div class="article_card--top">
+        <div class="article_card--top-left">
+            <p class="article_card--title">{{ lesson.get_translation.title }}</p>
+        </div>
+    </div>
+    {% if lesson.get_translation.description %}
+    <p class="article_card--description">{{ lesson.get_translation.description }}</p>
+    {% endif %}
+    <div class="article_card--bottom">
+        {% if lesson.get_translation.get_reading_time %}
+        <span class="article_card--reading-time">{% include 'components/icons.html' with name='clock' %} {{ lesson.get_translation.get_reading_time }} min</span>
+        {% endif %}
+        {% if lesson.tags.all %}
+        <div class="article_card--tags">
+            {% for tag in lesson.tags.all %}
+            <span class="article_card--tag">{{ tag.title }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</a>

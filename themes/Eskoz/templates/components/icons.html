@@ -1,0 +1,13 @@
+{% comment %}
+Reusable inline SVG icons. Pattern: {% include 'components/icons.html' with name="calendar" %}
+Sized via .icon CSS class (16px). Color inherits via currentColor.
+{% endcomment %}{% spaceless %}
+{% if name == "calendar" %}
+<svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="11" rx="1.5"/><line x1="2" y1="6.5" x2="14" y2="6.5"/><line x1="5" y1="2" x2="5" y2="4.5"/><line x1="11" y1="2" x2="11" y2="4.5"/></svg>
+{% elif name == "clock" %}
+<svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="6"/><polyline points="8 5 8 8 10.5 9.5"/></svg>
+{% elif name == "folder" %}
+<svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4.5A1.5 1.5 0 0 1 3.5 3h2.7l1.4 1.5H12.5A1.5 1.5 0 0 1 14 6v6.5A1.5 1.5 0 0 1 12.5 14h-9A1.5 1.5 0 0 1 2 12.5z"/></svg>
+{% elif name == "bolt" %}
+<svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="9 1 2.5 9.5 8 9.5 7 15 13.5 6.5 8 6.5"/></svg>
+{% endif %}{% endspaceless %}

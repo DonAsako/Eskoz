@@ -1,0 +1,28 @@
+<a class="article_card" href="{% url 'infosec:writeup_detail' writeup.category.slug writeup.slug %}">
+    <div class="article_card--top">
+        <div class="article_card--top-left">
+            <p class="article_card--title">{{ writeup.get_translation.title }}</p>
+        </div>
+        {% if writeup.category %}
+        <p class="article_card--category">{{ writeup.category }}</p>
+        {% endif %}
+    </div>
+    {% if writeup.get_translation.description %}
+    <p class="article_card--description">{{ writeup.get_translation.description }}</p>
+    {% endif %}
+    <div class="article_card--bottom">
+        <div class="article_card--meta">
+            <span class="article_card--date">{{ writeup.published_on|date:"j F Y" }}</span>
+            {% if writeup.get_translation.get_reading_time %}
+            <span class="article_card--reading-time">{% include 'components/icons.html' with name='clock' %} {{ writeup.get_translation.get_reading_time }} min</span>
+            {% endif %}
+        </div>
+        {% if writeup.tags.all %}
+        <div class="article_card--tags">
+            {% for tag in writeup.tags.all %}
+            <span class="article_card--tag">{{ tag.title }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</a>

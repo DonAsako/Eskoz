@@ -8,8 +8,10 @@
 <div class="article_list">
     <div class="article_list--top">
         <h2 class="article_list--title">{% trans 'Writeups' %}</h2>
-        {% include "components/category_selector.html" with categories=categories base_url="writeups" %}
-        {% include "components/per_page_selector.html" %}
+        <div class="article_list--actions">
+            {% include "components/category_selector.html" with categories=categories base_url="writeups" %}
+            {% include "components/per_page_selector.html" %}
+        </div>
     </div>
     {% if not writeups %}
         <div class="message-wrapper">
@@ -17,30 +19,7 @@
         </div>
     {% else %}
         {% for writeup in writeups %}
-        <a class="article_card" href="{% url 'infosec:writeup_detail' writeup.category.slug writeup.slug %}">
-            <div class="article_card--top">
-                <div class="article_card--top-left">
-                    <p class="article_card--title">{{ writeup.get_translation.title }}</p>
-                </div>
-                {% if writeup.category %}
-                    <p class="article_card--category">{{ writeup.category }}</p>
-                {% endif %}
-            </div>
-            {% if writeup.get_translation.description %}
-                <p class="article_card--description">{{ writeup.get_translation.description|default_if_none:'' }}</p>
-            {% endif %}
-            <div class="article_card--bottom">
-                <p class="article_card--date">{{ writeup.published_on|date:"j F Y" }}</p>
-                {% if writeup.get_translation.get_reading_time %}
-                <span class="article_card--reading-time">📖 {{ writeup.get_translation.get_reading_time }} min</span>
-                {% endif %}
-                <div class="article_card--tags">
-                    {% for tag in writeup.tags.all %}
-                        <p class="article_card--tag">{{ tag.title }}</p>
-                    {% endfor %}
-                </div>
-            </div>
-        </a>
+            {% include 'components/writeup_card.html' with writeup=writeup %}
         {% endfor %}
         {% include "components/pagination.html" %}
     {% endif %}

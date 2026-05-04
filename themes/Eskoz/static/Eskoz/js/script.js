@@ -2,22 +2,25 @@ document.addEventListener('DOMContentLoaded', () => {
   // Mobile menu
   const navbar = document.querySelector('.navbar');
   if (navbar) {
-    let hamburger = navbar.querySelector('.navbar-hamburger');
-    const navItems = navbar.querySelector('.navbar-items');
+    const hamburger = navbar.querySelector('.navbar-hamburger');
+    const menu = navbar.querySelector('.navbar-menu');
 
-    if (navItems && hamburger) {
+    if (menu && hamburger) {
+      const close = () => {
+        menu.classList.remove('active');
+        hamburger.classList.remove('active');
+        hamburger.setAttribute('aria-expanded', 'false');
+      };
       hamburger.addEventListener('click', () => {
-        navItems.classList.toggle('active');
-        hamburger.classList.toggle('active');
-        document.body.style.overflow = navItems.classList.contains('active') ? 'hidden' : '';
+        const open = menu.classList.toggle('active');
+        hamburger.classList.toggle('active', open);
+        hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
       });
-
-      navItems.querySelectorAll('.navbar-item--link').forEach(link => {
-        link.addEventListener('click', () => {
-          navItems.classList.remove('active');
-          hamburger.classList.remove('active');
-          document.body.style.overflow = '';
-        });
+      menu.querySelectorAll('.navbar-item--link').forEach(link => {
+        link.addEventListener('click', close);
+      });
+      document.addEventListener('click', e => {
+        if (menu.classList.contains('active') && !navbar.contains(e.target)) close();
       });
     }
   }
@@ -48,6 +51,33 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   }
+
+  // Theme toggle: flip data-theme + swap which highlight.js stylesheet is enabled
+  function applyHighlightTheme(mode) {
+    document.querySelectorAll('link[data-hljs-theme]').forEach(link => {
+      link.disabled = link.dataset.hljsTheme !== mode;
+    });
+  }
+  applyHighlightTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
+  document.querySelectorAll('[data-theme-toggle]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      if (next === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+      }
+      applyHighlightTheme(next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  });
+
+  // Close <details> category-picker on outside click
+  document.querySelectorAll('.category-picker').forEach(picker => {
+    document.addEventListener('click', e => {
+      if (picker.open && !picker.contains(e.target)) picker.open = false;
+    });
+  });
 
   // Lesson list badges
   const lessonCards = document.querySelectorAll('.article_card[data-lesson]');

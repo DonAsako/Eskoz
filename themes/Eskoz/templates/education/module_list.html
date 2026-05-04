@@ -2,6 +2,7 @@
 {% load i18n %}
 {% block title %} - {{ course.title }}{% endblock %}
 {% block content %}
+{% include 'components/education_breadcrumb.html' with course=course %}
 <div class="article_list">
     <div class="article_list--top">
         <h2 class="article_list--title">{{ course.title }}</h2>
@@ -12,23 +13,7 @@
         </div>
     {% else %}
         {% for module in modules.all %}
-        <a class="article_card" href="{% url "education:lesson_list" course.slug module.slug %}">
-            <div class="article_card--top">
-                <div class="article_card--top-left">
-                    <p class="article_card--title">{{ module.title }}</p>
-                </div>
-            </div>
-            {% if module.get_translation.description %}
-                <p class="article_card--description">{{ module.get_translation.description|default_if_none:'' }}</p>
-            {% endif %}
-            <div class="article_card--bottom">
-                <div class="article_card--tags">
-                    {% for tag in module.tags.all %}
-                        <p class="article_card--tag">{{ tag.title }}</p>
-                    {% endfor %}
-                </div>
-            </div>
-        </a>
+            {% include 'components/module_card.html' with module=module course=course %}
         {% endfor %}
     {% endif %}
 </div>

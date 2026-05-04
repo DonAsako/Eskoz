@@ -1,0 +1,28 @@
+<a class="article_card" href="{% url 'blog:article_detail' article.category.slug article.slug %}">
+    <div class="article_card--top">
+        <div class="article_card--top-left">
+            <p class="article_card--title">{{ article.get_translation.title }}</p>
+        </div>
+        {% if article.category %}
+        <p class="article_card--category">{{ article.category }}</p>
+        {% endif %}
+    </div>
+    {% if article.get_translation.description %}
+    <p class="article_card--description">{{ article.get_translation.description }}</p>
+    {% endif %}
+    <div class="article_card--bottom">
+        <div class="article_card--meta">
+            <span class="article_card--date">{{ article.published_on|date:"j F Y" }}</span>
+            {% if article.get_translation.get_reading_time %}
+            <span class="article_card--reading-time">{% include 'components/icons.html' with name='clock' %} {{ article.get_translation.get_reading_time }} min</span>
+            {% endif %}
+        </div>
+        {% if article.tags.all %}
+        <div class="article_card--tags">
+            {% for tag in article.tags.all %}
+            <span class="article_card--tag">{{ tag.title }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</a>

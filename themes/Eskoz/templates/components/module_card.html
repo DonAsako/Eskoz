@@ -1,0 +1,19 @@
+<a class="article_card" href="{% url 'education:lesson_list' course.slug module.slug %}">
+    <div class="article_card--top">
+        <div class="article_card--top-left">
+            <p class="article_card--title">{{ module.title }}</p>
+        </div>
+    </div>
+    {% if module.get_translation.description %}
+    <p class="article_card--description">{{ module.get_translation.description }}</p>
+    {% endif %}
+    {% if module.tags.all %}
+    <div class="article_card--bottom">
+        <div class="article_card--tags">
+            {% for tag in module.tags.all %}
+            <span class="article_card--tag">{{ tag.title }}</span>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</a>

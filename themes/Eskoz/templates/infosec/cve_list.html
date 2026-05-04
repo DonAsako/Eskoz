@@ -8,7 +8,9 @@
 <div class="article_list">
     <div class="article_list--top">
         <h2 class="article_list--title">{% trans 'CVEs' %}</h2>
-        {% include "components/per_page_selector.html" %}
+        <div class="article_list--actions">
+            {% include "components/per_page_selector.html" %}
+        </div>
     </div>
     {% if not cves %}
         <div class="message-wrapper">
@@ -16,27 +18,7 @@
         </div>
     {% else %}
         {% for cve in cves %}
-        <a class="article_card" {% if cve.article %}href="{% url 'blog:article_detail' cve.article.category.slug cve.article.slug %}"{% endif %}>
-            <div class="article_card--top">
-                <div class="article_card--top-left">
-                    <p class="article_card--title">{{ cve.cve_id }}</p>
-                </div>
-                {% if cve.cvss_score %}
-                <p class="article_card--category">{{ cve.cvss_severity }}</p>
-                {% endif %}
-            </div>
-            {% if cve.description %}
-            <p class="article_card--description">{{ cve.description|default_if_none:'' }}</p>
-            {% endif %}
-            <div class="article_card--bottom">
-                <p class="article_card--date">{{ cve.published_date|date:"j F Y" }}</p>
-                <div class="article_card--tags">
-                    {% if cve.cvss_score %}
-                    <p class="article_card--tag">CVSS: {{ cve.cvss_score }}</p>
-                    {% endif %}
-                </div>
-            </div>
-        </a>
+            {% include 'components/cve_card.html' with cve=cve %}
         {% endfor %}
         {% include "components/pagination.html" %}
     {% endif %}

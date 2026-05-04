@@ -1,0 +1,34 @@
+{% load i18n %}
+<nav class="breadcrumb" aria-label="{% trans 'Breadcrumb' %}">
+    <ol class="breadcrumb__list">
+        <li class="breadcrumb__item">
+            <a href="{% url 'education:course_list' %}" class="breadcrumb__link">{% trans 'Education' %}</a>
+        </li>
+        {% if course %}
+        <li class="breadcrumb__item">
+            <span class="breadcrumb__sep" aria-hidden="true">›</span>
+            {% if module or lesson %}
+            <a href="{% url 'education:module_list' course.slug %}" class="breadcrumb__link">{{ course.title }}</a>
+            {% else %}
+            <span class="breadcrumb__current" aria-current="page">{{ course.title }}</span>
+            {% endif %}
+        </li>
+        {% endif %}
+        {% if module %}
+        <li class="breadcrumb__item">
+            <span class="breadcrumb__sep" aria-hidden="true">›</span>
+            {% if lesson %}
+            <a href="{% url 'education:lesson_list' course.slug module.slug %}" class="breadcrumb__link">{{ module.title }}</a>
+            {% else %}
+            <span class="breadcrumb__current" aria-current="page">{{ module.title }}</span>
+            {% endif %}
+        </li>
+        {% endif %}
+        {% if lesson %}
+        <li class="breadcrumb__item">
+            <span class="breadcrumb__sep" aria-hidden="true">›</span>
+            <span class="breadcrumb__current" aria-current="page">{{ lesson.get_translation.title }}</span>
+        </li>
+        {% endif %}
+    </ol>
+</nav>
