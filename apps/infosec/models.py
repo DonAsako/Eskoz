@@ -184,6 +184,8 @@ class CVE(models.Model):
 
     def cvss_severity(self) -> str:
         score = self.cvss_score
+        if score is None:
+            return "unknown"
         if score >= 9:
             return "critical"
         elif score >= 7:
