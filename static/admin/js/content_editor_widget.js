@@ -34,7 +34,7 @@ async function sendContentToPreview(content, id) {
             <!DOCTYPE html>
             <html>
                 <head>
-                
+
                     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/base16/dracula.min.css" integrity="sha512-zKpFlhUX8c+WC6H/XTJavnEpWFt2zH9BU9vu0Hry5Y+SEgG21pRMFcecS7DgDXIegXBQ3uK9puwWPP3h6WSR9g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -71,7 +71,7 @@ async function sendContentToPreview(content, id) {
             const contentContainer = iframeDoc.querySelector(".article--content");
             contentContainer.innerHTML = data.html;
             iframe.contentWindow.hljs.highlightAll();
-            
+
             if (iframe.contentWindow.renderMathInElement) {
                 iframe.contentWindow.renderMathInElement(
                     iframeDoc.body,
@@ -99,7 +99,7 @@ function initTextareas(textareas) {
 
         textarea.dataset.listenerAttached = "true";
         const id = textarea.id;
-        
+
         sendContentToPreview(textarea.value, id);
 
         const smoothUpdate = debounce((value) => {
