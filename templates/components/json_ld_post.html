@@ -5,7 +5,7 @@ Required context: `post` (an AbstractPost instance) and a `schema_type`
 {% endcomment %}
 {% load i18n %}
 {% spaceless %}
-<script type="application/ld+json">
+    <script type="application/ld+json">
 {
     "@context": "https://schema.org",
     "@type": "{{ schema_type|default:'Article' }}",
@@ -34,5 +34,5 @@ Required context: `post` (an AbstractPost instance) and a `schema_type`
     "keywords": "{% for tag in post.tags.all %}{{ tag.title|escapejs }}{% if not forloop.last %}, {% endif %}{% endfor %}"{% endif %}{% if post.category %},
     "articleSection": "{{ post.category|escapejs }}"{% endif %}
 }
-</script>
+    </script>
 {% endspaceless %}

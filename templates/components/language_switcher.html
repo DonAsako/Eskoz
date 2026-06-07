@@ -6,17 +6,21 @@ SITE_LANGUAGES = languages with actual translations in DB (so we don't list ~100
 PATH_AFTER_LANG = request.path with the active /<lang>/ stripped, safe for multi-char codes.
 {% endcomment %}
 <details class="lang-switcher">
-    <summary class="lang-switcher--current" aria-label="{% trans 'Switch language' %}">
+    <summary class="lang-switcher--current"
+             aria-label="{% trans 'Switch language' %}">
         <span>{{ CURRENT_LANG|upper }}</span>
         <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
-            <path d="M2 4l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 4l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
     </summary>
     <ul class="lang-switcher--menu">
         {% for lang_code, lang_name in SITE_LANGUAGES %}
             {% if lang_code != CURRENT_LANG %}
                 <li>
-                    <a href="/{{ lang_code }}{{ PATH_AFTER_LANG }}" hreflang="{{ lang_code }}" rel="alternate" title="{{ lang_name }}">{{ lang_code|upper }}</a>
+                    <a href="/{{ lang_code }}{{ PATH_AFTER_LANG }}"
+                       hreflang="{{ lang_code }}"
+                       rel="alternate"
+                       title="{{ lang_name }}">{{ lang_code|upper }}</a>
                 </li>
             {% endif %}
         {% endfor %}

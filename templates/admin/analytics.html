@@ -1,16 +1,15 @@
 {% extends 'admin/base.html' %}
-
 {% load i18n %}
-
-{% block title %}{% trans "Analytics" %} | {{ site_title|default:_('Django site admin') }}{% endblock %}
-
+{% block title %}
+    {% trans "Analytics" %} | {{ site_title|default:_("Django site admin") }}
+{% endblock %}
 {% block branding %}
     {% include "unfold/helpers/site_branding.html" %}
 {% endblock %}
-
 {% block content %}
-    <h1 class="mb-6 text-xl font-semibold text-font-important-light dark:text-font-important-dark">{% trans "Analytics" %}</h1>
-
+    <h1 class="mb-6 text-xl font-semibold text-font-important-light dark:text-font-important-dark">
+        {% trans "Analytics" %}
+    </h1>
     {# ---- Summary cards ---- #}
     <div class="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-5">
         {% for label, value in cards %}
@@ -20,19 +19,21 @@
             </div>
         {% endfor %}
     </div>
-
     {# ---- Daily bar chart ---- #}
     {% if views_series %}
         <div class="mb-8 rounded-default border border-base-200 bg-white p-4 dark:border-base-800 dark:bg-base-900">
             <div class="mb-3 flex items-baseline justify-between">
-                <h2 class="font-semibold text-font-important-light dark:text-font-important-dark">{% trans "Views per day (30 days)" %}</h2>
+                <h2 class="font-semibold text-font-important-light dark:text-font-important-dark">
+                    {% trans "Views per day (30 days)" %}
+                </h2>
                 <span class="text-font-subtle-light text-xs dark:text-font-subtle-dark">{% trans "peak" %} {{ views_peak }}</span>
             </div>
             <div class="flex h-28 items-end gap-[2px]">
                 {% for d in views_series %}
                     <div class="group flex-1" title="{{ d.day }} — {{ d.count }}">
                         <div class="w-full rounded-t bg-primary-600 transition-colors group-hover:bg-primary-500 dark:bg-primary-500 dark:group-hover:bg-primary-400"
-                             style="height: {{ d.pct }}%; min-height: {% if d.count %}3px{% else %}0{% endif %}"></div>
+                             style="height: {{ d.pct }}%;
+                                    min-height: {% if d.count %}3px{% else %}0{% endif %}"></div>
                     </div>
                 {% endfor %}
             </div>
@@ -42,7 +43,6 @@
             </div>
         </div>
     {% endif %}
-
     <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
         {# ---- Top content ---- #}
         <div class="rounded-default border border-base-200 bg-white dark:border-base-800 dark:bg-base-900">
@@ -54,7 +54,8 @@
                     <li class="flex items-center gap-3 px-4 py-2 text-sm">
                         <span class="grow truncate">
                             {% if item.url %}
-                                <a href="{{ item.url }}" class="font-medium text-primary-600 hover:underline dark:text-primary-500">{{ item.title }}</a>
+                                <a href="{{ item.url }}"
+                                   class="font-medium text-primary-600 hover:underline dark:text-primary-500">{{ item.title }}</a>
                             {% else %}
                                 <span class="font-medium text-font-default-light dark:text-font-default-dark">{{ item.title }}</span>
                             {% endif %}
@@ -67,7 +68,6 @@
                 {% endfor %}
             </ul>
         </div>
-
         {# ---- Top pages ---- #}
         <div class="rounded-default border border-base-200 bg-white dark:border-base-800 dark:bg-base-900">
             <h2 class="border-b border-base-200 font-semibold px-4 py-3 text-font-important-light dark:border-base-800 dark:text-font-important-dark">
@@ -76,7 +76,8 @@
             <ul class="divide-y divide-base-200 dark:divide-base-800">
                 {% for page in top_pages %}
                     <li class="flex items-center gap-3 px-4 py-2 text-sm">
-                        <a href="{{ page.path }}" class="grow truncate text-primary-600 hover:underline dark:text-primary-500">{{ page.path }}</a>
+                        <a href="{{ page.path }}"
+                           class="grow truncate text-primary-600 hover:underline dark:text-primary-500">{{ page.path }}</a>
                         <span class="shrink-0 font-medium text-font-default-light dark:text-font-default-dark">{{ page.n }}</span>
                     </li>
                 {% empty %}
@@ -85,7 +86,6 @@
             </ul>
         </div>
     </div>
-
     {# ---- Referrers ---- #}
     {% if top_referrers %}
         <div class="mt-8 rounded-default border border-base-200 bg-white dark:border-base-800 dark:bg-base-900">
