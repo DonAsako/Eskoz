@@ -1,14 +1,14 @@
-import markdown
 from django.apps import apps
 from django.conf import settings
 from django.contrib.admin import AdminSite
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed, JsonResponse
+from django.http import HttpResponseBadRequest, HttpResponseNotAllowed, JsonResponse
 from django.urls import path
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django_ratelimit.decorators import ratelimit
 
 from apps.core.models import SiteSettings
+from apps.core.utils import get_content_as_html
 
 
 class EskozAdminSite(AdminSite):
@@ -179,56 +179,10 @@ class EskozAdminSite(AdminSite):
         return JsonResponse({"value": new_value, "label": str(label), "css": new_value})
 
     def content_preview(self, request):
-        if request.method == "POST":
-            content = request.POST.get("content", "")
-            html = markdown.markdown(
-                content,
-                extensions=[
-                    "extra",
-                    "fenced_code",
-                    "toc",
-                    "pymdownx.blocks.admonition",
-                    "pymdownx.arithmatex",
-                    "pymdownx.details",
-                    "pymdownx.superfences",
-                    "pymdownx.highlight",
-                ],
-                extension_configs={
-                    "pymdownx.highlight": {
-                        "use_pygments": False,
-                    },
-                    "pymdownx.arithmatex": {
-                        "generic": True,
-                    },
-                    "pymdownx.blocks.admonition": {
-                        "types": [
-                            "note",
-                            "info",
-                            "tip",
-                            "success",
-                            "warning",
-                            "caution",
-                            "danger",
-                            "error",
-                            "example",
-                            "abstract",
-                            "summary",
-                            "tldr",
-                            "quote",
-                            "cite",
-                            "question",
-                            "faq",
-                            "help",
-                            "bug",
-                            "security",
-                            "flag",
-                            "ctf",
-                        ]
-                    },
-                },
-            )
-            return JsonResponse({"html": (html)})
-        return HttpResponse(request, status="401")
+        if request.method != "POST":
+            return HttpResponseNotAllowed(["POST"])
+        content = request.POST.get("content", "")
+        return JsonResponse({"html": get_content_as_html(content)})
 
 
 admin_site = EskozAdminSite(name="admin")
