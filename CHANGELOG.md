@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/DonAsako/Eskoz/compare/v0.4.0...v0.5.0) (2026-06-07)
+
+
+### Features
+
+* add title and favicon ([a92e3e9](https://github.com/DonAsako/Eskoz/commit/a92e3e9c78e6b7472cb7f4517750d6a13b7aa265))
+
 ## [0.4.0](https://github.com/DonAsako/Eskoz/compare/v0.3.0...v0.4.0) (2026-06-07)
 
 
