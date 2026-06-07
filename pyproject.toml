@@ -54,3 +54,15 @@ max-locals = 20
 "**/tests.py" = ["S101", "S106", "ARG", "PLR2004"]
 "**/test_*.py" = ["S101", "S106", "ARG", "PLR2004"]
 "manage.py" = ["INP001"]
+
+# Django-aware HTML formatter/linter. The stock VS Code HTML formatter wraps
+# long lines mid-tag (splitting `{{ ... }}` across lines, which Django then
+# renders as literal text); djLint understands template tags and never does.
+[tool.djlint]
+profile = "django"
+indent = 4
+max_line_length = 120
+format_css = false
+format_js = false
+# Bundled theme is a separate repo (submodule) with its own conventions.
+exclude = "themes,staticfiles,media,venv,.venv"

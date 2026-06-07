@@ -6,5 +6,11 @@
       "source.fixAll.ruff": "explicit",
       "source.organizeImports.ruff": "explicit"
     }
+  },
+  "files.associations": {
+    "**/templates/**/*.html": "django-html"
+  },
+  "[django-html]": {
+    "editor.defaultFormatter": "monosans.djlint"
   }
 }

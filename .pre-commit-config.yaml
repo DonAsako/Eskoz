@@ -27,6 +27,12 @@ repos:
         args: ["--fix"]
       - id: ruff-format
 
+  - repo: https://github.com/djlint/djLint
+    rev: v1.36.4
+    hooks:
+      - id: djlint-reformat-django
+        files: ^templates/.*\.html$
+
   - repo: https://github.com/adrienverge/yamllint
     rev: v1.35.1
     hooks:
