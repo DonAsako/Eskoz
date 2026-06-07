@@ -143,11 +143,11 @@ class User2FAInline(admin.StackedInline):
     @admin.display(description=_("Authentication QR Code"))
     def qr_code(self, obj):
         if not obj or not obj.secret_key:
-            return mark_safe(f'<p class="tfa-empty">{_("No 2FA secret key set yet.")}</p>')
+            return mark_safe(f'<p class="tfa-empty">{_("No 2FA secret key set yet.")}</p>')  # noqa: S308
 
         uri = obj.get_otpauth_uri()
         copy_label = _("Copy")
-        return mark_safe(
+        return mark_safe(  # noqa: S308  - renders system-generated 2FA values (QR/secret/URI), no user input
             f"""
             <div class="tfa-grid">
                 <div class="tfa-qr">{obj.get_otp_qr_code()}</div>
@@ -177,7 +177,7 @@ class User2FAInline(admin.StackedInline):
             return ""
 
         if obj.backup_codes_viewed:
-            return mark_safe(
+            return mark_safe(  # noqa: S308  - static translated string, no user input
                 f'<p class="tfa-empty">{_("Backup codes have already been displayed once. Disable then re-enable 2FA to regenerate them.")}</p>'
             )
 
@@ -193,7 +193,7 @@ class User2FAInline(admin.StackedInline):
             obj.backup_codes_viewed = True
             obj.save(update_fields=["backup_codes_viewed"])
 
-        return mark_safe(
+        return mark_safe(  # noqa: S308  - renders system-generated backup codes, no user input
             f"""
             <div class="tfa-backup">
                 <div class="tfa-backup__head">
@@ -240,7 +240,7 @@ class UserAdmin(BaseUserAdmin):
                 increment=True,
             )
             if limited:
-                raise Ratelimited()
+                raise Ratelimited
         return super().change_view(request, object_id, form_url, extra_context)
 
     def has_change_permission(self, request, obj=None):
@@ -273,7 +273,7 @@ class UserAdmin(BaseUserAdmin):
             if obj.id != request.user.id:
                 fields = tuple(f for f in fields if f != "password")
 
-            fields = tuple(f for f in fields if f not in ("user_permissions",))
+            fields = tuple(f for f in fields if f != "user_permissions")
 
             new_fieldsets.append((title, {"fields": fields}))
 

@@ -24,7 +24,9 @@ def writeup_detail(request, slug_category, slug_writeup):
     if writeup.visibility == "private" and not request.user.is_authenticated:
         raise Http404
 
-    redirect_response = redirect_to_available_translation(writeup, "infosec:writeup_detail", [slug_category, slug_writeup])
+    redirect_response = redirect_to_available_translation(
+        writeup, "infosec:writeup_detail", [slug_category, slug_writeup]
+    )
     if redirect_response is not None:
         return redirect_response
 

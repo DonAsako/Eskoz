@@ -90,8 +90,7 @@ def index(request):
     }
     if page:
         return render(request, "core/page.html", {"page": page, **context})
-    else:
-        return render(request, "core/index.html", context)
+    return render(request, "core/index.html", context)
 
 
 def page_detail(request, slug):
@@ -222,7 +221,7 @@ def verify_2fa_view(request):
             method="POST",
             increment=True,
         ):
-            raise Ratelimited()
+            raise Ratelimited
 
         code = (request.POST.get("code") or "").strip().replace(" ", "").replace("-", "")
         if tfa.verify_otp(code):
@@ -232,7 +231,8 @@ def verify_2fa_view(request):
             request.session["2fa_verified"] = True
             messages.warning(
                 request,
-                _("Backup code consumed. %(remaining)d codes remain — generate new ones soon.") % {"remaining": len(tfa.backup_codes)},
+                _("Backup code consumed. %(remaining)d codes remain — generate new ones soon.")
+                % {"remaining": len(tfa.backup_codes)},
             )
             return HttpResponseRedirect(request.GET.get("next") or reverse("admin:index"))
         error = _("Invalid code. Try again.")
@@ -300,7 +300,7 @@ def post_detail(
     post_model,
     slug,
     template_detail,
-    template_password="blog/post_password.html",
+    template_password="blog/post_password.html",  # noqa: S107  - template path, not a credential
 ):
     """
     Render the detail page of a single post instance.
@@ -369,9 +369,9 @@ def posts_list(
     category_field = post_model._meta.get_field("category")
     related_name = category_field.remote_field.related_name
 
-    categories = category_model.objects.annotate(num_posts=Count(related_name, filter=Q(**{f"{related_name}__visibility": "public"}))).filter(
-        num_posts__gt=0
-    )
+    categories = category_model.objects.annotate(
+        num_posts=Count(related_name, filter=Q(**{f"{related_name}__visibility": "public"}))
+    ).filter(num_posts__gt=0)
 
     return render(
         request,

@@ -312,7 +312,9 @@ class AbstractPostTranslation(AbstractTranslatableMarkdownItemTranslation):
         """
         Returns the parent post (must be implemented by subclass if ForeignKey name differs).
         """
-        raise NotImplementedError("Each subclass of AbstractPostTranslation must define a ForeignKey to its Post model.")
+        raise NotImplementedError(
+            "Each subclass of AbstractPostTranslation must define a ForeignKey to its Post model."
+        )
 
 
 class AbstractTag(models.Model):

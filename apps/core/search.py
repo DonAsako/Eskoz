@@ -12,8 +12,8 @@ hreflang strategy means each language is a distinct content surface, so
 mixing them in results would dilute relevance.
 """
 
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Iterable
 
 from django.db import connection
 from django.db.models import Case, Q, Value, When
@@ -103,7 +103,8 @@ def _postgres_search(query: str, language: str) -> dict[str, list[SearchHit]]:
             .order_by("-rank")[:30]
         )
         results[key] = [
-            SearchHit(post=t.translatable_content, translation=t, rank=float(t.rank)) for t in _filter_published(translations, post_model)
+            SearchHit(post=t.translatable_content, translation=t, rank=float(t.rank))
+            for t in _filter_published(translations, post_model)
         ]
     return results
 
@@ -128,7 +129,8 @@ def _fallback_search(query: str, language: str) -> dict[str, list[SearchHit]]:
             .order_by("-rank", "-id")[:30]
         )
         results[key] = [
-            SearchHit(post=t.translatable_content, translation=t, rank=float(t.rank)) for t in _filter_published(translations, post_model)
+            SearchHit(post=t.translatable_content, translation=t, rank=float(t.rank))
+            for t in _filter_published(translations, post_model)
         ]
     return results
 

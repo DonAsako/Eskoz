@@ -1,0 +1,56 @@
+[tool.ruff]
+line-length = 120
+target-version = "py313"
+exclude = [".venv", "venv", "env", "__pycache__", "staticfiles", "media", "themes", "*/migrations/*"]
+
+[tool.ruff.format]
+quote-style = "preserve"
+
+[tool.ruff.lint]
+task-tags = ["TODO"]
+unfixable = ["F841"]
+ignore = [
+    "UP015", "E501", "PYI041", "SIM103", "SIM108", "SIM110", "TD003",
+    "COM812", "ISC001",
+    "G003", "G004",
+    "S311", "S101",
+    "PERF401", "PERF403",
+    "PLR2004",
+    "TRY002", "TRY003", "TRY300", "TRY301",
+    "N802", "N803", "N805", "N806", "N812", "N815",
+    "RUF012",
+    # Django-specific pragmatic ignores:
+    "PLC0415",  # function-level imports are used to break circular deps
+    "ARG001", "ARG002",  # request/sender/instance args are required but often unused
+    "SLF001",  # model._meta / admin._registry are standard Django access despite the underscore
+]
+select = [
+    "YTT", "ASYNC", "S", "B", "A", "COM", "C4", "DTZ",
+    "T10", "EXE", "FA", "INT", "ISC", "ICN", "LOG", "G", "PIE",
+    "T20", "PYI", "PT", "Q", "RSE", "RET", "SLF", "SIM", "SLOT", "TID",
+    "TD", "TC", "ARG", "I", "C90", "N", "PERF", "E", "W", "F", "PGH",
+    "PL", "UP", "FURB", "RUF", "TRY",
+]
+
+[tool.ruff.lint.flake8-quotes]
+docstring-quotes = "double"
+inline-quotes = "double"
+
+[tool.ruff.lint.mccabe]
+max-complexity = 12
+
+[tool.ruff.lint.pylint]
+max-args = 8
+max-positional-args = 8
+max-branches = 15
+max-statements = 60
+max-returns = 8
+max-locals = 20
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401", "F403"]
+"*/settings/*" = ["F401", "F403", "F405", "E402"]
+"*/migrations/*" = ["INP001", "S608", "E501", "RUF012"]
+"**/tests.py" = ["S101", "S106", "ARG", "PLR2004"]
+"**/test_*.py" = ["S101", "S106", "ARG", "PLR2004"]
+"manage.py" = ["INP001"]

@@ -163,4 +163,5 @@ def get_content_as_html(content):
             },
         },
     )
-    return mark_safe(nh3.clean(html, tags=_ALLOWED_TAGS, attributes=_ALLOWED_ATTRIBUTES))
+    # Safe: the HTML is sanitized by nh3.clean() on the same line before mark_safe.
+    return mark_safe(nh3.clean(html, tags=_ALLOWED_TAGS, attributes=_ALLOWED_ATTRIBUTES))  # noqa: S308

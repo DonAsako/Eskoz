@@ -28,7 +28,7 @@ class ArticleTranslationAdmin(AbstractPostTranslationAdmin):
 
 
 class ArticleAdmin(AbstractPostAdmin):
-    inlines = AbstractPostAdmin.inlines + [ArticleTranslationAdmin]
+    inlines = [*AbstractPostAdmin.inlines, ArticleTranslationAdmin]
 
 
 class CategoryTranslationAdmin(AbstractCategoryTranslationAdmin):

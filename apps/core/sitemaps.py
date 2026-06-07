@@ -17,7 +17,7 @@ class StaticViewSitemap(Sitemap):
     UI labels are translated per language, so each list lives at a different
     URL per language (``/fr/articles/``, ``/en/articles/``, …). We scope the
     iteration to languages with real DB content — otherwise i18n=True would
-    blow this up to 100×N entries with full hreflang alternates.
+    blow this up to 100xN entries with full hreflang alternates.
     """
 
     priority = 0.6
@@ -67,7 +67,12 @@ class ArticleSitemap(_TranslatablePostSitemap):
     priority = 0.8
 
     def items(self):
-        return Article.objects.filter(visibility="public").prefetch_related("translations").select_related("category").order_by("-edited_on")
+        return (
+            Article.objects.filter(visibility="public")
+            .prefetch_related("translations")
+            .select_related("category")
+            .order_by("-edited_on")
+        )
 
     def lastmod(self, obj):
         return obj.edited_on
@@ -81,7 +86,12 @@ class WriteupSitemap(_TranslatablePostSitemap):
     priority = 0.8
 
     def items(self):
-        return Writeup.objects.filter(visibility="public").prefetch_related("translations").select_related("category").order_by("-edited_on")
+        return (
+            Writeup.objects.filter(visibility="public")
+            .prefetch_related("translations")
+            .select_related("category")
+            .order_by("-edited_on")
+        )
 
     def lastmod(self, obj):
         return obj.edited_on

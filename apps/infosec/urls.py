@@ -2,9 +2,9 @@ from django.urls import path
 
 from .views import (
     certification_list,
+    cve_list,
     writeup_detail,
     writeup_list,
-    cve_list,
 )
 
 app_name = "infosec"

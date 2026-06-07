@@ -9,11 +9,17 @@ from django_ratelimit.decorators import ratelimit
 
 from apps.core.models import SiteSettings
 from apps.core.utils import get_content_as_html
+from eskoz import __version__
 
 
 class EskozAdminSite(AdminSite):
     site_header = "Eskoz"
     index_template = "admin/eskoz_index.html"
+
+    def each_context(self, request):
+        context = super().each_context(request)
+        context["eskoz_version"] = __version__
+        return context
 
     @method_decorator(ratelimit(key="ip", rate=settings.RATELIMIT_LOGIN_IP, method="POST", block=True))
     @method_decorator(ratelimit(key="post:username", rate=settings.RATELIMIT_LOGIN_USERNAME, method="POST", block=True))
@@ -69,7 +75,11 @@ class EskozAdminSite(AdminSite):
         from apps.infosec.models import CVE, Writeup
 
         def _public(model):
-            return model.objects.filter(visibility="public").count() if hasattr(model, "visibility") else model.objects.count()
+            return (
+                model.objects.filter(visibility="public").count()
+                if hasattr(model, "visibility")
+                else model.objects.count()
+            )
 
         site_settings = SiteSettings.objects.first()
         site_settings_url = None
@@ -85,13 +95,48 @@ class EskozAdminSite(AdminSite):
                 )
 
         stats = [
-            {"label": "Articles", "total": Article.objects.count(), "public": _public(Article), "add_url": "admin:blog_article_add"},
-            {"label": "Writeups", "total": Writeup.objects.count(), "public": _public(Writeup), "add_url": "admin:infosec_writeup_add"},
-            {"label": "Lessons", "total": Lesson.objects.count(), "public": Lesson.objects.count(), "add_url": "admin:education_lesson_add"},
-            {"label": "CVEs", "total": CVE.objects.count(), "public": CVE.objects.count(), "add_url": "admin:infosec_cve_add"},
-            {"label": "Projects", "total": Project.objects.count(), "public": Project.objects.count(), "add_url": "admin:blog_project_add"},
-            {"label": "Courses", "total": Course.objects.count(), "public": Course.objects.count(), "add_url": "admin:education_course_add"},
-            {"label": "Pages", "total": Page.objects.count(), "public": _public(Page), "add_url": "admin:core_page_add"},
+            {
+                "label": "Articles",
+                "total": Article.objects.count(),
+                "public": _public(Article),
+                "add_url": "admin:blog_article_add",
+            },
+            {
+                "label": "Writeups",
+                "total": Writeup.objects.count(),
+                "public": _public(Writeup),
+                "add_url": "admin:infosec_writeup_add",
+            },
+            {
+                "label": "Lessons",
+                "total": Lesson.objects.count(),
+                "public": Lesson.objects.count(),
+                "add_url": "admin:education_lesson_add",
+            },
+            {
+                "label": "CVEs",
+                "total": CVE.objects.count(),
+                "public": CVE.objects.count(),
+                "add_url": "admin:infosec_cve_add",
+            },
+            {
+                "label": "Projects",
+                "total": Project.objects.count(),
+                "public": Project.objects.count(),
+                "add_url": "admin:blog_project_add",
+            },
+            {
+                "label": "Courses",
+                "total": Course.objects.count(),
+                "public": Course.objects.count(),
+                "add_url": "admin:education_course_add",
+            },
+            {
+                "label": "Pages",
+                "total": Page.objects.count(),
+                "public": _public(Page),
+                "add_url": "admin:core_page_add",
+            },
         ]
 
         recent_activity = LogEntry.objects.select_related("actor", "content_type").order_by("-timestamp")[:8]

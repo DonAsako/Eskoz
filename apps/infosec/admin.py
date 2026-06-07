@@ -28,19 +28,13 @@ class WriteupTranslationAdmin(AbstractPostTranslationAdmin):
 
 
 class WritupAdmin(AbstractPostAdmin):
-    fieldsets = AbstractPostAdmin.fieldsets + [
-        (
-            "CTF Information",
-            {
-                "fields": [
-                    ("ctf", "difficulty", "points", "solver_count"),
-                ]
-            },
-        ),
+    fieldsets = [
+        *AbstractPostAdmin.fieldsets,
+        ("CTF Information", {"fields": [("ctf", "difficulty", "points", "solver_count")]}),
     ]
     list_display = ("ctf", "difficulty", "points", "visibility_badge")
     list_select_related = ("ctf",)
-    inlines = AbstractPostAdmin.inlines + [WriteupTranslationAdmin]
+    inlines = [*AbstractPostAdmin.inlines, WriteupTranslationAdmin]
 
 
 class CategoryTranslationAdmin(AbstractCategoryTranslationAdmin):

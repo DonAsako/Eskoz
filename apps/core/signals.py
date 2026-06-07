@@ -37,7 +37,7 @@ def create_site_settings(sender, **kwargs):
 def create_undefined_categories(sender, **kwargs):
     try:
         for model in apps.get_models():
-            if issubclass(model, AbstractTranslatableCategory) and model is not AbstractTranslatableCategory:
+            if issubclass(model, AbstractTranslatableCategory) and model is not AbstractTranslatableCategory:  # noqa: SIM102
                 if not model.objects.exists():
                     category = model.objects.create(title="Undefined", slug="undefined")
 

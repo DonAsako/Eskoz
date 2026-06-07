@@ -1,10 +1,9 @@
 -r base.txt
 
-# Code quality
-flake8>=7.3.0
-isort>=7.0.0
-black>=25.9.0
-bandit>=1.8.6
+# Code quality (ruff replaces black + isort + flake8; its S rules replace bandit)
+ruff>=0.15.0
+yamllint>=1.35.0
+gitlint>=0.19.0
 
 # Pre-commit
 pre_commit>=4.4.0

@@ -55,7 +55,9 @@ def lesson_detail(request, slug_course="", slug_module="", slug_lesson=""):
     if lesson.visibility == "private" and not request.user.is_authenticated:
         raise Http404
 
-    redirect_response = redirect_to_available_translation(lesson, "education:lesson_detail", [slug_course, slug_module, slug_lesson])
+    redirect_response = redirect_to_available_translation(
+        lesson, "education:lesson_detail", [slug_course, slug_module, slug_lesson]
+    )
     if redirect_response is not None:
         return redirect_response
 

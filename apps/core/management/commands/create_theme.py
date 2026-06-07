@@ -31,18 +31,12 @@ class Command(BaseCommand):
             raise CommandError(f"There is no themes directory in {themes_dir}.")
 
         if not re.fullmatch(r"^[A-Za-z_]+$", theme_name):
-            raise CommandError(
-                "Invalid theme name. Use only letters (A-Z, a-z) and underscores (_)."
-            )
+            raise CommandError("Invalid theme name. Use only letters (A-Z, a-z) and underscores (_).")
 
-        existing_themes = [
-            name for name in os.listdir(themes_dir) if (themes_dir / name).is_dir()
-        ]
+        existing_themes = [name for name in os.listdir(themes_dir) if (themes_dir / name).is_dir()]
 
         if theme_name in existing_themes:
-            raise CommandError(
-                f"There is already a theme named '{theme_name}' existing !"
-            )
+            raise CommandError(f"There is already a theme named '{theme_name}' existing !")
 
         new_theme_path = themes_dir / theme_name
         if base_theme_name:
@@ -58,11 +52,7 @@ class Command(BaseCommand):
             if old_static_path.exists():
                 old_static_path.rename(new_static_path)
 
-            self.stdout.write(
-                self.style.SUCCESS(
-                    f"Theme '{theme_name}' created by copying '{base_theme_name}'!"
-                )
-            )
+            self.stdout.write(self.style.SUCCESS(f"Theme '{theme_name}' created by copying '{base_theme_name}'!"))
         else:
             path_template = new_theme_path / "templates"
             path_static = new_theme_path / "static" / theme_name
@@ -99,6 +89,4 @@ class Command(BaseCommand):
                 else:
                     path.mkdir(parents=True, exist_ok=True)
 
-            self.stdout.write(
-                self.style.SUCCESS(f"Theme '{theme_name}' created with success !")
-            )
+            self.stdout.write(self.style.SUCCESS(f"Theme '{theme_name}' created with success !"))

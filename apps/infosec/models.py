@@ -188,12 +188,11 @@ class CVE(models.Model):
             return "unknown"
         if score >= 9:
             return "critical"
-        elif score >= 7:
+        if score >= 7:
             return "high"
-        elif score >= 4:
+        if score >= 4:
             return "medium"
-        else:
-            return "low"
+        return "low"
 
     def __str__(self):
         """Return the cve id as its string representation"""

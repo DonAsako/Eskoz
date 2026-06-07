@@ -55,7 +55,7 @@ class LessonAdmin(AbstractTranslatableMarkdownItemAdmin):
     list_display = ("module__course", "module", "title", "order", "visibility_badge")
     list_select_related = ("module", "module__course")
     visibility_badge = visibility_badge_field("visibility")
-    inlines = AbstractTranslatableMarkdownItemAdmin.inlines + [LessonTranslationAdmin]
+    inlines = [*AbstractTranslatableMarkdownItemAdmin.inlines, LessonTranslationAdmin]
 
     class Media:
         js = ("admin/js/visibility_toggle.js",)

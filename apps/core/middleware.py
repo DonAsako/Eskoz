@@ -1,3 +1,5 @@
+import contextlib
+
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.utils import translation
@@ -10,8 +12,7 @@ class ActiveThemeMiddleware:
     def __call__(self, request):
         request.theme = getattr(settings, "ACTIVE_THEME", "Eskoz")
 
-        response = self.get_response(request)
-        return response
+        return self.get_response(request)
 
 
 PERMISSIONS_POLICY = (
@@ -77,10 +78,8 @@ class Force2FAMiddleware:
 
             paths = set()
             for name in self.EXEMPT_URL_NAMES:
-                try:
+                with contextlib.suppress(NoReverseMatch):
                     paths.add(reverse(name))
-                except NoReverseMatch:
-                    pass
             self._exempt_paths = paths
         return self._exempt_paths
 
@@ -169,6 +168,10 @@ class LegacyURLPermanentRedirectMiddleware:
         # Only upgrade redirects that point to a language-prefixed path AND
         # whose source path itself was NOT language-prefixed — i.e. the
         # specific case we want to make permanent for SEO.
-        if location.startswith(self._lang_prefixes) and not request.path.startswith(self._lang_prefixes) and request.path != "/":
+        if (
+            location.startswith(self._lang_prefixes)
+            and not request.path.startswith(self._lang_prefixes)
+            and request.path != "/"
+        ):
             response.status_code = 301
         return response

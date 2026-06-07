@@ -19,9 +19,7 @@ class Command(BaseCommand):
 
         active_theme = getattr(settings, "ACTIVE_THEME", None)
 
-        existing_themes = sorted(
-            [name for name in os.listdir(themes_dir) if (themes_dir / name).is_dir()]
-        )
+        existing_themes = sorted([name for name in os.listdir(themes_dir) if (themes_dir / name).is_dir()])
 
         if not existing_themes:
             self.stdout.write("No themes found.")
@@ -33,9 +31,7 @@ class Command(BaseCommand):
         active_width = 6
 
         # Header
-        header = (
-            f"{'Name':<{name_width}} {'Path':<{path_width}} {'Active':<{active_width}}"
-        )
+        header = f"{'Name':<{name_width}} {'Path':<{path_width}} {'Active':<{active_width}}"
         self.stdout.write(header)
         self.stdout.write("-" * len(header))
 
@@ -51,6 +47,4 @@ class Command(BaseCommand):
             self.stdout.write(row)
 
         self.stdout.write("")
-        self.stdout.write(
-            self.style.SUCCESS(f"Successfully listed {len(existing_themes)} theme(s).")
-        )
+        self.stdout.write(self.style.SUCCESS(f"Successfully listed {len(existing_themes)} theme(s)."))

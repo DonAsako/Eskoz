@@ -20,12 +20,12 @@ def feature_active_required(module_name, feature_name=None):
             site_settings = SiteSettings.objects.first()
             module = getattr(site_settings, module_name, None)
             if not module or not module.is_active:
-                raise Http404()
+                raise Http404
 
             if feature_name:
                 feature_value = getattr(module, f"activate_{feature_name}_page", None)
                 if not feature_value:
-                    raise Http404()
+                    raise Http404
 
             return view_func(request, *args, **kwargs)
 

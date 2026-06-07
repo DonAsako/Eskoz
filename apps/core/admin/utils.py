@@ -50,7 +50,9 @@ def visibility_badge_field(field_name="visibility", description=None):
             if url:
                 import json
 
-                choices = [{"value": code, "label": str(label_)} for code, label_ in meta.get_field("visibility").choices]
+                choices = [
+                    {"value": code, "label": str(label_)} for code, label_ in meta.get_field("visibility").choices
+                ]
                 return format_html(
                     '<button type="button" class="status-badge status-badge--{} status-badge--toggle"'
                     ' data-url="{}" data-current="{}" data-choices="{}">{}</button>',

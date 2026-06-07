@@ -24,21 +24,18 @@ class Command(BaseCommand):
 
         for key, value in env_dict.items():
             # Truncate if too long
-            key = truncate(key, key_width)
-            value = truncate(value, value_width)
+            display_key = truncate(key, key_width)
+            display_value = truncate(value, value_width)
 
-            row = f"{key:<{key_width}} {value:<{value_width}}"
+            row = f"{display_key:<{key_width}} {display_value:<{value_width}}"
             self.stdout.write(row)
 
     def update_value(self, env_dict: dict, env_key: str, env_path: str):
         # Update .env
         try:
             with open(env_path, "w") as f:
-                for key, value in env_dict.items():
-                    f.write(f"{key}={value}\n")
-                self.stdout.write(
-                    self.style.SUCCESS(f"Updated '{env_key}' in .env file.")
-                )
+                f.writelines(f"{key}={value}\n" for key, value in env_dict.items())
+                self.stdout.write(self.style.SUCCESS(f"Updated '{env_key}' in .env file."))
         except Exception as e:
             self.stderr.write(self.style.ERROR(f"Failed to update .env: {e}"))
 
@@ -50,9 +47,7 @@ class Command(BaseCommand):
             env_dict = dotenv_values(dotenv_path=env_path)
             self.print_env(env_dict)
             while True:
-                env_key = input(
-                    "Select a key to update (or press Enter to leave): "
-                ).strip()
+                env_key = input("Select a key to update (or press Enter to leave): ").strip()
                 if not env_key:
                     self.stdout.write("Exiting...")
                     break
@@ -70,9 +65,7 @@ class Command(BaseCommand):
                         with open(env_path, "w") as f_env:
                             f_env.write(data)
                     except Exception as e:
-                        self.stderr.write(
-                            self.style.ERROR(f"Failed to create .env: {e}")
-                        )
+                        self.stderr.write(self.style.ERROR(f"Failed to create .env: {e}"))
 
             except Exception as e:
                 self.stderr.write(self.style.ERROR(f"Failed to open .env.example: {e}"))
@@ -82,9 +75,7 @@ class Command(BaseCommand):
             for key, value in env_dict.items():
                 env_value = ""
                 while env_value == "":
-                    env_value = input(
-                        f"Enter a new value for '{key}' {f"(default : '{value}')" if value else ''}: "
-                    )
+                    env_value = input(f"Enter a new value for '{key}' {f"(default : '{value}')" if value else ''}: ")
                     if env_value or value:
                         env_dict[key] = env_value or value
                         self.update_value(env_dict, key, env_path)

@@ -75,7 +75,10 @@ def article_list(request, slug=None):
         HttpResponse: Rendered articles list page.
     """
     articles = (
-        Article.objects.filter(visibility="public").select_related("category").prefetch_related("translations", "tags").order_by("-published_on")
+        Article.objects.filter(visibility="public")
+        .select_related("category")
+        .prefetch_related("translations", "tags")
+        .order_by("-published_on")
     )
     selected_category = None
     if slug:

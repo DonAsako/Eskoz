@@ -25,7 +25,7 @@ class TranslatableMarkdownImageAdmin(GenericTabularInline):
     def image_url(self, obj):
         if obj.pk and obj.picture:
             return format_html(
-                '<p style="text-decoration:underline;" ' "onclick=\"navigator.clipboard.writeText('{url}')\">" "{}" "</p>",
+                '<p style="text-decoration:underline;" onclick="navigator.clipboard.writeText(\'{url}\')">{}</p>',
                 obj.picture.url,
                 url=obj.picture.url,
             )
