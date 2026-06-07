@@ -48,6 +48,9 @@
             <h1>{{ article.get_translation.title }}</h1>
             <div class="article--meta">
                 <span class="article--meta-item">{% include 'components/icons.html' with name='calendar' %} {{ article.published_on|date:"j F Y" }}</span>
+                {% if article.authors.all %}
+                <span class="article--meta-item">{% include 'components/icons.html' with name='user' %} {% trans "by" %} {% for author in article.authors.all %}{{ author.get_full_name|default:author.username }}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
+                {% endif %}
                 {% if article.get_translation.get_reading_time %}
                 <span class="article--meta-item">{% include 'components/icons.html' with name='clock' %} {{ article.get_translation.get_reading_time }} min {% trans "read" %}</span>
                 {% endif %}
