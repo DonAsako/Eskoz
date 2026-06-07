@@ -1,6 +1,13 @@
 # Eskoz
 
+[![CI](https://github.com/DonAsako/eskoz/actions/workflows/ci.yml/badge.svg)](https://github.com/DonAsako/eskoz/actions/workflows/ci.yml)
+[![Latest release](https://img.shields.io/github/v/release/DonAsako/eskoz)](https://github.com/DonAsako/eskoz/releases)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+[![Docs](https://img.shields.io/badge/docs-mkdocs-blue.svg)](https://donasako.github.io/eskoz/)
+
 **Eskoz** is a Django-based project designed to help you quickly and easily create a multilingual blog, with a straightforward deployment process.
+
+📖 **Full documentation: [donasako.github.io/eskoz](https://donasako.github.io/eskoz/)** — installation, configuration, Docker & bare-metal deployment, theming.
 
 ## Requirements
 Make sure you have the following installed on your system:
@@ -44,6 +51,12 @@ EMAIL=                          # Email address used for SSL certificate
 ```sh
 docker compose -f docker/docker-compose.yml up --build -d
 ```
+
+> **Prebuilt image:** every release is automatically published to the GitHub
+> Container Registry. Instead of building locally, you can pull a tagged image:
+> ```sh
+> docker pull ghcr.io/donasako/eskoz:latest      # or a specific version, e.g. :v0.6.0
+> ```
 
 ### 2. Create the first admin user
 To create the first Django superuser, run:
@@ -107,42 +120,18 @@ docker compose up --build -d
 ```
 Your new theme should now be applied and visible on the site.
 
-## To-do
-### Logs
-- [ ] Add Django logging configuration
-- [ ] Set up log rotation (e.g. RotatingFileHandler)
-- [ ] Mount Docker volume for log files
-- [ ] Define log levels (INFO, WARNING, ERROR, etc.)
-- [ ] Redirect container logs to files
-- [ ] Add .env variable for log level
-
-### Translate
-- [ ] Make translation
-
-### Styling
-- [ ] Make the layout responsive
-- [x] Improve article detail view
-- [ ] Add article parameters to the article list page
-- [x] Update Eskoz Theme
-
-### Deployment
-- [x] Add an automatic script to load SSL certificates and simplify deployment
-
-### Authentication / Users
-- [ ] Finish connection with 2FA OTP
-
-### Views / Pages
-- [x] View Page Settings (block view if false)
-- [ ] Add members page
-
-### New Apps
-- [X] Create Course app
 
 ## Key Features
 - Ready-to-use multilingual blog
 - Easy deployment with Docker
 - Built-in Django admin interface
 
+
+## Contributing
+Contributions are welcome! Eskoz uses [Conventional Commits](https://www.conventionalcommits.org/)
+for automated versioning and releases (via release-please), with quality and tests
+enforced in CI. See [CONTRIBUTING.md](CONTRIBUTING.md) for the commit convention,
+local setup, and the full release workflow.
 
 ## License
 This project is licensed under the GNU General Public License v3.0.

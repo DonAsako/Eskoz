@@ -1,0 +1,63 @@
+site_name: Eskoz
+site_description: A Django-based multilingual blog, built for straightforward deployment.
+site_url: https://donasako.github.io/eskoz/
+repo_url: https://github.com/DonAsako/eskoz
+repo_name: DonAsako/eskoz
+edit_uri: edit/main/docs/
+copyright: Licensed under the GNU General Public License v3.0.
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.top
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+
+nav:
+  - Home: index.md
+  - Getting started:
+      - Installation: getting-started/installation.md
+      - Configuration: getting-started/configuration.md
+  - Deployment:
+      - With Docker: deployment/docker.md
+      - On bare metal: deployment/baremetal.md
+  - Customization:
+      - Themes: customization/themes.md
+  - Development:
+      - Contributing & releases: development/contributing.md
+
+plugins:
+  - search
