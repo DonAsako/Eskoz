@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.7.0](https://github.com/DonAsako/Eskoz/compare/v0.6.0...v0.7.0) (2026-06-07)
+
+
+### Features
+
+* **admin:** add check for update ([2cde183](https://github.com/DonAsako/Eskoz/commit/2cde1838aa98caa1547ffd9024c00f4b6fe8f2fb))
+
+
+### Bug Fixes
+
+* **admin:** anonymous user ([a87607b](https://github.com/DonAsako/Eskoz/commit/a87607bdc62d896e42c50d485cb1ab09ca626172))
+
 ## [0.6.0](https://github.com/DonAsako/Eskoz/compare/v0.5.0...v0.6.0) (2026-06-07)
 
 
