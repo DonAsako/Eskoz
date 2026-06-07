@@ -46,7 +46,7 @@ class Article(AbstractPost):
 
     def save(self, *args, **kwargs):
         if not self.category_id:
-            self.category = Category.objects.get(slug="undefined")
+            self.category = Category.objects.get_or_create(slug="undefined", defaults={"title": "Undefined"})[0]
         super().save(*args, **kwargs)
 
     class Meta(AbstractPost.Meta):
