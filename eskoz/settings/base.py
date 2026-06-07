@@ -87,10 +87,15 @@ def _unfold_account_links(request):
     from django.urls import reverse
 
     user = getattr(request, "user", None)
+    # each_context runs on every request, including the login page where the
+    # user is anonymous (no .has_usable_password()), so bail out early.
+    if not (user and user.is_authenticated):
+        return []
+
     links = []
-    if user and user.pk and user.has_perm("auth.change_user"):
+    if user.has_perm("auth.change_user"):
         links.append({"title": _("Edit my profile"), "link": reverse("admin:auth_user_change", args=[user.pk])})
-    if user and user.has_usable_password():
+    if user.has_usable_password():
         links.append({"title": _("Change password"), "link": reverse("admin:password_change")})
     return links
 
