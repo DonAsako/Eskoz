@@ -7,6 +7,12 @@
     {% if subtitle %}{{ subtitle }} |{% endif %}
     {{ title }} | {{ site_title|default:_("Django site admin") }}
 {% endblock %}
+{# Unfold's base_site.html also defines this; our override drops it, so the
+   captured `branding` var is empty and the sidebar header (logo/name/version)
+   renders nothing on model pages. Restore it like Unfold does. #}
+{% block branding %}
+    {% include "unfold/helpers/site_branding.html" %}
+{% endblock %}
 {% block extrastyle %}
     {{ block.super }}
     <link rel="stylesheet"
