@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.6.0](https://github.com/DonAsako/Eskoz/compare/v0.5.0...v0.6.0) (2026-06-07)
+
+
+### Features
+
+* **admin:** add edit profile ([510245f](https://github.com/DonAsako/Eskoz/commit/510245fd2fd32f57071877b8052e7321054a9a9a))
+* **admin:** add user profile in admin view ([a1784ac](https://github.com/DonAsako/Eskoz/commit/a1784acac36b819343b51c871c11bc33814f5519))
+* remove show transition ([4806b6f](https://github.com/DonAsako/Eskoz/commit/4806b6f02066832244d894e6adbc8d882654bf88))
+* **SEO:** add ref to icon ([63503ea](https://github.com/DonAsako/Eskoz/commit/63503ead24ed0e402d945fa3e0e8dab7eab52007))
+
+
+### Refactoring
+
+* same base template for admin ([ff61134](https://github.com/DonAsako/Eskoz/commit/ff61134511a880ab49aa1f1f823cab8698fb2ab9))
+
 ## [0.5.0](https://github.com/DonAsako/Eskoz/compare/v0.4.0...v0.5.0) (2026-06-07)
 
 
