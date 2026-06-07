@@ -1,14 +1,17 @@
 {% extends 'admin/base.html' %}
 {% load static i18n %}
 
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin')
+}}{% endblock %}
+
 {% block extrastyle %}
-    {{ block.super }}
-    <link rel="stylesheet" type="text/css" href="{% static 'admin/css/admin.css' %}">
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/admin.css' %}">
 {% endblock %}
 
 {% block extrahead %}
-    {{ block.super }}
-    {# Required by the Markdown live-preview JS (reads the active theme). #}
-    <meta name="theme-name" content="{{ request.theme }}">
-    <script defer src="{% static 'admin/js/autosave_draft.js' %}"></script>
+{{ block.super }}
+{# Required by the Markdown live-preview JS (reads the active theme). #}
+<meta name="theme-name" content="{{ request.theme }}">
+<script defer src="{% static 'admin/js/autosave_draft.js' %}"></script>
 {% endblock %}

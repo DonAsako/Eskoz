@@ -48,10 +48,20 @@ def _unfold_site_subheader(request):
     return f"v{__version__}"
 
 
+def _unfold_favicons(request):
+    from apps.core.models import SiteSettings
+
+    site_settings = SiteSettings.objects.first()
+    if site_settings and site_settings.favicon:
+        return [{"rel": "icon", "href": site_settings.favicon.url}]
+    return []
+
+
 UNFOLD = {
     "SITE_TITLE": _unfold_site_name,
     "SITE_HEADER": _unfold_site_name,
     "SITE_SUBHEADER": _unfold_site_subheader,
+    "SITE_FAVICONS": _unfold_favicons,
     "SITE_URL": "/",
     "DASHBOARD_CALLBACK": "apps.core.dashboard.dashboard_callback",
     "SHOW_HISTORY": True,
