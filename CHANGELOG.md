@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.4.0](https://github.com/DonAsako/Eskoz/compare/v0.3.0...v0.4.0) (2026-06-07)
+
+
+### Features
+
+* add unfold ([a91bf71](https://github.com/DonAsako/Eskoz/commit/a91bf71c1ab53a03b6d2eb819f8b4dae823dca78))
+* **admin:** image upload, filter, logs ([7570376](https://github.com/DonAsako/Eskoz/commit/757037609d7d1c77fa93114a43ca5c4b152c6ffa))
+* **analytics:** blog view, writeup ([cf02b9e](https://github.com/DonAsako/Eskoz/commit/cf02b9e0c9912ac9a95c84adaa53a1aed9a390b5))
+* **analytics:** dedicated analytics admin page ([5a87d57](https://github.com/DonAsako/Eskoz/commit/5a87d5709cb607cbaaac08ce9e8326cb51490160))
+* **analytics:** modules, lessons ([558610f](https://github.com/DonAsako/Eskoz/commit/558610f224f857013a24141443899dcd29396501))
+* content editor ([38fd2c8](https://github.com/DonAsako/Eskoz/commit/38fd2c8ba84cbf45e63b7a688347e159b77eebed))
+* **content:** show a visible author byline on post detail pages ([204e4e3](https://github.com/DonAsako/Eskoz/commit/204e4e3f272a593fb741aa7c0052c46bfa985c1b))
+* unfold config ([428ccb7](https://github.com/DonAsako/Eskoz/commit/428ccb79f54febe1428e742685b2ee0e13dbb55c))
+
+
+### Performance
+
+* **db:** index hot list and ordering columns ([e54134f](https://github.com/DonAsako/Eskoz/commit/e54134f240d430952f9d3acdb7225a309da370bf))
+
 ## [0.3.0](https://github.com/DonAsako/Eskoz/compare/v0.2.0...v0.3.0) (2026-06-07)
 
 
