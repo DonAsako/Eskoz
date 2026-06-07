@@ -28,3 +28,49 @@ jobs:
 
       - name: Run pre-commit (ruff, yamllint, gitleaks, django checks)
         uses: pre-commit/action@v3.0.1
+
+  tests:
+    runs-on: ubuntu-latest
+    env:
+      DJANGO_SETTINGS_MODULE: eskoz.settings.ci
+      DJANGO_SECRET_KEY: ci-dummy-secret-key-not-for-production
+      POSTGRES_DB: eskoz_test
+      POSTGRES_USER: eskoz
+      POSTGRES_PASSWORD: eskoz
+      DB_HOST: localhost
+      DB_PORT: 5432
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: eskoz_test
+          POSTGRES_USER: eskoz
+          POSTGRES_PASSWORD: eskoz
+        ports:
+          - 5432:5432
+        # Wait until Postgres is ready before the test step runs.
+        options: >-
+          --health-cmd "pg_isready -U eskoz"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements/production.txt
+
+      - name: Run Django tests
+        # -t . sets the unittest top-level dir to the repo root so the
+        # apps.*.models packages import under their real dotted path.
+        run: >-
+          python manage.py test
+          apps.analytics apps.blog apps.core apps.education apps.infosec
+          -t . --verbosity 2
