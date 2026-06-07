@@ -22,3 +22,12 @@
     {% endif %}
     <script defer src="{% static 'admin/js/autosave_draft.js' %}"></script>
 {% endblock %}
+
+{% block footer %}
+    {{ block.super }}
+    {% if eskoz_version %}
+        <div id="eskoz-version" style="text-align:center; padding:8px; opacity:.6; font-size:.85em;">
+            Eskoz v{{ eskoz_version }}
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,20 @@
+extends: default
+
+rules:
+  line-length:
+    max: 160
+    level: warning
+  document-start: disable
+  comments-indentation: disable
+  truthy:
+    # GitHub Actions workflows use `on:` as a key.
+    allowed-values: ["true", "false", "on"]
+  indentation:
+    spaces: consistent
+    indent-sequences: consistent
+
+ignore: |
+  .venv/
+  venv/
+  staticfiles/
+  themes/

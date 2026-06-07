@@ -1,0 +1,11 @@
+[general]
+# Enforce Conventional Commits (feat:, fix:, chore:, ...) — this is what
+# release-please parses to compute the next version and the changelog.
+contrib=contrib-title-conventional-commits
+ignore=body-is-missing
+
+[title-max-length]
+line-length=100
+
+[contrib-title-conventional-commits]
+types=feat,fix,docs,style,refactor,perf,test,build,ci,chore,revert

@@ -1,3 +1,6 @@
+default_install_hook_types: [pre-commit, commit-msg]
+default_stages: [pre-commit]
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
@@ -13,40 +16,33 @@ repos:
       - id: check-merge-conflict
       - id: check-case-conflict
       - id: detect-private-key
+      - id: debug-statements
       - id: mixed-line-ending
         args: ["--fix=lf"]
 
-  - repo: https://github.com/psf/black
-    rev: 25.9.0
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.16
     hooks:
-      - id: black
-        language_version: python3.13
-        args: ["--line-length=148"]
+      - id: ruff
+        args: ["--fix"]
+      - id: ruff-format
 
-  - repo: https://github.com/pycqa/isort
-    rev: 7.0.0
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.35.1
     hooks:
-      - id: isort
-        args: ["--profile", "black", "--line-length", "148"]
+      - id: yamllint
+        args: ["-c", ".yamllint.yaml"]
 
-  - repo: https://github.com/pycqa/flake8
-    rev: 7.3.0
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.21.2
     hooks:
-      - id: flake8
-        args:
-          [
-            "--max-line-length=148",
-            "--extend-ignore=E203,W503,E701",
-            "--exclude=*/migrations/*,*/settings/*,venv,env",
-          ]
+      - id: gitleaks
 
-  # - repo: https://github.com/PyCQA/bandit
-  #   rev: 1.8.3
-  #   hooks:
-  #     - id: bandit
-  #       args: ["-c", "pyproject.toml"]
-  #       additional_dependencies: ["bandit[toml]"]
-  #       exclude: "(tests/|test_)"
+  - repo: https://github.com/jorisroovers/gitlint
+    rev: v0.19.1
+    hooks:
+      - id: gitlint
+        stages: [commit-msg]
 
   - repo: local
     hooks:
