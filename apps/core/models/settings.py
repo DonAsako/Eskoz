@@ -5,6 +5,18 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.utils import get_content_as_html, upload_to_settings
 
+# favicon/logo are generic ImageFields (png/svg/ico/…), so the <link>/icon type
+# must be derived from the uploaded file rather than hard-coded.
+IMAGE_MIME_TYPES = {
+    "ico": "image/x-icon",
+    "png": "image/png",
+    "svg": "image/svg+xml",
+    "gif": "image/gif",
+    "jpg": "image/jpeg",
+    "jpeg": "image/jpeg",
+    "webp": "image/webp",
+}
+
 
 class SiteSettings(models.Model):
     site_name = models.CharField(max_length=100, verbose_name=_("Site name"))
@@ -19,10 +31,18 @@ class SiteSettings(models.Model):
         blank=True,
     )
     under_maintenance = models.BooleanField(default=False, verbose_name=_("Under maintenance"))
-    show_transition = models.BooleanField(default=False, verbose_name=_("Show transition between page"))
 
     def __str__(self):
         return gettext("Site settings")
+
+    @property
+    def favicon_mime_type(self):
+        """Best-effort MIME type for the favicon <link>, or None if unknown."""
+        if not self.favicon:
+            return None
+        name = self.favicon.name
+        ext = name.rsplit(".", 1)[-1].lower() if "." in name else ""
+        return IMAGE_MIME_TYPES.get(ext)
 
     def get_page_referenced(self):
         return self.pages.filter(visibility="referenced")
