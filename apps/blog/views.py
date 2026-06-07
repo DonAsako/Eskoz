@@ -115,15 +115,18 @@ def article_list(request, slug=None):
 @feature_active_required(module_name="blog", feature_name="members")
 def member_list(request):
     """
-    Render a list of all members.
+    Render the team page: staff users (back-office team) with their profile.
+
+    Only ``is_staff`` users are listed so the page never exposes the full
+    user table — regular registered accounts are excluded.
 
     Args:
         request (HttpRequest): The HTTP request object.
 
     Returns:
-        HttpResponse: Rendered projects list page.
+        HttpResponse: Rendered team members page.
     """
-    members = User.objects.select_related("profile").all()
+    members = User.objects.filter(is_staff=True).select_related("profile").order_by("username")
     return render(request, "blog/member_list.html", {"members": members})
 
 

@@ -1,30 +1,33 @@
 {% load i18n %}
 <div class="article_card article_card-split">
     <div class="article_card_left">
-        {% if member.picture %}
-        <img class="article_card--image article_card--image-rounded" src="{{ member.picture.url }}" alt="{{ member.username }}">
+        {% if member.profile.avatar %}
+        <img class="article_card--image article_card--image-rounded" src="{{ member.profile.avatar.url }}" alt="{{ member.username }}">
         {% endif %}
     </div>
     <div class="article_card_right">
         <div class="article_card--top">
             <div class="article_card--top-left">
-                <p class="article_card--title">{{ member.username }}</p>
+                <p class="article_card--title">{{ member.get_full_name|default:member.username }}</p>
             </div>
-            {% if member.role %}
-            <p class="article_card--category">{{ member.role }}</p>
+            {% if member.profile.role %}
+            <p class="article_card--category">{{ member.profile.role }}</p>
             {% endif %}
         </div>
-        {% if member.bio %}
-        <p class="article_card--description">{{ member.bio }}</p>
+        {% if member.profile.bio %}
+        <p class="article_card--description">{{ member.profile.bio }}</p>
         {% endif %}
-        {% if member.website or member.github %}
+        {% if member.profile.website or member.profile.github or member.profile.twitter %}
         <div class="article_card--bottom">
             <div class="article_card--tags">
-                {% if member.website %}
-                <a class="article_card--tag" href="{{ member.website }}" target="_blank" rel="noopener">{% trans 'Website' %}</a>
+                {% if member.profile.website %}
+                <a class="article_card--tag" href="{{ member.profile.website }}" target="_blank" rel="noopener">{% trans 'Website' %}</a>
                 {% endif %}
-                {% if member.github %}
-                <a class="article_card--tag" href="{{ member.github }}" target="_blank" rel="noopener">GitHub</a>
+                {% if member.profile.github %}
+                <a class="article_card--tag" href="{{ member.profile.github }}" target="_blank" rel="noopener">GitHub</a>
+                {% endif %}
+                {% if member.profile.twitter %}
+                <a class="article_card--tag" href="{{ member.profile.twitter }}" target="_blank" rel="noopener">Twitter</a>
                 {% endif %}
             </div>
         </div>

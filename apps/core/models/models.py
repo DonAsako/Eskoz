@@ -16,6 +16,10 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     avatar = models.ImageField(upload_to=upload_to_users, blank=True, null=True, verbose_name=_("Avatar"))
     bio = models.TextField(blank=True, verbose_name=_("Biography"))
+    role = models.CharField(max_length=100, blank=True, verbose_name=_("Role"))
+    website = models.URLField(max_length=200, blank=True, verbose_name=_("Website"))
+    github = models.URLField(max_length=200, blank=True, verbose_name=_("GitHub"))
+    twitter = models.URLField(max_length=200, blank=True, verbose_name=_("Twitter / X"))
 
     def __str__(self):
         return f"{self.user.get_username()}"

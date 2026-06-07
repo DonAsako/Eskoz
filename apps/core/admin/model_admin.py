@@ -126,7 +126,8 @@ class UserProfileInline(admin.StackedInline):
     can_delete = False
     verbose_name = _("Profil")
     fieldsets = [
-        (_("Description"), {"fields": ["avatar", "bio"]}),
+        (_("Description"), {"fields": ["avatar", "role", "bio"]}),
+        (_("Links"), {"fields": ["website", "github", "twitter"]}),
     ]
 
 

@@ -109,7 +109,7 @@ class BlogSettings(models.Model):
         verbose_name=_("Blog settings"),
     )
     is_active = models.BooleanField(default=True, verbose_name=_("Activate Blog Module"))
-    activate_members_view = models.BooleanField(default=False, verbose_name=_("Show members page"))
+    activate_members_page = models.BooleanField(default=False, verbose_name=_("Show team page"))
     activate_projects_page = models.BooleanField(default=True, verbose_name=_("Show projects page"))
     activate_articles_page = models.BooleanField(default=True, verbose_name=_("Show articles page"))
 
