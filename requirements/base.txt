@@ -1,6 +1,7 @@
 asgiref>=3.10.0
 Django>=5.2.9
 Markdown>=3.9
+nh3>=0.2.18
 packaging>=25.0
 pillow>=12.0.0
 psycopg2-binary>=2.9.9
