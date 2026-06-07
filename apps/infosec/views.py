@@ -137,6 +137,6 @@ def cve_list(request):
     Returns:
         HttpResponse: The rendered cve list page.
     """
-    cves = CVE.objects.select_related("article", "article__category").order_by("-published_date", "-id")
+    cves = CVE.objects.order_by("-published_date", "-id")
     page_obj = paginate_queryset(request, cves)
     return render(request, "infosec/cve_list.html", {"cves": page_obj, "page_obj": page_obj})
