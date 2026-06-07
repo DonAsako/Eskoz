@@ -604,6 +604,71 @@ function buildToolbar(ta, shell) {
     return bar;
 }
 
+/* ------------------------------------------------------------------
+ * Image upload — paste or drop an image into the editor; it uploads to
+ * the admin endpoint and the `![](url)` markdown is inserted in place,
+ * with a placeholder shown while the request is in flight.
+ * ------------------------------------------------------------------ */
+let uploadSeq = 0;
+
+function uploadImage(file) {
+    const body = new FormData();
+    body.append("image", file);
+    return fetch(window.IMAGE_UPLOAD_URL, {
+        method: "POST",
+        headers: { "X-CSRFToken": getCookie("csrftoken") },
+        body,
+    }).then((r) => (r.ok ? r.json() : r.json().then((e) => Promise.reject(e))));
+}
+
+function replaceFirst(ta, needle, replacement) {
+    const idx = ta.value.indexOf(needle);
+    if (idx < 0) return;
+    ta.value = ta.value.slice(0, idx) + replacement + ta.value.slice(idx + needle.length);
+    fireInput(ta);
+}
+
+function insertImageUpload(ta, file) {
+    const placeholder = `![⏳ envoi ${++uploadSeq}…]()`;
+    const s = ta.selectionStart;
+    applyText(ta, s, ta.selectionEnd, placeholder, s + placeholder.length, s + placeholder.length);
+
+    const alt = (file.name || "image").replace(/\.[^.]+$/, "");
+    uploadImage(file)
+        .then(({ url }) => replaceFirst(ta, placeholder, `![${alt}](${url})`))
+        .catch((e) => {
+            replaceFirst(ta, placeholder, "");
+            alert((e && e.error) || "Échec de l'envoi de l'image.");
+        });
+}
+
+function wireImageUpload(ta) {
+    ta.addEventListener("paste", (e) => {
+        const items = e.clipboardData && e.clipboardData.items;
+        if (!items) return;
+        for (const it of items) {
+            if (it.kind === "file" && it.type.startsWith("image/")) {
+                const file = it.getAsFile();
+                if (file) { e.preventDefault(); insertImageUpload(ta, file); }
+            }
+        }
+    });
+
+    const hasImage = (e) => e.dataTransfer && Array.from(e.dataTransfer.items || []).some((i) => i.type.startsWith("image/"));
+    ta.addEventListener("dragover", (e) => { if (hasImage(e)) { e.preventDefault(); ta.classList.add("md-dragover"); } });
+    ta.addEventListener("dragleave", () => ta.classList.remove("md-dragover"));
+    ta.addEventListener("drop", (e) => {
+        const files = e.dataTransfer && e.dataTransfer.files;
+        ta.classList.remove("md-dragover");
+        if (!files || !files.length) return;
+        let handled = false;
+        for (const file of files) {
+            if (file.type.startsWith("image/")) { insertImageUpload(ta, file); handled = true; }
+        }
+        if (handled) e.preventDefault();
+    });
+}
+
 function enhanceEditor(textarea) {
     const content = textarea.closest(".editor-content");
     if (!content || content.dataset.enhanced) return;
@@ -622,6 +687,7 @@ function enhanceEditor(textarea) {
     shell.appendChild(status);
 
     wireKeys(textarea);
+    wireImageUpload(textarea);
     const refreshStats = () => updateStats(textarea, status);
     textarea.addEventListener("input", refreshStats);
     refreshStats();

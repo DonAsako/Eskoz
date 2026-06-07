@@ -52,6 +52,7 @@ UNFOLD = {
     "SITE_HEADER": _unfold_site_name,
     "SITE_SUBHEADER": _unfold_site_subheader,
     "SITE_URL": "/",
+    "DASHBOARD_CALLBACK": "apps.core.dashboard.dashboard_callback",
     "SHOW_HISTORY": True,
     "SHOW_VIEW_ON_SITE": True,
     "SHOW_BACK_BUTTON": True,

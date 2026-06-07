@@ -1,6 +1,6 @@
-from django.contrib import messages
+from django.contrib import admin, messages
 from django.core.exceptions import ValidationError
-from django.utils.html import format_html
+from django.utils.html import format_html, format_html_join
 from django.utils.translation import gettext_lazy as _
 from unfold.admin import GenericTabularInline, ModelAdmin, StackedInline
 
@@ -69,10 +69,19 @@ class AbstractPostTranslationAdmin(AbstractTranslatableMarkdownItemTranslationAd
 
 class AuthorsAdminMixin:
     """Shared author handling for any admin whose model has an ``authors``
-    M2M: a multi-select widget plus auto-filling the creating editor, so a
-    freshly created object is never left author-less."""
+    M2M: a multi-select widget, an authors changelist column (prefetched),
+    plus auto-filling the creating editor so a freshly created object is
+    never left author-less."""
 
     filter_horizontal = ("authors",)
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related("authors")
+
+    @admin.display(description=_("Authors"))
+    def authors_list(self, obj):
+        names = [a.get_full_name() or a.get_username() for a in obj.authors.all()]
+        return ", ".join(names) if names else "—"
 
     def save_related(self, request, form, formsets, change):
         super().save_related(request, form, formsets, change)
@@ -87,11 +96,28 @@ class AbstractPostAdmin(AuthorsAdminMixin, AbstractTranslatableMarkdownItemAdmin
     warn_unsaved_form = True
     change_form_show_cancel_button = True
     form = AbstractPostAdminForm
-    list_display = ("title", "published_on", "visibility_badge")
+    list_display = ("title", "authors_list", "languages_list", "published_on", "visibility_badge")
+    list_filter = ("visibility", "category", "authors", "published_on")
+    date_hierarchy = "published_on"
     visibility_badge = visibility_badge_field("visibility")
     filter_horizontal = (*AuthorsAdminMixin.filter_horizontal, "tags")
     autocomplete_fields_excluded_from_warnings = ["tags", "category"]
     readonly_fields = ["edited_on"]
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related("translations")
+
+    @admin.display(description=_("Languages"))
+    def languages_list(self, obj):
+        codes = sorted({t.language.upper() for t in obj.translations.all()})
+        if not codes:
+            return format_html('<span style="opacity:.5">—</span>')
+        return format_html_join(
+            "",
+            '<span class="status-badge status-badge--index" style="margin:0 2px">{}</span>',
+            ((c,) for c in codes),
+        )
+
     prepopulated_fields = {"slug": ("title",)}
     fieldsets = [
         (

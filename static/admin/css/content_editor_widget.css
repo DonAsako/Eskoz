@@ -202,6 +202,11 @@
     color: var(--color-font-default-dark);
     border-right-color: var(--color-base-700);
 }
+.editor-content--editor.md-dragover {
+    outline: 2px dashed var(--color-primary-600);
+    outline-offset: -4px;
+    background: color-mix(in oklch, var(--color-primary-600) 6%, transparent);
+}
 
 /* ---- View modes ------------------------------------------- */
 .md-editor[data-view="editor"] .editor-content--viewer { display: none; }

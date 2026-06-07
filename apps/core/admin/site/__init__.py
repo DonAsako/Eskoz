@@ -67,8 +67,47 @@ class EskozAdminSite(UnfoldAdminSite):
                 self.admin_view(self.set_visibility),
                 name="set_visibility",
             ),
+            path(
+                "image_upload/",
+                self.admin_view(self.image_upload),
+                name="image_upload",
+            ),
         ]
         return custom_urls + urls
+
+    def image_upload(self, request):
+        """Store an image dropped/pasted into the Markdown editor and return
+        its URL so the JS can insert the corresponding ``![](...)``. Staff-only
+        (wrapped by ``admin_view``); the file is validated as a real image by
+        Pillow before being written under ``posts/``.
+        """
+        import uuid
+
+        from django.core.files.storage import default_storage
+        from PIL import Image, UnidentifiedImageError
+
+        if request.method != "POST":
+            return HttpResponseNotAllowed(["POST"])
+
+        upload = request.FILES.get("image")
+        if not upload:
+            return HttpResponseBadRequest("No file")
+        if upload.size > 10 * 1024 * 1024:
+            return JsonResponse({"error": str(_("Image too large (max 10 MB)."))}, status=400)
+
+        try:
+            probe = Image.open(upload)
+            probe.verify()
+        except (UnidentifiedImageError, OSError):
+            return JsonResponse({"error": str(_("Invalid image file."))}, status=400)
+
+        ext = {"jpeg": "jpg", "png": "png", "gif": "gif", "webp": "webp"}.get((probe.format or "").lower())
+        if not ext:
+            return JsonResponse({"error": str(_("Unsupported image format."))}, status=400)
+
+        upload.seek(0)
+        name = default_storage.save(f"posts/{uuid.uuid4()}.{ext}", upload)
+        return JsonResponse({"url": default_storage.url(name)})
 
     def set_visibility(self, request, app_label, model_name, pk):
         """Swap the ``visibility`` of a single object from a changelist

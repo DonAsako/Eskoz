@@ -33,7 +33,8 @@ class WriteupAdmin(AbstractPostAdmin):
         *AbstractPostAdmin.fieldsets,
         ("CTF Information", {"fields": [("ctf", "difficulty", "points", "solver_count")]}),
     ]
-    list_display = ("ctf", "difficulty", "points", "visibility_badge")
+    list_display = ("title", "ctf", "difficulty", "authors_list", "languages_list", "visibility_badge")
+    list_filter = (*AbstractPostAdmin.list_filter, "ctf", "difficulty")
     list_select_related = ("ctf",)
     inlines = [*AbstractPostAdmin.inlines, WriteupTranslationAdmin]
 
@@ -50,7 +51,9 @@ class TagAdmin(AbstractTagAdmin): ...
 
 
 class CVEAdmin(AuthorsAdminMixin, ModelAdmin):
-    list_display = ("cve_id", "cvss_score", "published_date", "visibility_badge")
+    list_display = ("cve_id", "cvss_score", "published_date", "authors_list", "visibility_badge")
+    list_filter = ("visibility", "published_date")
+    date_hierarchy = "published_date"
     visibility_badge = visibility_badge_field("visibility")
     search_fields = ("cve_id", "vulnerable_product")
 
