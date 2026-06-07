@@ -12,6 +12,10 @@ load_dotenv(BASE_DIR / ".env")
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 INSTALLED_APPS = [
+    "unfold",
+    "unfold.contrib.filters",
+    "unfold.contrib.forms",
+    "unfold.contrib.inlines",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -25,6 +29,17 @@ INSTALLED_APPS = [
     "apps.infosec",
     "apps.education",
 ]
+
+# django-unfold admin theme. Colours/sidebar refined in a later pass;
+# kept minimal here so the default professional palette applies.
+UNFOLD = {
+    "SITE_TITLE": "Eskoz",
+    "SITE_HEADER": "Eskoz",
+    "SITE_URL": "/",
+    "SHOW_HISTORY": True,
+    "SHOW_VIEW_ON_SITE": True,
+    "SHOW_BACK_BUTTON": False,
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
