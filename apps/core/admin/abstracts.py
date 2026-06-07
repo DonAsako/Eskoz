@@ -1,5 +1,6 @@
 from django.contrib import admin, messages
 from django.core.exceptions import ValidationError
+from django.db.models import Count
 from django.utils.html import format_html, format_html_join
 from django.utils.translation import gettext_lazy as _
 from unfold.admin import GenericTabularInline, ModelAdmin, StackedInline
@@ -96,7 +97,7 @@ class AbstractPostAdmin(AuthorsAdminMixin, AbstractTranslatableMarkdownItemAdmin
     warn_unsaved_form = True
     change_form_show_cancel_button = True
     form = AbstractPostAdminForm
-    list_display = ("title", "authors_list", "languages_list", "published_on", "visibility_badge")
+    list_display = ("title", "authors_list", "languages_list", "views_count", "published_on", "visibility_badge")
     list_filter = ("visibility", "category", "authors", "published_on")
     date_hierarchy = "published_on"
     visibility_badge = visibility_badge_field("visibility")
@@ -105,7 +106,11 @@ class AbstractPostAdmin(AuthorsAdminMixin, AbstractTranslatableMarkdownItemAdmin
     readonly_fields = ["edited_on"]
 
     def get_queryset(self, request):
-        return super().get_queryset(request).prefetch_related("translations")
+        return super().get_queryset(request).prefetch_related("translations").annotate(_views=Count("page_views"))
+
+    @admin.display(description=_("Views"), ordering="_views")
+    def views_count(self, obj):
+        return obj._views
 
     @admin.display(description=_("Languages"))
     def languages_list(self, obj):

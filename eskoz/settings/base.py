@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "apps.blog",
     "apps.infosec",
     "apps.education",
+    "apps.analytics",
 ]
 
 
@@ -243,6 +244,7 @@ MIDDLEWARE = [
     "auditlog.middleware.AuditlogMiddleware",
     "apps.core.middleware.ActiveThemeMiddleware",
     "apps.core.middleware.SecurityHeadersMiddleware",
+    "apps.analytics.middleware.PageViewMiddleware",
 ]
 
 ROOT_URLCONF = "eskoz.urls"

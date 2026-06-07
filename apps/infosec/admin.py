@@ -33,7 +33,7 @@ class WriteupAdmin(AbstractPostAdmin):
         *AbstractPostAdmin.fieldsets,
         ("CTF Information", {"fields": [("ctf", "difficulty", "points", "solver_count")]}),
     ]
-    list_display = ("title", "ctf", "difficulty", "authors_list", "languages_list", "visibility_badge")
+    list_display = ("title", "ctf", "difficulty", "authors_list", "languages_list", "views_count", "visibility_badge")
     list_filter = (*AbstractPostAdmin.list_filter, "ctf", "difficulty")
     list_select_related = ("ctf",)
     inlines = [*AbstractPostAdmin.inlines, WriteupTranslationAdmin]

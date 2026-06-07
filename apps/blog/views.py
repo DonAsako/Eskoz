@@ -24,6 +24,7 @@ def article_detail(request, slug_category, slug_article):
     article = get_object_or_404(Article, category=category, slug=slug_article)
     if article.visibility == "private" and not request.user.is_authenticated:
         raise Http404
+    request.tracked_object = article
 
     redirect_response = redirect_to_available_translation(article, "blog:article_detail", [slug_category, slug_article])
     if redirect_response is not None:

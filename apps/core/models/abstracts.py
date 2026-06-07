@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.hashers import check_password, identify_hasher, make_password
 from django.contrib.auth.models import User
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.core import checks
 from django.core.exceptions import ValidationError
@@ -240,6 +240,7 @@ class AbstractPost(AbstractTranslatableMarkdownItem):
         verbose_name=_("Visibility"),
     )
     password = models.CharField(max_length=128, null=True, blank=True, verbose_name=_("Password"))
+    page_views = GenericRelation("analytics.PageView")
 
     def _password_is_hashed(self):
         """Return True if self.password is already a hashed value."""

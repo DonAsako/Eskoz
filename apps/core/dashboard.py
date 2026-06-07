@@ -9,7 +9,8 @@ from auditlog.models import LogEntry
 from django.urls import NoReverseMatch, reverse
 from django.utils.translation import gettext_lazy as _
 
-# action id -> (label, css modifier matching our status-badge--* styles)
+from apps.analytics.metrics import add_dashboard_metrics
+
 _ACTION_META = {
     LogEntry.Action.CREATE: (_("created"), "public"),
     LogEntry.Action.UPDATE: (_("updated"), "unlisted"),
@@ -30,6 +31,8 @@ def _change_url(entry):
 
 
 def dashboard_callback(request, context):
+    add_dashboard_metrics(context)
+
     entries = LogEntry.objects.select_related("actor", "content_type").order_by("-timestamp")[:12]
 
     activity = []

@@ -97,6 +97,7 @@ def page_detail(request, slug):
     page = get_object_or_404(Page, slug=slug)
     if page.visibility == "private" and not request.user.is_authenticated:
         raise Http404
+    request.tracked_object = page
     return render(request, "core/page.html", {"page": page})
 
 
