@@ -61,9 +61,28 @@ class Force2FAMiddleware:
     Sits AFTER AuthenticationMiddleware so ``request.user`` is populated.
     """
 
+    # Admin URL names that must stay reachable while 2FA is unverified.
+    EXEMPT_URL_NAMES = ("admin:login", "admin:logout", "admin:verify_2fa", "admin:jsi18n")
+
     def __init__(self, get_response):
         self.get_response = get_response
         self._admin_prefix = "/" + settings.ADMIN_URL.strip("/") + "/"
+        self._exempt_paths = None
+
+    def _get_exempt_paths(self):
+        # Resolved lazily and cached: exact paths, so an admin URL that merely
+        # *ends* with "login/"/"verify/" etc. can't slip past the 2FA gate.
+        if self._exempt_paths is None:
+            from django.urls import NoReverseMatch, reverse
+
+            paths = set()
+            for name in self.EXEMPT_URL_NAMES:
+                try:
+                    paths.add(reverse(name))
+                except NoReverseMatch:
+                    pass
+            self._exempt_paths = paths
+        return self._exempt_paths
 
     def __call__(self, request):
         if not request.path.startswith(self._admin_prefix):
@@ -71,8 +90,7 @@ class Force2FAMiddleware:
 
         # Allowlist URLs that must be reachable in the unverified-2FA state.
         path = request.path
-        exempt_suffixes = ("login/", "logout/", "verify/", "jsi18n/")
-        if any(path.endswith("/" + s) or path.endswith(s) for s in exempt_suffixes):
+        if path in self._get_exempt_paths():
             return self.get_response(request)
         # Static/media files served by Django in dev shouldn't trip the gate.
         if "/static/" in path or "/media/" in path:
