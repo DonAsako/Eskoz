@@ -85,6 +85,11 @@ UNFOLD = {
                         "icon": "dashboard",
                         "link": reverse_lazy("admin:index"),
                     },
+                    {
+                        "title": _("Analytics"),
+                        "icon": "monitoring",
+                        "link": reverse_lazy("admin:analytics"),
+                    },
                 ],
             },
             {

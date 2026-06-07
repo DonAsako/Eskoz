@@ -43,10 +43,16 @@ class EskozAdminSite(UnfoldAdminSite):
         return filtered_apps
 
     def get_urls(self):
+        from apps.analytics.views import analytics_view
         from apps.core.views import verify_2fa_view
 
         urls = super().get_urls()
         custom_urls = [
+            path(
+                "analytics/",
+                self.admin_view(analytics_view),
+                name="analytics",
+            ),
             path(
                 "content_preview/",
                 self.admin_view(self.content_preview),
