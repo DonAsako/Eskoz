@@ -68,6 +68,19 @@ class AbstractTranslatableMarkdownItemAdmin(ModelAdmin):
 class AbstractPostTranslationAdmin(AbstractTranslatableMarkdownItemTranslationAdmin): ...
 
 
+class PageViewsAdminMixin:
+    """Adds a sortable "Views" column from the analytics ``page_views``
+    GenericRelation. The model must declare ``page_views =
+    GenericRelation("analytics.PageView")``."""
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).annotate(_views=Count("page_views"))
+
+    @admin.display(description=_("Views"), ordering="_views")
+    def views_count(self, obj):
+        return getattr(obj, "_views", 0)
+
+
 class AuthorsAdminMixin:
     """Shared author handling for any admin whose model has an ``authors``
     M2M: a multi-select widget, an authors changelist column (prefetched),
