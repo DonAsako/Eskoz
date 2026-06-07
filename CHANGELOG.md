@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.0](https://github.com/DonAsako/Eskoz/compare/v0.2.0...v0.3.0) (2026-06-07)
+
+
+### Features
+
+* **content:** support multiple authors per post ([6f813a1](https://github.com/DonAsako/Eskoz/commit/6f813a1b6eb2c67eb08cbd1dc62b6e51277f6fa6))
+* **infosec:** support multiple authors on CVE entries ([de0a4c9](https://github.com/DonAsako/Eskoz/commit/de0a4c9c7f0eae7c81132c88a3e43479c02c5418))
+
+
+### Bug Fixes
+
+* **blog:** scope the team page to staff and repair its feature gate ([7ab1f68](https://github.com/DonAsako/Eskoz/commit/7ab1f68d60df553155be9d4cc22a009f44474082))
+
 ## [0.2.0](https://github.com/DonAsako/Eskoz/compare/v0.1.0...v0.2.0) (2026-06-07)
 
 
