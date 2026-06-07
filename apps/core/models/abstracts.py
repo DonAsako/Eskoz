@@ -285,6 +285,10 @@ class AbstractPost(AbstractTranslatableMarkdownItem):
         abstract = True
         verbose_name = _("Post")
         verbose_name_plural = _("Posts")
+        # Serves the list views: filter visibility="public" + order by
+        # -published_on. No explicit name so Django derives a unique one
+        # per concrete model (Article, Writeup).
+        indexes = [models.Index(fields=["visibility", "-published_on"])]
 
     @classmethod
     def check(cls, **kwargs):

@@ -38,7 +38,7 @@ class Course(models.Model):
     description = models.TextField(blank=True, null=True)
     version = models.FloatField(default=0.01)
     slug = models.SlugField()
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="courses", blank=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name="courses")
 
     def save(self, *args, **kwargs):
         if not self.category_id:
@@ -70,7 +70,7 @@ class Module(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="modules")
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
-    order = models.PositiveIntegerField(default=0)
+    order = models.PositiveIntegerField(default=0, db_index=True)
     slug = models.SlugField()
 
     def __str__(self):
@@ -105,11 +105,12 @@ class Lesson(AbstractTranslatableMarkdownItem):
         related_name="lessons",
         verbose_name=_("Module"),
     )
-    order = models.PositiveIntegerField(default=0, verbose_name=_("Order"))
+    order = models.PositiveIntegerField(default=0, db_index=True, verbose_name=_("Order"))
     visibility = models.CharField(
         max_length=10,
         choices=VISIBILITY_CHOICES,
         default="public",
+        db_index=True,
         verbose_name=_("Visibility"),
     )
 

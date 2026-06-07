@@ -28,7 +28,7 @@ class WriteupTranslationAdmin(AbstractPostTranslationAdmin):
     model = WriteupTranslation
 
 
-class WritupAdmin(AbstractPostAdmin):
+class WriteupAdmin(AbstractPostAdmin):
     fieldsets = [
         *AbstractPostAdmin.fieldsets,
         ("CTF Information", {"fields": [("ctf", "difficulty", "points", "solver_count")]}),
@@ -58,7 +58,7 @@ class CVEAdmin(AuthorsAdminMixin, admin.ModelAdmin):
         js = ("admin/js/visibility_toggle.js",)
 
 
-admin_site.register(Writeup, WritupAdmin)
+admin_site.register(Writeup, WriteupAdmin)
 admin_site.register(CTF, admin.ModelAdmin)
 admin_site.register(Certification, admin.ModelAdmin)
 admin_site.register(Issuer, admin.ModelAdmin)

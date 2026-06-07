@@ -132,6 +132,7 @@ class CVE(models.Model):
     published_date = models.DateField(
         blank=True,
         null=True,
+        db_index=True,
         verbose_name=_("published_date"),
         help_text=_("date when the CVE was published"),
     )
@@ -298,7 +299,7 @@ class Writeup(AbstractPost):
         """Return the title of the writeup and its associated CTF name."""
         return f"{self.title} ({self.ctf.name if self.ctf else 'No CTF'})"
 
-    class Meta(AbstractPostTranslation.Meta):
+    class Meta(AbstractPost.Meta):
         verbose_name = _("Writeup")
         verbose_name_plural = _("Writeups")
 

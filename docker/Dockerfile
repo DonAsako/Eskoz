@@ -3,12 +3,11 @@ FROM python:3.13-slim
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
+# Only gettext is needed at runtime (manage.py compilemessages). psycopg2-binary
+# ships prebuilt wheels, so no build-essential/libpq-dev compile toolchain.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        build-essential \
-        libpq-dev \
         gettext \
-        curl \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
