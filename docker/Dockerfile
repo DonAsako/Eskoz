@@ -20,8 +20,13 @@ RUN pip install --no-cache-dir --upgrade pip && \
 
 COPY . .
 
-RUN chmod +x docker/entrypoint.sh && \
-    mkdir -p logs staticfiles media
+RUN groupadd --gid 1000 app && \
+    useradd --uid 1000 --gid app --home-dir /app --no-create-home app && \
+    chmod +x docker/entrypoint.sh && \
+    mkdir -p logs staticfiles media && \
+    chown -R app:app /app
+
+USER app
 
 EXPOSE 8000
 
