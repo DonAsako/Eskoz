@@ -21,7 +21,6 @@ services:
       dockerfile: docker/Dockerfile
     container_name: eskoz_web
     volumes:
-      - ..:/app
       - static_volume:/app/staticfiles
       - media_volume:/app/media
     env_file:
