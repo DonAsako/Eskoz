@@ -53,8 +53,29 @@ def _unfold_favicons(request):
 
     site_settings = SiteSettings.objects.first()
     if site_settings and site_settings.favicon:
-        return [{"rel": "icon", "href": site_settings.favicon.url}]
+        favicon = {"rel": "icon", "href": site_settings.favicon.url}
+        if site_settings.favicon_mime_type:
+            favicon["type"] = site_settings.favicon_mime_type
+        return [favicon]
     return []
+
+
+def _unfold_site_icon(request):
+    """Mark shown in the admin sidebar header. Using SITE_ICON (not SITE_LOGO)
+    keeps the site name + version text beside it; SITE_LOGO would replace the
+    text entirely. Falls back to the favicon (a square image, well-suited to
+    the 38px slot) when no dedicated logo is uploaded.
+    """
+    from apps.core.models import SiteSettings
+
+    site_settings = SiteSettings.objects.first()
+    if not site_settings:
+        return None
+    if site_settings.logo:
+        return site_settings.logo.url
+    if site_settings.favicon:
+        return site_settings.favicon.url
+    return None
 
 
 UNFOLD = {
@@ -62,6 +83,7 @@ UNFOLD = {
     "SITE_HEADER": _unfold_site_name,
     "SITE_SUBHEADER": _unfold_site_subheader,
     "SITE_FAVICONS": _unfold_favicons,
+    "SITE_ICON": _unfold_site_icon,
     "SITE_URL": "/",
     "DASHBOARD_CALLBACK": "apps.core.dashboard.dashboard_callback",
     "SHOW_HISTORY": True,

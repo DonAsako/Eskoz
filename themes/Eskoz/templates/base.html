@@ -18,7 +18,7 @@
     <meta name="author" content="{{ site_settings.seo_settings.meta_author }}">
     {% endblock %}
 
-    {% if site_settings.favicon %}<link rel="icon" href="{{ site_settings.favicon.url }}" type="image/x-icon">{% endif %}
+    {% if site_settings.favicon %}<link rel="icon" href="{{ site_settings.favicon.url }}"{% if site_settings.favicon_mime_type %} type="{{ site_settings.favicon_mime_type }}"{% endif %}>{% endif %}
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
