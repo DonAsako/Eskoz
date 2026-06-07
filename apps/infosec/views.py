@@ -120,7 +120,7 @@ def certification_list(request):
     Returns:
         HttpResponse: The rendered certifications list page.
     """
-    certifications = Certification.objects.all()
+    certifications = Certification.objects.select_related("issuer", "article", "article__category")
     return render(request, "infosec/certification_list.html", {"certifications": certifications})
 
 
@@ -135,6 +135,6 @@ def cve_list(request):
     Returns:
         HttpResponse: The rendered cve list page.
     """
-    cves = CVE.objects.all().order_by("-published_date", "-id")
+    cves = CVE.objects.select_related("article", "article__category").order_by("-published_date", "-id")
     page_obj = paginate_queryset(request, cves)
     return render(request, "infosec/cve_list.html", {"cves": page_obj, "page_obj": page_obj})

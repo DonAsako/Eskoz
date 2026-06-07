@@ -39,6 +39,7 @@ class WritupAdmin(AbstractPostAdmin):
         ),
     ]
     list_display = ("ctf", "difficulty", "points", "visibility_badge")
+    list_select_related = ("ctf",)
     inlines = AbstractPostAdmin.inlines + [WriteupTranslationAdmin]
 
 

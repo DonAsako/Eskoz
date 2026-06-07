@@ -29,12 +29,14 @@ class CategoryAdmin(AbstractCategoryAdmin):
 
 class CourseAdmin(admin.ModelAdmin):
     list_display = ("category", "title")
+    list_select_related = ("category",)
 
     prepopulated_fields = {"slug": ("title",)}
 
 
 class ModuleAdmin(admin.ModelAdmin):
     list_display = ("course__category", "course", "title", "order")
+    list_select_related = ("course", "course__category")
     prepopulated_fields = {"slug": ("title",)}
 
 
@@ -51,6 +53,7 @@ class LessonAdmin(AbstractTranslatableMarkdownItemAdmin):
     ]
     prepopulated_fields = {"slug": ("title",)}
     list_display = ("module__course", "module", "title", "order", "visibility_badge")
+    list_select_related = ("module", "module__course")
     visibility_badge = visibility_badge_field("visibility")
     inlines = AbstractTranslatableMarkdownItemAdmin.inlines + [LessonTranslationAdmin]
 

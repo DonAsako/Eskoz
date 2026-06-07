@@ -135,5 +135,5 @@ def project_list(request):
     Returns:
         HttpResponse: Rendered projects list page.
     """
-    projects = Project.objects.all()
+    projects = Project.objects.select_related("maintainer", "article", "article__category")
     return render(request, "blog/project_list.html", {"projects": projects})
