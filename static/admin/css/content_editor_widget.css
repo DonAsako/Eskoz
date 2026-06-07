@@ -1,25 +1,40 @@
 .editor-content {
     display: flex;
     width: 100%;
-    border-radius: 5px;
-    overflow: scroll;
-    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    border: 1px solid var(--color-base-300);
+    border-radius: var(--border-radius, 6px);
+    overflow: hidden;
+    background: var(--color-white);
 }
+.dark .editor-content {
+    border-color: var(--color-base-600);
+    background: var(--color-base-900);
+}
+.editor-content:focus-within {
+    border-color: var(--color-primary-600);
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary-600) 20%, transparent);
+}
+
 .editor-content--viewer, .editor-content--editor {
     flex: 0.5;
     min-height: 600px !important;
     outline: none;
     resize: none;
+    border: none;
     border-radius: 0;
     margin: 0;
-    border: none;
-    overflow-y: scroll;
+    overflow-y: auto;
     line-break: auto;
-    overflow-x: none;
-    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
 }
 
 .editor-content--editor {
     padding: 1em;
     font-size: 1.2em !important;
+    border-right: 1px solid var(--color-base-200);
+    background: transparent;
+    color: var(--color-font-default-light);
+}
+.dark .editor-content--editor {
+    border-right-color: var(--color-base-700);
+    color: var(--color-font-default-dark);
 }

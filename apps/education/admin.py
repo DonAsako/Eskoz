@@ -1,4 +1,4 @@
-from django.contrib import admin
+from unfold.admin import ModelAdmin
 
 from apps.core.admin.abstracts import (
     AbstractCategoryAdmin,
@@ -27,14 +27,14 @@ class CategoryAdmin(AbstractCategoryAdmin):
     inlines = [CategoryTranslationAdmin]
 
 
-class CourseAdmin(admin.ModelAdmin):
+class CourseAdmin(ModelAdmin):
     list_display = ("category", "title")
     list_select_related = ("category",)
 
     prepopulated_fields = {"slug": ("title",)}
 
 
-class ModuleAdmin(admin.ModelAdmin):
+class ModuleAdmin(ModelAdmin):
     list_display = ("course__category", "course", "title", "order")
     list_select_related = ("course", "course__category")
     prepopulated_fields = {"slug": ("title",)}

@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 from django.conf.global_settings import LANGUAGES as DJANGO_LANGUAGES
+from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
 
@@ -30,15 +31,199 @@ INSTALLED_APPS = [
     "apps.education",
 ]
 
+
 # django-unfold admin theme. Colours/sidebar refined in a later pass;
 # kept minimal here so the default professional palette applies.
+def _unfold_site_name(request):
+    from apps.core.models import SiteSettings
+
+    site_settings = SiteSettings.objects.first()
+    return site_settings.site_name if site_settings and site_settings.site_name else "Eskoz"
+
+
+def _unfold_site_subheader(request):
+    from eskoz import __version__
+
+    return f"v{__version__}"
+
+
 UNFOLD = {
-    "SITE_TITLE": "Eskoz",
-    "SITE_HEADER": "Eskoz",
+    "SITE_TITLE": _unfold_site_name,
+    "SITE_HEADER": _unfold_site_name,
+    "SITE_SUBHEADER": _unfold_site_subheader,
     "SITE_URL": "/",
     "SHOW_HISTORY": True,
     "SHOW_VIEW_ON_SITE": True,
-    "SHOW_BACK_BUTTON": False,
+    "SHOW_BACK_BUTTON": True,
+    "BORDER_RADIUS": "6px",
+    "COLORS": {
+        "primary": {
+            "50": "oklch(97.5% 0.013 236.0)",
+            "100": "oklch(95.1% 0.028 236.5)",
+            "200": "oklch(90.2% 0.056 237.0)",
+            "300": "oklch(83.5% 0.104 234.3)",
+            "400": "oklch(74.4% 0.171 231.9)",
+            "500": "oklch(62.9% 0.236 259.1)",
+            "600": "oklch(54.6% 0.246 262.9)",
+            "700": "oklch(47.7% 0.222 261.5)",
+            "800": "oklch(40.0% 0.177 260.7)",
+            "900": "oklch(34.5% 0.138 261.3)",
+            "950": "oklch(25.6% 0.105 261.7)",
+        },
+    },
+    "SIDEBAR": {
+        "show_search": False,
+        "show_all_applications": False,
+        "navigation": [
+            {
+                "title": _("General"),
+                "items": [
+                    {
+                        "title": _("Dashboard"),
+                        "icon": "dashboard",
+                        "link": reverse_lazy("admin:index"),
+                    },
+                ],
+            },
+            {
+                "title": _("Blog"),
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {"title": _("Articles"), "icon": "article", "link": reverse_lazy("admin:blog_article_changelist")},
+                    {
+                        "title": _("Projects"),
+                        "icon": "rocket_launch",
+                        "link": reverse_lazy("admin:blog_project_changelist"),
+                    },
+                    {
+                        "title": _("Categories"),
+                        "icon": "category",
+                        "link": reverse_lazy("admin:blog_category_changelist"),
+                    },
+                    {"title": _("Tags"), "icon": "label", "link": reverse_lazy("admin:blog_articletag_changelist")},
+                ],
+            },
+            {
+                "title": _("Infosec"),
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {"title": _("Writeups"), "icon": "flag", "link": reverse_lazy("admin:infosec_writeup_changelist")},
+                    {"title": _("CTF"), "icon": "emoji_events", "link": reverse_lazy("admin:infosec_ctf_changelist")},
+                    {"title": _("CVE"), "icon": "bug_report", "link": reverse_lazy("admin:infosec_cve_changelist")},
+                    {
+                        "title": _("Certifications"),
+                        "icon": "workspace_premium",
+                        "link": reverse_lazy("admin:infosec_certification_changelist"),
+                    },
+                    {
+                        "title": _("Issuers"),
+                        "icon": "business",
+                        "link": reverse_lazy("admin:infosec_issuer_changelist"),
+                    },
+                    {
+                        "title": _("Categories"),
+                        "icon": "category",
+                        "link": reverse_lazy("admin:infosec_category_changelist"),
+                    },
+                    {"title": _("Tags"), "icon": "label", "link": reverse_lazy("admin:infosec_writeuptag_changelist")},
+                ],
+            },
+            {
+                "title": _("Education"),
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": _("Courses"),
+                        "icon": "school",
+                        "link": reverse_lazy("admin:education_course_changelist"),
+                    },
+                    {
+                        "title": _("Modules"),
+                        "icon": "layers",
+                        "link": reverse_lazy("admin:education_module_changelist"),
+                    },
+                    {"title": _("Lessons"), "icon": "book", "link": reverse_lazy("admin:education_lesson_changelist")},
+                    {
+                        "title": _("Categories"),
+                        "icon": "category",
+                        "link": reverse_lazy("admin:education_category_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": _("Team"),
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {"title": _("Users"), "icon": "group", "link": reverse_lazy("admin:auth_user_changelist")},
+                    {
+                        "title": _("Groups"),
+                        "icon": "manage_accounts",
+                        "link": reverse_lazy("admin:auth_group_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": _("Settings"),
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": _("Site Settings"),
+                        "icon": "settings",
+                        "link": reverse_lazy("admin:core_sitesettings_changelist"),
+                    },
+                    {"title": _("Pages"), "icon": "web", "link": reverse_lazy("admin:core_page_changelist")},
+                ],
+            },
+        ],
+    },
+    "TABS": [
+        # CTF-related content
+        {
+            "models": ["infosec.writeup", "infosec.ctf"],
+            "items": [
+                {"title": _("Writeups"), "link": reverse_lazy("admin:infosec_writeup_changelist")},
+                {"title": _("CTF"), "link": reverse_lazy("admin:infosec_ctf_changelist")},
+            ],
+        },
+        # Blog content
+        {
+            "models": ["blog.article", "blog.project"],
+            "items": [
+                {"title": _("Articles"), "link": reverse_lazy("admin:blog_article_changelist")},
+                {"title": _("Projects"), "link": reverse_lazy("admin:blog_project_changelist")},
+            ],
+        },
+        # Certifications & Issuers
+        {
+            "models": ["infosec.certification", "infosec.issuer"],
+            "items": [
+                {"title": _("Certifications"), "link": reverse_lazy("admin:infosec_certification_changelist")},
+                {"title": _("Issuers"), "link": reverse_lazy("admin:infosec_issuer_changelist")},
+            ],
+        },
+        # Blog taxonomy
+        {
+            "models": ["blog.category", "blog.articletag", "blog.projecttag"],
+            "items": [
+                {"title": _("Categories"), "link": reverse_lazy("admin:blog_category_changelist")},
+                {"title": _("Article Tags"), "link": reverse_lazy("admin:blog_articletag_changelist")},
+                {"title": _("Project Tags"), "link": reverse_lazy("admin:blog_projecttag_changelist")},
+            ],
+        },
+        # Infosec taxonomy
+        {
+            "models": ["infosec.category", "infosec.writeuptag"],
+            "items": [
+                {"title": _("Categories"), "link": reverse_lazy("admin:infosec_category_changelist")},
+                {"title": _("Tags"), "link": reverse_lazy("admin:infosec_writeuptag_changelist")},
+            ],
+        },
+    ],
 }
 
 MIDDLEWARE = [

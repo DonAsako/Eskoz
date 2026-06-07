@@ -1,4 +1,4 @@
-from django.contrib import admin
+from unfold.admin import ModelAdmin
 
 from apps.core.admin import (
     AbstractCategoryAdmin,
@@ -49,7 +49,7 @@ class CategoryAdmin(AbstractCategoryAdmin):
 class TagAdmin(AbstractTagAdmin): ...
 
 
-class CVEAdmin(AuthorsAdminMixin, admin.ModelAdmin):
+class CVEAdmin(AuthorsAdminMixin, ModelAdmin):
     list_display = ("cve_id", "cvss_score", "published_date", "visibility_badge")
     visibility_badge = visibility_badge_field("visibility")
     search_fields = ("cve_id", "vulnerable_product")
@@ -59,9 +59,9 @@ class CVEAdmin(AuthorsAdminMixin, admin.ModelAdmin):
 
 
 admin_site.register(Writeup, WriteupAdmin)
-admin_site.register(CTF, admin.ModelAdmin)
-admin_site.register(Certification, admin.ModelAdmin)
-admin_site.register(Issuer, admin.ModelAdmin)
+admin_site.register(CTF, ModelAdmin)
+admin_site.register(Certification, ModelAdmin)
+admin_site.register(Issuer, ModelAdmin)
 admin_site.register(CVE, CVEAdmin)
 admin_site.register(WriteupTag, TagAdmin)
 admin_site.register(Category, CategoryAdmin)
