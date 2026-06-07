@@ -78,6 +78,23 @@ def _unfold_site_icon(request):
     return None
 
 
+def _unfold_account_links(request):
+    """Links in the user dropdown (bottom of the sidebar). Defining this
+    suppresses Unfold's default "Change password" entry, so we re-add it here.
+    "Edit my profile" points at the user's own change page (where the
+    UserProfile inline lives); gated on the change perm to avoid a 403.
+    """
+    from django.urls import reverse
+
+    user = getattr(request, "user", None)
+    links = []
+    if user and user.pk and user.has_perm("auth.change_user"):
+        links.append({"title": _("Edit my profile"), "link": reverse("admin:auth_user_change", args=[user.pk])})
+    if user and user.has_usable_password():
+        links.append({"title": _("Change password"), "link": reverse("admin:password_change")})
+    return links
+
+
 UNFOLD = {
     "SITE_TITLE": _unfold_site_name,
     "SITE_HEADER": _unfold_site_name,
@@ -85,6 +102,7 @@ UNFOLD = {
     "SITE_FAVICONS": _unfold_favicons,
     "SITE_ICON": _unfold_site_icon,
     "SITE_URL": "/",
+    "ACCOUNT": {"navigation": _unfold_account_links},
     "DASHBOARD_CALLBACK": "apps.core.dashboard.dashboard_callback",
     "SHOW_HISTORY": True,
     "SHOW_VIEW_ON_SITE": True,

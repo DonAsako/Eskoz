@@ -1457,3 +1457,7 @@ msgstr "Writeup protégé"
 #: themes/donasako/templates/infosec/writeup_password.html:8
 msgid "This writeup requires a password to access."
 msgstr "Ce writeup nécessite un mot de passe pour y accéder."
+
+#: eskoz/settings/base.py:92
+msgid "Edit my profile"
+msgstr "Modifier mon profil"
