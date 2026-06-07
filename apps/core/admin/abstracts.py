@@ -67,7 +67,20 @@ class AbstractTranslatableMarkdownItemAdmin(admin.ModelAdmin):
 class AbstractPostTranslationAdmin(AbstractTranslatableMarkdownItemTranslationAdmin): ...
 
 
-class AbstractPostAdmin(AbstractTranslatableMarkdownItemAdmin):
+class AuthorsAdminMixin:
+    """Shared author handling for any admin whose model has an ``authors``
+    M2M: a multi-select widget plus auto-filling the creating editor, so a
+    freshly created object is never left author-less."""
+
+    filter_horizontal = ("authors",)
+
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+        if not change and not form.instance.authors.exists():
+            form.instance.authors.add(request.user)
+
+
+class AbstractPostAdmin(AuthorsAdminMixin, AbstractTranslatableMarkdownItemAdmin):
     """Base admin for all Post-like models."""
 
     abstract = True
@@ -75,7 +88,6 @@ class AbstractPostAdmin(AbstractTranslatableMarkdownItemAdmin):
     list_display = ("title", "published_on", "visibility_badge")
     visibility_badge = visibility_badge_field("visibility")
     autocomplete_fields = ["tags", "category"]
-    filter_horizontal = ["authors"]
     readonly_fields = ["edited_on"]
     prepopulated_fields = {"slug": ("title",)}
     fieldsets = [
@@ -99,13 +111,6 @@ class AbstractPostAdmin(AbstractTranslatableMarkdownItemAdmin):
             "admin/js/post_visibility_edit.js",
             "admin/js/visibility_toggle.js",
         )
-
-    def save_related(self, request, form, formsets, change):
-        """Default a freshly created post's authors to the editor who created
-        it, so multi-author stays opt-in but never leaves a post author-less."""
-        super().save_related(request, form, formsets, change)
-        if not change and not form.instance.authors.exists():
-            form.instance.authors.add(request.user)
 
 
 class AbstractCategoryAdmin(admin.ModelAdmin):

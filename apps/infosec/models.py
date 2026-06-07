@@ -163,13 +163,11 @@ class CVE(models.Model):
         verbose_name=_("references_url"),
         help_text=_("link to official references or advisories"),
     )
-    author = models.ForeignKey(
+    authors = models.ManyToManyField(
         User,
-        on_delete=models.SET_NULL,
+        related_name="cves_authored",
         blank=True,
-        null=True,
-        related_name="cve",
-        verbose_name=_("Author"),
+        verbose_name=_("Authors"),
     )
     VISIBILITY_CHOICES = [
         ("public", _("Public")),

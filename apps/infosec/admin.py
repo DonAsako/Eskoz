@@ -6,6 +6,7 @@ from apps.core.admin import (
     AbstractPostAdmin,
     AbstractPostTranslationAdmin,
     AbstractTagAdmin,
+    AuthorsAdminMixin,
 )
 from apps.core.admin.site import admin_site
 from apps.core.admin.utils import visibility_badge_field
@@ -48,7 +49,7 @@ class CategoryAdmin(AbstractCategoryAdmin):
 class TagAdmin(AbstractTagAdmin): ...
 
 
-class CVEAdmin(admin.ModelAdmin):
+class CVEAdmin(AuthorsAdminMixin, admin.ModelAdmin):
     list_display = ("cve_id", "cvss_score", "published_date", "visibility_badge")
     visibility_badge = visibility_badge_field("visibility")
     search_fields = ("cve_id", "vulnerable_product")
