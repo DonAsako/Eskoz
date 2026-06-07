@@ -1461,3 +1461,24 @@ msgstr "Ce writeup nécessite un mot de passe pour y accéder."
 #: eskoz/settings/base.py:92
 msgid "Edit my profile"
 msgstr "Modifier mon profil"
+
+#: apps/core/models/settings.py:36
+msgid "Check for updates"
+msgstr "Vérifier les mises à jour"
+
+#: apps/core/models/settings.py:37
+msgid ""
+"Periodically check GitHub for a newer Eskoz release and show a notice on the "
+"dashboard."
+msgstr ""
+"Vérifie périodiquement sur GitHub si une nouvelle version d'Eskoz est "
+"disponible et affiche un avis sur le tableau de bord."
+
+#: templates/admin/index.html:9
+#, python-format
+msgid "Eskoz %(latest)s is available — you are running %(current)s."
+msgstr "Eskoz %(latest)s est disponible — vous utilisez la version %(current)s."
+
+#: templates/admin/index.html:14
+msgid "Release notes"
+msgstr "Notes de version"

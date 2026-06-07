@@ -31,6 +31,11 @@ class SiteSettings(models.Model):
         blank=True,
     )
     under_maintenance = models.BooleanField(default=False, verbose_name=_("Under maintenance"))
+    check_for_updates = models.BooleanField(
+        default=False,
+        verbose_name=_("Check for updates"),
+        help_text=_("Periodically check GitHub for a newer Eskoz release and show a notice on the dashboard."),
+    )
 
     def __str__(self):
         return gettext("Site settings")

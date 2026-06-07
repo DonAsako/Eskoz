@@ -10,6 +10,8 @@ from django.urls import NoReverseMatch, reverse
 from django.utils.translation import gettext_lazy as _
 
 from apps.analytics.metrics import add_dashboard_metrics
+from apps.core.models import SiteSettings
+from apps.core.updates import get_update_info
 
 _ACTION_META = {
     LogEntry.Action.CREATE: (_("created"), "public"),
@@ -32,6 +34,10 @@ def _change_url(entry):
 
 def dashboard_callback(request, context):
     add_dashboard_metrics(context)
+
+    site_settings = SiteSettings.objects.first()
+    if site_settings and site_settings.check_for_updates:
+        context["update_info"] = get_update_info()
 
     entries = LogEntry.objects.select_related("actor", "content_type").order_by("-timestamp")[:12]
 
