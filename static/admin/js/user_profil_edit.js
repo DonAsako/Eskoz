@@ -1,33 +1,36 @@
 document.addEventListener("DOMContentLoaded", function () {
     const isActiveInput = document.querySelector("#id_two_factor-0-is_active");
-    const qrCodeWrapper = document.querySelector(".field-qr_code");
-    const otpCodeWrapper = document.querySelector(".field-otp_code");
-    const backupCodesWrapper = document.querySelector(".field-backup_codes_display");
-
     if (!isActiveInput) return;
 
+    // unfold does NOT emit a `.field-<name>` class on readonly fields
+    // (qr_code, backup_codes_display), so we can't target those wrappers by
+    // name. Instead we locate each row from a stable anchor inside it — the
+    // editable input by id, or the data-tfa-field marker we render in the
+    // readonly HTML — then climb to the field row (.field-line) to toggle it.
+    const rowOf = (el) => (el ? el.closest(".field-line, .form-row") : null);
+
+    const otpRow = rowOf(document.querySelector("#id_two_factor-0-otp_code"));
+    const qrMarker = document.querySelector('[data-tfa-field="qr"]');
+    const qrRow = rowOf(qrMarker);
+    const backupMarker = document.querySelector('[data-tfa-field="backup"]');
+    const backupRow = rowOf(backupMarker);
+
     const wasAlreadyActive = isActiveInput.checked;
+    const show = (row, visible) => { if (row) row.style.display = visible ? "" : "none"; };
 
     function toggleOtpFields() {
         const isChecked = isActiveInput.checked;
         const stateChanged = isChecked !== wasAlreadyActive;
 
-        // Show QR code only when enabling (not already active, checking the box)
-        if (qrCodeWrapper) {
-            qrCodeWrapper.style.display = (isChecked && !wasAlreadyActive) ? "block" : "none";
-        }
+        // QR code: only while enabling (box checked, was not already active).
+        show(qrRow, isChecked && !wasAlreadyActive);
 
-        // Show OTP input when state changes (enabling or disabling)
-        if (otpCodeWrapper) {
-            otpCodeWrapper.style.display = stateChanged ? "block" : "none";
-        }
+        // OTP input: whenever the state is changing (enabling or disabling).
+        show(otpRow, stateChanged);
 
-        // Hide backup codes section if empty (already viewed or not generated)
-        if (backupCodesWrapper) {
-            const content = backupCodesWrapper.querySelector(".readonly");
-            const hasContent = content && content.textContent.trim() !== "";
-            backupCodesWrapper.style.display = hasContent ? "block" : "none";
-        }
+        // Backup codes: only when the marker wraps real content.
+        const hasBackup = backupMarker && backupMarker.textContent.trim() !== "";
+        show(backupRow, Boolean(hasBackup));
     }
 
     isActiveInput.addEventListener("change", toggleOtpFields);

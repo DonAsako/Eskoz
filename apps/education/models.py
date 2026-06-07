@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -39,6 +40,7 @@ class Course(models.Model):
     version = models.FloatField(default=0.01)
     slug = models.SlugField()
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name="courses")
+    page_views = GenericRelation("analytics.PageView")
 
     def save(self, *args, **kwargs):
         if not self.category_id:
@@ -72,6 +74,7 @@ class Module(models.Model):
     description = models.TextField(blank=True, null=True)
     order = models.PositiveIntegerField(default=0, db_index=True)
     slug = models.SlugField()
+    page_views = GenericRelation("analytics.PageView")
 
     def __str__(self):
         """Return the module title as its string representation"""
@@ -113,6 +116,7 @@ class Lesson(AbstractTranslatableMarkdownItem):
         db_index=True,
         verbose_name=_("Visibility"),
     )
+    page_views = GenericRelation("analytics.PageView")
 
     def __str__(self):
         """Return the lesson title as its string representation"""

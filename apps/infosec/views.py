@@ -23,6 +23,7 @@ def writeup_detail(request, slug_category, slug_writeup):
     writeup = get_object_or_404(Writeup, category=category, slug=slug_writeup)
     if writeup.visibility == "private" and not request.user.is_authenticated:
         raise Http404
+    request.tracked_object = writeup
 
     redirect_response = redirect_to_available_translation(
         writeup, "infosec:writeup_detail", [slug_category, slug_writeup]

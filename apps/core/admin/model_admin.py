@@ -9,6 +9,7 @@ from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django_ratelimit.core import is_ratelimited
 from django_ratelimit.exceptions import Ratelimited
+from unfold.admin import ModelAdmin, StackedInline, TabularInline
 
 from apps.core.admin.abstracts import AbstractSubModuleInline
 from apps.core.admin.site import admin_site
@@ -28,14 +29,14 @@ from apps.core.models import (
 )
 
 
-class WellKnownFileInline(admin.TabularInline):
+class WellKnownFileInline(TabularInline):
     model = WellKnownFile
     can_delete = True
     extra = 0
     verbose_name = _("Well-Known file")
 
 
-class SeoSettingsInline(admin.StackedInline):
+class SeoSettingsInline(StackedInline):
     model = SeoSettings
     can_delete = False
     extra = 0
@@ -82,7 +83,7 @@ class BlogSettingsInline(AbstractSubModuleInline):
     verbose_name = _("Blog Settings")
 
 
-class SiteSettingsAdmin(admin.ModelAdmin):
+class SiteSettingsAdmin(ModelAdmin):
     inlines = [
         WellKnownFileInline,
         SeoSettingsInline,
@@ -108,7 +109,7 @@ class SiteSettingsAdmin(admin.ModelAdmin):
         js = ("admin/js/settings_admin.js",)
 
 
-class PageAdmin(admin.ModelAdmin):
+class PageAdmin(ModelAdmin):
     model = Page
     verbose_name = _("Page")
     exclude = ["site_settings"]
@@ -121,7 +122,7 @@ class PageAdmin(admin.ModelAdmin):
         js = ("admin/js/visibility_toggle.js",)
 
 
-class UserProfileInline(admin.StackedInline):
+class UserProfileInline(StackedInline):
     model = UserProfile
     can_delete = False
     verbose_name = _("Profil")
@@ -131,7 +132,7 @@ class UserProfileInline(admin.StackedInline):
     ]
 
 
-class User2FAInline(admin.StackedInline):
+class User2FAInline(StackedInline):
     model = User2FA
     can_delete = False
     verbose_name = _("Two Factor Authentication")
@@ -144,13 +145,13 @@ class User2FAInline(admin.StackedInline):
     @admin.display(description=_("Authentication QR Code"))
     def qr_code(self, obj):
         if not obj or not obj.secret_key:
-            return mark_safe(f'<p class="tfa-empty">{_("No 2FA secret key set yet.")}</p>')  # noqa: S308
+            return mark_safe(f'<p class="tfa-empty" data-tfa-field="qr">{_("No 2FA secret key set yet.")}</p>')  # noqa: S308
 
         uri = obj.get_otpauth_uri()
         copy_label = _("Copy")
         return mark_safe(  # noqa: S308  - renders system-generated 2FA values (QR/secret/URI), no user input
             f"""
-            <div class="tfa-grid">
+            <div class="tfa-grid" data-tfa-field="qr">
                 <div class="tfa-qr">{obj.get_otp_qr_code()}</div>
                 <div class="tfa-copy-stack">
                     <div class="tfa-copy">
@@ -174,16 +175,21 @@ class User2FAInline(admin.StackedInline):
 
     @admin.display(description=_("Backup Codes"))
     def backup_codes_display(self, obj):
+        # Always return a wrapper carrying the data-tfa-field marker so the
+        # JS can locate (and hide) the whole readonly row — unfold does not
+        # emit a .field-backup_codes_display class on readonly fields.
+        empty = mark_safe('<span data-tfa-field="backup"></span>')
+
         if not obj or not obj.is_active:
-            return ""
+            return empty
 
         if obj.backup_codes_viewed:
             return mark_safe(  # noqa: S308  - static translated string, no user input
-                f'<p class="tfa-empty">{_("Backup codes have already been displayed once. Disable then re-enable 2FA to regenerate them.")}</p>'
+                f'<p class="tfa-empty" data-tfa-field="backup">{_("Backup codes have already been displayed once. Disable then re-enable 2FA to regenerate them.")}</p>'
             )
 
         if not obj.backup_codes:
-            return ""
+            return empty
 
         codes_html = "".join([f'<code class="tfa-backup__code">{code}</code>' for code in obj.backup_codes])
         all_codes = "\\n".join(obj.backup_codes)
@@ -196,7 +202,7 @@ class User2FAInline(admin.StackedInline):
 
         return mark_safe(  # noqa: S308  - renders system-generated backup codes, no user input
             f"""
-            <div class="tfa-backup">
+            <div class="tfa-backup" data-tfa-field="backup">
                 <div class="tfa-backup__head">
                     <span class="tfa-copy__label">{_("Recovery codes")} <span class="tfa-backup__count">{len(obj.backup_codes)}</span></span>
                     <button type="button" class="tfa-copy__btn"
@@ -213,7 +219,7 @@ class User2FAInline(admin.StackedInline):
         js = ("admin/js/user_profil_edit.js",)
 
 
-class UserLinkInline(admin.TabularInline):
+class UserLinkInline(TabularInline):
     model = UserLink
     extra = 1
     can_delete = True
@@ -221,7 +227,7 @@ class UserLinkInline(admin.TabularInline):
     verbose_name_plural = _("External links")
 
 
-class UserAdmin(BaseUserAdmin):
+class UserAdmin(BaseUserAdmin, ModelAdmin):
     inlines = [User2FAInline, UserProfileInline, UserLinkInline]
 
     list_display = ("username", "email", "is_staff")
@@ -281,7 +287,7 @@ class UserAdmin(BaseUserAdmin):
         return new_fieldsets
 
 
-class GroupAdmin(BaseGroupAdmin): ...
+class GroupAdmin(BaseGroupAdmin, ModelAdmin): ...
 
 
 admin_site.register(User, UserAdmin)

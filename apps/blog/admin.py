@@ -1,6 +1,6 @@
-from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
+from unfold.admin import ModelAdmin
 
 from apps.core.admin import (
     AbstractCategoryAdmin,
@@ -39,7 +39,7 @@ class CategoryAdmin(AbstractCategoryAdmin):
     inlines = [CategoryTranslationAdmin]
 
 
-class ProjectAdmin(admin.ModelAdmin):
+class ProjectAdmin(ModelAdmin):
     list_display = (
         "name",
         "short_description",
@@ -52,7 +52,8 @@ class ProjectAdmin(admin.ModelAdmin):
     search_fields = ("name", "description")
     list_filter = ()
     ordering = ("name",)
-    autocomplete_fields = ["tags"]
+    filter_horizontal = ("tags",)
+    autocomplete_fields_excluded_from_warnings = ["tags"]
 
     class Media:
         js = ("admin/js/visibility_toggle.js",)

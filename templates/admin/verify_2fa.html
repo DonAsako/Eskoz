@@ -1,49 +1,51 @@
-{% extends "admin/base_site.html" %}
-{% load i18n static %}
+{% extends "unfold/layouts/unauthenticated.html" %}
 
-{% block title %}{% trans 'Two-factor verification' %} | {{ site_settings.site_name }}{% endblock %}
+{% load i18n static unfold %}
 
-{% block bodyclass %}{{ block.super }} login auth-page{% endblock %}
-
-{% block usertools %}{% endblock %}
-{% block nav-global %}{% endblock %}
-{% block nav-sidebar %}{% endblock %}
-{% block content_title %}{% endblock %}
-{% block nav-breadcrumbs %}{% endblock %}
-{% block header %}{% endblock %}
+{% block title %}{% trans "Two-factor verification" %} | {{ site_title }}{% endblock %}
 
 {% block content %}
-<main class="auth">
-    <section class="auth__panel">
-        <header class="auth__brand">
-            <span class="auth__wordmark">{{ site_settings.site_name|default:"Eskoz" }}</span>
-        </header>
+    {% include "unfold/helpers/unauthenticated_title.html" with title=site_title|default:"Eskoz" subtitle=_("Two-factor verification") %}
 
-        <h1 class="auth__title">{% trans "Two-factor verification" %}</h1>
-        <p class="auth__lede">
-            {% blocktrans %}Signed in as <strong>{{ username }}</strong>.{% endblocktrans %}
+    {% if username %}
+        <p class="mb-6 text-font-subtle-light dark:text-font-subtle-dark text-sm -mt-4">
+            {% blocktrans trimmed %}Signed in as <span class="font-semibold">{{ username }}</span>.{% endblocktrans %}
         </p>
+    {% endif %}
 
-        {% if error %}
-            <p class="auth__error">{{ error }}</p>
-        {% endif %}
+    {% if error %}
+        {% include "unfold/helpers/messages/error.html" with error=error %}
+    {% endif %}
 
-        <form method="post" action="" class="auth__form">{% csrf_token %}
-            <label class="auth__field">
-                <span class="auth__field-label">{% trans "Authentication code" %}</span>
-                <input type="text" name="code" id="id_code" autofocus autocomplete="one-time-code" inputmode="numeric" pattern="[A-Za-z0-9 \-]*" required class="auth__field-input--otp">
+    <form method="post" action="" id="verify-2fa-form">
+        {% csrf_token %}
+
+        <div class="form-field flex flex-col group mb-4">
+            <label for="id_code" class="font-semibold mb-2 text-font-important-light dark:text-font-important-dark">
+                {% trans "Authentication code" %}
             </label>
-            <p class="auth__hint">
+            <input id="id_code" name="code" type="text" required autofocus
+                   autocomplete="one-time-code" inputmode="numeric" pattern="[A-Za-z0-9 \-]*"
+                   class="border border-base-200 bg-white font-medium min-w-20 placeholder-base-400 rounded-default shadow-xs text-font-default-light text-center text-lg tracking-[.3em] focus:outline-2 focus:-outline-offset-2 focus:outline-primary-600 dark:bg-base-900 dark:border-base-700 dark:text-font-default-dark dark:scheme-dark px-3 py-2.5 w-full">
+            <p class="mt-2 text-font-subtle-light dark:text-font-subtle-dark text-sm">
                 {% trans "6-digit code from your authenticator app, or one of your backup codes." %}
             </p>
-            {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
-            <button type="submit" class="auth__submit">{% trans "Verify" %}</button>
-        </form>
-    </section>
+        </div>
 
-    <form method="post" action="{{ logout_url }}" class="auth__footer-form">
-        {% csrf_token %}
-        <button type="submit">{% trans "Sign out instead" %}</button>
+        {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+
+        <div class="flex flex-col gap-3 mt-6">
+            {% component "unfold/components/button.html" with submit=1 variant="primary" class="w-full" %}
+                {% trans "Verify" %}
+                <span class="material-symbols-outlined relative right-0 transition-all group-hover:-right-1 text-sm">arrow_forward</span>
+            {% endcomponent %}
+        </div>
     </form>
-</main>
+
+    <form method="post" action="{{ logout_url }}" class="mt-3">
+        {% csrf_token %}
+        {% component "unfold/components/button.html" with submit=1 variant="secondary" class="w-full" %}
+            {% trans "Sign out instead" %}
+        {% endcomponent %}
+    </form>
 {% endblock %}

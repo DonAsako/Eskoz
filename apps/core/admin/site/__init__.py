@@ -1,32 +1,21 @@
 from django.apps import apps
 from django.conf import settings
-from django.contrib.admin import AdminSite
 from django.http import HttpResponseBadRequest, HttpResponseNotAllowed, JsonResponse
 from django.urls import path
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django_ratelimit.decorators import ratelimit
+from unfold.sites import UnfoldAdminSite
 
 from apps.core.models import SiteSettings
 from apps.core.utils import get_content_as_html
-from eskoz import __version__
 
 
-class EskozAdminSite(AdminSite):
-    site_header = "Eskoz"
-    index_template = "admin/eskoz_index.html"
-
-    def each_context(self, request):
-        context = super().each_context(request)
-        context["eskoz_version"] = __version__
-        return context
-
+class EskozAdminSite(UnfoldAdminSite):
     @method_decorator(ratelimit(key="ip", rate=settings.RATELIMIT_LOGIN_IP, method="POST", block=True))
     @method_decorator(ratelimit(key="post:username", rate=settings.RATELIMIT_LOGIN_USERNAME, method="POST", block=True))
     def login(self, request, extra_context=None):
         return super().login(request, extra_context)
-
-    APP_ORDER = ["core", "auth", "infosec", "blog", "education"]
 
     def get_app_list(self, request, extra_context=None):
         app_list = super().get_app_list(request, extra_context)
@@ -48,112 +37,22 @@ class EskozAdminSite(AdminSite):
             elif label == "education" and getattr(site_settings, "education", None):
                 if site_settings.education.is_active:
                     filtered_apps.append(app)
-
-            elif label == "core":
-                app["name"] = _("Site")
-                filtered_apps.append(app)
-
             else:
                 filtered_apps.append(app)
 
-        filtered_apps.sort(key=lambda a: self.APP_ORDER.index(a["app_label"]))
         return filtered_apps
 
-    def index(self, request, extra_context=None):
-        """Render the dashboard with content stats + recent activity.
-
-        The default Django admin index just lists apps; we keep that list
-        further down the page (via ``admin/index.html`` which extends the
-        original) and surface the operational data first: counts, audit
-        trail, quick actions to the most-used create forms.
-        """
-        from auditlog.models import LogEntry
-
-        from apps.blog.models import Article, Project
-        from apps.core.models import Page
-        from apps.education.models import Course, Lesson
-        from apps.infosec.models import CVE, Writeup
-
-        def _public(model):
-            return (
-                model.objects.filter(visibility="public").count()
-                if hasattr(model, "visibility")
-                else model.objects.count()
-            )
-
-        site_settings = SiteSettings.objects.first()
-        site_settings_url = None
-        if site_settings:
-            model_admin = self._registry.get(SiteSettings)
-            if model_admin:
-                from django.urls import reverse as _reverse
-
-                site_settings_url = _reverse(
-                    "admin:core_sitesettings_change",
-                    args=[site_settings.pk],
-                    current_app=self.name,
-                )
-
-        stats = [
-            {
-                "label": "Articles",
-                "total": Article.objects.count(),
-                "public": _public(Article),
-                "add_url": "admin:blog_article_add",
-            },
-            {
-                "label": "Writeups",
-                "total": Writeup.objects.count(),
-                "public": _public(Writeup),
-                "add_url": "admin:infosec_writeup_add",
-            },
-            {
-                "label": "Lessons",
-                "total": Lesson.objects.count(),
-                "public": Lesson.objects.count(),
-                "add_url": "admin:education_lesson_add",
-            },
-            {
-                "label": "CVEs",
-                "total": CVE.objects.count(),
-                "public": CVE.objects.count(),
-                "add_url": "admin:infosec_cve_add",
-            },
-            {
-                "label": "Projects",
-                "total": Project.objects.count(),
-                "public": Project.objects.count(),
-                "add_url": "admin:blog_project_add",
-            },
-            {
-                "label": "Courses",
-                "total": Course.objects.count(),
-                "public": Course.objects.count(),
-                "add_url": "admin:education_course_add",
-            },
-            {
-                "label": "Pages",
-                "total": Page.objects.count(),
-                "public": _public(Page),
-                "add_url": "admin:core_page_add",
-            },
-        ]
-
-        recent_activity = LogEntry.objects.select_related("actor", "content_type").order_by("-timestamp")[:8]
-
-        context = {
-            **(extra_context or {}),
-            "dashboard_stats": stats,
-            "dashboard_recent_activity": recent_activity,
-            "dashboard_site_settings_url": site_settings_url,
-        }
-        return super().index(request, context)
-
     def get_urls(self):
+        from apps.analytics.views import analytics_view
         from apps.core.views import verify_2fa_view
 
         urls = super().get_urls()
         custom_urls = [
+            path(
+                "analytics/",
+                self.admin_view(analytics_view),
+                name="analytics",
+            ),
             path(
                 "content_preview/",
                 self.admin_view(self.content_preview),
@@ -174,8 +73,47 @@ class EskozAdminSite(AdminSite):
                 self.admin_view(self.set_visibility),
                 name="set_visibility",
             ),
+            path(
+                "image_upload/",
+                self.admin_view(self.image_upload),
+                name="image_upload",
+            ),
         ]
         return custom_urls + urls
+
+    def image_upload(self, request):
+        """Store an image dropped/pasted into the Markdown editor and return
+        its URL so the JS can insert the corresponding ``![](...)``. Staff-only
+        (wrapped by ``admin_view``); the file is validated as a real image by
+        Pillow before being written under ``posts/``.
+        """
+        import uuid
+
+        from django.core.files.storage import default_storage
+        from PIL import Image, UnidentifiedImageError
+
+        if request.method != "POST":
+            return HttpResponseNotAllowed(["POST"])
+
+        upload = request.FILES.get("image")
+        if not upload:
+            return HttpResponseBadRequest("No file")
+        if upload.size > 10 * 1024 * 1024:
+            return JsonResponse({"error": str(_("Image too large (max 10 MB)."))}, status=400)
+
+        try:
+            probe = Image.open(upload)
+            probe.verify()
+        except (UnidentifiedImageError, OSError):
+            return JsonResponse({"error": str(_("Invalid image file."))}, status=400)
+
+        ext = {"jpeg": "jpg", "png": "png", "gif": "gif", "webp": "webp"}.get((probe.format or "").lower())
+        if not ext:
+            return JsonResponse({"error": str(_("Unsupported image format."))}, status=400)
+
+        upload.seek(0)
+        name = default_storage.save(f"posts/{uuid.uuid4()}.{ext}", upload)
+        return JsonResponse({"url": default_storage.url(name)})
 
     def set_visibility(self, request, app_label, model_name, pk):
         """Swap the ``visibility`` of a single object from a changelist

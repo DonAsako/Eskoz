@@ -97,6 +97,7 @@ def page_detail(request, slug):
     page = get_object_or_404(Page, slug=slug)
     if page.visibility == "private" and not request.user.is_authenticated:
         raise Http404
+    request.tracked_object = page
     return render(request, "core/page.html", {"page": page})
 
 
@@ -240,16 +241,20 @@ def verify_2fa_view(request):
     # GET (or POST with bad code): render the form. We deliberately keep this
     # page reachable while authenticated-but-unverified — logout link is the
     # escape hatch for users who lost their device (and have no backup code).
-    return render(
-        request,
-        "admin/verify_2fa.html",
+    # Merge the admin site context so the page can extend unfold's
+    # unauthenticated layout (site title, theme, etc.).
+    from apps.core.admin.site import admin_site
+
+    context = admin_site.each_context(request)
+    context.update(
         {
             "error": error,
             "username": request.user.get_username(),
             "next": request.GET.get("next", ""),
             "logout_url": reverse("admin:logout"),
-        },
+        }
     )
+    return render(request, "admin/verify_2fa.html", context)
 
 
 def search_view(request):

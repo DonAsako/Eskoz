@@ -13,4 +13,5 @@ class ContentEditorWidget(Widget):
         return {
             **super().get_context(name, value, attrs),
             "content_preview_url": reverse("admin:content_preview"),
+            "image_upload_url": reverse("admin:image_upload"),
         }

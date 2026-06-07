@@ -1,10 +1,11 @@
-from django.contrib import admin
+from unfold.admin import ModelAdmin
 
 from apps.core.admin.abstracts import (
     AbstractCategoryAdmin,
     AbstractCategoryTranslationAdmin,
     AbstractTranslatableMarkdownItemAdmin,
     AbstractTranslatableMarkdownItemTranslationAdmin,
+    PageViewsAdminMixin,
 )
 from apps.core.admin.site import admin_site
 from apps.core.admin.utils import visibility_badge_field
@@ -27,15 +28,15 @@ class CategoryAdmin(AbstractCategoryAdmin):
     inlines = [CategoryTranslationAdmin]
 
 
-class CourseAdmin(admin.ModelAdmin):
-    list_display = ("category", "title")
+class CourseAdmin(PageViewsAdminMixin, ModelAdmin):
+    list_display = ("category", "title", "views_count")
     list_select_related = ("category",)
 
     prepopulated_fields = {"slug": ("title",)}
 
 
-class ModuleAdmin(admin.ModelAdmin):
-    list_display = ("course__category", "course", "title", "order")
+class ModuleAdmin(PageViewsAdminMixin, ModelAdmin):
+    list_display = ("course__category", "course", "title", "order", "views_count")
     list_select_related = ("course", "course__category")
     prepopulated_fields = {"slug": ("title",)}
 
@@ -44,7 +45,7 @@ class LessonTranslationAdmin(AbstractTranslatableMarkdownItemTranslationAdmin):
     model = LessonTranslation
 
 
-class LessonAdmin(AbstractTranslatableMarkdownItemAdmin):
+class LessonAdmin(PageViewsAdminMixin, AbstractTranslatableMarkdownItemAdmin):
     fieldsets = [
         (
             "Course information",
@@ -52,7 +53,7 @@ class LessonAdmin(AbstractTranslatableMarkdownItemAdmin):
         ),
     ]
     prepopulated_fields = {"slug": ("title",)}
-    list_display = ("module__course", "module", "title", "order", "visibility_badge")
+    list_display = ("module__course", "module", "title", "order", "views_count", "visibility_badge")
     list_select_related = ("module", "module__course")
     visibility_badge = visibility_badge_field("visibility")
     inlines = [*AbstractTranslatableMarkdownItemAdmin.inlines, LessonTranslationAdmin]

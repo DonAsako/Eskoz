@@ -1,8 +1,9 @@
 from django.contrib import admin, messages
-from django.contrib.contenttypes.admin import GenericTabularInline
 from django.core.exceptions import ValidationError
-from django.utils.html import format_html
+from django.db.models import Count
+from django.utils.html import format_html, format_html_join
 from django.utils.translation import gettext_lazy as _
+from unfold.admin import GenericTabularInline, ModelAdmin, StackedInline
 
 from apps.core.admin.utils import backup, visibility_badge_field
 from apps.core.forms import AbstractPostAdminForm, AbstractTranslatableMarkdownItemAdminForm
@@ -34,7 +35,7 @@ class TranslatableMarkdownImageAdmin(GenericTabularInline):
     image_url.short_description = "URL"
 
 
-class AbstractTranslatableMarkdownItemTranslationAdmin(admin.StackedInline):
+class AbstractTranslatableMarkdownItemTranslationAdmin(StackedInline):
     abstract = True
     extra = 1
     can_delete = True
@@ -56,8 +57,8 @@ class AbstractTranslatableMarkdownItemTranslationAdmin(admin.StackedInline):
         return 1 if not self.model.objects.filter(translatable_content=obj).exists() else 0
 
 
-class AbstractTranslatableMarkdownItemAdmin(admin.ModelAdmin):
-    """Base adnin for all AbstractTranslatableMarkdownItem-like models."""
+class AbstractTranslatableMarkdownItemAdmin(ModelAdmin):
+    """Base admin for all AbstractTranslatableMarkdownItem-like models."""
 
     abstract = True
     actions = [backup]
@@ -67,12 +68,34 @@ class AbstractTranslatableMarkdownItemAdmin(admin.ModelAdmin):
 class AbstractPostTranslationAdmin(AbstractTranslatableMarkdownItemTranslationAdmin): ...
 
 
+class PageViewsAdminMixin:
+    """Adds a sortable "Views" column from the analytics ``page_views``
+    GenericRelation. The model must declare ``page_views =
+    GenericRelation("analytics.PageView")``."""
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).annotate(_views=Count("page_views"))
+
+    @admin.display(description=_("Views"), ordering="_views")
+    def views_count(self, obj):
+        return getattr(obj, "_views", 0)
+
+
 class AuthorsAdminMixin:
     """Shared author handling for any admin whose model has an ``authors``
-    M2M: a multi-select widget plus auto-filling the creating editor, so a
-    freshly created object is never left author-less."""
+    M2M: a multi-select widget, an authors changelist column (prefetched),
+    plus auto-filling the creating editor so a freshly created object is
+    never left author-less."""
 
     filter_horizontal = ("authors",)
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related("authors")
+
+    @admin.display(description=_("Authors"))
+    def authors_list(self, obj):
+        names = [a.get_full_name() or a.get_username() for a in obj.authors.all()]
+        return ", ".join(names) if names else "—"
 
     def save_related(self, request, form, formsets, change):
         super().save_related(request, form, formsets, change)
@@ -84,11 +107,35 @@ class AbstractPostAdmin(AuthorsAdminMixin, AbstractTranslatableMarkdownItemAdmin
     """Base admin for all Post-like models."""
 
     abstract = True
+    warn_unsaved_form = True
+    change_form_show_cancel_button = True
     form = AbstractPostAdminForm
-    list_display = ("title", "published_on", "visibility_badge")
+    list_display = ("title", "authors_list", "languages_list", "views_count", "published_on", "visibility_badge")
+    list_filter = ("visibility", "category", "authors", "published_on")
+    date_hierarchy = "published_on"
     visibility_badge = visibility_badge_field("visibility")
-    autocomplete_fields = ["tags", "category"]
+    filter_horizontal = (*AuthorsAdminMixin.filter_horizontal, "tags")
+    autocomplete_fields_excluded_from_warnings = ["tags", "category"]
     readonly_fields = ["edited_on"]
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related("translations").annotate(_views=Count("page_views"))
+
+    @admin.display(description=_("Views"), ordering="_views")
+    def views_count(self, obj):
+        return obj._views
+
+    @admin.display(description=_("Languages"))
+    def languages_list(self, obj):
+        codes = sorted({t.language.upper() for t in obj.translations.all()})
+        if not codes:
+            return format_html('<span style="opacity:.5">—</span>')
+        return format_html_join(
+            "",
+            '<span class="status-badge status-badge--index" style="margin:0 2px">{}</span>',
+            ((c,) for c in codes),
+        )
+
     prepopulated_fields = {"slug": ("title",)}
     fieldsets = [
         (
@@ -96,7 +143,8 @@ class AbstractPostAdmin(AuthorsAdminMixin, AbstractTranslatableMarkdownItemAdmin
             {
                 "fields": [
                     ("title", "picture"),
-                    ("tags", "category"),
+                    "category",
+                    "tags",
                     "authors",
                 ]
             },
@@ -113,7 +161,7 @@ class AbstractPostAdmin(AuthorsAdminMixin, AbstractTranslatableMarkdownItemAdmin
         )
 
 
-class AbstractCategoryAdmin(admin.ModelAdmin):
+class AbstractCategoryAdmin(ModelAdmin):
     abstract = True
     prepopulated_fields = {"slug": ("title",)}
     list_display = ("title", "slug")
@@ -141,7 +189,7 @@ class AbstractCategoryAdmin(admin.ModelAdmin):
                 )
 
 
-class AbstractCategoryTranslationAdmin(admin.StackedInline):
+class AbstractCategoryTranslationAdmin(StackedInline):
     abstract = True
     extra = 1
     can_delete = True
@@ -157,13 +205,13 @@ class AbstractCategoryTranslationAdmin(admin.StackedInline):
         return 1 if not has_existing else 0
 
 
-class AbstractTagAdmin(admin.ModelAdmin):
+class AbstractTagAdmin(ModelAdmin):
     abstract = True
 
     search_fields = ["title"]
 
 
-class AbstractSubModuleInline(admin.StackedInline):
+class AbstractSubModuleInline(StackedInline):
     abstract = True
     can_delete = False
     extra = 0

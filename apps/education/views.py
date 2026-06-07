@@ -30,6 +30,7 @@ def course_list(request):
 @feature_active_required(module_name="education", feature_name="courses")
 def module_list(request, slug_course=""):
     course = get_object_or_404(Course, slug=slug_course)
+    request.tracked_object = course
     modules = Module.objects.filter(course=course).order_by("order")
     return render(request, "education/module_list.html", {"course": course, "modules": modules})
 
@@ -38,6 +39,7 @@ def module_list(request, slug_course=""):
 def lesson_list(request, slug_course="", slug_module=""):
     course = get_object_or_404(Course, slug=slug_course)
     module = get_object_or_404(Module, slug=slug_module, course=course)
+    request.tracked_object = module
     lessons = _visible_lessons(module, request.user)
     return render(
         request,
@@ -54,6 +56,7 @@ def lesson_detail(request, slug_course="", slug_module="", slug_lesson=""):
 
     if lesson.visibility == "private" and not request.user.is_authenticated:
         raise Http404
+    request.tracked_object = lesson
 
     redirect_response = redirect_to_available_translation(
         lesson, "education:lesson_detail", [slug_course, slug_module, slug_lesson]
