@@ -224,7 +224,12 @@ class AbstractPost(AbstractTranslatableMarkdownItem):
         ("protected", _("Protected")),
         ("private", _("Private")),
     ]
-    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("Author"))
+    authors = models.ManyToManyField(
+        User,
+        related_name="%(app_label)s_%(class)s_authored",
+        blank=True,
+        verbose_name=_("Authors"),
+    )
     published_on = models.DateTimeField(null=True, blank=True, verbose_name=_("Published on"))
     edited_on = models.DateTimeField(auto_now=True, verbose_name=_("Edited on"))
     picture = models.ImageField(upload_to=upload_to_posts, blank=True, null=True, verbose_name=_("Picture"))

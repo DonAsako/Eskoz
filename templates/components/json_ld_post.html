@@ -15,10 +15,10 @@ Required context: `post` (an AbstractPost instance) and a `schema_type`
     "datePublished": "{{ post.published_on.isoformat }}",
     "dateModified": "{{ post.edited_on.isoformat }}",
     "inLanguage": "{{ LANGUAGE_CODE }}",
-    "author": {
+    "author": [{% for author in post.authors.all %}{
         "@type": "Person",
-        "name": "{{ post.author.get_full_name|default:post.author.username|escapejs }}"
-    },
+        "name": "{{ author.get_full_name|default:author.username|escapejs }}"
+    }{% if not forloop.last %},{% endif %}{% endfor %}],
     "publisher": {
         "@type": "Organization",
         "name": "{{ site_settings.site_name|escapejs }}"{% if site_settings.logo %},

@@ -24,7 +24,8 @@
 {% block meta_properties %}
 <meta property="article:published_time" content="{{ article.published_on.isoformat }}">
 <meta property="article:modified_time" content="{{ article.edited_on.isoformat }}">
-<meta property="article:author" content="{{ article.author.get_full_name|default:article.author.username }}">
+{% for author in article.authors.all %}<meta property="article:author" content="{{ author.get_full_name|default:author.username }}">
+{% endfor %}
 {% if article.category %}<meta property="article:section" content="{{ article.category }}">{% endif %}
 {% for tag in article.tags.all %}<meta property="article:tag" content="{{ tag.title }}">{% endfor %}
 {% endblock %}
