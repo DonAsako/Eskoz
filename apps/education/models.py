@@ -80,6 +80,13 @@ class Module(models.Model):
         """Return the module title as its string representation"""
         return f"{self.title}"
 
+    @property
+    def position(self):
+        """1-based rank within its course"""
+
+        ids = list(Module.objects.filter(course_id=self.course_id).order_by("order", "id").values_list("id", flat=True))
+        return ids.index(self.id) + 1 if self.id in ids else 1
+
     class Meta:
         verbose_name = _("Module")
         verbose_name_plural = _("Modules")
