@@ -138,20 +138,46 @@
             </ul>
         </div>
     </div>
-    {# ---- Referrers ---- #}
-    {% if top_referrers %}
-        <div class="mt-8 rounded-default border border-base-200 bg-white dark:border-base-800 dark:bg-base-900">
-            <h2 class="border-b border-base-200 font-semibold px-4 py-3 text-font-important-light dark:border-base-800 dark:text-font-important-dark">
-                {% trans "Top referrers (30 days)" %}
-            </h2>
-            <ul class="divide-y divide-base-200 dark:divide-base-800">
-                {% for ref in top_referrers %}
-                    <li class="flex items-center gap-3 px-4 py-2 text-sm">
-                        <span class="grow truncate text-font-default-light dark:text-font-default-dark">{{ ref.referrer }}</span>
-                        <span class="shrink-0 font-medium text-font-default-light dark:text-font-default-dark">{{ ref.n }}</span>
-                    </li>
-                {% endfor %}
-            </ul>
+    {# ---- Traffic sources: referrers + UTM campaigns ---- #}
+    {% if top_referrers or top_campaigns %}
+        <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
+            {% if top_referrers %}
+                <div class="rounded-default border border-base-200 bg-white dark:border-base-800 dark:bg-base-900">
+                    <h2 class="border-b border-base-200 font-semibold px-4 py-3 text-font-important-light dark:border-base-800 dark:text-font-important-dark">
+                        {% trans "Top referrers (30 days)" %}
+                    </h2>
+                    <ul class="divide-y divide-base-200 dark:divide-base-800">
+                        {% for ref in top_referrers %}
+                            <li class="flex items-center gap-3 px-4 py-2 text-sm">
+                                <span class="grow truncate text-font-default-light dark:text-font-default-dark">{{ ref.referrer }}</span>
+                                <span class="shrink-0 font-medium text-font-default-light dark:text-font-default-dark">{{ ref.n }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            {% if top_campaigns %}
+                <div class="rounded-default border border-base-200 bg-white dark:border-base-800 dark:bg-base-900">
+                    <h2 class="border-b border-base-200 font-semibold px-4 py-3 text-font-important-light dark:border-base-800 dark:text-font-important-dark">
+                        {% trans "Top campaigns (30 days)" %}
+                    </h2>
+                    <ul class="divide-y divide-base-200 dark:divide-base-800">
+                        {% for c in top_campaigns %}
+                            <li class="flex items-center gap-3 px-4 py-2 text-sm">
+                                <span class="grow truncate">
+                                    <span class="font-medium text-font-default-light dark:text-font-default-dark">{{ c.utm_source }}</span>
+                                    {% if c.utm_medium or c.utm_campaign %}
+                                        <span class="text-font-subtle-light dark:text-font-subtle-dark">· {{ c.utm_medium }}
+                                            {% if c.utm_campaign %}/ {{ c.utm_campaign }}{% endif %}
+                                        </span>
+                                    {% endif %}
+                                </span>
+                                <span class="shrink-0 font-medium text-font-default-light dark:text-font-default-dark">{{ c.n }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
         </div>
     {% endif %}
 {% endblock %}

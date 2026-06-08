@@ -62,4 +62,7 @@ class PageViewMiddleware:
             path=path[:512],
             visitor_hash=vhash,
             referrer=(request.META.get("HTTP_REFERER", "") or "")[:512],
+            utm_source=request.GET.get("utm_source", "")[:128],
+            utm_medium=request.GET.get("utm_medium", "")[:128],
+            utm_campaign=request.GET.get("utm_campaign", "")[:128],
         )

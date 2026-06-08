@@ -7,8 +7,8 @@ from django.utils.translation import gettext_lazy as _
 class PageView(models.Model):
     """A single (de-duplicated) page visit.
 
-    Recorded server-side by ``PageViewMiddleware`` so it is immune to ad
-    blockers. No personal data is stored: ``visitor_hash`` is a non-reversible,
+    Recorded server-side by `PageViewMiddleware` so it is immune to ad
+    blockers. No personal data is stored: `visitor_hash` is a non-reversible,
     daily-rotating hash of IP + user-agent used only to estimate unique
     visitors. When the visited page is a content object (article, writeup…),
     the generic FK links the view to it for per-object counts.
@@ -21,6 +21,11 @@ class PageView(models.Model):
     path = models.CharField(max_length=512, db_index=True)
     visitor_hash = models.CharField(max_length=64, db_index=True)
     referrer = models.CharField(max_length=512, blank=True)
+    # UTM campaign tags read off the landing query string (no index, aggregated
+    # like `referrer`). Captured on the first recorded view of a visit.
+    utm_source = models.CharField(max_length=128, blank=True)
+    utm_medium = models.CharField(max_length=128, blank=True)
+    utm_campaign = models.CharField(max_length=128, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:

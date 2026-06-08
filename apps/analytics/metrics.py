@@ -139,3 +139,10 @@ def full_metrics(context):
         .annotate(n=Count("id"))
         .order_by("-n")[:10]
     )
+    context["top_campaigns"] = list(
+        views.filter(created_at__gte=d30)
+        .exclude(utm_source="")
+        .values("utm_source", "utm_medium", "utm_campaign")
+        .annotate(n=Count("id"))
+        .order_by("-n")[:10]
+    )
