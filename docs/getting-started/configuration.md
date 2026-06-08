@@ -65,6 +65,20 @@ automatically.
 | `DOMAIN` | Your domain name.                            | `example.com`     |
 | `EMAIL`  | Email used for Let's Encrypt SSL certs.      | `you@example.com` |
 
+### Integrations (optional)
+
+| Variable      | Description                                                                 | Example       |
+| ------------- | -------------------------------------------------------------------------- | ------------- |
+| `NVD_API_KEY` | Raises the rate limit when enriching CVEs from NVD (no key needed to work). | *(unset)*     |
+
+The CVE admin offers a **Fetch from NVD** action (on the changelist and on each
+CVE page) that fills the description, CVSS score, dates, affected product and
+reference from the [NVD API](https://nvd.nist.gov/developers/vulnerabilities) by
+CVE id. It works without any key; the public limit is ~5 requests per 30 s. To
+enrich in bulk, request a free key at
+[nvd.nist.gov](https://nvd.nist.gov/developers/request-an-api-key) and set it as
+`NVD_API_KEY` — it is then used automatically.
+
 ## Generating a secret key
 
 ```sh
