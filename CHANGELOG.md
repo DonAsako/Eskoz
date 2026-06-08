@@ -1,5 +1,39 @@
 # Changelog
 
+## [0.8.0](https://github.com/DonAsako/Eskoz/compare/v0.7.0...v0.8.0) (2026-06-08)
+
+
+### Features
+
+* **analytics:** add last-hour realtime panel ([2c03c9c](https://github.com/DonAsako/Eskoz/commit/2c03c9ceb7590a233f82f470d32c414cc038a5b4))
+* **analytics:** add period-over-period comparison ([98fa341](https://github.com/DonAsako/Eskoz/commit/98fa341744ee7eccfb070b82ee7c8e5f60ffd99d))
+* **analytics:** capture and report UTM campaign sources ([d15121f](https://github.com/DonAsako/Eskoz/commit/d15121f5749d9c746de152c38a183e9e6a44028d))
+* **content:** add get_absolute_url for posts and education models ([b93e407](https://github.com/DonAsako/Eskoz/commit/b93e407d0d60cbc509c603507c3e2ec0655a7c31))
+* **education:** drag-and-drop ordering for modules and lessons ([6b49c23](https://github.com/DonAsako/Eskoz/commit/6b49c230ae518e56b7430ec544a4ba22633c08d2))
+* **education:** show module and lesson counts in the course list ([5e5280c](https://github.com/DonAsako/Eskoz/commit/5e5280ce1c4ac8d848ff5b08dc310ab2e8d842e2))
+* **infosec:** enrich CVE records from the NVD API ([ea9bcb2](https://github.com/DonAsako/Eskoz/commit/ea9bcb21118b0144de0fdd6d91cd1ab1e0603bfc))
+
+
+### Bug Fixes
+
+* **analytics:** exclude internal navigation from Top referrers ([73dbac0](https://github.com/DonAsako/Eskoz/commit/73dbac0e7f6b116ac85f3d4405b3fe40de07ca4d))
+* **style:** bar chart ([d079014](https://github.com/DonAsako/Eskoz/commit/d07901475c4be5c6085b15d76dadf776a4ebff09))
+* **style:** realtime ([037ba9c](https://github.com/DonAsako/Eskoz/commit/037ba9c613cfb76c10c41eab5abfe220686fa8e4))
+
+
+### Refactoring
+
+* **admin:** admin page order ([9dfd0eb](https://github.com/DonAsako/Eskoz/commit/9dfd0eb88d1689e6afe89304b63ce8e26e98827f))
+* **dashboard:** remove analytics and enhance logs ([95e2ec5](https://github.com/DonAsako/Eskoz/commit/95e2ec5af580c2df2d445b54fca504d583dd4855))
+
+
+### Documentation
+
+* add mkdocs + github page ([125afd0](https://github.com/DonAsako/Eskoz/commit/125afd024176a20558a888cb61dbf69be50fc412))
+* document NVD_API_KEY and the CVE enrichment action ([8fab14f](https://github.com/DonAsako/Eskoz/commit/8fab14f7044576b2b9dc1585b6af3922e2b46d79))
+* **emote:** add md_in_html and pymdownx.emoji ([8882a19](https://github.com/DonAsako/Eskoz/commit/8882a19714958a8fc25627a255c0e63f3341c96e))
+* **themes:** add docs about themes ([57c6a3f](https://github.com/DonAsako/Eskoz/commit/57c6a3f0e4ee6a75803d9ae547c5f8d3bac62889))
+
 ## [0.7.0](https://github.com/DonAsako/Eskoz/compare/v0.6.0...v0.7.0) (2026-06-07)
 
 
