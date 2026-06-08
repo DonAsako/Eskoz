@@ -186,6 +186,18 @@
         linear-gradient(to right, var(--color-base-800) 1px, transparent 1px);
 }
 
+/* UPDATE BANNER (dashboard "new version available") */
+
+.update-banner {
+    background: var(--color-primary-50);
+    border-color: var(--color-primary-200);
+}
+
+.dark .update-banner {
+    background: var(--color-primary-950);
+    border-color: var(--color-primary-800);
+}
+
 /* Toggle variant — clickable badge in changelist. */
 button.status-badge--toggle {
     appearance: none;

@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block content %}
     {% if update_info.available %}
-        <div class="mb-6 flex items-center gap-3 rounded-default border border-primary-200 bg-primary-50 px-4 py-3 text-sm dark:border-primary-500/30 dark:bg-primary-500/10">
+        <div class="update-banner mb-6 flex items-center gap-3 rounded-default border px-4 py-3 text-sm">
             <span class="material-symbols-outlined text-primary-600 dark:text-primary-400">system_update</span>
             <span class="grow text-font-important-light dark:text-font-important-dark">
                 {% blocktrans with latest=update_info.latest current=update_info.current %}Eskoz {{ latest }} is available — you are running {{ current }}.{% endblocktrans %}
