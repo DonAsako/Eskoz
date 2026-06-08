@@ -1,11 +1,5 @@
-{% extends 'admin/base.html' %}
+{% extends 'admin/base_site.html' %}
 {% load i18n %}
-{% block title %}
-    {% trans "Analytics" %} | {{ site_title|default:_("Django site admin") }}
-{% endblock %}
-{% block branding %}
-    {% include "unfold/helpers/site_branding.html" %}
-{% endblock %}
 {% block content %}
     <h1 class="mb-6 text-xl font-semibold text-font-important-light dark:text-font-important-dark">
         {% trans "Analytics" %}
@@ -31,12 +25,14 @@
                 </h2>
                 <span class="text-font-subtle-light text-xs dark:text-font-subtle-dark">{% trans "peak" %} {{ views_peak }}</span>
             </div>
-            <div class="flex h-28 items-end gap-[2px]">
+            {# Inline height/align/gap: Tailwind's h-28 & items-end are purged from unfold's build. #}
+            <div style="display: flex; align-items: flex-end; gap: 2px; height: 7rem;">
                 {% for d in views_series %}
-                    <div class="group flex-1" title="{{ d.day }} — {{ d.count }}">
-                        <div class="w-full rounded-t bg-primary-600 transition-colors group-hover:bg-primary-500 dark:bg-primary-500 dark:group-hover:bg-primary-400"
-                             style="height: {{ d.pct }}%;
-                                    min-height: {% if d.count %}3px{% else %}0{% endif %}"></div>
+                    <div class="bar rounded-t bg-primary-600 transition-colors hover:bg-primary-500 dark:bg-primary-500 dark:hover:bg-primary-400"
+                         style="flex: 1 1 0;
+                                height: {{ d.pct }}%;
+                                min-height: {% if d.count %}3px{% else %}0{% endif %}">
+                        <span class="bar__tip"><strong>{{ d.count }}</strong> {% trans "views" %}<span>{{ d.day }}</span></span>
                     </div>
                 {% endfor %}
             </div>

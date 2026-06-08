@@ -122,6 +122,52 @@
     background: var(--color-base-800);
 }
 
+/* BAR CHART TOOLTIP (views-per-day hover label) */
+
+.bar {
+    position: relative;
+}
+
+.bar__tip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 5px;
+    padding: 0.15rem 0.45rem;
+    white-space: nowrap;
+    font-size: 0.7rem;
+    line-height: 1.2;
+    text-align: center;
+    border-radius: 5px;
+    background: var(--color-base-900);
+    color: var(--color-base-50);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 90ms ease;
+    z-index: 20;
+}
+
+.bar__tip strong {
+    font-weight: 600;
+}
+
+.bar__tip span {
+    display: block;
+    opacity: 0.7;
+    font-size: 0.65rem;
+}
+
+.dark .bar__tip {
+    background: var(--color-base-100);
+    color: var(--color-base-900);
+}
+
+.bar:hover .bar__tip {
+    opacity: 1;
+}
+
 /* Toggle variant — clickable badge in changelist. */
 button.status-badge--toggle {
     appearance: none;
