@@ -3,11 +3,11 @@
 [![CI](https://github.com/DonAsako/eskoz/actions/workflows/ci.yml/badge.svg)](https://github.com/DonAsako/eskoz/actions/workflows/ci.yml)
 [![Latest release](https://img.shields.io/github/v/release/DonAsako/eskoz)](https://github.com/DonAsako/eskoz/releases)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
-[![Docs](https://img.shields.io/badge/docs-mkdocs-blue.svg)](https://donasako.github.io/eskoz/)
+[![Docs](https://img.shields.io/badge/docs-mkdocs-blue.svg)](https://donasako.github.io/Eskoz/)
 
 **Eskoz** is a Django-based project designed to help you quickly and easily create a multilingual blog, with a straightforward deployment process.
 
-📖 **Full documentation: [donasako.github.io/eskoz](https://donasako.github.io/eskoz/)** — installation, configuration, Docker & bare-metal deployment, theming.
+📖 **Full documentation: [donasako.github.io/Eskoz](https://donasako.github.io/Eskoz/)** — installation, configuration, Docker & bare-metal deployment, theming.
 
 ## Requirements
 Make sure you have the following installed on your system:

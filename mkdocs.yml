@@ -59,7 +59,9 @@ nav:
       - With Docker: deployment/docker.md
       - On bare metal: deployment/baremetal.md
   - Customization:
-      - Themes: customization/themes.md
+      - Overview: customization/themes.md
+      - Creating a theme: customization/theme-creation.md
+      - Template reference: customization/theme-reference.md
   - Development:
       - Contributing & releases: development/contributing.md
 
