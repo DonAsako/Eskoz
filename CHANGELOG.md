@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.8.1](https://github.com/DonAsako/Eskoz/compare/v0.8.0...v0.8.1) (2026-06-08)
+
+
+### Bug Fixes
+
+* **core:** scope update-check cache by version ([f895b69](https://github.com/DonAsako/Eskoz/commit/f895b695977ac2c5ff88f3110f83eb25a6ff8e3c))
+* **style:** update banner ([790447a](https://github.com/DonAsako/Eskoz/commit/790447ad57527330da2c1ddd9dff636bcb0b5a7e))
+
 ## [0.8.0](https://github.com/DonAsako/Eskoz/compare/v0.7.0...v0.8.0) (2026-06-08)
 
 
