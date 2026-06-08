@@ -18,7 +18,7 @@ from packaging.version import InvalidVersion, Version
 
 from eskoz import __version__
 
-_CACHE_KEY = "core:update_check"
+_CACHE_KEY = f"core:update_check:{__version__}"
 _CACHE_TTL = 60 * 60 * 24  # cache a successful check for a day
 _FAIL_TTL = 60 * 60  # on failure, back off an hour before retrying
 _TIMEOUT = 3  # seconds — a slow GitHub must not stall the dashboard
