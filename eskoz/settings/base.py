@@ -158,12 +158,6 @@ UNFOLD = {
                         "icon": "rocket_launch",
                         "link": reverse_lazy("admin:blog_project_changelist"),
                     },
-                    {
-                        "title": _("Categories"),
-                        "icon": "category",
-                        "link": reverse_lazy("admin:blog_category_changelist"),
-                    },
-                    {"title": _("Tags"), "icon": "label", "link": reverse_lazy("admin:blog_articletag_changelist")},
                 ],
             },
             {
@@ -172,24 +166,12 @@ UNFOLD = {
                 "collapsible": True,
                 "items": [
                     {"title": _("Writeups"), "icon": "flag", "link": reverse_lazy("admin:infosec_writeup_changelist")},
-                    {"title": _("CTF"), "icon": "emoji_events", "link": reverse_lazy("admin:infosec_ctf_changelist")},
                     {"title": _("CVE"), "icon": "bug_report", "link": reverse_lazy("admin:infosec_cve_changelist")},
                     {
                         "title": _("Certifications"),
                         "icon": "workspace_premium",
                         "link": reverse_lazy("admin:infosec_certification_changelist"),
                     },
-                    {
-                        "title": _("Issuers"),
-                        "icon": "business",
-                        "link": reverse_lazy("admin:infosec_issuer_changelist"),
-                    },
-                    {
-                        "title": _("Categories"),
-                        "icon": "category",
-                        "link": reverse_lazy("admin:infosec_category_changelist"),
-                    },
-                    {"title": _("Tags"), "icon": "label", "link": reverse_lazy("admin:infosec_writeuptag_changelist")},
                 ],
             },
             {
@@ -246,18 +228,21 @@ UNFOLD = {
     "TABS": [
         # CTF-related content
         {
-            "models": ["infosec.writeup", "infosec.ctf"],
+            "models": ["infosec.writeup", "infosec.ctf", "infosec.category", "infosec.writeuptag"],
             "items": [
                 {"title": _("Writeups"), "link": reverse_lazy("admin:infosec_writeup_changelist")},
                 {"title": _("CTF"), "link": reverse_lazy("admin:infosec_ctf_changelist")},
+                {"title": _("Categories"), "link": reverse_lazy("admin:infosec_category_changelist")},
+                {"title": _("Tags"), "link": reverse_lazy("admin:infosec_writeuptag_changelist")},
             ],
         },
         # Blog content
         {
-            "models": ["blog.article", "blog.project"],
+            "models": ["blog.article", "blog.category", "blog.articletag"],
             "items": [
                 {"title": _("Articles"), "link": reverse_lazy("admin:blog_article_changelist")},
-                {"title": _("Projects"), "link": reverse_lazy("admin:blog_project_changelist")},
+                {"title": _("Categories"), "link": reverse_lazy("admin:blog_category_changelist")},
+                {"title": _("Article Tags"), "link": reverse_lazy("admin:blog_articletag_changelist")},
             ],
         },
         # Certifications & Issuers
@@ -270,19 +255,10 @@ UNFOLD = {
         },
         # Blog taxonomy
         {
-            "models": ["blog.category", "blog.articletag", "blog.projecttag"],
+            "models": ["blog.project", "blog.projecttag"],
             "items": [
-                {"title": _("Categories"), "link": reverse_lazy("admin:blog_category_changelist")},
-                {"title": _("Article Tags"), "link": reverse_lazy("admin:blog_articletag_changelist")},
+                {"title": _("Projects"), "link": reverse_lazy("admin:blog_project_changelist")},
                 {"title": _("Project Tags"), "link": reverse_lazy("admin:blog_projecttag_changelist")},
-            ],
-        },
-        # Infosec taxonomy
-        {
-            "models": ["infosec.category", "infosec.writeuptag"],
-            "items": [
-                {"title": _("Categories"), "link": reverse_lazy("admin:infosec_category_changelist")},
-                {"title": _("Tags"), "link": reverse_lazy("admin:infosec_writeuptag_changelist")},
             ],
         },
     ],

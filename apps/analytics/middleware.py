@@ -37,7 +37,7 @@ class PageViewMiddleware:
         if any(path.startswith(p) for p in self._excluded):
             return
 
-        from apps.analytics.tracking import is_bot, visitor_hash
+        from apps.analytics.tracking import external_referrer, is_bot, visitor_hash
 
         if is_bot(request.META.get("HTTP_USER_AGENT", "")):
             return
@@ -61,5 +61,8 @@ class PageViewMiddleware:
             object_id=getattr(obj, "pk", None),
             path=path[:512],
             visitor_hash=vhash,
-            referrer=(request.META.get("HTTP_REFERER", "") or "")[:512],
+            referrer=external_referrer(request)[:512],
+            utm_source=request.GET.get("utm_source", "")[:128],
+            utm_medium=request.GET.get("utm_medium", "")[:128],
+            utm_campaign=request.GET.get("utm_campaign", "")[:128],
         )
