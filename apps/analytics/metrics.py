@@ -16,6 +16,13 @@ from django.utils.translation import gettext_lazy as _
 from apps.analytics.models import PageView
 
 
+def _pct_change(current, previous):
+    """Signed % change vs the previous equal-length window."""
+    if not previous:
+        return None
+    return round((current - previous) / previous * 100)
+
+
 def _daily_series(views, days=30):
     """Zero-filled daily counts (oldest -> newest) with bar heights as a
     percentage of the busiest day, for the sparkline / bar chart."""
@@ -64,13 +71,25 @@ def add_dashboard_metrics(context):
     """Compact analytics for the admin dashboard landing page."""
     now = timezone.now()
     d7 = now - timedelta(days=7)
+    d14 = now - timedelta(days=14)
     d30 = now - timedelta(days=30)
+    d60 = now - timedelta(days=60)
     views = PageView.objects.all()
 
+    v7 = views.filter(created_at__gte=d7).count()
+    v7_prev = views.filter(created_at__gte=d14, created_at__lt=d7).count()
+    v30 = views.filter(created_at__gte=d30).count()
+    v30_prev = views.filter(created_at__gte=d60, created_at__lt=d30).count()
+    u7 = views.filter(created_at__gte=d7).values("visitor_hash").distinct().count()
+    u7_prev = views.filter(created_at__gte=d14, created_at__lt=d7).values("visitor_hash").distinct().count()
+
     context["metrics"] = {
-        "views_7d": views.filter(created_at__gte=d7).count(),
-        "views_30d": views.filter(created_at__gte=d30).count(),
-        "uniques_7d": views.filter(created_at__gte=d7).values("visitor_hash").distinct().count(),
+        "views_7d": v7,
+        "views_7d_delta": _pct_change(v7, v7_prev),
+        "views_30d": v30,
+        "views_30d_delta": _pct_change(v30, v30_prev),
+        "uniques_7d": u7,
+        "uniques_7d_delta": _pct_change(u7, u7_prev),
     }
     context["top_pages"] = list(
         views.filter(created_at__gte=d30).values("path").annotate(n=Count("id")).order_by("-n")[:8]
@@ -82,23 +101,35 @@ def full_metrics(context):
     """Richer analytics for the dedicated Analytics admin page."""
     now = timezone.now()
     d7 = now - timedelta(days=7)
+    d14 = now - timedelta(days=14)
     d30 = now - timedelta(days=30)
+    d60 = now - timedelta(days=60)
     views = PageView.objects.all()
 
+    v7 = views.filter(created_at__gte=d7).count()
+    v7_prev = views.filter(created_at__gte=d14, created_at__lt=d7).count()
+    v30 = views.filter(created_at__gte=d30).count()
+    v30_prev = views.filter(created_at__gte=d60, created_at__lt=d30).count()
+    u7 = views.filter(created_at__gte=d7).values("visitor_hash").distinct().count()
+    u7_prev = views.filter(created_at__gte=d14, created_at__lt=d7).values("visitor_hash").distinct().count()
+    u30 = views.filter(created_at__gte=d30).values("visitor_hash").distinct().count()
+    u30_prev = views.filter(created_at__gte=d60, created_at__lt=d30).values("visitor_hash").distinct().count()
+
     metrics = {
-        "views_7d": views.filter(created_at__gte=d7).count(),
-        "views_30d": views.filter(created_at__gte=d30).count(),
+        "views_7d": v7,
+        "views_30d": v30,
         "views_all": views.count(),
-        "uniques_7d": views.filter(created_at__gte=d7).values("visitor_hash").distinct().count(),
-        "uniques_30d": views.filter(created_at__gte=d30).values("visitor_hash").distinct().count(),
+        "uniques_7d": u7,
+        "uniques_30d": u30,
     }
     context["metrics"] = metrics
+    # (label, value, delta%) — delta is None for the all-time card (no baseline).
     context["cards"] = [
-        (_("Views (7 days)"), metrics["views_7d"]),
-        (_("Views (30 days)"), metrics["views_30d"]),
-        (_("Views (all time)"), metrics["views_all"]),
-        (_("Unique visitors (7 days)"), metrics["uniques_7d"]),
-        (_("Unique visitors (30 days)"), metrics["uniques_30d"]),
+        (_("Views (7 days)"), v7, _pct_change(v7, v7_prev)),
+        (_("Views (30 days)"), v30, _pct_change(v30, v30_prev)),
+        (_("Views (all time)"), metrics["views_all"], None),
+        (_("Unique visitors (7 days)"), u7, _pct_change(u7, u7_prev)),
+        (_("Unique visitors (30 days)"), u30, _pct_change(u30, u30_prev)),
     ]
     context["views_series"], context["views_peak"] = _daily_series(views, days=30)
     context["top_content"] = _top_content(views, d30, limit=10)

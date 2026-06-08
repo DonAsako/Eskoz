@@ -1,0 +1,6 @@
+{% load i18n %}
+{# Period-over-period delta badge. Expects `delta` (signed int %) or None. #}
+{% if delta != None %}
+    <span class="trend trend--{% if delta > 0 %}up{% elif delta < 0 %}down{% else %}flat{% endif %}"
+          title="{% trans 'vs previous period' %}">{{ delta|stringformat:"+d" }}%</span>
+{% endif %}
