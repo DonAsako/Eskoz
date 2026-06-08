@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from apps.blog.models import Article
@@ -298,6 +299,11 @@ class Writeup(AbstractPost):
     def __str__(self):
         """Return the title of the writeup and its associated CTF name."""
         return f"{self.title} ({self.ctf.name if self.ctf else 'No CTF'})"
+
+    def get_absolute_url(self):
+        if not self.category_id:
+            return reverse("infosec:writeup_list")
+        return reverse("infosec:writeup_detail", args=[self.category.slug, self.slug])
 
     class Meta(AbstractPost.Meta):
         verbose_name = _("Writeup")

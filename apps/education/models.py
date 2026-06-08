@@ -1,5 +1,6 @@
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models.abstracts import (
@@ -52,6 +53,9 @@ class Course(models.Model):
 
         return self.title
 
+    def get_absolute_url(self):
+        return reverse("education:module_list", args=[self.slug])
+
     class Meta:
         verbose_name = _("Course")
         verbose_name_plural = _("Courses")
@@ -79,6 +83,9 @@ class Module(models.Model):
     def __str__(self):
         """Return the module title as its string representation"""
         return f"{self.title}"
+
+    def get_absolute_url(self):
+        return reverse("education:lesson_list", args=[self.course.slug, self.slug])
 
     @property
     def position(self):
@@ -128,6 +135,9 @@ class Lesson(AbstractTranslatableMarkdownItem):
     def __str__(self):
         """Return the lesson title as its string representation"""
         return f"{self.title}"
+
+    def get_absolute_url(self):
+        return reverse("education:lesson_detail", args=[self.module.course.slug, self.module.slug, self.slug])
 
     class Meta(AbstractTranslatableMarkdownItem.Meta):
         verbose_name = _("Lesson")
