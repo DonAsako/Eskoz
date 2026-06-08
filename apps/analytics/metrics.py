@@ -44,18 +44,19 @@ def _daily_series(views, days=30):
     return series, peak
 
 
-def _minute_series(views, minutes=60):
-    """Per-minute counts over the last ``minutes`` for the realtime sparkline."""
+def _realtime_series(views, minutes=60, bucket=5):
+    """Counts grouped into bucket -minute slots over the last minutes."""
     now = timezone.now()
     cur = now.replace(second=0, microsecond=0)
     start = cur - timedelta(minutes=minutes - 1)
-    buckets = [0] * minutes
+    nslots = -(-minutes // bucket)  # ceil
+    slots = [0] * nslots
     for ts in views.filter(created_at__gte=start).values_list("created_at", flat=True):
-        idx = int((ts - start).total_seconds() // 60)
-        if 0 <= idx < minutes:
-            buckets[idx] += 1
-    series = [{"min": start + timedelta(minutes=i), "count": c} for i, c in enumerate(buckets)]
-    peak = max(buckets, default=0) or 1
+        mi = int((ts - start).total_seconds() // 60)
+        if 0 <= mi < minutes:
+            slots[mi // bucket] += 1
+    series = [{"min": start + timedelta(minutes=i * bucket), "span": bucket, "count": c} for i, c in enumerate(slots)]
+    peak = max(slots, default=0) or 1
     for s in series:
         s["pct"] = max(round(s["count"] / peak * 100), 3) if s["count"] else 0
     return series, peak
@@ -125,7 +126,7 @@ def full_metrics(context):
         "views_1h": rt.count(),
         "uniques_1h": rt.values("visitor_hash").distinct().count(),
     }
-    context["realtime_series"], context["realtime_peak"] = _minute_series(views, minutes=60)
+    context["realtime_series"], context["realtime_peak"] = _realtime_series(views, minutes=60, bucket=5)
     context["realtime_pages"] = list(rt.values("path").annotate(n=Count("id")).order_by("-n")[:5])
 
     context["top_content"] = _top_content(views, d30, limit=10)

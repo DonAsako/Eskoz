@@ -93,8 +93,8 @@
 }
 
 .trend--up {
-    color: var(--color-green-700);
-    background: var(--color-green-50);
+    color: var(--color-primary-700);
+    background: var(--color-primary-50);
 }
 
 .trend--down {
@@ -108,8 +108,8 @@
 }
 
 .dark .trend--up {
-    color: var(--color-green-400);
-    background: var(--color-green-950);
+    color: var(--color-primary-400);
+    background: var(--color-primary-950);
 }
 
 .dark .trend--down {
@@ -168,29 +168,22 @@
     opacity: 1;
 }
 
-/* LIVE DOT (realtime "last hour" panel) */
+/* REALTIME SPARKLINE GRID (last-hour chart backdrop) */
 
-.live-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--color-green-500);
-    flex: 0 0 8px;
-    animation: live-pulse 1.8s ease-out infinite;
+.spark-grid {
+    background-color: var(--color-base-50);
+    background-image:
+        linear-gradient(to top, var(--color-base-200) 1px, transparent 1px),
+        linear-gradient(to right, var(--color-base-200) 1px, transparent 1px);
+    background-size: 100% 25%, 16.6667% 100%;
+    background-position: left bottom;
 }
 
-@keyframes live-pulse {
-    0% {
-        box-shadow: 0 0 0 0 color-mix(in oklch, var(--color-green-500) 55%, transparent);
-    }
-
-    70% {
-        box-shadow: 0 0 0 6px transparent;
-    }
-
-    100% {
-        box-shadow: 0 0 0 0 transparent;
-    }
+.dark .spark-grid {
+    background-color: var(--color-base-950);
+    background-image:
+        linear-gradient(to top, var(--color-base-800) 1px, transparent 1px),
+        linear-gradient(to right, var(--color-base-800) 1px, transparent 1px);
 }
 
 /* Toggle variant — clickable badge in changelist. */
