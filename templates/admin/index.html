@@ -1,4 +1,3 @@
-{# title + branding blocks are inherited from admin/base_site.html. #}
 {% extends 'admin/base_site.html' %}
 {% load i18n %}
 {% block content %}
@@ -14,116 +13,35 @@
                class="shrink-0 font-medium text-primary-600 hover:underline dark:text-primary-400">{% trans "Release notes" %}</a>
         </div>
     {% endif %}
-    <div class="flex flex-col lg:flex-row lg:gap-8">
-        <div class="grow">
-            {% if metrics %}
-                <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-                    <div class="rounded-default border border-base-200 bg-white p-4 dark:border-base-800 dark:bg-base-900">
-                        <div class="text-font-subtle-light text-xs uppercase tracking-wide dark:text-font-subtle-dark">
-                            {% trans "Views (7 days)" %}
-                        </div>
-                        <div class="mt-1 flex items-baseline gap-2">
-                            <span class="text-2xl font-semibold text-font-important-light dark:text-font-important-dark">{{ metrics.views_7d }}</span>
-                            {% include "admin/_trend.html" with delta=metrics.views_7d_delta %}
-                        </div>
-                    </div>
-                    <div class="rounded-default border border-base-200 bg-white p-4 dark:border-base-800 dark:bg-base-900">
-                        <div class="text-font-subtle-light text-xs uppercase tracking-wide dark:text-font-subtle-dark">
-                            {% trans "Unique visitors (7 days)" %}
-                        </div>
-                        <div class="mt-1 flex items-baseline gap-2">
-                            <span class="text-2xl font-semibold text-font-important-light dark:text-font-important-dark">{{ metrics.uniques_7d }}</span>
-                            {% include "admin/_trend.html" with delta=metrics.uniques_7d_delta %}
-                        </div>
-                    </div>
-                    <div class="rounded-default border border-base-200 bg-white p-4 dark:border-base-800 dark:bg-base-900">
-                        <div class="text-font-subtle-light text-xs uppercase tracking-wide dark:text-font-subtle-dark">
-                            {% trans "Views (30 days)" %}
-                        </div>
-                        <div class="mt-1 flex items-baseline gap-2">
-                            <span class="text-2xl font-semibold text-font-important-light dark:text-font-important-dark">{{ metrics.views_30d }}</span>
-                            {% include "admin/_trend.html" with delta=metrics.views_30d_delta %}
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
-            {% if realtime %}
-                <div class="mb-8 flex items-center gap-2 text-sm text-font-default-light dark:text-font-default-dark">
-                    <span class="live-dot"></span>
-                    <span><strong class="font-semibold">{{ realtime.views_1h }}</strong> {% trans "views" %} ·
-                        <strong class="font-semibold">{{ realtime.uniques_1h }}</strong> {% trans "visitors" %}</span>
-                    <span class="text-font-subtle-light dark:text-font-subtle-dark">— {% trans "last hour" %}</span>
-                </div>
-            {% endif %}
-            {% if views_series %}
-                <div class="mb-8 rounded-default border border-base-200 bg-white p-4 dark:border-base-800 dark:bg-base-900">
-                    <div class="mb-3 flex items-baseline justify-between">
-                        <h2 class="font-semibold text-font-important-light dark:text-font-important-dark">
-                            {% trans "Views per day (30 days)" %}
-                        </h2>
-                        <span class="text-font-subtle-light text-xs dark:text-font-subtle-dark">{% trans "peak" %} {{ views_peak }}</span>
-                    </div>
-                    {# Inline height/align/gap: Tailwind's h-20 & items-end are purged from unfold's build. #}
-                    <div style="display: flex; align-items: flex-end; gap: 2px; height: 5rem;">
-                        {% for d in views_series %}
-                            <div class="bar rounded-t bg-primary-600 transition-colors hover:bg-primary-500 dark:bg-primary-500 dark:hover:bg-primary-400"
-                                 style="flex: 1 1 0;
-                                        height: {{ d.pct }}%;
-                                        min-height: {% if d.count %}3px{% else %}0{% endif %}">
-                                <span class="bar__tip"><strong>{{ d.count }}</strong> {% trans "views" %}<span>{{ d.day }}</span></span>
-                            </div>
-                        {% endfor %}
-                    </div>
-                    <div class="mt-2 flex justify-between text-font-subtle-light text-xs dark:text-font-subtle-dark">
-                        <span>{{ views_series.0.day }}</span>
-                        <span>{{ views_series.29.day }}</span>
-                    </div>
-                </div>
-            {% endif %}
-            {% if top_pages %}
-                <div class="mb-8 rounded-default border border-base-200 bg-white dark:border-base-800 dark:bg-base-900">
-                    <h2 class="border-b border-base-200 font-semibold px-4 py-3 text-font-important-light dark:border-base-800 dark:text-font-important-dark">
-                        {% trans "Top pages (30 days)" %}
-                    </h2>
-                    <ul class="divide-y divide-base-200 dark:divide-base-800">
-                        {% for page in top_pages %}
-                            <li class="flex items-center gap-3 px-4 py-2 text-sm">
-                                <a href="{{ page.path }}"
-                                   class="grow truncate text-primary-600 hover:underline dark:text-primary-500">{{ page.path }}</a>
-                                <span class="shrink-0 font-medium text-font-default-light dark:text-font-default-dark">{{ page.n }}</span>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            {% endif %}
-            {% if recent_activity %}
-                <div class="mb-8 rounded-default border border-base-200 bg-white dark:border-base-800 dark:bg-base-900">
-                    <h2 class="border-b border-base-200 font-semibold px-4 py-3 text-font-important-light dark:border-base-800 dark:text-font-important-dark">
-                        {% trans "Recent activity" %}
-                    </h2>
-                    <ul class="divide-y divide-base-200 dark:divide-base-800">
+    <div class="flex flex-col gap-8 lg:flex-row">
+        <div class="grow">{% include "unfold/helpers/app_list_default.html" %}</div>
+        {% if recent_activity %}
+            <div id="content-related" class="lg:w-96">
+                <div id="recent-actions-module"
+                     class="module bg-base-50 rounded-default p-3 dark:bg-base-800">
+                    <h2 class="mb-3 font-semibold text-base-900 dark:text-base-100">{% trans "Recent activity" %}</h2>
+                    <ul class="actionlist">
                         {% for item in recent_activity %}
-                            <li class="flex items-center gap-3 px-4 py-2.5 text-sm">
-                                <span class="status-badge status-badge--{{ item.action_css }}">{{ item.action }}</span>
-                                <span class="grow truncate text-font-default-light dark:text-font-default-dark">
-                                    {% if item.url %}
-                                        <a href="{{ item.url }}"
-                                           class="font-medium text-primary-600 hover:underline dark:text-primary-500">{{ item.repr }}</a>
-                                    {% else %}
-                                        <span class="font-medium">{{ item.repr }}</span>
-                                    {% endif %}
-                                    <span class="text-font-subtle-light dark:text-font-subtle-dark">· {{ item.model }}</span>
-                                </span>
-                                <span class="shrink-0 text-font-subtle-light dark:text-font-subtle-dark">
-                                    {{ item.actor }} · {{ item.timestamp|timesince }}
-                                </span>
+                            <li class="border border-base-400/10 bg-white mb-3 p-3 rounded-default shadow-xs last:mb-0 dark:bg-base-900">
+                                <div class="mb-3 flex items-center gap-2 overflow-hidden">
+                                    <span class="status-badge status-badge--{{ item.action_css }} shrink-0">{{ item.action }}</span>
+                                    <span class="grow overflow-hidden text-ellipsis whitespace-nowrap">
+                                        {% if item.url %}
+                                            <a href="{{ item.url }}">{{ item.repr }}</a>
+                                        {% else %}
+                                            {{ item.repr }}
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <div class="border-base-100 border-t flex gap-2 pt-3 text-font-subtle-light dark:border-base-800 dark:text-font-subtle-dark">
+                                    <div class="truncate">{{ item.model }}</div>
+                                    <div class="ml-auto shrink-0 whitespace-nowrap">{{ item.actor }} · {{ item.timestamp|timesince }}</div>
+                                </div>
                             </li>
                         {% endfor %}
                     </ul>
                 </div>
-            {% endif %}
-            {% include "unfold/helpers/app_list_default.html" %}
-        </div>
-        {% include "unfold/helpers/history.html" %}
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

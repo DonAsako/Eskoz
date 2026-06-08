@@ -1,7 +1,7 @@
-"""Aggregations feeding the admin dashboard analytics panels.
+"""Aggregations feeding the dedicated Analytics admin page.
 
-Exposes ``add_dashboard_metrics(context)``, called by the core dashboard
-callback. Kept here so all page-view logic lives in the analytics app.
+Exposes ``full_metrics(context)``, called by the analytics view. Kept here so
+all page-view logic lives in the analytics app.
 """
 
 from datetime import timedelta
@@ -82,42 +82,6 @@ def _top_content(views, since, limit=10):
             url = None
         items.append({"title": str(obj), "model": ct.name, "count": r["n"], "url": url})
     return items
-
-
-def add_dashboard_metrics(context):
-    """Compact analytics for the admin dashboard landing page."""
-    now = timezone.now()
-    d7 = now - timedelta(days=7)
-    d14 = now - timedelta(days=14)
-    d30 = now - timedelta(days=30)
-    d60 = now - timedelta(days=60)
-    views = PageView.objects.all()
-
-    v7 = views.filter(created_at__gte=d7).count()
-    v7_prev = views.filter(created_at__gte=d14, created_at__lt=d7).count()
-    v30 = views.filter(created_at__gte=d30).count()
-    v30_prev = views.filter(created_at__gte=d60, created_at__lt=d30).count()
-    u7 = views.filter(created_at__gte=d7).values("visitor_hash").distinct().count()
-    u7_prev = views.filter(created_at__gte=d14, created_at__lt=d7).values("visitor_hash").distinct().count()
-
-    context["metrics"] = {
-        "views_7d": v7,
-        "views_7d_delta": _pct_change(v7, v7_prev),
-        "views_30d": v30,
-        "views_30d_delta": _pct_change(v30, v30_prev),
-        "uniques_7d": u7,
-        "uniques_7d_delta": _pct_change(u7, u7_prev),
-    }
-    context["top_pages"] = list(
-        views.filter(created_at__gte=d30).values("path").annotate(n=Count("id")).order_by("-n")[:8]
-    )
-    context["views_series"], context["views_peak"] = _daily_series(views, days=30)
-
-    rt = views.filter(created_at__gte=now - timedelta(hours=1))
-    context["realtime"] = {
-        "views_1h": rt.count(),
-        "uniques_1h": rt.values("visitor_hash").distinct().count(),
-    }
 
 
 def full_metrics(context):
