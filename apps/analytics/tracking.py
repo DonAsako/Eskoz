@@ -8,6 +8,7 @@ blockers (relevant for an infosec audience).
 
 import hashlib
 import re
+from urllib.parse import urlsplit
 
 from django.conf import settings
 from django.utils import timezone
@@ -22,6 +23,14 @@ _BOT_RE = re.compile(
 
 def is_bot(user_agent):
     return not user_agent or bool(_BOT_RE.search(user_agent))
+
+
+def external_referrer(request):
+    """HTTP referer, blanked when it points back at our own host"""
+    ref = request.META.get("HTTP_REFERER", "") or ""
+    if ref and urlsplit(ref).netloc == request.get_host():
+        return ""
+    return ref
 
 
 def client_ip(request):
