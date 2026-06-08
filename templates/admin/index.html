@@ -47,6 +47,14 @@
                     </div>
                 </div>
             {% endif %}
+            {% if realtime %}
+                <div class="mb-8 flex items-center gap-2 text-sm text-font-default-light dark:text-font-default-dark">
+                    <span class="live-dot"></span>
+                    <span><strong class="font-semibold">{{ realtime.views_1h }}</strong> {% trans "views" %} ·
+                        <strong class="font-semibold">{{ realtime.uniques_1h }}</strong> {% trans "visitors" %}</span>
+                    <span class="text-font-subtle-light dark:text-font-subtle-dark">— {% trans "last hour" %}</span>
+                </div>
+            {% endif %}
             {% if views_series %}
                 <div class="mb-8 rounded-default border border-base-200 bg-white p-4 dark:border-base-800 dark:bg-base-900">
                     <div class="mb-3 flex items-baseline justify-between">

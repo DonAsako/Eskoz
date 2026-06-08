@@ -44,6 +44,23 @@ def _daily_series(views, days=30):
     return series, peak
 
 
+def _minute_series(views, minutes=60):
+    """Per-minute counts over the last ``minutes`` for the realtime sparkline."""
+    now = timezone.now()
+    cur = now.replace(second=0, microsecond=0)
+    start = cur - timedelta(minutes=minutes - 1)
+    buckets = [0] * minutes
+    for ts in views.filter(created_at__gte=start).values_list("created_at", flat=True):
+        idx = int((ts - start).total_seconds() // 60)
+        if 0 <= idx < minutes:
+            buckets[idx] += 1
+    series = [{"min": start + timedelta(minutes=i), "count": c} for i, c in enumerate(buckets)]
+    peak = max(buckets, default=0) or 1
+    for s in series:
+        s["pct"] = max(round(s["count"] / peak * 100), 3) if s["count"] else 0
+    return series, peak
+
+
 def _top_content(views, since, limit=10):
     """Most-viewed content objects (resolved to title + admin/site links)."""
     rows = (
@@ -96,6 +113,12 @@ def add_dashboard_metrics(context):
     )
     context["views_series"], context["views_peak"] = _daily_series(views, days=30)
 
+    rt = views.filter(created_at__gte=now - timedelta(hours=1))
+    context["realtime"] = {
+        "views_1h": rt.count(),
+        "uniques_1h": rt.values("visitor_hash").distinct().count(),
+    }
+
 
 def full_metrics(context):
     """Richer analytics for the dedicated Analytics admin page."""
@@ -132,6 +155,15 @@ def full_metrics(context):
         (_("Unique visitors (30 days)"), u30, _pct_change(u30, u30_prev)),
     ]
     context["views_series"], context["views_peak"] = _daily_series(views, days=30)
+
+    rt = views.filter(created_at__gte=now - timedelta(hours=1))
+    context["realtime"] = {
+        "views_1h": rt.count(),
+        "uniques_1h": rt.values("visitor_hash").distinct().count(),
+    }
+    context["realtime_series"], context["realtime_peak"] = _minute_series(views, minutes=60)
+    context["realtime_pages"] = list(rt.values("path").annotate(n=Count("id")).order_by("-n")[:5])
+
     context["top_content"] = _top_content(views, d30, limit=10)
     context["top_pages"] = list(
         views.filter(created_at__gte=d30).values("path").annotate(n=Count("id")).order_by("-n")[:15]

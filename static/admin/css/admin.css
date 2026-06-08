@@ -168,6 +168,31 @@
     opacity: 1;
 }
 
+/* LIVE DOT (realtime "last hour" panel) */
+
+.live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-green-500);
+    flex: 0 0 8px;
+    animation: live-pulse 1.8s ease-out infinite;
+}
+
+@keyframes live-pulse {
+    0% {
+        box-shadow: 0 0 0 0 color-mix(in oklch, var(--color-green-500) 55%, transparent);
+    }
+
+    70% {
+        box-shadow: 0 0 0 6px transparent;
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 transparent;
+    }
+}
+
 /* Toggle variant — clickable badge in changelist. */
 button.status-badge--toggle {
     appearance: none;

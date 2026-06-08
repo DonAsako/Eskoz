@@ -16,6 +16,59 @@
             </div>
         {% endfor %}
     </div>
+    {# ---- Realtime (last hour) ---- #}
+    <div class="mb-8 rounded-default border border-base-200 bg-white p-4 dark:border-base-800 dark:bg-base-900">
+        <div class="mb-4 flex items-center gap-2">
+            <span class="live-dot"></span>
+            <h2 class="font-semibold text-font-important-light dark:text-font-important-dark">{% trans "Last hour" %}</h2>
+        </div>
+        <div class="flex flex-wrap items-end gap-8">
+            <div class="shrink-0">
+                <div class="text-2xl font-semibold text-font-important-light dark:text-font-important-dark">
+                    {{ realtime.views_1h }}
+                </div>
+                <div class="text-font-subtle-light text-xs uppercase tracking-wide dark:text-font-subtle-dark">
+                    {% trans "Views" %}
+                </div>
+            </div>
+            <div class="shrink-0">
+                <div class="text-2xl font-semibold text-font-important-light dark:text-font-important-dark">
+                    {{ realtime.uniques_1h }}
+                </div>
+                <div class="text-font-subtle-light text-xs uppercase tracking-wide dark:text-font-subtle-dark">
+                    {% trans "Unique visitors" %}
+                </div>
+            </div>
+            <div class="grow" style="min-width: 200px;">
+                {# Per-minute over the last hour; inline sizing (purged Tailwind, see above). #}
+                <div style="display: flex; align-items: flex-end; gap: 1px; height: 3rem;">
+                    {% for m in realtime_series %}
+                        <div class="bar rounded-t bg-primary-600 transition-colors hover:bg-primary-500 dark:bg-primary-500 dark:hover:bg-primary-400"
+                             style="flex: 1 1 0;
+                                    height: {{ m.pct }}%;
+                                    min-height: {% if m.count %}2px{% else %}0{% endif %}">
+                            <span class="bar__tip"><strong>{{ m.count }}</strong> {% trans "views" %}<span>{{ m.min|time:"H:i" }}</span></span>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="mt-1 flex justify-between text-font-subtle-light text-xs dark:text-font-subtle-dark">
+                    <span>{{ realtime_series.0.min|time:"H:i" }}</span>
+                    <span>{% trans "now" %}</span>
+                </div>
+            </div>
+        </div>
+        {% if realtime_pages %}
+            <ul class="mt-4 divide-y divide-base-200 border-t border-base-200 dark:divide-base-800 dark:border-base-800">
+                {% for page in realtime_pages %}
+                    <li class="flex items-center gap-3 py-1.5 text-sm">
+                        <a href="{{ page.path }}"
+                           class="grow truncate text-primary-600 hover:underline dark:text-primary-500">{{ page.path }}</a>
+                        <span class="shrink-0 font-medium text-font-default-light dark:text-font-default-dark">{{ page.n }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
     {# ---- Daily bar chart ---- #}
     {% if views_series %}
         <div class="mb-8 rounded-default border border-base-200 bg-white p-4 dark:border-base-800 dark:bg-base-900">
