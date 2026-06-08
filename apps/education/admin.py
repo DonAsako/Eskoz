@@ -1,4 +1,7 @@
-from unfold.admin import ModelAdmin
+from django.contrib import admin
+from django.db.models import Count
+from django.utils.translation import gettext_lazy as _
+from unfold.admin import ModelAdmin, TabularInline
 
 from apps.core.admin.abstracts import (
     AbstractCategoryAdmin,
@@ -28,16 +31,59 @@ class CategoryAdmin(AbstractCategoryAdmin):
     inlines = [CategoryTranslationAdmin]
 
 
+class ModuleInline(TabularInline):
+    """Modules of a course, reorderable by drag-and-drop (the numeric order
+    field is hidden behind the drag handle)."""
+
+    model = Module
+    fields = ("title", "slug", "order")
+    prepopulated_fields = {"slug": ("title",)}
+    ordering = ("order",)
+    ordering_field = "order"
+    hide_ordering_field = True
+    extra = 0
+
+
+class LessonInline(TabularInline):
+    """Lessons of a module, reorderable by drag-and-drop. Content is edited on
+    the lesson's own page (it lives in translations)."""
+
+    model = Lesson
+    fields = ("title", "slug", "visibility", "order")
+    prepopulated_fields = {"slug": ("title",)}
+    ordering = ("order",)
+    ordering_field = "order"
+    hide_ordering_field = True
+    extra = 0
+
+
 class CourseAdmin(PageViewsAdminMixin, ModelAdmin):
-    list_display = ("category", "title", "views_count")
+    list_display = ("category", "title", "modules_count", "lessons_count", "views_count")
     list_select_related = ("category",)
+    inlines = [ModuleInline]
 
     prepopulated_fields = {"slug": ("title",)}
+
+    def get_queryset(self, request):
+        return ModelAdmin.get_queryset(self, request).annotate(
+            _views=Count("page_views", distinct=True),
+            _modules=Count("modules", distinct=True),
+            _lessons=Count("modules__lessons", distinct=True),
+        )
+
+    @admin.display(description=_("Modules"), ordering="_modules")
+    def modules_count(self, obj):
+        return obj._modules
+
+    @admin.display(description=_("Lessons"), ordering="_lessons")
+    def lessons_count(self, obj):
+        return obj._lessons
 
 
 class ModuleAdmin(PageViewsAdminMixin, ModelAdmin):
     list_display = ("course__category", "course", "title", "order", "views_count")
     list_select_related = ("course", "course__category")
+    inlines = [LessonInline]
     prepopulated_fields = {"slug": ("title",)}
 
 

@@ -70,9 +70,11 @@ def lesson_detail(request, slug_course="", slug_module="", slug_lesson=""):
         current_index = lesson_list.index(lesson)
         prev_lesson = lesson_list[current_index - 1] if current_index > 0 else None
         next_lesson = lesson_list[current_index + 1] if current_index < len(lesson_list) - 1 else None
+        lesson_position = current_index + 1
     except ValueError:
         prev_lesson = None
         next_lesson = None
+        lesson_position = None
 
     return render(
         request,
@@ -81,6 +83,7 @@ def lesson_detail(request, slug_course="", slug_module="", slug_lesson=""):
             "course": course,
             "module": module,
             "lesson": lesson,
+            "lesson_position": lesson_position,
             "prev_lesson": prev_lesson,
             "next_lesson": next_lesson,
         },

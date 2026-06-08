@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models.abstracts import (
@@ -48,6 +49,11 @@ class Article(AbstractPost):
         if not self.category_id:
             self.category = Category.objects.get_or_create(slug="undefined", defaults={"title": "Undefined"})[0]
         super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        if not self.category_id:
+            return reverse("blog:article_list")
+        return reverse("blog:article_detail", args=[self.category.slug, self.slug])
 
     class Meta(AbstractPost.Meta):
         verbose_name = _("Article")
