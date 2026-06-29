@@ -2,6 +2,8 @@ import pyotp
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
+from unfold.widgets import UnfoldAdminPasswordWidget
+
 from apps.core.models import Page, User2FA
 from apps.core.widgets import ContentEditorWidget
 
@@ -116,7 +118,7 @@ class AbstractPostAdminForm(forms.ModelForm):
 
     password = forms.CharField(
         required=False,
-        widget=forms.PasswordInput(render_value=False),
+        widget=UnfoldAdminPasswordWidget(render_value=False),
         label=_("Password"),
         help_text=_("Leave empty to keep the current password."),
     )
