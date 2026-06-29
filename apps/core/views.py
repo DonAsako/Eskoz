@@ -206,8 +206,9 @@ def verify_2fa_view(request):
     Reached by ``Force2FAMiddleware`` after a successful password login.
     Accepts either a TOTP code or one of the user's backup codes (the
     backup code is consumed on success). Marks the session as verified so
-    the rest of the admin opens up. Rate-limited at the IP level via the
-    middleware that wraps the project (``RATELIMIT_2FA_IP``).
+    the rest of the admin opens up. Attempts are throttled both per source IP
+    (`RATELIMIT_2FA_IP`) and per account (`RATELIMIT_2FA_USER`) so neither a
+    single host nor an IP-rotating attacker can brute-force one user's codes.
     """
     from django.contrib import messages
     from django_ratelimit.core import is_ratelimited
@@ -231,14 +232,23 @@ def verify_2fa_view(request):
 
     error = None
     if request.method == "POST":
-        if is_ratelimited(
+        ip_limited = is_ratelimited(
             request,
-            group="verify-2fa",
+            group="verify-2fa-ip",
             key="ip",
             rate=settings.RATELIMIT_2FA_IP,
             method="POST",
             increment=True,
-        ):
+        )
+        user_limited = is_ratelimited(
+            request,
+            group="verify-2fa-user",
+            key="user",
+            rate=settings.RATELIMIT_2FA_USER,
+            method="POST",
+            increment=True,
+        )
+        if ip_limited or user_limited:
             raise Ratelimited
 
         code = (request.POST.get("code") or "").strip().replace(" ", "").replace("-", "")
