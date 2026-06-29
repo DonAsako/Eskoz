@@ -4,7 +4,7 @@ from .base import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "").split(" ")
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "").split()
 
 CSRF_TRUSTED_ORIGINS = ["https://" + domain for domain in ALLOWED_HOSTS if domain]
 CSRF_COOKIE_SECURE = True
