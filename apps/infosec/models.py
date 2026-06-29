@@ -205,13 +205,13 @@ class CTF(models.Model):
 
     Attributes:
         name (CharField): Name of the CTF.
-        date_beginning (DateTimeField): Start date and time of the CTF.
-        date_end (DateTimeField): End date and time of the CTF.
+        date_beginning (DateTimeField): Start date and time of the CTF (optional).
+        date_end (DateTimeField): End date and time of the CTF (optional).
     """
 
     name = models.CharField(max_length=100, blank=False, null=False, verbose_name=_("Name"))
-    date_beginning = models.DateTimeField()
-    date_end = models.DateTimeField()
+    date_beginning = models.DateTimeField(null=True, blank=True)
+    date_end = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         """Return the CTF name as its string representation."""
