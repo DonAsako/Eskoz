@@ -60,7 +60,7 @@ LOGGING = {
             "propagate": False,
         },
         "django.request": {
-            "handlers": ["file"],
+            "handlers": ["console", "file"],
             "level": "ERROR",
             "propagate": False,
         },
