@@ -611,9 +611,24 @@ function buildToolbar(ta, shell) {
  * ------------------------------------------------------------------ */
 let uploadSeq = 0;
 
+// On a change page the admin URL ends with `…/<app_label>/<model_name>/<object_id>/change/`.
+// Parsing it lets the upload endpoint attach the image to the edited object so it
+// appears in the "Markdown Images" inline. The add page has no id → null → bare file.
+function currentAdminObject() {
+    const m = window.location.pathname.match(/\/([^/]+)\/([^/]+)\/([^/]+)\/change\/?$/);
+    if (!m) return null;
+    return { app_label: m[1], model_name: m[2], object_id: decodeURIComponent(m[3]) };
+}
+
 function uploadImage(file) {
     const body = new FormData();
     body.append("image", file);
+    const obj = currentAdminObject();
+    if (obj) {
+        body.append("app_label", obj.app_label);
+        body.append("model_name", obj.model_name);
+        body.append("object_id", obj.object_id);
+    }
     return fetch(window.IMAGE_UPLOAD_URL, {
         method: "POST",
         headers: { "X-CSRFToken": getCookie("csrftoken") },

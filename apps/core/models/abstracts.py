@@ -11,7 +11,7 @@ from django.utils.text import slugify
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.utils import get_content_as_html, upload_to_posts, upload_to_settings
+from apps.core.utils import get_content_as_html, upload_to_posts
 
 
 class AbstractTranslatableCategory(models.Model):
@@ -356,7 +356,7 @@ class TranslatableMarkdownItemImage(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey("content_type", "object_id")
-    picture = models.ImageField(upload_to=upload_to_settings, verbose_name=_("Picture"))
+    picture = models.ImageField(upload_to=upload_to_posts, verbose_name=_("Picture"))
     uploaded_on = models.DateTimeField(auto_now_add=True, verbose_name=_("Uploaded on"))
 
     class Meta:

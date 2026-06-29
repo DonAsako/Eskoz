@@ -83,9 +83,9 @@ class EskozAdminSite(UnfoldAdminSite):
 
     def image_upload(self, request):
         """Store an image dropped/pasted into the Markdown editor and return
-        its URL so the JS can insert the corresponding ``![](...)``. Staff-only
-        (wrapped by ``admin_view``); the file is validated as a real image by
-        Pillow before being written under ``posts/``.
+        its URL so the JS can insert the corresponding `![](...)`. Staff-only
+        (wrapped by `admin_view`); the file is validated as a real image by
+        Pillow before being written under `posts/`.
         """
         import uuid
 
@@ -112,8 +112,47 @@ class EskozAdminSite(UnfoldAdminSite):
             return JsonResponse({"error": str(_("Unsupported image format."))}, status=400)
 
         upload.seek(0)
+
+        attached = self._attach_markdown_image(request, upload, ext)
+        if attached is not None:
+            return attached
+
         name = default_storage.save(f"posts/{uuid.uuid4()}.{ext}", upload)
         return JsonResponse({"url": default_storage.url(name)})
+
+    def _attach_markdown_image(self, request, upload, ext):
+        """Register `upload` as a `TranslatableMarkdownItemImage` bound to the
+        object currently edited, so a dropped/pasted image shows up in its
+        "Markdown Images" inline. Returns a `JsonResponse` (success or a
+        permission error), or `None` to tell the caller to fall back to a bare
+        file save (no object identity given, unknown model, or object not saved
+        yet — e.g. the add page).
+        """
+        import uuid
+
+        app_label = request.POST.get("app_label")
+        model_name = request.POST.get("model_name")
+        object_id = request.POST.get("object_id")
+        if not (app_label and model_name and object_id):
+            return None
+
+        try:
+            model = apps.get_model(app_label, model_name)
+        except LookupError:
+            return None
+
+        if not request.user.has_perm(f"{app_label}.change_{model._meta.model_name}"):
+            return JsonResponse({"error": "forbidden"}, status=403)
+
+        obj = model.objects.filter(pk=object_id).first()
+        if obj is None:
+            return None
+
+        from apps.core.models import TranslatableMarkdownItemImage
+
+        image = TranslatableMarkdownItemImage(content_object=obj)
+        image.picture.save(f"{uuid.uuid4()}.{ext}", upload, save=True)
+        return JsonResponse({"url": image.picture.url})
 
     def set_visibility(self, request, app_label, model_name, pk):
         """Swap the ``visibility`` of a single object from a changelist
