@@ -409,6 +409,9 @@ ADMIN_URL = os.getenv("ADMIN_URL") or "admin"
 POSTS_PER_PAGE = 12
 POSTS_PER_PAGE_CHOICES = [12, 24, 36]
 
+# Article/writeup list views render the whole archive grouped by year
+ARCHIVE_GROUP_THRESHOLD = 40
+
 EDITOR_PERMISSIONS = {
     "infosec": {
         "models": [

@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import Http404, get_object_or_404, render
 from django_ratelimit.exceptions import Ratelimited
 
@@ -98,9 +99,8 @@ def writeup_list(request, slug=None):
 
     categories = Category.objects.filter(writeups__isnull=False, writeups__visibility="public").distinct()
 
-    GROUP_THRESHOLD = 40
     total = writeups.count()
-    if total <= GROUP_THRESHOLD:
+    if total <= settings.ARCHIVE_GROUP_THRESHOLD:
         page_obj = None
         groups = group_by_year(writeups)
     else:

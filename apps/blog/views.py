@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.shortcuts import Http404, get_object_or_404, render
 from django_ratelimit.exceptions import Ratelimited
@@ -97,12 +98,8 @@ def article_list(request, slug=None):
 
     categories = Category.objects.filter(articles__isnull=False, articles__visibility="public").distinct()
 
-    # Below the threshold we render the whole archive grouped by year
-    # (no pagination, no per-page selector). Past the threshold we keep
-    # standard pagination but still group within each page.
-    GROUP_THRESHOLD = 40
     total = articles.count()
-    if total <= GROUP_THRESHOLD:
+    if total <= settings.ARCHIVE_GROUP_THRESHOLD:
         page_obj = None
         groups = group_by_year(articles)
     else:
