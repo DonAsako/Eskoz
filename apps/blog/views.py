@@ -1,8 +1,14 @@
 from django.contrib.auth.models import User
 from django.shortcuts import Http404, get_object_or_404, render
+from django_ratelimit.exceptions import Ratelimited
 
 from apps.core.decorators import feature_active_required
-from apps.core.views import group_by_year, paginate_queryset, redirect_to_available_translation
+from apps.core.views import (
+    group_by_year,
+    paginate_queryset,
+    protected_password_ratelimited,
+    redirect_to_available_translation,
+)
 
 from .models import Article, Category, Project
 
@@ -55,8 +61,11 @@ def article_detail(request, slug_category, slug_article):
     }
 
     if article.visibility == "protected":
-        if request.method == "POST" and article.check_password(request.POST.get("password", "")):
-            return render(request, "blog/article_detail.html", context)
+        if request.method == "POST":
+            if protected_password_ratelimited(request):
+                raise Ratelimited
+            if article.check_password(request.POST.get("password", "")):
+                return render(request, "blog/article_detail.html", context)
 
         return render(request, "blog/article_password.html")
 

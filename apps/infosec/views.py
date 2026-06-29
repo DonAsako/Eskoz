@@ -1,7 +1,13 @@
 from django.shortcuts import Http404, get_object_or_404, render
+from django_ratelimit.exceptions import Ratelimited
 
 from apps.core.decorators import feature_active_required
-from apps.core.views import group_by_year, paginate_queryset, redirect_to_available_translation
+from apps.core.views import (
+    group_by_year,
+    paginate_queryset,
+    protected_password_ratelimited,
+    redirect_to_available_translation,
+)
 
 from .models import CTF, CVE, Category, Certification, Writeup
 
@@ -54,8 +60,11 @@ def writeup_detail(request, slug_category, slug_writeup):
     }
 
     if writeup.visibility == "protected":
-        if request.method == "POST" and writeup.check_password(request.POST.get("password", "")):
-            return render(request, "infosec/writeup_detail.html", context)
+        if request.method == "POST":
+            if protected_password_ratelimited(request):
+                raise Ratelimited
+            if writeup.check_password(request.POST.get("password", "")):
+                return render(request, "infosec/writeup_detail.html", context)
 
         return render(request, "infosec/writeup_password.html")
 

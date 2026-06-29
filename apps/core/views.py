@@ -186,6 +186,20 @@ def ratelimited(request, exception):
     return response
 
 
+def protected_password_ratelimited(request):
+    """Throttle password attempts on `protected` posts."""
+    from django_ratelimit.core import is_ratelimited
+
+    return is_ratelimited(
+        request,
+        group="protected-password",
+        key="ip",
+        rate=settings.RATELIMIT_PROTECTED_IP,
+        method="POST",
+        increment=True,
+    )
+
+
 def verify_2fa_view(request):
     """Second-factor gate for users who have ``User2FA.is_active=True``.
 
