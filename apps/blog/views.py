@@ -143,4 +143,6 @@ def project_list(request):
         HttpResponse: Rendered projects list page.
     """
     projects = Project.objects.select_related("maintainer", "article", "article__category")
+    if not request.user.is_authenticated:
+        projects = projects.filter(visibility="public")
     return render(request, "blog/project_list.html", {"projects": projects})

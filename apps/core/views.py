@@ -82,7 +82,10 @@ def index(request):
     page = Page.objects.filter(visibility="index").first()
     articles = Article.objects.filter(visibility="public").order_by("-published_on")[:5]
     writeups = Writeup.objects.filter(visibility="public").order_by("-published_on")[:5]
-    projects = Project.objects.all().order_by("-date_beginning")[:5]
+    projects = Project.objects.all()
+    if not request.user.is_authenticated:
+        projects = projects.filter(visibility="public")
+    projects = projects.order_by("-date_beginning")[:5]
     context = {
         "articles": articles,
         "writeups": writeups,
