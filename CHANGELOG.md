@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.9.0](https://github.com/DonAsako/Eskoz/compare/v0.8.1...v0.9.0) (2026-06-29)
+
+
+### Features
+
+* **ctf:** duration is now optional ([95df783](https://github.com/DonAsako/Eskoz/commit/95df783cb106ae6b88e64e2d10fe4037763d51d9))
+* **upload image:** one process ([0a92e74](https://github.com/DonAsako/Eskoz/commit/0a92e745a2d1382b8163f1ea4c9c63a366fd444f))
+
+
+### Bug Fixes
+
+* **admin:** show password input ([a02fce0](https://github.com/DonAsako/Eskoz/commit/a02fce04eadc5bbb3f5977742fae02815f2399dc))
+
+
+### Documentation
+
+* **logs:** add info on logs in docker ([f85967d](https://github.com/DonAsako/Eskoz/commit/f85967dda94250b2c6a57a31f59fd94e85301658))
+
 ## [0.8.1](https://github.com/DonAsako/Eskoz/compare/v0.8.0...v0.8.1) (2026-06-08)
 
 
