@@ -66,3 +66,33 @@ To run it via Compose, replace the `build:` block of the `web` service with:
     Database, static and media files live in named Docker volumes
     (`postgres_data`, `static_volume`, `media_volume`). `down` keeps them; add
     `-v` only if you really want to delete your data.
+
+## Logs and tracebacks
+
+The app logs to two places in production:
+
+- **stdout** — captured by Docker. Use this for a live view, including the full
+  traceback of any `500` error:
+
+    ```sh
+    docker compose -f docker/docker-compose.yml logs -f web
+    ```
+
+- **`logs/django.log`** — `ERROR`-level entries (unhandled exceptions, request
+  failures) are also written to a file. The `web` service bind-mounts the host's `logs/` directory to `/app/logs`, so the file survives container restarts and can be read directly on the host:
+
+    ```sh
+    tail -n 80 logs/django.log
+    ```
+
+
+!!! warning "Log file ownership"
+    The container runs as uid `1000` (the `app` user). For the bind-mounted
+    `logs/` directory to be writable, it must be owned by that uid, otherwise
+    Django's file handler fails to open `django.log` on startup. If you hit a
+    permission error, fix it once on the host:
+
+    ```sh
+    sudo rm -f logs/django.log        # drop any root-owned leftover
+    sudo chown -R 1000:1000 logs/
+    ```
