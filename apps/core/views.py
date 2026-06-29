@@ -169,7 +169,6 @@ def robots_txt(request):
     sitemap_url = request.build_absolute_uri("/sitemap.xml")
     lines = [
         "User-agent: *",
-        f"Disallow: /{settings.ADMIN_URL}/",
         "Disallow: /accounts/",
         "",
         f"Sitemap: {sitemap_url}",
@@ -200,16 +199,9 @@ def protected_password_ratelimited(request):
 
 
 def verify_2fa_view(request):
-    """Second-factor gate for users who have ``User2FA.is_active=True``.
-
-    Reached by ``Force2FAMiddleware`` after a successful password login.
-    Accepts either a TOTP code or one of the user's backup codes (the
-    backup code is consumed on success). Marks the session as verified so
-    the rest of the admin opens up. Attempts are throttled both per source IP
-    (`RATELIMIT_2FA_IP`) and per account (`RATELIMIT_2FA_USER`) so neither a
-    single host nor an IP-rotating attacker can brute-force one user's codes.
-    """
+    """Second-factor gate for users who have `User2FA.is_active=True`."""
     from django.contrib import messages
+    from django.utils.http import url_has_allowed_host_and_scheme
     from django_ratelimit.core import is_ratelimited
     from django_ratelimit.exceptions import Ratelimited
 
@@ -218,16 +210,28 @@ def verify_2fa_view(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("admin:login"))
 
+    # Validate the post-verification redirect target so a crafted
+    # ?next=https://evil.example link can't turn this into an open redirect.
+    requested_next = request.GET.get("next") or request.POST.get("next") or ""
+    if requested_next and url_has_allowed_host_and_scheme(
+        requested_next,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure(),
+    ):
+        safe_next = requested_next
+    else:
+        safe_next = reverse("admin:index")
+
     try:
         tfa = request.user.two_factor
     except User2FA.DoesNotExist:
         # User reached this view without 2FA configured — let them through.
         request.session["2fa_verified"] = True
-        return HttpResponseRedirect(request.GET.get("next") or reverse("admin:index"))
+        return HttpResponseRedirect(safe_next)
 
     if not tfa.is_active:
         request.session["2fa_verified"] = True
-        return HttpResponseRedirect(request.GET.get("next") or reverse("admin:index"))
+        return HttpResponseRedirect(safe_next)
 
     error = None
     if request.method == "POST":
@@ -253,7 +257,7 @@ def verify_2fa_view(request):
         code = (request.POST.get("code") or "").strip().replace(" ", "").replace("-", "")
         if tfa.verify_otp(code):
             request.session["2fa_verified"] = True
-            return HttpResponseRedirect(request.GET.get("next") or reverse("admin:index"))
+            return HttpResponseRedirect(safe_next)
         if tfa.verify_backup_code(code):
             request.session["2fa_verified"] = True
             messages.warning(
@@ -261,7 +265,7 @@ def verify_2fa_view(request):
                 _("Backup code consumed. %(remaining)d codes remain — generate new ones soon.")
                 % {"remaining": len(tfa.backup_codes)},
             )
-            return HttpResponseRedirect(request.GET.get("next") or reverse("admin:index"))
+            return HttpResponseRedirect(safe_next)
         error = _("Invalid code. Try again.")
 
     # GET (or POST with bad code): render the form. We deliberately keep this
@@ -276,7 +280,9 @@ def verify_2fa_view(request):
         {
             "error": error,
             "username": request.user.get_username(),
-            "next": request.GET.get("next", ""),
+            # Carry only the validated target so the form never echoes an
+            # attacker-supplied off-site URL back into the page.
+            "next": safe_next if requested_next else "",
             "logout_url": reverse("admin:logout"),
         }
     )
