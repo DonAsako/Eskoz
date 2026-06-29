@@ -31,7 +31,7 @@ def course_list(request):
 def module_list(request, slug_course=""):
     course = get_object_or_404(Course, slug=slug_course)
     request.tracked_object = course
-    modules = Module.objects.filter(course=course).order_by("order")
+    modules = Module.objects.filter(course=course).with_position().order_by("order")
     return render(request, "education/module_list.html", {"course": course, "modules": modules})
 
 

@@ -1,5 +1,7 @@
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
+from django.db.models import F, Q, Window
+from django.db.models.functions import RowNumber
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -61,6 +63,23 @@ class Course(models.Model):
         verbose_name_plural = _("Courses")
 
 
+class ModuleQuerySet(models.QuerySet):
+    def with_position(self):
+        """Annotate each row with its 1-based rank within its course.
+
+        A single window-function pass computes every module's position, so
+        listing modules and reading ``module.position`` costs no extra query
+        per row (the property picks up the annotated value).
+        """
+        return self.annotate(
+            _position=Window(
+                expression=RowNumber(),
+                partition_by=[F("course_id")],
+                order_by=[F("order").asc(), F("id").asc()],
+            )
+        )
+
+
 class Module(models.Model):
     """
     Represents a module within a course. A module groups multiple lessons
@@ -80,6 +99,8 @@ class Module(models.Model):
     slug = models.SlugField()
     page_views = GenericRelation("analytics.PageView")
 
+    objects = ModuleQuerySet.as_manager()
+
     def __str__(self):
         """Return the module title as its string representation"""
         return f"{self.title}"
@@ -89,10 +110,22 @@ class Module(models.Model):
 
     @property
     def position(self):
-        """1-based rank within its course"""
+        """1-based rank within its course (ordered by ``order`` then ``id``).
 
-        ids = list(Module.objects.filter(course_id=self.course_id).order_by("order", "id").values_list("id", flat=True))
-        return ids.index(self.id) + 1 if self.id in ids else 1
+        Prefers the value annotated by ``Module.objects.with_position()`` so
+        listing modules triggers no per-row query; otherwise falls back to a
+        single COUNT for a standalone instance.
+        """
+        annotated = self.__dict__.get("_position")
+        if annotated is not None:
+            return annotated
+        if not self.pk:
+            return 1
+        return (
+            Module.objects.filter(course_id=self.course_id)
+            .filter(Q(order__lt=self.order) | Q(order=self.order, id__lte=self.id))
+            .count()
+        )
 
     class Meta:
         verbose_name = _("Module")
