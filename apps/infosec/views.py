@@ -1,3 +1,4 @@
+from django.db.models import Max, Min
 from django.shortcuts import Http404, get_object_or_404, render
 
 from apps.core.decorators import feature_active_required
@@ -124,7 +125,16 @@ def certification_list(request):
         HttpResponse: The rendered certifications list page.
     """
     certifications = Certification.objects.select_related("issuer", "article", "article__category")
-    return render(request, "infosec/certification_list.html", {"certifications": certifications})
+    span = certifications.aggregate(earliest=Min("obtained_date"), latest=Max("obtained_date"))
+    return render(
+        request,
+        "infosec/certification_list.html",
+        {
+            "certifications": certifications,
+            "cert_year_earliest": span["earliest"],
+            "cert_year_latest": span["latest"],
+        },
+    )
 
 
 @feature_active_required(module_name="infosec", feature_name="cves")
