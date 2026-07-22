@@ -83,6 +83,7 @@ def lesson_detail(request, slug_course="", slug_module="", slug_lesson=""):
             "course": course,
             "module": module,
             "lesson": lesson,
+            "lessons": lesson_list,
             "lesson_position": lesson_position,
             "prev_lesson": prev_lesson,
             "next_lesson": next_lesson,
