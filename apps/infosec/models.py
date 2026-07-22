@@ -54,6 +54,12 @@ class Certification(models.Model):
     """
 
     name = models.CharField(max_length=100, blank=False, null=False, verbose_name=_("Name"))
+    code = models.CharField(
+        max_length=20,
+        blank=True,
+        verbose_name=_("Code"),
+        help_text=_("Short code / acronym shown as the card title (e.g. CPTS, OSCP). Falls back to the name."),
+    )
     description = models.TextField()
     certification_detail_url = models.URLField(
         max_length=200,
