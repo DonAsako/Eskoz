@@ -5,7 +5,7 @@
       "release-type": "simple",
       "package-name": "eskoz",
       "include-component-in-tag": false,
-      "extra-files": ["eskoz/__init__.py"],
+      "extra-files": ["eskoz/__init__.py", "pyproject.toml"],
       "changelog-sections": [
         { "type": "feat", "section": "Features" },
         { "type": "fix", "section": "Bug Fixes" },

@@ -17,6 +17,7 @@ collect static, compile translations, then start Gunicorn — just done by hand.
 sudo apt update
 sudo apt install -y python3.13 python3.13-venv git gettext \
     postgresql nginx
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
 `gettext` is required for `manage.py compilemessages`.
@@ -49,10 +50,8 @@ sudo -u eskoz -i
 git clone https://github.com/DonAsako/eskoz.git /opt/eskoz/app
 cd /opt/eskoz/app
 
-python3.13 -m venv .venv
+uv sync --frozen --no-dev
 source .venv/bin/activate
-pip install --upgrade pip
-pip install -r requirements/production.txt
 ```
 
 ## 5. Configure `.env`
@@ -259,8 +258,8 @@ Two options are described below — pick **one**:
 sudo -u eskoz -i
 cd /opt/eskoz/app
 git pull
+uv sync --frozen --no-dev
 source .venv/bin/activate
-pip install -r requirements/production.txt
 export DJANGO_SETTINGS_MODULE=eskoz.settings.production
 python manage.py migrate --noinput
 python manage.py collectstatic --noinput

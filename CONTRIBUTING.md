@@ -60,7 +60,7 @@ Quality is enforced by [pre-commit](https://pre-commit.com/). Install the hooks 
 then they run automatically on every commit:
 
 ```bash
-pip install -r requirements/development.txt
+uv sync
 pre-commit install            # installs both pre-commit and commit-msg hooks
 pre-commit run --all-files    # run everything on demand
 ```

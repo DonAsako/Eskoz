@@ -16,15 +16,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v5
         with:
           python-version-file: .python-version
-          cache: pip
+          enable-cache: true
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements/development.txt
+          uv sync --frozen
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
 
       - name: Run pre-commit (ruff, yamllint, gitleaks, django checks)
         uses: pre-commit/action@v3.0.1
@@ -57,20 +57,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v5
         with:
           python-version-file: .python-version
-          cache: pip
+          enable-cache: true
 
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements/production.txt
+        run: uv sync --frozen --no-dev
 
       - name: Run Django tests
         # -t . sets the unittest top-level dir to the repo root so the
         # apps.*.models packages import under their real dotted path.
         run: >-
-          python manage.py test
+          uv run python manage.py test
           apps.analytics apps.blog apps.core apps.education apps.infosec
           -t . --verbosity 2

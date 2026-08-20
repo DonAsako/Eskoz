@@ -1,3 +1,5 @@
+import logging
+
 from django.apps import apps
 from django.conf import settings
 from django.http import HttpResponseBadRequest, HttpResponseNotAllowed, JsonResponse
@@ -9,6 +11,8 @@ from unfold.sites import UnfoldAdminSite
 
 from apps.core.models import SiteSettings
 from apps.core.utils import get_content_as_html
+
+logger = logging.getLogger(__name__)
 
 
 class EskozAdminSite(UnfoldAdminSite):
@@ -104,7 +108,7 @@ class EskozAdminSite(UnfoldAdminSite):
         try:
             probe = Image.open(upload)
             probe.verify()
-        except (UnidentifiedImageError, OSError):
+        except (UnidentifiedImageError, OSError, Image.DecompressionBombError, ValueError):
             return JsonResponse({"error": str(_("Invalid image file."))}, status=400)
 
         ext = {"jpeg": "jpg", "png": "png", "gif": "gif", "webp": "webp"}.get((probe.format or "").lower())
@@ -117,8 +121,13 @@ class EskozAdminSite(UnfoldAdminSite):
         if attached is not None:
             return attached
 
-        name = default_storage.save(f"posts/{uuid.uuid4()}.{ext}", upload)
-        return JsonResponse({"url": default_storage.url(name)})
+        try:
+            name = default_storage.save(f"posts/{uuid.uuid4()}.{ext}", upload)
+            url = default_storage.url(name)
+        except OSError:
+            logger.exception("Image upload failed while saving to media storage")
+            return JsonResponse({"error": str(_("Could not store the image on the server."))}, status=500)
+        return JsonResponse({"url": url})
 
     def _attach_markdown_image(self, request, upload, ext):
         """Register `upload` as a `TranslatableMarkdownItemImage` bound to the

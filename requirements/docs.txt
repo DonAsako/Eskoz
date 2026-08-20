@@ -1,2 +1,0 @@
-# Documentation site (MkDocs Material). Kept separate from app deps.
-mkdocs-material>=9.5.0

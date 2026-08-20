@@ -10,8 +10,8 @@ in the repository.
 ```sh
 git clone git@github.com:DonAsako/eskoz.git
 cd eskoz
-python3.13 -m venv .venv && source .venv/bin/activate
-pip install -r requirements/development.txt
+uv sync
+source .venv/bin/activate
 pre-commit install            # installs the pre-commit and commit-msg hooks
 ```
 
@@ -82,8 +82,8 @@ and deployed to GitHub Pages automatically on every push to `main`. To preview i
 locally:
 
 ```sh
-pip install -r requirements/docs.txt
-mkdocs serve
+uv sync --only-group docs
+uv run mkdocs serve
 ```
 
 Then open <http://127.0.0.1:8000>.
