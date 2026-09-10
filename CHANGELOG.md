@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.10.0](https://github.com/DonAsako/Eskoz/compare/v0.9.0...v0.10.0) (2026-08-20)
+
+
+### Features
+
+* add code on cert ([75b1f92](https://github.com/DonAsako/Eskoz/commit/75b1f92c26ac4badd3144c25651198fcd811cbc3))
+* add lesson list in education ([a8e5d46](https://github.com/DonAsako/Eskoz/commit/a8e5d46e2e52093edf4fbbf38c0713cd59f281c8))
+* order certs ([d8ca4e6](https://github.com/DonAsako/Eskoz/commit/d8ca4e6e507adb3beb9a6a9e08e48b91711bfbd8))
+
+
+### Bug Fixes
+
+* **ci:** run pre-commit via uv instead of pre-commit/action ([df6888d](https://github.com/DonAsako/Eskoz/commit/df6888d2735cfbdb994b6d098ff3a836778645f9))
+
 ## [0.9.0](https://github.com/DonAsako/Eskoz/compare/v0.8.1...v0.9.0) (2026-06-29)
 
 
