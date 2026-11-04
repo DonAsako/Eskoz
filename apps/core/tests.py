@@ -40,3 +40,41 @@ class PublicEndpointTests(TestCase):
     def test_unknown_well_known_file_is_404(self):
         response = self.client.get("/.well-known/does-not-exist.txt")
         assert response.status_code == HTTPStatus.NOT_FOUND
+
+
+class SearchVisibilityTests(TestCase):
+    """Search must only surface what the public site itself exposes."""
+
+    def setUp(self):
+        from apps.core.models import SiteSettings
+        from apps.infosec.models import Writeup, WriteupTranslation
+
+        # post_migrate seeds a SiteSettings row; reuse it (views read .first()).
+        self.site = SiteSettings.objects.first() or SiteSettings.objects.create(site_name="Test")
+        self.site.infosec.is_active = True
+        self.site.infosec.activate_writeups_page = True
+        self.site.infosec.save()
+
+        for visibility in ("public", "unlisted", "protected", "private"):
+            post = Writeup.objects.create(title=f"w-{visibility}", slug=f"w-{visibility}", visibility=visibility)
+            WriteupTranslation.objects.create(
+                translatable_content=post, language="en", title=f"needle {visibility}", content="body"
+            )
+
+    def _titles(self):
+        from apps.core.search import search_posts
+
+        return {hit.translation.title for hit in search_posts("needle", "en")["writeups"]}
+
+    def test_only_public_posts_are_returned(self):
+        assert self._titles() == {"needle public"}
+
+    def test_disabled_writeups_page_hides_writeups(self):
+        self.site.infosec.activate_writeups_page = False
+        self.site.infosec.save()
+        assert self._titles() == set()
+
+    def test_disabled_infosec_module_hides_writeups(self):
+        self.site.infosec.is_active = False
+        self.site.infosec.save()
+        assert self._titles() == set()

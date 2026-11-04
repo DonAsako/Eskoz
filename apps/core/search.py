@@ -12,13 +12,14 @@ hreflang strategy means each language is a distinct content surface, so
 mixing them in results would dilute relevance.
 """
 
-from collections.abc import Iterable
 from dataclasses import dataclass
 
 from django.db import connection
 from django.db.models import Case, Q, Value, When
 
 from apps.blog.models import Article, ArticleTranslation
+from apps.core.decorators import is_feature_active
+from apps.core.models import SiteSettings
 from apps.education.models import Lesson, LessonTranslation
 from apps.infosec.models import Writeup, WriteupTranslation
 
@@ -57,10 +58,14 @@ PG_TEXT_SEARCH_CONFIG = {
     "yi": "yiddish",
 }
 
+# (result key, post model, translation model, settings module, settings feature)
+# The module/feature pair mirrors the ``feature_active_required`` gate on the
+# matching list/detail views: if the section is switched off in Site
+# Settings, its posts must not leak through search either.
 POST_TYPES = (
-    ("articles", Article, ArticleTranslation),
-    ("writeups", Writeup, WriteupTranslation),
-    ("lessons", Lesson, LessonTranslation),
+    ("articles", Article, ArticleTranslation, "blog", "articles"),
+    ("writeups", Writeup, WriteupTranslation, "infosec", "writeups"),
+    ("lessons", Lesson, LessonTranslation, "education", "courses"),
 )
 
 
@@ -75,14 +80,34 @@ def search_posts(query: str, language: str) -> dict[str, list[SearchHit]]:
     """Return matching posts grouped by type, ordered by rank desc."""
     query = (query or "").strip()
     if not query:
-        return {key: [] for key, _, _ in POST_TYPES}
+        return {key: [] for key, *_ in POST_TYPES}
 
+    site_settings = SiteSettings.objects.first()
+    enabled = [
+        (key, translation_model)
+        for key, _, translation_model, module, feature in POST_TYPES
+        if is_feature_active(site_settings, module, feature)
+    ]
+    results = {key: [] for key, *_ in POST_TYPES}
     if connection.vendor == "postgresql":
-        return _postgres_search(query, language)
-    return _fallback_search(query, language)
+        results.update(_postgres_search(query, language, enabled))
+    else:
+        results.update(_fallback_search(query, language, enabled))
+    return results
 
 
-def _postgres_search(query: str, language: str) -> dict[str, list[SearchHit]]:
+def _public_translations(translation_model, language: str):
+    """Translations in ``language`` whose parent post is publicly listed.
+
+    Only ``public`` posts are searchable: ``unlisted`` and ``protected`` are
+    reachable by direct link only, ``private`` never — search is a
+    public-content discovery surface, even for authenticated users. Filtered
+    in SQL (not after slicing) so hidden rows don't eat the result budget.
+    """
+    return translation_model.objects.filter(language=language, translatable_content__visibility="public")
+
+
+def _postgres_search(query: str, language: str, enabled) -> dict[str, list[SearchHit]]:
     from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 
     config = PG_TEXT_SEARCH_CONFIG.get(language, "simple")
@@ -94,22 +119,19 @@ def _postgres_search(query: str, language: str) -> dict[str, list[SearchHit]]:
     )
 
     results: dict[str, list[SearchHit]] = {}
-    for key, post_model, translation_model in POST_TYPES:
+    for key, translation_model in enabled:
         translations = (
-            translation_model.objects.filter(language=language)
+            _public_translations(translation_model, language)
             .annotate(rank=SearchRank(vector, search_query))
             .filter(rank__gt=0)
             .select_related("translatable_content")
             .order_by("-rank")[:30]
         )
-        results[key] = [
-            SearchHit(post=t.translatable_content, translation=t, rank=float(t.rank))
-            for t in _filter_published(translations, post_model)
-        ]
+        results[key] = [SearchHit(post=t.translatable_content, translation=t, rank=float(t.rank)) for t in translations]
     return results
 
 
-def _fallback_search(query: str, language: str) -> dict[str, list[SearchHit]]:
+def _fallback_search(query: str, language: str, enabled) -> dict[str, list[SearchHit]]:
     """SQLite-friendly substring search. Used in dev only — Postgres in prod."""
     needle = Q(title__icontains=query) | Q(description__icontains=query) | Q(content__icontains=query)
     # Bias title hits to the top so ordering is at least roughly useful.
@@ -120,28 +142,13 @@ def _fallback_search(query: str, language: str) -> dict[str, list[SearchHit]]:
     )
 
     results: dict[str, list[SearchHit]] = {}
-    for key, post_model, translation_model in POST_TYPES:
+    for key, translation_model in enabled:
         translations = (
-            translation_model.objects.filter(language=language)
+            _public_translations(translation_model, language)
             .filter(needle)
             .annotate(rank=rank_expr)
             .select_related("translatable_content")
             .order_by("-rank", "-id")[:30]
         )
-        results[key] = [
-            SearchHit(post=t.translatable_content, translation=t, rank=float(t.rank))
-            for t in _filter_published(translations, post_model)
-        ]
+        results[key] = [SearchHit(post=t.translatable_content, translation=t, rank=float(t.rank)) for t in translations]
     return results
-
-
-def _filter_published(translations: Iterable, post_model) -> list:
-    """Drop hits whose parent post isn't publicly visible.
-
-    Article, Writeup and Lesson all carry a `visibility` field; we never
-    surface ``private`` rows in search results, even to authenticated users
-    — search is a public-content discovery surface.
-    """
-    if not hasattr(post_model, "visibility"):
-        return list(translations)
-    return [t for t in translations if getattr(t.translatable_content, "visibility", "public") == "public"]
