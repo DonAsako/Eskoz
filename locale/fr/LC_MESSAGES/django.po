@@ -1482,3 +1482,88 @@ msgstr "Eskoz %(latest)s est disponible — vous utilisez la version %(current)s
 #: templates/admin/index.html:14
 msgid "Release notes"
 msgstr "Notes de version"
+
+#. Sakado theme (themes/sakado/templates)
+msgid "Breadcrumb"
+msgstr "Fil d'Ariane"
+
+msgid "Home"
+msgstr "Accueil"
+
+msgid "Lessons in this module"
+msgstr "Leçons de ce module"
+
+msgid "Recent articles"
+msgstr "Articles récents"
+
+msgid "all"
+msgstr "tous"
+
+msgid "all articles"
+msgstr "tous les articles"
+
+msgid "all lessons"
+msgstr "toutes les leçons"
+
+msgid "articles"
+msgstr "articles"
+
+msgid "courses"
+msgstr "cours"
+
+msgid "by"
+msgstr "par"
+
+msgid "CVE research, red team notes and postmortems."
+msgstr "Recherche de CVE, notes de red team et post-mortems."
+
+msgid "Penetration testing reports, exploit breakdowns and CTF writeups."
+msgstr "Rapports de tests d'intrusion, analyses d'exploits et writeups de CTF."
+
+msgid "Security certifications I hold."
+msgstr "Les certifications en sécurité que j'ai obtenues."
+
+msgid "Self-paced courses, organised into modules and lessons."
+msgstr "Des cours à suivre à votre rythme, organisés en modules et en leçons."
+
+msgid "Search articles, writeups and lessons"
+msgstr "Rechercher dans les articles, writeups et leçons"
+
+msgid "Search results"
+msgstr "Résultats de recherche"
+
+msgid "No results for"
+msgstr "Aucun résultat pour"
+
+msgid "See all results"
+msgstr "Voir tous les résultats"
+
+msgctxt "search shortcut"
+msgid "navigate"
+msgstr "naviguer"
+
+msgctxt "search shortcut"
+msgid "open"
+msgstr "ouvrir"
+
+msgctxt "search shortcut"
+msgid "close"
+msgstr "fermer"
+
+msgid "Request blocked"
+msgstr "Requête bloquée"
+
+msgid "The server could not process this request because it was malformed."
+msgstr "Le serveur n'a pas pu traiter cette requête car elle est mal formée."
+
+msgid "You don't have permission to view this resource."
+msgstr "Vous n'avez pas l'autorisation d'accéder à cette ressource."
+
+msgid "The CSRF token was missing or invalid. Reload the page and try again."
+msgstr "Le jeton CSRF est manquant ou invalide. Rechargez la page et réessayez."
+
+msgid "This page doesn't exist or has been moved."
+msgstr "Cette page n'existe pas ou a été déplacée."
+
+msgid "You've sent too many requests in a short time. Wait a moment and try again."
+msgstr "Vous avez envoyé trop de requêtes en peu de temps. Patientez un instant puis réessayez."

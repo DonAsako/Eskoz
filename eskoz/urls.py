@@ -7,7 +7,7 @@ from django.urls import include, path
 
 from apps.core.admin.site import admin_site
 from apps.core.sitemaps import sitemaps
-from apps.core.views import robots_txt
+from apps.core.views import robots_txt, well_known
 
 # Routes that must stay un-prefixed regardless of language (admin tooling,
 # crawler endpoints, language switcher).
@@ -21,6 +21,9 @@ urlpatterns = [
     ),
     path("sitemap-<section>.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap_section"),
     path("robots.txt", robots_txt, name="robots_txt"),
+    # RFC 8615: /.well-known/ lives at the origin root (security.txt, etc.),
+    # never under a language prefix.
+    path(".well-known/<str:filename>", well_known, name="well_known"),
     path("i18n/", include("django.conf.urls.i18n")),
 ]
 
