@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.11.0](https://github.com/DonAsako/Eskoz/compare/v0.10.0...v0.11.0) (2026-11-04)
+
+
+### Features
+
+* RFC 8615: /.well-known/ lives at the origin root (security.txt, etc. ([72ffdf0](https://github.com/DonAsako/Eskoz/commit/72ffdf00079d626fed4fddce07bf88366f7d391a))
+
+
+### Bug Fixes
+
+* remove unactive content from search results ([990b551](https://github.com/DonAsako/Eskoz/commit/990b55138d706edcdb1a2aa0f7eb281dedfe9e73))
+* remove unactive content from sitemap ([493358b](https://github.com/DonAsako/Eskoz/commit/493358b15fb92082ecdf2df2f411e82cb114e224))
+
 ## [0.10.0](https://github.com/DonAsako/Eskoz/compare/v0.9.0...v0.10.0) (2026-08-20)
 
 
