@@ -78,3 +78,44 @@ class SearchVisibilityTests(TestCase):
         self.site.infosec.is_active = False
         self.site.infosec.save()
         assert self._titles() == set()
+
+
+class SitemapFeatureGateTests(TestCase):
+    """Sections switched off in Site Settings must not appear in the sitemap."""
+
+    def setUp(self):
+        from apps.core.models import SiteSettings
+        from apps.infosec.models import Writeup, WriteupTranslation
+
+        self.site = SiteSettings.objects.first() or SiteSettings.objects.create(site_name="Test")
+        self.site.infosec.is_active = True
+        self.site.infosec.activate_writeups_page = True
+        self.site.infosec.save()
+        post = Writeup.objects.create(title="hidden-writeup", slug="hidden-writeup", visibility="public")
+        WriteupTranslation.objects.create(translatable_content=post, language="en", title="t", content="c")
+
+    def _writeups_xml(self):
+        response = self.client.get("/sitemap-writeups.xml")
+        assert response.status_code == HTTPStatus.OK
+        return response.content.decode()
+
+    def _static_xml(self):
+        return self.client.get("/sitemap-static.xml").content.decode()
+
+    def test_enabled_writeups_are_listed(self):
+        assert "hidden-writeup" in self._writeups_xml()
+        assert "/writeups/" in self._static_xml()
+
+    def test_disabled_writeups_page_is_not_listed(self):
+        self.site.infosec.activate_writeups_page = False
+        self.site.infosec.save()
+        assert "hidden-writeup" not in self._writeups_xml()
+        assert "/writeups/" not in self._static_xml()
+
+    def test_disabled_infosec_module_is_not_listed(self):
+        self.site.infosec.is_active = False
+        self.site.infosec.save()
+        assert "hidden-writeup" not in self._writeups_xml()
+        static = self._static_xml()
+        assert "/writeups/" not in static
+        assert "/cves/" not in static

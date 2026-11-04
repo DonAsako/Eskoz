@@ -8,7 +8,18 @@ from apps.core.context_processors import get_active_language_codes
 from apps.education.models import Course, Lesson
 from apps.infosec.models import Writeup
 
-from .models import Page
+from .decorators import is_feature_active
+from .models import Page, SiteSettings
+
+
+def _feature_active(module_name, feature_name):
+    """Mirror the ``feature_active_required`` gate of the matching views.
+
+    A section switched off in Site Settings 404s on the site, so its URLs
+    must not be advertised here either (that would leak titles/slugs of
+    content the owner chose to hide, and send crawlers to dead links).
+    """
+    return is_feature_active(SiteSettings.objects.first(), module_name, feature_name)
 
 
 class StaticViewSitemap(Sitemap):
@@ -26,16 +37,20 @@ class StaticViewSitemap(Sitemap):
     alternates = True
     x_default = True
 
+    # URL name -> (settings module, feature) gate; ``None`` = always on.
+    GATES = {
+        "core:index": None,
+        "blog:article_list": ("blog", "articles"),
+        "blog:project_list": ("blog", "projects"),
+        "infosec:writeup_list": ("infosec", "writeups"),
+        "infosec:certification_list": ("infosec", "certifications"),
+        "infosec:cve_list": ("infosec", "cves"),
+        "education:course_list": ("education", "courses"),
+    }
+
     def items(self):
-        return [
-            "core:index",
-            "blog:article_list",
-            "blog:project_list",
-            "infosec:writeup_list",
-            "infosec:certification_list",
-            "infosec:cve_list",
-            "education:course_list",
-        ]
+        site_settings = SiteSettings.objects.first()
+        return [name for name, gate in self.GATES.items() if gate is None or is_feature_active(site_settings, *gate)]
 
     def get_languages_for_item(self, item):
         return list(get_active_language_codes())
@@ -67,6 +82,8 @@ class ArticleSitemap(_TranslatablePostSitemap):
     priority = 0.8
 
     def items(self):
+        if not _feature_active("blog", "articles"):
+            return Article.objects.none()
         return (
             Article.objects.filter(visibility="public")
             .prefetch_related("translations")
@@ -86,6 +103,8 @@ class WriteupSitemap(_TranslatablePostSitemap):
     priority = 0.8
 
     def items(self):
+        if not _feature_active("infosec", "writeups"):
+            return Writeup.objects.none()
         return (
             Writeup.objects.filter(visibility="public")
             .prefetch_related("translations")
@@ -105,6 +124,8 @@ class LessonSitemap(_TranslatablePostSitemap):
     priority = 0.7
 
     def items(self):
+        if not _feature_active("education", "courses"):
+            return Lesson.objects.none()
         return (
             Lesson.objects.filter(visibility="public")
             .prefetch_related("translations")
@@ -139,6 +160,8 @@ class CourseSitemap(_MonolingualSitemap):
     priority = 0.7
 
     def items(self):
+        if not _feature_active("education", "courses"):
+            return Course.objects.none()
         return Course.objects.all().order_by("title")
 
     def _reverse(self, obj):
